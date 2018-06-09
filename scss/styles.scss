@@ -906,6 +906,7 @@ div#page.container-fluid {
 
 /* side post drawer */
 
+
 [data-region="spdrawer"].closed {
     right: -($drawer-width + $drawer-offscreen-gutter);
 }

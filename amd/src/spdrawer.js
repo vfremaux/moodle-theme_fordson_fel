@@ -110,6 +110,8 @@ define(['jquery', 'core/custom_interaction_events', 'core/log'],
             drawer.focus();
             body.addClass('drawer-open-' + side);
             drawer.removeClass('closed');
+            trigger.children('i').removeClass('fa-arrow-left');
+            trigger.children('i').addClass('fa-arrow-right');
             M.util.set_user_preference(preference, 'true');
         } else {
             // Close.
@@ -117,6 +119,8 @@ define(['jquery', 'core/custom_interaction_events', 'core/log'],
             trigger.attr('aria-expanded', 'false');
             drawer.attr('aria-hidden', 'true');
             drawer.addClass('closed');
+            trigger.children('i').removeClass('fa-arrow-right');
+            trigger.children('i').addClass('fa-arrow-left');
             M.util.set_user_preference(preference, 'false');
         }
     };

@@ -355,6 +355,7 @@ $string['region-fp-a'] = 'Colonne A';
 $string['region-fp-b'] = 'Colonne B';
 $string['region-fp-c'] = 'Colonne C';
 $string['region-side-pre'] = 'Droite';
+$string['region-side-post'] = 'Panneau escamotable droite';
 $string['sectionicon'] = 'Icône de section de cours';
 $string['sectionicon_desc'] = 'Cette option vous permet de changer l\'icône qui apparaît à côté de chaque semaine/sujet dans un cours. Ce sont des icônes « Font-Awesome »';
 $string['section_mods'] = 'Modules :';

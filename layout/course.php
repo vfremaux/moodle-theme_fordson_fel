@@ -39,14 +39,14 @@ if ($navdraweropen) {
     $extraclasses[] = 'drawer-open-left';
 }
 
-$hasspdrawer = isset($PAGE->theme->settings->shownavspdrawer) && $PAGE->theme->settings->shownavspdrawer == 1;
-if (isloggedin() && $hasspdrawer && isset($PAGE->theme->settings->showspclosed) && $PAGE->theme->settings->showspclosed == 0) {
+if (isloggedin()) {
     $navspdraweropen = (get_user_preferences('spdrawer-open-nav', 'true') == 'true');
 } else {
     $navspdraweropen = false;
 }
 if ($navspdraweropen) {
-    $extraclasses[] = 'spdrawer-open-right';
+    // Forces body to stretch at right.
+    $extraclasses[] = 'drawer-open-right';
 }
 $bodyattributes = $OUTPUT->body_attributes($extraclasses);
 $blockshtml = $OUTPUT->blocks('side-pre');
@@ -76,6 +76,7 @@ $templatecontext = [
     'fpablocks' => $blockshtmla,
     'fpbblocks' => $blockshtmlb,
     'fpcblocks' => $blockshtmlc,
+    'sidepostblocks' => $blockshtmlpost,
     'hasblocks' => $hasblocks,
     'hascourseblocks' => $hascourseblocks,
     'hasfpblockregion' => $hasfpblockregion,

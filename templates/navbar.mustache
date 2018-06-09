@@ -64,10 +64,8 @@
         </ul>
         <!-- search_box -->
 
-    {{#hasspdrawer}}
         <div data-region="spdrawer-toggle" class="d-inline-block mr-3">
-            <button aria-expanded="{{#navspdraweropen}}true{{/navspdraweropen}}{{^navspdraweropen}}false{{/navspdraweropen}}" aria-controls="nav-spdrawer" type="button" class="btn nav-link float-sm-left mr-1 btn-secondary" data-action="toggle-spdrawer" data-side="right" data-preference="spdrawer-open-nav">{{#pix}}i/menubars{{/pix}}<span class="sr-only">{{#str}}sidepanel, core{{/str}}</span></button>
+            <button aria-expanded="{{#navspdraweropen}}true{{/navspdraweropen}}{{^navspdraweropen}}false{{/navspdraweropen}}" aria-controls="nav-spdrawer" type="button" class="btn nav-link float-sm-left mr-1 btn-secondary" data-action="toggle-spdrawer" data-side="right" data-preference="spdrawer-open-nav">{{#navspdraweropen}}{{#pix}}t/right{{/pix}}{{/navspdraweropen}}{{^navspdraweropen}}{{#pix}}t/left{{/pix}}{{/navspdraweropen}}<span class="sr-only">{{#str}}sidepanel, core{{/str}}</span></button>
         </div>
-    {{/hasspdrawer}}
 </nav>
 

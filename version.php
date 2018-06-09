@@ -18,8 +18,8 @@
  * Version file.
  *
  * @package    theme_fordson_fel
- * @copyright  2016 Chris Kenniburg
- * @credits    theme_boost - MoodleHQ
+ * @copyright  Valery Fremaux valery.fremaux@gmail.com
+ * @credits    theme_boost - MoodleHQ / 2016 Chris Kenniburg
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
