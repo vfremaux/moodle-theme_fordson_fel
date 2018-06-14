@@ -146,28 +146,28 @@ class core_renderer extends \theme_boost\output\core_renderer {
         // Create html for header.
         $html = html_writer::start_div('headerbkg');
         // If course image display it in separate div to allow css styling of inline style.
-        if (theme_fordson_fel_get_setting('showcourseheaderimage') && $courseimage) {
+        if (!empty($PAGE->theme->settings->showcourseheaderimage) && $courseimage) {
             $html .= html_writer::start_div('withimage', array(
                 'style' => 'background-image: url("' . $courseimage . '"); background-size: cover; background-position:center;
                 width: 100%; height: 100%;'
             ));
             $html .= html_writer::end_div(); // End withimage inline style div.
-            
-        } else if (theme_fordson_fel_get_setting('showcourseheaderimage') && !$courseimage && isset($headerbg)) {
+
+        } else if (!empty($PAGE->theme->settings->showcourseheaderimage) && !$courseimage && isset($headerbg)) {
             $html .= html_writer::start_div('customimage', array(
                 'style' => 'background-image: url("' . $headerbgimgurl . '"); background-size: cover; background-position:center;
                 width: 100%; height: 100%;'
             ));
             $html .= html_writer::end_div(); // End withoutimage inline style div.
-            
-        } else if ($courseimage && isset($headerbg) && !theme_fordson_fel_get_setting('showcourseheaderimage')) {
+
+        } else if ($courseimage && isset($headerbg) && empty($PAGE->theme->settings->showcourseheaderimage)) {
             $html .= html_writer::start_div('customimage', array(
                 'style' => 'background-image: url("' . $headerbgimgurl . '"); background-size: cover; background-position:center;
                 width: 100%; height: 100%;'
             ));
             $html .= html_writer::end_div(); // End withoutimage inline style div.
-            
-        } else if (!$courseimage && isset($headerbg) && !theme_fordson_fel_get_setting('showcourseheaderimage')) {
+
+        } else if (!$courseimage && isset($headerbg) && empty($PAGE->theme->settings->showcourseheaderimage)) {
             $html .= html_writer::start_div('customimage', array(
                 'style' => 'background-image: url("' . $headerbgimgurl . '"); background-size: cover; background-position:center;
                 width: 100%; height: 100%;'
@@ -465,9 +465,9 @@ class core_renderer extends \theme_boost\output\core_renderer {
         if ($menunode->has_children()) {
 
             if ($level == 1) {
-                $class = 'dropdown-toggle';
+                $class = 'dropdown nav-item';
             } else {
-                $class = 'dropdown-submenu';
+                $class = 'dropdown nav-item';
             }
 
             if ($menunode === $this->language) {
@@ -500,11 +500,8 @@ class core_renderer extends \theme_boost\output\core_renderer {
             $url = str_replace('%WWWROOT%', $CFG->wwwroot, $url);
 
             $content = html_writer::start_tag('li', array('class' => $class));
-            $content .= html_writer::start_tag('a', array('href' => $url, 'class' => 'dropdown-toggle', 'data-toggle' => 'dropdown', 'title' => $menunode->get_title()));
+            $content .= html_writer::start_tag('a', array('href' => $url, 'class' => 'dropdown-toggle nav-link', 'data-toggle' => 'dropdown', 'title' => $menunode->get_title()));
             $content .= format_string($menunode->get_text());
-            if ($level == 1) {
-                $content .= '<i class="fa fa-caret-right"></i>';
-            }
             $content .= '</a>';
             $content .= '<ul class="dropdown-menu">';
             foreach ($menunode->get_children() as $menunode) {

@@ -29,7 +29,10 @@
         }
     }
 }}
+<!-- fordson_fel:login -->
+<!-- boost:head -->
 {{> theme_boost/head }}
+<!-- /boost:head -->
 
 <body {{{ bodyattributes }}}>
 
@@ -55,7 +58,9 @@
     {{/hascustomlogin}}
 </div>
 
+<!-- fordson_fel:footer -->
 {{> theme_fordson_fel/footer }}
+<!-- fordson_fel:footer -->
 
 </body>
 </html>
@@ -63,3 +68,4 @@
 {{#js}}
 require(['theme_boost/loader']);
 {{/js}}
+<!-- /fordson_fel:login -->

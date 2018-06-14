@@ -116,6 +116,12 @@ function theme_fordson_fel_get_main_scss_content($theme) {
 
     $scss .= file_get_contents($CFG->dirroot . '/theme/fordson_fel/scss/styles.scss');
 
+    // Add variant local sheet.
+    if (preg_match('/\d{2}$/', $theme->name)) {
+        // We are in a numbered variant.
+        $scss .= file_get_contents($CFG->dirroot . '/theme/'.$theme->name.'/scss/variant.scss');
+    }
+
     return $scss;
 }
 

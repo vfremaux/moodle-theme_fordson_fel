@@ -26,9 +26,9 @@
 defined('MOODLE_INTERNAL') || die();
 
 // Theme strings.
-$string['choosereadme'] = 'fordson_fel provides a unique visual experience to the default Boost theme with customization features such as color choosers and enhanced homepage experience.';
-$string['configtitle'] = 'fordson_fel';
-$string['pluginname'] = 'fordson_fel';
+$string['choosereadme'] = 'Fordson fel adds to the community Fordson theme valuable functional additions such as variant capabiity, side bloc panel and contextual custom menus.';
+$string['configtitle'] = 'Fordson FEL';
+$string['pluginname'] = 'Fordson FEL';
 $string['region-side-pre'] = 'Right';
 $string['generalsettings'] = 'General settings';
 $string['advancedsettings'] = 'Advanced settings';

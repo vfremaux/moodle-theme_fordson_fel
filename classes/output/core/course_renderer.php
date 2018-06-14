@@ -890,7 +890,9 @@ if ($PAGE->theme->settings->coursetilestyle < 8) {
          * @return string
          */
         protected function coursecat_category(coursecat_helper $chelper, $coursecat, $depth) {
-            if (!theme_fordson_fel_get_setting('enablecategoryicon')) {
+            global $PAGE;
+
+            if (empty($PAGE->theme->settings->enablecategoryicon)) {
                 return parent::coursecat_category($chelper, $coursecat, $depth);
             }
 
@@ -937,7 +939,7 @@ if ($PAGE->theme->settings->coursetilestyle < 8) {
             $content = '<div class="' . join(' ', $classes) . '" data-categoryid="' . $coursecat->id . '" data-depth="' . $depth . '" data-showcourses="' . $chelper->get_show_courses() . '" data-type="' . self::COURSECAT_TYPE_CATEGORY . '">';
             $content .= '<div class="cat-icon">';
 
-            $val = theme_fordson_fel_get_setting('catsicon');
+            $val = $PAGE->theme->settings->catsicon;
             $url = new moodle_url('/course/index.php', array(
                 'categoryid' => $coursecat->id
             ));
@@ -1089,7 +1091,7 @@ if ($PAGE->theme->settings->coursetilestyle < 8) {
             $lastaccess = '';
 
             $output = '';
-            if (theme_fordson_fel_get_setting('frontpagemycoursessorting')) {
+            if (!empty($PAGE->theme->settings->frontpagemycoursessorting)) {
                 $courses = enrol_get_my_courses(null, 'sortorder ASC');
                 if ($courses) {
                     // We have something to work with.  Get the last accessed information for the user and populate.

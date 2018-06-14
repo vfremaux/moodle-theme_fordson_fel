@@ -48,7 +48,10 @@
         "hasregionmainsettingsmenu": false
     }
 }}
+<!-- fordson_fel:frontpage -->
+<!-- boost:head -->
 {{> theme_boost/head }}
+<!-- /boost:head -->
 
 <body {{{ bodyattributes }}}>
 
@@ -137,7 +140,9 @@
 </div>
 
 {{#hasfhsdrawer}}
+<!-- boost:navdrawer -->
 {{> theme_boost/nav-drawer }}
+<!-- /boost:navdrawer -->
 {{/hasfhsdrawer}}
 </div>
 
@@ -145,7 +150,9 @@
 <a href="#" id="back-to-top" class="btn btn-primary btn-lg" role="button" title="{{#str}}backtotop, theme_fordson_fel{{/str}}"><i class="fa fa-chevron-circle-up" aria-hidden="true"></i></a>
 
 
+<!-- boost:footer -->
 {{> theme_boost/footer }}
+<!-- /boost:footer -->
 
 </body>
 </html>
@@ -156,3 +163,4 @@ require(['theme_boost/drawer'], function(mod) {
     mod.init();
 });
 {{/js}}
+<!-- /fordson_fel:frontpage -->
