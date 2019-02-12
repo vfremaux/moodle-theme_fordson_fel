@@ -54,6 +54,8 @@ global $PAGE;
 if ($PAGE->theme->settings->coursetilestyle < 8) {
     class course_renderer extends \theme_boost\output\core\course_renderer {
 
+        protected $thumbfiles;
+
         protected $countcategories = 0;
 
         public function frontpage_available_courses($id = 0) {

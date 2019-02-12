@@ -69,23 +69,22 @@ define(['jquery', 'core/config', 'core/log'], function($, config, log) {
             e.preventDefault();
             var that = $(this);
 
-            regex = /control-([0-9]+)-section-([0-9]+)/;
-            matchs = regex.exec(that.attr('id'));
+            var regex = /control-([0-9]+)-section-([0-9]+)/;
+            var matchs = regex.exec(that.attr('id'));
             var sectionid = parseInt(matchs[1]);
             var sectionsection = parseInt(matchs[2]);
-            regex = /level-([0-9]+)/
+            regex = /level-([0-9]+)/;
             matchs = regex.exec(that.attr('class'));
             var level = parseInt(matchs[1]);
-            var nextlevel = level + 1;
 
             log.debug('Working for flex section ' + sectionsection + ' of id ' + sectionid);
 
             var url = config.wwwroot + '/theme/archaius/flexsections/ajax/flexregister.php?';
             url += 'sectionid=' + sectionid;
-            handlesrc = $('#control-' + sectionid + '-section-' + sectionsection).attr('src');
+            var handlesrc = $('#control-' + sectionid + '-section-' + sectionsection).attr('src');
 
             if (!hide) {
-                parentid = that.closest('li').parent().closest('li').attr('id');
+                var parentid = that.closest('li').parent().closest('li').attr('id');
                 // Trigger hide event on all siblings.
                 $.each($('#' + parentid + ' .flexcontrol.level-' + level), function(index, value) {
                     if ($(value).attr('id') != that.attr('id')) {
@@ -94,7 +93,8 @@ define(['jquery', 'core/config', 'core/log'], function($, config, log) {
                 });
             }
 
-            if (($('#section-' + sectionsection + ' > div > div.section-content').css('visibility') === 'visible') || (hide === true)) {
+            if (($('#section-' + sectionsection + ' > div > div.section-content').css('visibility') === 'visible') ||
+                        (hide === true)) {
                 $('#section-' + sectionsection + ' > div > div.section-content').css('visibility', 'hidden');
                 $('#section-' + sectionsection + ' > div > div.section-content').css('display', 'none');
                 $('#section-' + sectionsection + ' > div > ul.flexsections').css('visibility', 'hidden');
@@ -118,7 +118,7 @@ define(['jquery', 'core/config', 'core/log'], function($, config, log) {
 
             url += '&hide=' + hide;
 
-            $.get(url, function(data) {
+            $.get(url, function() {
             });
 
             return false;
@@ -129,11 +129,11 @@ define(['jquery', 'core/config', 'core/log'], function($, config, log) {
             e.preventDefault();
             var that = $(this);
 
-            regex = /flexsections-control-([a-z]+)/;
-            matchs = regex.exec(that.attr('id'));
-            what = matchs[1];
+            var regex = /flexsections-control-([a-z]+)/;
+            var matchs = regex.exec(that.attr('id'));
+            var what = matchs[1];
 
-            url = config.wwwroot + '/theme/archaius/flexsections/ajax/flexregister.php?';
+            var url = config.wwwroot + '/theme/archaius/flexsections/ajax/flexregister.php?';
             url += 'id=' + M.course.id;
             url += '&what=' + what;
 
@@ -182,7 +182,7 @@ define(['jquery', 'core/config', 'core/log'], function($, config, log) {
             // Update positions server side.
             $.get(url);
         }
-    }
+    };
 
     return flexsection_control;
 
