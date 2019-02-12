@@ -1,7 +1,7 @@
 /* indent non customlabels */
 
-.activity:not(.customlabel):not(.label) {
-    margin-left: 120px !important;
+.path-course-view .activity:not(.customlabel):not(.label) {
+    margin-left: 95px !important;
 }
 
 /* General rules */
@@ -10,14 +10,14 @@ td.custombox-header-thumb,
 td.custombox-header-thumb,
 td.custombox-thumb,
 td.custombox-thumb {
-    padding-top:1.2em;
+    padding-top: 1.2em;
 }
 
 #page-region-main td.custombox-header-thumb,
 #region-main td.custombox-header-thumb,
 #page-region-main td.custombox-thumb,
 #region-main td.custombox-thumb {
-    padding-top:1.5em;
+    padding-top:0.8em;
 }
 
 .custombox-content-caption{
@@ -54,7 +54,7 @@ div.custombox-heading.courseheading {
 }
 
 /* Sequence heading */
-
+/*
 .custombox-caption.sequenceheading {
     font-size: 2.5em;
     line-height: 1.3em;
@@ -64,7 +64,7 @@ div.custombox-heading.courseheading {
 }
 
 .custombox-sequenceheading p {
-    /* font-size:12pt; */
+    font-size:12pt;
     width:100%;
 }
 
@@ -81,19 +81,22 @@ tr.custombox-icon.sequenceheading {
 .custombox-icon-right.sequenceheading {
     min-width:65px;
 }
-
+*/
+/*
 .custombox-caption.sectionheading {
     font-size: 2.5em;
     line-height: 1.3em;
     font-family:"gothic", sans-serif;
 }
-
+*/
+/*
 .custombox-caption.unitheading {
     font-size: 1.6em;
     line-height: 1.2em;
     font-family:"gothic", sans-serif;
     color:#A0A0A0;
 }
+*/
 
 /* Course data */
 
@@ -314,25 +317,37 @@ td.custombox-thumb.authornote:after {
 
 /* Important */
 
+td.custombox-header-thumb.important:after {
+    content: "!"; /* fa-bookmark-o */
+    font-family: "sans-serif";
+    color:#ffffff;
+    font-size:48px;
+    font-weight: bold;
+}
+
 #page-region-main td.custombox-header-thumb.important,
 #region-main td.custombox-header-thumb.important{
-    background-image: url("/theme/fordson_fel/pix_plugins/mod/customlabel/icon_important.png") !important;
+    background-image: url("/theme/fordson_fel/pix_plugins/mod/customlabel/CC0000_spot.png") !important;
     background-repeat: no-repeat;
     height:73px !important;
     width:80px !important;
     min-width:80px !important;
+    text-align:center;
     border-right:1px solid #A0A0A0 !important;
+    padding-top: 0px;
 }
 
 #page-region-pre td.custombox-header-thumb.important,
 #region-pre td.custombox-header-thumb.important,
 #region-post td.custombox-header-thumb.important,
 #page-region-post  td.custombox-header-thumb.important{
-    background-image: url("/theme/fordson_fel/pix_plugins/mod/customlabel/icon_important_small.png") !important;
+    background-image: url("/theme/fordson_fel/pix_plugins/mod/customlabel/CC0000_spot.png") !important;
     background-repeat: no-repeat;
+    background-position:30% 0%;
     height:73px !important;
     width:35px !important;
     min-width:35px !important;
+    text-align:center;
     border-right:1px solid #A0A0A0 !important;
 }
 
@@ -460,7 +475,7 @@ td.custombox-header-thumb.seealso:after {
 }
 
 td.custombox-header-caption.seealso {
-    color:#21A1C2 !important;
+    color:#4564af !important;
 }
 
 td.custombox-content.seealso{
@@ -482,7 +497,7 @@ td.custombox-content.seealso{
 }
 
 td.custombox-header-thumb.localgoals:after {
-    content: "\f091"; /* fa-trophy */
+    content: "\f140"; /* fa-bullseye */
     font-family: "fontAwesome";
     color:#ffffff;
     font-size:32px;
@@ -507,7 +522,7 @@ td.custombox-content.localgoals{
 }
 
 td.custombox-header-caption.localgoals {
-    color: #23A7c1 !important;
+    color: #4564af !important;
 }
 
 /* Définition */
@@ -555,6 +570,54 @@ td.custombox-content.definition{
 }
 
 td.custombox-header-caption.definition{
+    color: #A00000 !important;
+}
+
+/* Formule */
+
+#page-region-main td.custombox-header-thumb.formule,
+#region-main td.custombox-header-thumb.formule{
+    background-image: url("/theme/fordson_fel/pix_plugins/mod/customlabel/orangespot.png") !important;
+    background-position: 30% 0%;
+    background-repeat: no-repeat;
+    height:73px !important;
+    width:80px !important;
+    min-width:80px !important;
+    border-right:1px solid #A0A0A0 !important;
+    text-align:center;
+}
+
+td.custombox-header-thumb.formule:after {
+    content: "\F13D"; /* fa-anchor */
+    font-family: "fontAwesome";
+    color:#ffffff;
+    font-size:32px;
+}
+
+#page-region-pre td.custombox-header-thumb.formule,
+#region-pre td.custombox-header-thumb.formule,
+#region-post td.custombox-header-thumb.formule,
+#page-region-post td.custombox-header-thumb.formule {
+    background-image: url("/theme/fordson_fel/pix_plugins/mod/customlabel/redspot.png") !important;
+    background-size: 50%;
+    background-repeat: no-repeat;
+    height:73px !important;
+    width:35px !important;
+    min-width:35px !important;
+    border-right:1px solid #A0A0A0 !important;
+    text-align:center;
+}
+
+td.custombox-content.formule {
+    font-size:1.3em;
+    letter-spacing:0.5px;
+    font-style:italic;
+    font-weight:normal;
+    padding:10px;
+    background-image: none !important;
+}
+
+td.custombox-header-caption.formule {
     color: #A00000 !important;
 }
 

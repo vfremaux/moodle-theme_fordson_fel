@@ -29,39 +29,27 @@ defined('MOODLE_INTERNAL') || die();
 $page = new admin_settingpage('theme_fordson_fel_footer', get_string('footerheading', 'theme_fordson_fel'));
 $page->add(new admin_setting_heading('theme_fordson_fel_footer', get_string('footerheadingsub', 'theme_fordson_fel'), format_text(get_string('footerdesc' , 'theme_fordson_fel'), FORMAT_MARKDOWN)));
 
-// footer branding
-$name = 'theme_fordson_fel/brandorganization';
-$title = get_string('brandorganization', 'theme_fordson_fel');
-$description = get_string('brandorganizationdesc', 'theme_fordson_fel');
+$name = 'theme_fordson_fel/leftfooter';
+$title = get_string('leftfooter', 'theme_fordson_fel');
+$description = get_string('leftfooter_desc', 'theme_fordson_fel');
 $default = '';
-$setting = new admin_setting_configtext($name, $title, $description, $default);
+$setting = new admin_setting_confightmleditor($name, $title, $description, $default);
 $setting->set_updatedcallback('theme_reset_all_caches');
 $page->add($setting);
 
-// footer branding
-$name = 'theme_fordson_fel/brandwebsite';
-$title = get_string('brandwebsite', 'theme_fordson_fel');
-$description = get_string('brandwebsitedesc', 'theme_fordson_fel');
+$name = 'theme_fordson_fel/midfooter';
+$title = get_string('midfooter', 'theme_fordson_fel');
+$description = get_string('midfooter_desc', 'theme_fordson_fel');
 $default = '';
-$setting = new admin_setting_configtext($name, $title, $description, $default);
+$setting = new admin_setting_confightmleditor($name, $title, $description, $default);
 $setting->set_updatedcallback('theme_reset_all_caches');
 $page->add($setting);
 
-// footer branding
-$name = 'theme_fordson_fel/brandphone';
-$title = get_string('brandphone', 'theme_fordson_fel');
-$description = get_string('brandphonedesc', 'theme_fordson_fel');
+$name = 'theme_fordson_fel/rightfooter';
+$title = get_string('rightfooter', 'theme_fordson_fel');
+$description = get_string('rightfooter_desc', 'theme_fordson_fel');
 $default = '';
-$setting = new admin_setting_configtext($name, $title, $description, $default);
-$setting->set_updatedcallback('theme_reset_all_caches');
-$page->add($setting);
-
-// footer branding
-$name = 'theme_fordson_fel/brandemail';
-$title = get_string('brandemail', 'theme_fordson_fel');
-$description = get_string('brandemaildesc', 'theme_fordson_fel');
-$default = '';
-$setting = new admin_setting_configtext($name, $title, $description, $default);
+$setting = new admin_setting_confightmleditor($name, $title, $description, $default);
 $setting->set_updatedcallback('theme_reset_all_caches');
 $page->add($setting);
 

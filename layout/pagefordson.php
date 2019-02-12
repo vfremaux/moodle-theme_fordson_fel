@@ -23,6 +23,7 @@
  */
 
 defined('MOODLE_INTERNAL') || die();
+require_once($CFG->dirroot.'/local/technicalsignals/lib.php');
 
 user_preference_allow_ajax_update('drawer-open-nav', PARAM_ALPHA);
 require_once($CFG->libdir . '/behat/lib.php');
@@ -37,30 +38,53 @@ $extraclasses = [];
 if ($navdraweropen) {
     $extraclasses[] = 'drawer-open-left';
 }
+
 $bodyattributes = $OUTPUT->body_attributes($extraclasses);
-$blockshtml = $OUTPUT->blocks('side-pre');
-$hasblocks = strpos($blockshtml, 'data-block=') !== false;
+$hasblocks = false;
+$haspostblocks = false;
+$hasfpblockregion = false;
+
+$footnote = $OUTPUT->footnote();
+$pagedoclink = $OUTPUT->page_doc_link();
+$coursefooter = $OUTPUT->course_footer();
+
 $regionmainsettingsmenu = $OUTPUT->region_main_settings_menu();
 
 $templatecontext = [
-    'sitename' => format_string($SITE->shortname, true, ['context' => context_course::instance(SITEID) , "escape" => false]) ,
+    'sitename' => format_string($SITE->shortname, true, ['context' => context_course::instance(SITEID) , "escape" => false]),
     'output' => $OUTPUT,
     'showbacktotop' => isset($PAGE->theme->settings->showbacktotop) && $PAGE->theme->settings->showbacktotop == 1,
-    'sidepreblocks' => $blockshtml,
+    'hasfpblockregion' => $hasfpblockregion,
     'hasblocks' => $hasblocks,
+    'haspostblocks' => $haspostblocks,
     'bodyattributes' => $bodyattributes,
     'navdraweropen' => $navdraweropen,
     'hasfhsdrawer' => $hasfhsdrawer,
     'regionmainsettingsmenu' => $regionmainsettingsmenu,
-    'hasregionmainsettingsmenu' => !empty($regionmainsettingsmenu)
+    'hasregionmainsettingsmenu' => !empty($regionmainsettingsmenu),
+    'hasfootenote' => !empty($footnote) && (preg_match('/[a-z]/', strip_tags($footnote))),
+    'footnote' => $footnote,
+    'hascoursefooter' => !empty($coursefooter) && (preg_match('/[a-z]/', strip_tags($coursefooter))),
+    'coursefooter' => $coursefooter,
+    'hasdoclink' => !empty($pagedoclink) && (preg_match('/[a-z]/', strip_tags($pagedoclink))),
+    'pagedoclink' => $pagedoclink,
+    'hascustomlogin' => $PAGE->theme->settings->showcustomlogin == 1,
+    'hasfooterelements' => !empty($PAGE->theme->settings->leftfooter) || !empty($PAGE->theme->settings->midfooter) || !empty($PAGE->theme->settings->rightfooter),
+    'leftfooter' => @$PAGE->theme->settings->leftfooter,
+    'midfooter' => @$PAGE->theme->settings->midfooter,
+    'rightfooter' => @$PAGE->theme->settings->rightfooter,
+    'showlangmenu' => @$CFG->langmenu,
+    'technicalsignals' => local_print_administrator_message()
 ];
 
 $PAGE->requires->jquery();
 if (isset($PAGE->theme->settings->showbacktotop) && $PAGE->theme->settings->showbacktotop == 1) {
     $PAGE->requires->js('/theme/fordson_fel/javascript/scrolltotop.js');
+    $PAGE->requires->js('/theme/fordson_fel/javascript/scrolltobottom.js');
     $PAGE->requires->js('/theme/fordson_fel/javascript/scrollspy.js');
 }
 $PAGE->requires->js('/theme/fordson_fel/javascript/tooltipfix.js');
+$PAGE->requires->js('/theme/fordson_fel/javascript/blockslider.js');
 
 $templatecontext['flatnavigation'] = $PAGE->flatnav;
 echo $OUTPUT->render_from_template('theme_fordson_fel/pagefordson_fel', $templatecontext);

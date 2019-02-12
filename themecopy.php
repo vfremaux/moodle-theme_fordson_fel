@@ -26,6 +26,9 @@
  */
 require('../../config.php');
 
+// We need this to retrieve original fordson settings.
+require_once($CFG->dirroot.'/theme/fordson_fel/lib.php');
+require_once($CFG->dirroot.'/theme/fordson_fel/lib/filesettings_lib.php');
 // Security.
 
 $context = context_system::instance();
@@ -86,22 +89,26 @@ if ($data = $mform->get_data()) {
 
         // Get all component file... 
         $syscontext = context_system::instance();
-        $files = $DB->get_records('file', array('contextid' => $syscontext->id, 'component' => 'theme_'.$data->themefrom));
+        $files = $DB->get_records('files', array('contextid' => $syscontext->id, 'component' => 'theme_'.$data->themefrom));
 
         // Start purging all files from the destination.
         $fs->delete_area_files($syscontext->id, 'theme_'.$data->themeto);
 
         if (!empty($files)) {
             foreach ($files as $f) {
+                if ($f->filename = '' || $f->filename = '.') {
+                    // This is a directory.
+                    continue;
+                }
                 $fromstoredfile = $fs->get_file_by_id($f->id);
 
                 $tofiledesc = new Stdclass;
                 $tofiledesc->contextid = $syscontext->id;
                 $tofiledesc->component = 'theme_'.$data->themeto;
-                $tofiledesc->filearea = $f->get_filearea();
-                $tofiledesc->itemid = $f->get_itemid();
-                $tofiledesc->filepath = $f->get_filepath();
-                $tofiledesc->filename = $f->get_filename();
+                $tofiledesc->filearea = $fromstoredfile->get_filearea();
+                $tofiledesc->itemid = $fromstoredfile->get_itemid();
+                $tofiledesc->filepath = $fromstoredfile->get_filepath();
+                $tofiledesc->filename = $fromstoredfile->get_filename();
 
                 $fs->create_file_from_storedfile($tofiledesc, $fromstoredfile);
             }

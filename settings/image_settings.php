@@ -73,7 +73,8 @@ $page->add($setting);
 $name = 'theme_fordson_fel/loginimage';
 $title = get_string('loginimage', 'theme_fordson_fel');
 $description = get_string('loginimage_desc', 'theme_fordson_fel');
-$setting = new admin_setting_configstoredfile($name, $title, $description, 'loginimage');
+$setting = new admin_setting_configstoredfile($name, $title, $description, 'loginimage', 0, 
+    ['maxfiles' => 20, 'accepted_types' => ['.jpg', '.gif', '.svg', '.png']]);
 $setting->set_updatedcallback('theme_reset_all_caches');
 $page->add($setting);
 

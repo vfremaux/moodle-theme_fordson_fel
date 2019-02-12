@@ -26,9 +26,9 @@
 defined('MOODLE_INTERNAL') || die();
 
 // Theme strings.
-$string['choosereadme'] = 'fordson_fel provides a unique visual experience to the default Boost theme with customization features such as color choosers and enhanced homepage experience.';
-$string['configtitle'] = 'fordson_fel';
-$string['pluginname'] = 'fordson_fel';
+$string['choosereadme'] = 'Fordson fel adds to the community Fordson theme valuable functional additions such as variant capabiity, side bloc panel and contextual custom menus.';
+$string['configtitle'] = 'Fordson FEL';
+$string['pluginname'] = 'Fordson FEL';
 $string['region-side-pre'] = 'Right';
 $string['generalsettings'] = 'General settings';
 $string['advancedsettings'] = 'Advanced settings';
@@ -38,6 +38,8 @@ $string['customloginheading'] = 'Custom Login Page';
 $string['iconnavheadingsub'] = 'Create Buttons with Icons for use on the homepage.  Links can go anywhere.';
 $string['section_mods'] = 'Modules:';
 $string['nomycourses'] = 'You are not enrolled in any courses.';
+$string['backtocourse'] = 'Back to the course';
+$string['gotobottom'] = 'Go to page bottom';
 $string['coursehome'] = 'Home';
 $string['navdrawerbtn'] = 'Navigation';
 $string['region-main'] = 'Center';
@@ -45,11 +47,17 @@ $string['region-side-post'] = 'Right panel';
 $string['region-fp-a'] = 'Column A';
 $string['region-fp-b'] = 'Column B';
 $string['region-fp-c'] = 'Column C';
+$string['changeto'] = 'Change to {$a}';
 $string['courseblockpanelbtn'] = 'Course Block Panel';
 $string['showblockregions'] = 'Show Additional Frontpage Block Regions';
 $string['showblockregions_desc'] = 'Turn on three more block regions on the site frontpage.  These appear just below the icon navigation bar.';
 $string['viewsectionmodules'] = 'View Section Modules';
 $string['privacy:metadata'] = 'The fordson_fel theme does not store any individual user data.';
+
+// Thums management.
+$string['editmodthumb'] = 'Edit the module thumbnail';
+$string['modthumb'] = 'Module thumbnail';
+$string['cleanthumb'] = 'Remove the thumbnail file';
 
 // Theme variants
 $string['variant_settings'] = 'Settings for theme variants';
@@ -144,14 +152,12 @@ $string['slideimage_desc'] = 'Add a background image for this slide.';
 
 // Footer
 $string['footerheading'] = 'Footer';
-$string['brandorganization'] = 'Organization Name';
-$string['brandorganizationdesc'] = 'Organization name to appear in the footer.';
-$string['brandwebsite'] = 'Organization Website';
-$string['brandwebsitedesc'] = 'Website address to appear in footer for organization.';
-$string['brandphone'] = 'Organization Phone';
-$string['brandphonedesc'] = 'Phone number to appear in footer.';
-$string['brandemail'] = 'Organization Email';
-$string['brandemaildesc'] = 'Email address for organization that appears in footer.';
+$string['leftfooter'] = 'Left footer';
+$string['leftfooter_desc'] = 'Left footer content';
+$string['midfooter'] = 'Mid footer';
+$string['midfooter_desc'] = 'Mid footer will not show on mobile devices';
+$string['rightfooter'] = 'Right footer';
+$string['rightfooter_desc'] = 'Right footer content';
 $string['footerheadingsub'] = 'Customize the footer of the homepage';
 $string['footerdesc'] = 'The items below allow you provide branding to the theme footer.';
 $string['footerheadingsocial'] ='Social Icons';
@@ -503,3 +509,33 @@ $string['modchoosercustomlabel'] = 'Custom Chooser Label';
 $string['modchoosercustomlabel_desc'] = 'Add your own custom label for this new menu in the Chooser Module panel.';
 $string['showalltomanager'] = 'Show All Activities and Resources to Managers';
 $string['showalltomanager_desc'] = 'This setting will allow users who have the role of Manager see and access ALL activities and resources even if it is set to only show the custom menu.  Generally, a manager role is given to a user at the site or category level.  Teachers will still only see the custom menu.  This feature is determined by the user permission: View the Site Administration Tree - moodle/site:configview . Site Administrators will always see all activities and resources.';
+
+$string['hiddencourse'] = 'This course is still hidden to students';
+$string['publish'] = 'Open the course';
+
+// Flexsection extras.
+$string['chooseclass'] = 'Change section style';
+$string['sectionclass'] = 'Change section apparearence';
+$string['flexsectionsstyles'] = 'Available styles for flexsections';
+$string['nostyleoverride'] = 'No style override';
+$string['sample'] = 'Sample';
+$string['collapseall'] = 'Close all';
+$string['expandall'] = 'Open all';
+$string['reset'] = 'Reset';
+$string['showactivitynames'] = 'Show activitynames';
+$string['hideactivitynames'] = 'Hide activitynames';
+$string['activatestyle'] = 'Use this style ';
+$string['flexsectionsstylesdesc'] = '
+You may enter a list of (one per line) style descriptors as:
+
+<i>&lt;stylename&gt;</i>:<i>&lt;stylelabel&gt;</i>:{<i>&lt;stylerules&gt;</i>}
+
+or:
+
+<i>&lt;stylename&gt;</i>:<i>&lt;stylelabel&gt;</i>:<i>&lt;classname&gt;</i>
+
+Empty lines will be ignored, so will lines starting with # or /.
+
+In case you are using class names, those classes should be added in the theme style css files, or using the customcss feature of the theme if supported.
+';
+

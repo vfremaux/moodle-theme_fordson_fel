@@ -116,6 +116,12 @@ function theme_fordson_fel_get_main_scss_content($theme) {
 
     $scss .= file_get_contents($CFG->dirroot . '/theme/fordson_fel/scss/styles.scss');
 
+    // Add variant local sheet.
+    if (preg_match('/\d{2}$/', $theme->name)) {
+        // We are in a numbered variant.
+        $scss .= file_get_contents($CFG->dirroot . '/theme/'.$theme->name.'/scss/variant.scss');
+    }
+
     return $scss;
 }
 
@@ -202,18 +208,20 @@ function theme_fordson_fel_get_pre_scss($theme) {
     }
 
     // Set the background image for the login page.
+    /*
     $loginbg = $theme->setting_file_url('loginimage', 'loginimage');
     if ($PAGE->theme->settings->showcustomlogin == 1) {
         if (isset($loginbg)) {
-            $prescss .= '#page.customloginimage {background-image: url("' . $loginbg . '") !important; background-size:cover; background-position:center;}';
-        } 
+            // $prescss .= '#page.customloginimage {background-image: url("' . $loginbg . '") !important; background-size:cover; background-position:center;}';
+        }
     } else {
         if (isset($loginbg)) {
             $prescss .= 'body#page-login-signup {background-image: url("' . $loginbg . '") !important; background-size:cover; background-position:center;}';
             $prescss .= 'body#page-login-index {background-image: url("' . $loginbg . '") !important; background-size:cover; background-position:center;}';
         }
     }
-    
+    */
+
     // Set the image.
     $marketing1image = $theme->setting_file_url('marketing1image', 'marketing1image');
     if (isset($marketing1image)) {

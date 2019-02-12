@@ -31,7 +31,7 @@ $page = new admin_settingpage('theme_fordson_fel_presets', get_string('presets_s
 $name = 'theme_fordson_fel/preset';
 $title = get_string('preset', 'theme_fordson_fel');
 $description = get_string('preset_desc', 'theme_fordson_fel');
-$presetchoices[] = '';
+$presetchoices = ['' => ''];
 // Add preset files from theme preset folder.
 $iterator = new DirectoryIterator($CFG->dirroot . '/theme/fordson_fel/scss/preset/');
 foreach ($iterator as $presetfile) {

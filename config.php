@@ -40,7 +40,7 @@ $THEME->parents = ['boost'];
  * to generate dynamically from the scss presets and settings and is not
  * used by Moodle's default editor (Atto).
  */
-$THEME->sheets = ['customlabels'];
+$THEME->sheets = ['customlabels', 'modthumb', 'flexsections', 'themefixes'];
 $THEME->editor_sheets = [''];
 $THEME->layouts = [
     // The site home page.
@@ -51,10 +51,17 @@ $THEME->layouts = [
         'options' => array('nonavbar' => true, 'langmenu' => true),
     ),
     // Main course page.
+    /*
     'course' => array(
         'file' => 'course.php',
         'regions' => array('fp-a', 'fp-b', 'fp-c', 'side-post'),
         'defaultregion' => 'fp-c',
+    ),
+    */
+    'course' => array(
+        'file' => 'course.php',
+        'regions' => array('side-post'),
+        'defaultregion' => 'side-post',
     ),
     'incourse' => array(
         'file' => 'course.php',

@@ -1,3 +1,4 @@
+<!-- fordson_fel:fpwonderbox -->
 <div class="fpwonderbox">
     <div class="container-fluid">
     <div class="row">
@@ -89,6 +90,7 @@
             <div class="fpsignup">
             <h3>{{#str}}fpsignup, theme_fordson_fel{{/str}}</h3>
                         <form class="m-t-1" action="{{{ config.wwwroot }}}/login/index.php" method="POST" role="form">
+                            <input type="hidden" name="logintoken" value="{{logintoken}}" />
                             <label for="username">
                               {{^canloginbyemail}}
                                   {{#str}}username{{/str}}
@@ -160,3 +162,4 @@
 {{/hasmarkettiles}}
 
 </div>
+<!-- /fordson_fel:fpwonderbox -->

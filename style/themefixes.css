@@ -1,0 +1,67 @@
+/* ======= USER PREFERENCES ======== */
+
+/* titre des notification largeur des colonnes corrigé */
+.preferences-container .preference-table tr td:not(:first-child) {
+    width: 250px;
+    text-align: center;
+}
+
+.preferences-container .preference-table .preference-row .preference-state .preference-state-status-container {
+    width: 70px;
+}
+
+/* réduction du container pour éviter ascenseur de droite */
+.container-fluid {
+    width: 98%;
+}
+
+/* je vais voir les préférence d'un autre usager, décalage des boutons sur le headerbkg */
+.page-context-header .header-button-group {
+    margin-left: 100px;
+}
+
+.logininfo, .purgecaches {
+    margin-top: 10px;
+    text-align: center;
+}
+
+.purgecaches {
+    border: 1px black dashed;
+    background-color: #FFFF80;
+    border-radius: 5px;
+    padding: 5px;
+}
+
+.navbar-nav .icon.shadow {
+    -webkit-filter: grayscale(100%); /* Safari 6.0 - 9.0 */
+    filter: grayscale(100%);
+    opacity:0.6;
+    -moz-opacity:0.6;
+}
+
+.local-my-fp-coursebox.dimmed .local-my-fp-coursename {
+    background-image: url(/theme/fordson_fel/pix/hidden.png);
+    background-size: 30%;
+    background-repeat: no-repeat;
+    background-position: 100% 50%;
+}
+
+.format-page .headerbkg {
+    box-shadow: none;
+}
+
+.format-page div#learningcontent {
+    margin-top: 115px;
+    box-shadow: 0 1px 1px 1px rgba(0,0,0,.3);
+}
+
+.format-page #page-region-top {
+    height: 60px;
+    margin-bottom: 0px;
+}
+
+/* Block page_tracker */
+
+a.block-pagetracker.current {
+    text-decoration: underline;
+}

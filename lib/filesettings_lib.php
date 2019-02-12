@@ -39,10 +39,46 @@
 defined('MOODLE_INTERNAL') || die();
 
 function theme_fordson_fel_pluginfile($course, $cm, $context, $filearea, $args, $forcedownload, array $options = array()) {
+    global $DB;
     static $theme;
-    if (empty($theme)) {
-        $theme = theme_config::load('fordson_fel');
+
+    if (empty($options['theme'])) {
+        if (empty($theme)) {
+            $theme = theme_config::load('fordson_fel');
+        }
+    } else {
+        // Allows reading another set of parameters.
+        $theme = $options['theme'];
     }
+
+    if ($filearea == 'modthumb') {
+        // Exceptionnnaly we let pass without control the course modules context queries to intro files.
+        // We allow format_page component pages which real component identity is given by the context id.
+
+        $fs = get_file_storage();
+        if ($course->format == 'page') {
+            include_once($CFG->dirroot.'/course/format/page/classes/page.class.php');
+            if (!course_page::check_page_public_accessibility($course)) {
+                // Process as usual.
+                require_course_login($course);
+            }
+        } else {
+            require_course_login($course);
+        }
+
+        // Seek for the real component hidden beside the context.
+        $cm = $DB->get_record('course_modules', array('id' => $context->instanceid));
+        $component = 'mod_'.$DB->get_field('modules', 'name', array('id' => $cm->module));
+        $relativepath = implode('/', $args);
+        $fullpath = "/{$context->id}/$component/$filearea/$relativepath";
+        $fs->get_file_by_hash(sha1($fullpath));
+        if ((!$file = $fs->get_file_by_hash(sha1($fullpath))) || $file->is_directory()) {
+            return false;
+        }
+        send_stored_file($file, 0, 0, true); // Download MUST be forced - security!
+        die;
+    }
+
     if ($context->contextlevel == CONTEXT_SYSTEM && ($filearea === '')) {
         $theme = theme_config::load('fordson_fel');
         return $theme->setting_file_serve($filearea, $args, $forcedownload, $options);
@@ -88,7 +124,6 @@ function theme_fordson_fel_pluginfile($course, $cm, $context, $filearea, $args, 
     }
 }
 
-
 /**
  * This function creates the dynamic HTML needed for some
  * settings and then passes it back in an object so it can
@@ -103,6 +138,7 @@ function theme_fordson_fel_pluginfile($course, $cm, $context, $filearea, $args, 
  * @param stdclass $CFG
  * @return string
  */
+ /*
 function theme_fordson_fel_get_setting($setting, $format = false) {
     global $CFG;
     require_once($CFG->dirroot . '/lib/weblib.php');
@@ -122,3 +158,4 @@ function theme_fordson_fel_get_setting($setting, $format = false) {
         return format_string($theme->settings->$setting);
     }
 }
+*/

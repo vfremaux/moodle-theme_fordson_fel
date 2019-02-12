@@ -34,9 +34,11 @@ $string['activitymenu_desc'] = 'Affiche la liste des activités du cours dans le
 $string['advancedsettings'] = 'Paramètres avancés';
 $string['alert'] = 'Alerte de la page d\'accueil';
 $string['alert_desc'] = 'Ceci est un message d\'alerte qui apparaîtra sur la page d\'accueil.';
+$string['backtocourse'] = 'Retour au cours';
 $string['backgroundimage'] = 'Image de fond par défaut de la page';
 $string['backgroundimage_desc'] = 'Image de fond pour les pages';
 $string['backtotop'] = 'Retour en haut de page et Scrollspy';
+$string['gotobottom'] = 'Aller en bas de page';
 $string['badges'] = 'Badges';
 $string['badges_desc'] = 'Récompensez vos étudiants';
 $string['blockwidthfordson_fel'] = 'Largeur du bloc de colonne';
@@ -51,31 +53,24 @@ $string['brandColour'] = 'Couleur principale';
 $string['brandColour_desc'] = 'Il s\'agit de la couleur principale de votre charte graphique.';
 $string['branddanger'] = 'Couleur « danger »';
 $string['branddanger_desc'] = 'Il s\'agit de la couleur utilisée par les panneaux et alertes marqués « danger ». Voir par exemple la classe CSS Bootstrap <i>alert-danger</i>';
-$string['brandemail'] = 'Courriel de l\'organisation';
-$string['brandemaildesc'] = 'Adresse de courriel de l\'organisation apparaissant dans le pied de page.';
 $string['brandgray'] = 'Base grise';
 $string['brandgray_desc'] = 'Paramètre de la base grise - Couleur utilisée afin de créer des ombres de gris. La valeur par défaut est #000, mais elle peut être adaptée afin d\'ajuster les niveaux de contraste';
 $string['brandinfo'] = 'Couleur « Info »';
 $string['brandinfo_desc'] = 'Il s\'agit de la couleur utilisée par les panneaux et alertes d\'information. Voir par exemple la classe CSS Bootstrap <i>alert-info</i>';
-$string['brandorganization'] = 'Nom de l\'organisation';
-$string['brandorganizationdesc'] = 'Nom de l\'organisation apparaissant dans le pied de page.';
-$string['brandphone'] = 'Numéro de téléphone de l\'organisation';
-$string['brandphonedesc'] = 'Numéro de téléphone apparaissant dans le pied de page.';
 $string['brandprimary'] = 'Couleur principale';
 $string['brandprimary_desc'] = 'Il s\'agit de la couleur principale de votre charte graphique.';
 $string['brandsuccess'] = 'Couleur « succès »';
 $string['brandsuccess_desc'] = 'Il s\'agit de la couleur utilisée par les panneaux, alertes et boutons pour marquer le succès et la réussite d\'une action. Voir par exemple la classe CSS Bootstrap <i>alert-success</i>';
 $string['brandwarning'] = 'Couleur « attention »';
 $string['brandwarning_desc'] = 'Il s\'agit de la couleur utilisée par les panneaux et alertes marqués « attention (warning) ». Voir par exemple la classe CSS Bootstrap <i>alert-warning</i>';
-$string['brandwebsite'] = 'Site de votre organisation';
-$string['brandwebsitedesc'] = 'Adresse du site web de votre organisation qui apparaîtra dans le pied de page.';
 $string['breadcrumbbkg'] = 'Couleur de fond de la piste de navigation';
 $string['breadcrumbbkg_desc'] = 'Couleur de fond de la piste de navigation.';
+$string['changeto'] = 'Changer vers {$a}';
 $string['cardbkg'] = 'Couleur d\'arrière-plan du contenu';
 $string['cardbkg_desc'] = 'Couleur de fond du contenu pour les cours et les blocs';
 $string['catsicon'] = 'Catégorie de l\'icône';
 $string['catsicon_desc'] = 'Choisir une icône qui représente les catégories de cours.';
-$string['choosereadme'] = 'fordson_fel apporte une expérience visuelle unique au thème par défaut (Boost) grâce à des fonctionnalités de personnalisation telles que les sélecteurs de couleurs et une expérience améliorée de la page d\'accueil.';
+$string['choosereadme'] = 'Fordson FEL ajoute au theme fordson communautaire des fonctionnalités uniques telles que le menu global contextualisé, le panneau de blocs escamotable de droite et la possibilité de variantes.';
 $string['colours_desc'] = 'Le sélecteur de couleurs permet de personnaliser l\'apparence et le rendu des éléments principaux sur la page. Si vous utilisez un pré-réglage différent de celui par défaut, il vous faudra enlever toute couleur personnalisée en dessous pour un meilleur résultat puisque celle-ci remplacera le pré-réglage par des résultats non-désirés. Généralement, le pré-réglage aura des couleurs par défaut que vous souhaiterez voir avant toute modification ici.';
 $string['colours_headingsub'] = 'Paramètres de couleur';
 $string['colours_settings'] = 'Couleurs';
@@ -85,7 +80,7 @@ Activités par défaut :<br>
 assign,chat,choice,data,feedback,forum,glossary,lesson,lti,quiz,scorm,survey,wiki,workshop<br>
 Ressources par défaut :<br>
 book,file,folder,imscp,label,page,resource,url';
-$string['configtitle'] = 'fordson_fel';
+$string['configtitle'] = 'Fordson FEL';
 $string['contentsettings'] = 'Zones de contenu';
 $string['courseactivities'] = 'Activités de cours';
 $string['courseboxheight'] = 'Hauteur';
@@ -338,7 +333,7 @@ $string['pagefont'] = 'Sélecteur de la police de la page';
 $string['pagefont_desc'] = 'Choisissez une police pour le texte de la page';
 $string['pinterest'] = 'URL Pinterest';
 $string['pinterestdesc'] = 'Saisir l\'URL de votre page Pinterest (i.e. http://pinterest.com/).';
-$string['pluginname'] = 'fordson_fel';
+$string['pluginname'] = 'Fordson FEL';
 $string['preset'] = 'Préréglages du thème';
 $string['preset_desc'] = 'Choisir un pré-réglage pour très largement changer l\'apparence du thème.';
 $string['presetfiles'] = 'Fichier supplémentaires de préréglage du thème';
@@ -432,6 +427,9 @@ $string['thismyprofessionaldevelopment'] = 'Ce développement professionnel';
 $string['thismyprograms'] = 'Ce programme';
 $string['thismytraining'] = 'Cette formation';
 $string['thismyunits'] = 'Cette unité';
+$string['editmodthumb'] = 'Modifier la vignette de l\'activité';
+$string['modthumb'] = 'Vignette d\'activité/ressource';
+$string['cleanthumb'] = 'Supprimer le fichier de vignette';
 $string['titletooltip'] = 'Titre info-bulle du cours';
 $string['titletooltip_desc'] = 'Si le tronquage du titre du cours est utilisé, cette fonction peut être utilisée et affichera le titre entier du cours dans une info-bulle. Cocher cette case pour activer cette option.';
 $string['togglemarketing'] = 'Position de la zone d\'annonce de la page d\'accueil';
@@ -455,3 +453,75 @@ $string['website'] = 'URL du site web';
 $string['websitedesc'] = 'Saisir l\'URL de votre propre site web (ex : http://dearbornschools.org).';
 $string['youtube'] = 'URL YouTube';
 $string['youtubedesc'] = 'Saisir l\'URL de votre chaîne YouTube (ex : http://www.youtube.com/).';
+
+$string['variant_settings'] = 'Réglage des variantes';
+$string['variantsheadingsub'] = 'Gestion des variantes';
+$string['variantsheading_desc'] = 'Pour transférer vos paramètres entre variantes, <a href="/theme/fordson_fel/themecopy.php">utilisez ce service</a>.';
+$string['themetitle'] = 'Titre de variante';
+$string['themetitledesc'] = 'Nom non fonctionnel. Utilisez ce champ pour vous souvenir de l\'usage de cette variante.';
+$string['fromtheme'] = 'A partir de la variante';
+$string['totheme'] = 'Vers la variante';
+$string['copytheme'] = 'Copier les réglages du theme';
+$string['themecopied'] = 'Les réglages ont été copiés.';
+$string['copy'] = 'Copier';
+$string['withfiles'] = 'Copier aussi les fichiers';
+$string['errorcopyonself'] = 'Une variante ne peut être copiée sur elle-même';
+
+$string['presetadjustmentsettings'] = 'Adaptation du préréglage';
+$string['layoutinfodesc'] = 'Choisir des preset de design pour l\'agencement des pages.';
+$string['leftfooter'] = 'Pied de page gauche';
+$string['leftfooter_desc'] = '';
+$string['midfooter'] = 'Pied de page centre';
+$string['midfooter_desc'] = 'Le pied de page central ne sera pas visible sur les mobiles';
+$string['rightfooter'] = 'Pied de page droite';
+$string['rightfooter_desc'] = '';
+
+$string['pagelayout'] = 'Agencement';
+$string['pagelayout_desc'] = 'Choisir u nagencement parmi les agencements suivants.  <a href="https://goo.gl/fMXzSo" target="_new">Instructions for fordson_fel 3.5 Theme</a>';
+$string['pagelayout1'] = 'Agencement de Boost par défaut';
+$string['pagelayout2'] = 'Pleine largeur / Image d\'en-tête';
+$string['pagelayout3'] = 'Contenu centré / Image d\'en-tete en fond';
+$string['pagelayout4'] = 'Contenu centré / Image de fond plein écran';
+$string['pagelayout5'] = 'Agencement de Boost par défaut / Image d\'en-tête dans la boite de titre de cours';
+
+$string['sectionlayout'] = 'Style de section';
+$string['sectionlayout_desc'] = 'Choisir un de ces styles pour les sections des styles a section (thématique ou semaine).  <a href="https://goo.gl/fMXzSo" target="_new">Instructions for fordson_fel 3.5 Theme</a>';
+$string['sectionlayout1'] = 'Style Boost';
+$string['sectionlayout2'] = 'Bold Notecard';
+$string['sectionlayout3'] = 'Onglets';
+$string['sectionlayout4'] = 'Clip Board';
+$string['sectionlayout5'] = 'Boîte simple';
+$string['sectionlayout6'] = 'Fancy Section Title';
+$string['sectionlayout7'] = 'Style Académique';
+$string['sectionlayout8'] = 'Style Corporate';
+
+$string['hiddencourse'] = 'Ce cours est caché pour les étudiants';
+$string['publish'] = 'Ouvrir le cours';
+
+// Flexsection extras.
+$string['chooseclass'] = 'Changer le style';
+$string['sectionclass'] = 'Modifier l\'apparence de la section';
+$string['flexsectionsstyles'] = 'Styles displonibles pour la section';
+$string['nostyleoverride'] = 'Pas de modification d\'apparence';
+$string['sample'] = 'Echantillon';
+$string['collapseall'] = 'Tout fermer';
+$string['expandall'] = 'Tout ouvrir';
+$string['reset'] = 'Plan';
+$string['showactivitynames'] = 'Montrer les noms des activités';
+$string['hideactivitynames'] = 'Cacher les noms des activités';
+$string['activatestyle'] = 'Activer ce style ';
+
+$string['flexsectionsstylesdesc'] = '
+Vous pouvez entrer une liste (une définition par ligne) de définitions de style de type:
+
+<i>&lt;stylename&gt;</i>:<i>&lt;stylelabel&gt;</i>:{<i>&lt;stylerules&gt;</i>}
+
+ou :
+
+<i>&lt;stylename&gt;</i>:<i>&lt;stylelabel&gt;</i>:<i>&lt;classname&gt;</i>
+
+Les lignes vides, ou commençant par # ou / sont ignorées.
+
+Dans le cas où vous utilisez des noms de classe CSS, ces classes devront être définies dans les feuille de style du thème, ou ajoutées par l\'administrateur
+en utilisant la fonctionnalité de customisation de la CSS du theme si ce dernier le supporte.
+';

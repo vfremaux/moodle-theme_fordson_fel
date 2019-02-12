@@ -29,9 +29,23 @@
         }
     }
 }}
+<!-- fordson_fel:login -->
+<!-- boost:head -->
 {{> theme_boost/head }}
+<!-- /boost:head -->
 
 <body {{{ bodyattributes }}}>
+{{{technicalsignals}}}
+
+{{#custombgimageurl}}
+<style>
+.customloginimage {
+    background-image: url({{{custombgimageurl}}}) !important;
+    background-size: cover;
+    background-position: center;
+}
+</style>
+{{/custombgimageurl}}
 
 <div id="page-wrapper">
 
@@ -46,16 +60,20 @@
                 </section>
         </div>
     </div>
-    {{#hascustomlogin}}
+    <!-- fordson_fel:customlogincontent -->
+    {{#hascustomlogincontent}}
     <div id="fordson_fellogin" class="fordson_fellogin">
         <div class="container">
         {{{ output.customlogin }}}
         </div>
     </div>
-    {{/hascustomlogin}}
+    {{/hascustomlogincontent}}
+    <!-- /fordson_fel:customlogincontent -->
 </div>
 
+<!-- fordson_fel:footer -->
 {{> theme_fordson_fel/footer }}
+<!-- fordson_fel:footer -->
 
 </body>
 </html>
@@ -63,3 +81,4 @@
 {{#js}}
 require(['theme_boost/loader']);
 {{/js}}
+<!-- /fordson_fel:login -->
