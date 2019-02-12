@@ -23,6 +23,7 @@
  */
 
 defined('MOODLE_INTERNAL') || die();
+require_once($CFG->dirroot.'/local/technicalsignals/lib.php');
 
 user_preference_allow_ajax_update('drawer-open-nav', PARAM_ALPHA);
 require_once($CFG->libdir . '/behat/lib.php');
@@ -54,6 +55,10 @@ $blockshtmlb = $OUTPUT->blocks('fp-b');
 $blockshtmlc = $OUTPUT->blocks('fp-c');
 $hasfpblockregion = isset($PAGE->theme->settings->showblockregions) !== false;
 
+$footnote = $OUTPUT->footnote();
+$pagedoclink = $OUTPUT->page_doc_link();
+$coursefooter = $OUTPUT->course_footer();
+
 $regionmainsettingsmenu = $OUTPUT->region_main_settings_menu();
 $templatecontext = [
     'sitename' => format_string($SITE->shortname, true, array('context' => context_course::instance(SITEID))),
@@ -71,10 +76,24 @@ $templatecontext = [
     'regionmainsettingsmenu' => $regionmainsettingsmenu,
     'hasregionmainsettingsmenu' => !empty($regionmainsettingsmenu),
     'enrolform' => $enrolform,
+    'hasfootenote' => !empty($footnote) && (preg_match('/[a-z]/', strip_tags($footnote))),
+    'footnote' => $footnote,
+    'hascoursefooter' => !empty($coursefooter) && (preg_match('/[a-z]/', strip_tags($coursefooter))),
+    'coursefooter' => $coursefooter,
+    'hasdoclink' => !empty($pagedoclink) && (preg_match('/[a-z]/', strip_tags($pagedoclink))),
+    'pagedoclink' => $pagedoclink,
+    'hascustomlogin' => $PAGE->theme->settings->showcustomlogin == 1,
+    'hasfooterelements' => !empty($PAGE->theme->settings->leftfooter) || !empty($PAGE->theme->settings->midfooter) || !empty($PAGE->theme->settings->rightfooter),
+    'leftfooter' => @$PAGE->theme->settings->leftfooter,
+    'midfooter' => @$PAGE->theme->settings->midfooter,
+    'rightfooter' => @$PAGE->theme->settings->rightfooter,
+    'showlangmenu' => @$CFG->langmenu,
+    'technicalsignals' => local_print_administrator_message()
 ];
 
 $PAGE->requires->jquery();
 $PAGE->requires->js('/theme/fordson_fel/javascript/scrolltotop.js');
+$PAGE->requires->js('/theme/fordson_fel/javascript/scrolltobottom.js');
 $PAGE->requires->js('/theme/fordson_fel/javascript/tooltipfix.js');
 
 $templatecontext['flatnavigation'] = $PAGE->flatnav;

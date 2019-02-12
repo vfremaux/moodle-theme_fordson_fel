@@ -77,7 +77,7 @@ h3.sectionname a {
     border-radius: $border-radius;
     text-align: center;
 }
-.course-content .content .summary, .course-content .content .li.activity {
+.course-content .content .summary, .course-content .content li.activity {
     text-align: left;
 }
 
@@ -131,10 +131,9 @@ div#changenumsections {
     padding: 1rem;
 }
 
-span.section-modchooser-link{
+span.section-modchooser-link {
     background-color: $sectionactivitybkg;
     padding: .5rem;
-
 }
 
 a.add-sections {

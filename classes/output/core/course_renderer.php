@@ -38,6 +38,7 @@ use heading;
 use pix_icon;
 use image_url;
 use single_select;
+use core_text;
 
 require_once($CFG->dirroot . '/course/renderer.php');
 global $PAGE;
@@ -53,12 +54,14 @@ global $PAGE;
 if ($PAGE->theme->settings->coursetilestyle < 8) {
     class course_renderer extends \theme_boost\output\core\course_renderer {
 
+        protected $thumbfiles;
+
         protected $countcategories = 0;
 
         public function frontpage_available_courses($id = 0) {
             /* available courses */
             global $CFG, $OUTPUT, $PAGE;
-            require_once ($CFG->libdir . '/coursecatlib.php');
+            include_once($CFG->libdir . '/coursecatlib.php');
 
             $chelper = new coursecat_helper();
             $chelper->set_show_courses(self::COURSECAT_SHOW_COURSES_EXPANDED)->set_courses_display_options(array(
@@ -475,7 +478,14 @@ if ($PAGE->theme->settings->coursetilestyle < 8) {
 
         }
 
-        public function view_available_courses($id = 0, $courses = null, $totalcount = null) {
+        public function view_available_courses($chelper, $id, $courses = null, $totalcount = null) {
+            global $PAGE;
+
+            $myrenderer = $PAGE->get_renderer('local_my');
+            return $myrenderer->courses_slider(array_keys($courses));
+        }
+
+        public function view_available_courses_deprecated($id = 0, $courses = null, $totalcount = null) {
 
             /* available courses */
             global $CFG, $OUTPUT, $PAGE;
@@ -1037,7 +1047,7 @@ if ($PAGE->theme->settings->coursetilestyle < 8) {
             $categoryid = optional_param('categoryid', 0, PARAM_INT);
             $coursecount = 0;
 
-            $content .= $this->view_available_courses($categoryid, $courses, $totalcount);
+            $content .= $this->view_available_courses($chelper, $categoryid, $courses, $totalcount);
 
             if (!empty($pagingbar)) {
                 $content .= $pagingbar;
@@ -1047,7 +1057,6 @@ if ($PAGE->theme->settings->coursetilestyle < 8) {
             }
 
             $content .= html_writer::end_tag('div');
-            
 
             $content .= '<div class="clearfix"></div>';
 
@@ -1163,7 +1172,7 @@ if ($PAGE->theme->settings->coursetilestyle < 8) {
                     return $nomycourses;
                 }
             }
-            
+
             $rhosts   = array();
             $rcourses = array();
             if (!empty($CFG->mnet_dispatcher_mode) && $CFG->mnet_dispatcher_mode==='strict') {
@@ -1225,6 +1234,392 @@ if ($PAGE->theme->settings->coursetilestyle < 8) {
             return $this->render($modchooser);
         }
 
+        // Additions for thumbed actitivies layout.
+        // CHANGE
+        public function course_section_cm_name_for_thumb($mod) {
+
+            // Accessibility: for files get description via icon, this is very ugly hack!
+
+            $instancename = $mod->get_formatted_name();
+            $altname = $mod->modfullname;
+            /*
+             * Avoid unnecessary duplication: if e.g. a forum name already
+             * includes the word forum (or Forum, etc) then it is unhelpful
+             * to include that in the accessible description that is added.
+             */
+            if (false !== strpos(core_text::strtolower($instancename),
+                    core_text::strtolower($altname))) {
+                $altname = '';
+            }
+            // File type after name, for alphabetic lists (screen reader).
+            if ($altname) {
+                $altname = get_accesshide(' '.$altname);
+            }
+
+            $linkclasses = '';
+            $accesstext = '';
+            $textclasses = '';
+            if ($mod->uservisible) {
+                $conditionalhidden = $this->is_cm_conditionally_hidden($mod);
+                $accessiblebutdim = (!$mod->visible || $conditionalhidden) &&
+                    has_capability('moodle/course:viewhiddenactivities', $mod->context);
+                if ($accessiblebutdim) {
+                    $linkclasses .= ' dimmed';
+                    $textclasses .= ' dimmed_text';
+                    if ($conditionalhidden) {
+                        $linkclasses .= ' conditionalhidden';
+                        $textclasses .= ' conditionalhidden';
+                    }
+                    // Show accessibility note only if user can access the module himself.
+                    $accesstext = get_accesshide(get_string('hiddenfromstudents').':'. $mod->modfullname);
+                }
+            } else {
+                $linkclasses .= ' dimmed';
+                $textclasses .= ' dimmed_text';
+            }
+
+            // Process a possible #hide flag :
+            if (preg_match('/^\#hide\s+/', $instancename)) {
+                $textclasses .= ' fullhide';
+                $linkclasses .= ' fullhide';
+                $instancename = preg_replace('/\#hide\s+/', '', $instancename);
+            }
+
+            // Get on-click attribute value if specified and decode the onclick - it
+            // has already been encoded for display (puke).
+            $onclick = htmlspecialchars_decode($mod->onclick, ENT_QUOTES);
+
+            $groupinglabel = $mod->get_grouping_label($textclasses);
+
+            // Display link itself.
+            $cmname = $accesstext.html_writer::tag('span', $instancename . $altname, array('class' => 'instancename'));
+            if ($mod->uservisible) {
+                $cmoutput = html_writer::link($mod->url, $cmname, array('class' => $linkclasses, 'onclick' => $onclick)).$groupinglabel;
+            } else {
+                // We may be displaying this just in order to show information
+                // about visibility, without the actual link ($mod->uservisible)
+                $cmoutput = html_writer::tag('div', $cmname, array('class' => $textclasses)).$groupinglabel;
+            }
+            return $cmoutput;
+        }
+
+        public function course_section_cm_thumb($mod) {
+            global $DB, $COURSE, $PAGE;
+
+            $cmoutput = '';
+
+            // Check existance of module thumb image in the description.
+            $fs = get_file_storage();
+
+            $files = $fs->get_area_files($mod->context->id, 'mod_'.$mod->modname, 'modthumb', $mod->id, 'filepath,filename', true);
+            if (!empty($files)) {
+                $file = array_pop($files);
+            }
+
+            if (!empty($file)) {
+
+                $this->thumbfiles[$mod->id] = $file;
+                $url = $mod->url;
+
+                if ($COURSE->format == 'page') {
+                    /*
+                     * Divert the resource call to the special page format file wrapper.
+                     * Do not change any other thing. The special file wrapper will know how
+                     * to get the origin component identity back.
+                     */
+                    $imgurl = moodle_url::make_pluginfile_url($file->get_contextid(), 'format_page',
+                                                              $file->get_filearea(), $file->get_itemid(),
+                                                              '/', $file->get_filename());
+                } else {
+                    $imgurl = moodle_url::make_pluginfile_url($file->get_contextid(), 'theme_'.$PAGE->theme->name,
+                                                              $file->get_filearea(), $file->get_itemid(),
+                                                              '/', $file->get_filename());
+                }
+
+                // For items which are hidden but available to current user
+                // ($mod->uservisible), we show those as dimmed only if the user has
+                // viewhiddenactivities, so that teachers see 'items which might not
+                // be available to some students' dimmed but students do not see 'item
+                // which is actually available to current student' dimmed.
+                $linkclasses = '';
+                $accesstext = '';
+                $textclasses = '';
+                if ($mod->uservisible) {
+                    $conditionalhidden = $this->is_cm_conditionally_hidden($mod);
+                    $accessiblebutdim = (!$mod->visible || $conditionalhidden) &&
+                        has_capability('moodle/course:viewhiddenactivities', $mod->context);
+                    if ($accessiblebutdim) {
+                        $linkclasses .= ' dimmed';
+                        $textclasses .= ' dimmed_text';
+                        if ($conditionalhidden) {
+                            $linkclasses .= ' conditionalhidden';
+                            $textclasses .= ' conditionalhidden';
+                        }
+                        // Show accessibility note only if user can access the module himself.
+                        $accesstext = get_accesshide(get_string('hiddenfromstudents').':'. $mod->modfullname);
+                    }
+                } else {
+                    $linkclasses .= ' dimmed';
+                    $textclasses .= ' dimmed_text';
+                }
+
+                // Get on-click attribute value if specified and decode the onclick - it
+                // has already been encoded for display (puke).
+                $onclick = htmlspecialchars_decode($mod->onclick, ENT_QUOTES);
+
+                $img = '<img src="'.$imgurl.'">';
+                // $modurl = new moodle_url('/mod/'.$mod->modname.'/view.php', array('id' => $mod->id));
+                $cmoutput = '<div class="cm-picture"><a href="'.$mod->url.'">'.$img.'</a></div>';
+
+                $imglink = html_writer::link($mod->url, $img, array('class' => $linkclasses, 'onclick' => $onclick));
+
+                $cmoutput = html_writer::tag('div', $imglink, array('class' => 'cm-picture'));
+            }
+
+            return $cmoutput;
+        }
+
+        public function get_thumbfiles() {
+            return $this->thumbfiles;
+        }
+
+        /**
+         * Renders HTML for displaying the sequence of course module editing buttons
+         *
+         * @see course_get_cm_edit_actions()
+         *
+         * @param action_link[] $actions Array of action_link objects
+         * @param cm_info $mod The module we are displaying actions for.
+         * @param array $displayoptions additional display options:
+         *     ownerselector => A JS/CSS selector that can be used to find an cm node.
+         *         If specified the owning node will be given the class 'action-menu-shown' when the action
+         *         menu is being displayed.
+         *     constraintselector => A JS/CSS selector that can be used to find the parent node for which to constrain
+         *         the action menu to when it is being displayed.
+         *     donotenhance => If set to true the action menu that gets displayed won't be enhanced by JS.
+         * @return string
+         */
+        public function course_section_cm_edit_actions($actions, \cm_info $mod = null, $displayoptions = array()) {
+            global $CFG, $PAGE;
+
+            if (empty($actions)) {
+                return '';
+            }
+
+            $baseurl = '/theme/'.$PAGE->theme->name.'/mod_thumb.php';
+            $editthumbstr = get_string('editmodthumb', 'theme_fordson_fel');
+            $actions['thumb'] = new \action_menu_link_primary(
+                new moodle_url($baseurl, array('id' => $mod->id)),
+                new pix_icon('editthumb', $editthumbstr, 'theme', array('class' => 'iconsmall', 'width' => '16')),
+                $editthumbstr,
+                array('class' => 'editing_thumb', 'data-action' => 'thumb', 'aria-live' => 'assertive')
+            );
+
+            return parent::course_section_cm_edit_actions($actions, $mod, $displayoptions);
+        }
+        // CHANGE-.
+
+        /**
+         * Renders HTML to display one course module in a course section
+         *
+         * This includes link, content, availability, completion info and additional information
+         * that module type wants to display (i.e. number of unread forum posts)
+         *
+         * This function calls:
+         * {@link core_course_renderer::course_section_cm_name()}
+         * {@link core_course_renderer::course_section_cm_text()}
+         * {@link core_course_renderer::course_section_cm_availability()}
+         * {@link core_course_renderer::course_section_cm_completion()}
+         * {@link course_get_cm_edit_actions()}
+         * {@link core_course_renderer::course_section_cm_edit_actions()}
+         *
+         * @param stdClass $course
+         * @param completion_info $completioninfo
+         * @param cm_info $mod
+         * @param int|null $sectionreturn
+         * @param array $displayoptions
+         * @return string
+         */
+        public function course_section_cm($course, &$completioninfo, \cm_info $mod, $sectionreturn, $displayoptions = array()) {
+            $output = '';
+            // We return empty string (because course module will not be displayed at all)
+            // if:
+            // 1) The activity is not visible to users
+            // and
+            // 2) The 'availableinfo' is empty, i.e. the activity was
+            //     hidden in a way that leaves no info, such as using the
+            //     eye icon.
+            if (!$mod->is_visible_on_course_page()) {
+                return $output;
+            }
+
+            $indentclasses = 'mod-indent';
+            if (!empty($mod->indent)) {
+                $indentclasses .= ' mod-indent-'.$mod->indent;
+                if ($mod->indent > 15) {
+                    $indentclasses .= ' mod-indent-huge';
+                }
+            }
+
+            $output .= html_writer::start_tag('div');
+
+            if ($this->page->user_is_editing()) {
+                $output .= course_get_cm_move($mod, $sectionreturn);
+            }
+
+            $output .= html_writer::start_tag('div', array('class' => 'mod-indent-outer'));
+
+            // This div is used to indent the content.
+            $output .= html_writer::div('', $indentclasses);
+
+            // Start a wrapper for the actual content to keep the indentation consistent
+            $output .= html_writer::start_tag('div');
+
+            // CHANGE+ : Add thumbed activities.
+            $thumb = $this->course_section_cm_thumb($mod);
+
+            if ($thumb) {
+                $output .= html_writer::start_tag('div', array('class' => 'cm-name'));
+                $output .= $thumb;
+                $output .= html_writer::start_tag('div', array('class' => 'cm-label'));
+                $cmname = $this->course_section_cm_name_for_thumb($mod, $displayoptions);
+            } else {
+                // Display the link to the module (or do nothing if module has no url)
+                $cmname = $this->course_section_cm_name($mod, $displayoptions);
+            }
+            // CHANGE-.
+
+            if (!empty($cmname)) {
+                // Start the div for the activity title, excluding the edit icons.
+                $output .= html_writer::start_tag('div', array('class' => 'activityinstance'));
+                $output .= $cmname;
+
+
+                // Module can put text after the link (e.g. forum unread)
+                $output .= $mod->afterlink;
+
+                // Closing the tag which contains everything but edit icons. Content part of the module should not be part of this.
+                $output .= html_writer::end_tag('div'); // .activityinstance
+            }
+
+            // If there is content but NO link (eg label), then display the
+            // content here (BEFORE any icons). In this case cons must be
+            // displayed after the content so that it makes more sense visually
+            // and for accessibility reasons, e.g. if you have a one-line label
+            // it should work similarly (at least in terms of ordering) to an
+            // activity.
+            $contentpart = $this->course_section_cm_text($mod, $displayoptions);
+            // CHANGE+ : manage thumb
+            if (!empty($this->thumbfiles[$mod->id])) {
+                // Remove the thumb that has already been displayed.
+                $pattern = '/<img.*?'.$this->thumbfiles[$mod->id]->get_filename().'".*?>/';
+                $contentpart = preg_replace($pattern, '', $contentpart);
+            }
+            // /CHANGE-.
+
+            $url = $mod->url;
+            if (empty($url)) {
+                $output .= $contentpart;
+            }
+
+            $modicons = '';
+            if ($this->page->user_is_editing()) {
+                $editactions = course_get_cm_edit_actions($mod, $mod->indent, $sectionreturn);
+                // CHANGE + : alter the show or hide action and make it primary.
+
+                $sectionvisible = $mod->get_section_info()->visible;
+                // The module on the course page may be in one of the following states:
+                // - Available and displayed on the course page ($displayedoncoursepage);
+                // - Not available and not displayed on the course page ($unavailable);
+                // - Available but not displayed on the course page ($stealth) - this can also be a visible activity in a hidden section.
+                $displayedoncoursepage = $mod->visible && $mod->visibleoncoursepage && $sectionvisible;
+                $unavailable = !$mod->visible;
+                $stealth = $mod->visible && (!$mod->visibleoncoursepage || !$sectionvisible);
+                $modshowstr = get_string('modshow');
+                $modhidestr = get_string('modhide');
+                $baseurl = new moodle_url('/course/mod.php', array('sesskey' => sesskey()));
+                if ($displayedoncoursepage) {
+                    $editactions['hide'] = new \action_menu_link_primary(
+                        new \moodle_url($baseurl, array('hide' => $mod->id)),
+                        new \pix_icon('t/hide', $modhidestr, 'moodle', array('class' => 'iconsmall', 'title' => '')),
+                        $modhidestr,
+                        array('class' => 'editing_hide', 'data-action' => 'hide')
+                    );
+                } else if (!$displayedoncoursepage && $sectionvisible) {
+                    // Offer to "show" only if the section is visible.
+                    $editactions['show'] = new \action_menu_link_primary(
+                        new \moodle_url($baseurl, array('show' => $mod->id)),
+                        new \pix_icon('t/show', $modshowstr, 'moodle', array('class' => 'iconsmall', 'title' => '')),
+                        $modshowstr,
+                        array('class' => 'editing_show', 'data-action' => 'show')
+                    );
+                }
+
+                // Groupmode.
+                $modcontext = \context_module::instance($mod->id);
+                $hasmanageactivities = has_capability('moodle/course:manageactivities', $modcontext);
+                if ($hasmanageactivities && !$mod->coursegroupmodeforce) {
+                    if (plugin_supports('mod', $mod->modname, FEATURE_GROUPS, 0)) {
+                        if ($mod->effectivegroupmode == SEPARATEGROUPS) {
+                            $nextgroupmode = VISIBLEGROUPS;
+                            $grouptitle = get_string('groupsseparate');
+                            $actionname = 'groupsseparate';
+                            $nextactionname = 'groupsvisible';
+                            $groupimage = 'i/groups';
+                        } else if ($mod->effectivegroupmode == VISIBLEGROUPS) {
+                            $nextgroupmode = NOGROUPS;
+                            $grouptitle = get_string('groupsvisible');
+                            $actionname = 'groupsvisible';
+                            $nextactionname = 'groupsnone';
+                            $groupimage = 'i/groupv';
+                        } else {
+                            $nextgroupmode = SEPARATEGROUPS;
+                            $grouptitle = get_string('groupsnone');
+                            $actionname = 'groupsnone';
+                            $nextactionname = 'groupsseparate';
+                            $groupimage = 'i/groupn';
+                        }
+
+                        $editactions[$actionname] = new \action_menu_link_secondary(
+                            new \moodle_url($baseurl, array('id' => $mod->id, 'groupmode' => $nextgroupmode)),
+                            new \pix_icon($groupimage, $grouptitle, 'moodle', array('class' => 'iconsmall')),
+                            $grouptitle,
+                            array('class' => 'editing_'. $actionname, 'data-action' => $nextactionname,
+                                'aria-live' => 'assertive', 'data-sectionreturn' => $sectionreturn)
+                        );
+                    } else {
+                        $actions['nogroupsupport'] = new \action_menu_filler();
+                    }
+                }
+
+                // CHANGE-.
+                $modicons .= ' '. $this->course_section_cm_edit_actions($editactions, $mod, $displayoptions);
+                $modicons .= $mod->afterediticons;
+            }
+
+            $modicons .= $this->course_section_cm_completion($course, $completioninfo, $mod, $displayoptions);
+
+            if (!empty($modicons)) {
+                $output .= html_writer::span($modicons, 'actions');
+            }
+
+            // Show availability info (if module is not available).
+            $output .= $this->course_section_cm_availability($mod, $displayoptions);
+
+            // If there is content AND a link, then display the content here
+            // (AFTER any icons). Otherwise it was displayed before
+            if (!empty($url)) {
+                $output .= $contentpart;
+            }
+
+            $output .= html_writer::end_tag('div'); // $indentclasses
+
+            // End of indentation div.
+            $output .= html_writer::end_tag('div');
+
+            $output .= html_writer::end_tag('div');
+            return $output;
+        }
     }
 } else {
     class course_renderer extends \theme_boost\output\core\course_renderer {

@@ -49,7 +49,9 @@
     }
 }}
 <!-- fordson_fel:columns2 -->
+<!-- boost:head -->
 {{> theme_boost/head }}
+<!-- boost:head -->
 
 <body {{{ bodyattributes }}}>
 
@@ -101,10 +103,13 @@
         </div>
     </div>
     {{#hasfhsdrawer}}
+    <!-- boost:nav-drawer -->
     {{> theme_boost/nav-drawer }}
+    <!-- /boost:nav-drawer -->
     {{/hasfhsdrawer}}
 </div>
 
+<a href="#pagebottom" id="go-to-bottom" class="btn btn-primary btn-lg show" role="button" title="{{#str}}gotobottom, theme_fordson_fel{{/str}}"><i class="fa fa-chevron-circle-down" aria-hidden="true"></i></a>
 <a href="#" id="back-to-top" class="btn btn-primary btn-lg" role="button" title="{{#str}}backtotop, theme_fordson_fel{{/str}}"><i class="fa fa-chevron-circle-up" aria-hidden="true"></i></a>
 
 {{> theme_fordson_fel/footer }}

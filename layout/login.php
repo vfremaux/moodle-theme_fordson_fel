@@ -15,6 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 defined('MOODLE_INTERNAL') || die();
+require_once($CFG->dirroot.'/local/technicalsignals/lib.php');
 
 /**
  * A login page layout for the boost theme.
@@ -26,11 +27,29 @@ defined('MOODLE_INTERNAL') || die();
 
 $bodyattributes = $OUTPUT->body_attributes();
 
+$footnote = $OUTPUT->footnote();
+$pagedoclink = $OUTPUT->page_doc_link();
+$coursefooter = $OUTPUT->course_footer();
+
 $templatecontext = [
     'sitename' => format_string($SITE->shortname, true, ['context' => context_course::instance(SITEID), "escape" => false]),
     'output' => $OUTPUT,
     'bodyattributes' => $bodyattributes,
+    'hasfootenote' => !empty($footnote) && (preg_match('/[a-z]/', strip_tags($footnote))),
+    'footnote' => $footnote,
+    'hascoursefooter' => !empty($coursefooter) && (preg_match('/[a-z]/', strip_tags($coursefooter))),
+    'coursefooter' => $coursefooter,
+    'hasdoclink' => !empty($pagedoclink) && (preg_match('/[a-z]/', strip_tags($pagedoclink))),
+    'pagedoclink' => $pagedoclink,
     'hascustomlogin' => $PAGE->theme->settings->showcustomlogin == 1,
+    'hascustomlogincontent' => !empty($OUTPUT->customlogin()),
+    'custombgimageurl' => theme_fordson_fel_get_random_filearea_url('loginimage'),
+    'hasfooterelements' => !empty($PAGE->theme->settings->leftfooter) || !empty($PAGE->theme->settings->midfooter) || !empty($PAGE->theme->settings->rightfooter),
+    'leftfooter' => @$PAGE->theme->settings->leftfooter,
+    'midfooter' => @$PAGE->theme->settings->midfooter,
+    'rightfooter' => @$PAGE->theme->settings->rightfooter,
+    'showlangmenu' => @$CFG->langmenu,
+    'technicalsignals' => local_print_administrator_message()
 ];
 
 echo $OUTPUT->render_from_template('theme_fordson_fel/login', $templatecontext);

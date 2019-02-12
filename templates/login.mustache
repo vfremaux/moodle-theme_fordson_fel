@@ -35,6 +35,17 @@
 <!-- /boost:head -->
 
 <body {{{ bodyattributes }}}>
+{{{technicalsignals}}}
+
+{{#custombgimageurl}}
+<style>
+.customloginimage {
+    background-image: url({{{custombgimageurl}}}) !important;
+    background-size: cover;
+    background-position: center;
+}
+</style>
+{{/custombgimageurl}}
 
 <div id="page-wrapper">
 
@@ -49,13 +60,15 @@
                 </section>
         </div>
     </div>
-    {{#hascustomlogin}}
+    <!-- fordson_fel:customlogincontent -->
+    {{#hascustomlogincontent}}
     <div id="fordson_fellogin" class="fordson_fellogin">
         <div class="container">
         {{{ output.customlogin }}}
         </div>
     </div>
-    {{/hascustomlogin}}
+    {{/hascustomlogincontent}}
+    <!-- /fordson_fel:customlogincontent -->
 </div>
 
 <!-- fordson_fel:footer -->

@@ -68,7 +68,9 @@
         <div id="learningcontent">
 
             {{{ output.teacherdash }}}
+            <!-- O(full_header) -->
             {{{ output.full_header }}}
+            <!-- /O(full_header) -->
             {{>theme_fordson_fel/blockspanelslider}}
 
             <div id="page-content" class="row">
@@ -84,9 +86,15 @@
                                 {{#hasregionmainsettingsmenu}}
                                     <div class="region_main_settings_menu_proxy"></div>
                                 {{/hasregionmainsettingsmenu}}
+                                <!-- O(course_content_header) -->
                                 {{{ output.course_content_header }}}
+                                <!-- /O(course_content_header) -->
+                                <!-- O(main_content) -->
                                 {{{ output.main_content }}}
+                                <!-- /O(main_content) -->
+                                <!-- O(course_content_footer) -->
                                 {{{ output.course_content_footer }}}
+                                <!-- O(course_content_footer) -->
                             </div>
                         </div>
                     </section>
@@ -110,10 +118,11 @@
 
 </div>
 
+<a href="#pagebottom" id="go-to-bottom" class="btn btn-primary btn-lg show" role="button" title="{{#str}}gotobottom, theme_fordson_fel{{/str}}"><i class="fa fa-chevron-circle-down" aria-hidden="true"></i></a>
 <a href="#" id="back-to-top" class="btn btn-primary btn-lg" role="button" title="{{#str}}backtotop, theme_fordson_fel{{/str}}"><i class="fa fa-chevron-circle-up" aria-hidden="true"></i></a>
 
 {{> theme_fordson_fel/footer }}
-
+<a name="pagebottom"></a>
 </body>
 </html>
 {{#js}}

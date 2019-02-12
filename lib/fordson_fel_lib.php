@@ -38,6 +38,8 @@
 
 defined('MOODLE_INTERNAL') || die();
 
+require_once($CFG->libdir.'/weblib.php');
+
 function theme_fordson_fel_get_course_activities() {
     global $CFG, $PAGE, $OUTPUT;
     // A copy of block_activity_modules.
@@ -127,3 +129,22 @@ function theme_fordson_fel_course_trim_char($str, $n = 500, $endchar = '&#8230;'
     $out = $small.$endchar;
     return $out;
 }
+
+function theme_fordson_fel_get_random_filearea_url($filearea) {
+
+    // Process args to randomize on all images in this filearea.
+    $fs = get_file_storage();
+
+    $syscontext = context_system::instance();
+    $component = 'theme_fordson_fel';
+
+    if ($loginimages = $fs->get_area_files($syscontext->id, $component, $filearea, 0, "itemid, filepath, filename", false)) { // Ignore dirs.
+        shuffle($loginimages);
+        $image = array_shift($loginimages);
+
+        return moodle_url::make_pluginfile_url($syscontext->id, $component, $filearea, 0, $image->get_filepath(), $image->get_filename(), true);
+    }
+
+    return false;
+}
+

@@ -1,0 +1,31 @@
+/* Flex sections additions */
+
+.flexsectionstyle-sample {
+    border: dashed 1px #ccc;
+    padding: 10px;
+    border-radius: 8px;
+    -moz-border-radius: 8px;
+}
+
+.flexsection-global-control {
+    margin:5px;
+}
+
+.flexsectionstyle-sample .sample-label {
+    color: #ccc;
+    font-size: 0.8em;
+}
+
+.format-flexsections .course-content ul.flexsections li.section {
+    margin-left: 2em;
+    border: dashed 1px #E0DCD7;
+}
+
+.format-flexsections div#page-content {
+    margin: 0;
+}
+
+.flexsections > .main > .content > .sectionname,
+.flexcontrol {
+    cursor:pointer;
+}

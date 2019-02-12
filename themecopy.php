@@ -27,8 +27,8 @@
 require('../../config.php');
 
 // We need this to retrieve original fordson settings.
-require_once($CFG->dirroot.'/theme/fordson/lib.php');
-require_once($CFG->dirroot.'/theme/fordson/lib/filesettings_lib.php');
+require_once($CFG->dirroot.'/theme/fordson_fel/lib.php');
+require_once($CFG->dirroot.'/theme/fordson_fel/lib/filesettings_lib.php');
 // Security.
 
 $context = context_system::instance();

@@ -34,6 +34,10 @@ use pix_icon;
 use renderer_base;
 use stdClass;
 
+if (file_exists($CFG->dirroot.'/local/userequipment/xlib.php')) {
+    require_once($CFG->dirroot.'/local/userequipment/xlib.php');
+}
+
 /**
  * The modchooser renderable class.
  *
@@ -82,7 +86,7 @@ class modchooser extends chooser {
             }
         }
 
-        // Commonly Used
+        // Commonly Used.
         if (count($commonlyused)) {
             $sections[] = new chooser_section('commonlyused', new lang_string('modchoosercommonlyusedtitle', 'theme_fordson_fel', $PAGE->theme->settings->modchoosercustomlabel) , array_map(function ($module) use ($context) {
                 return new modchooser_item($module, $context);
@@ -93,8 +97,15 @@ class modchooser extends chooser {
         if ($showonlycustom == 0) {
             // Activities.
             $activities = array_filter($modules, function ($mod) {
-                return ($mod->archetype !== MOD_ARCHETYPE_RESOURCE && $mod->archetype !== MOD_ARCHETYPE_SYSTEM);
+                $ok = ($mod->archetype !== MOD_ARCHETYPE_RESOURCE && $mod->archetype !== MOD_ARCHETYPE_SYSTEM);
+
+                if (function_exists('check_user_equipment')) {
+                    $ok = $ok && check_user_equipment('mod', $mod->name);
+                }
+
+                return $ok;
             });
+
             if (count($activities)) {
                 $sections[] = new chooser_section('activities', new lang_string('activities') , array_map(function ($module) use ($context) {
                     return new modchooser_item($module, $context);
@@ -104,7 +115,13 @@ class modchooser extends chooser {
 
             // Resources
             $resources = array_filter($modules, function ($mod) {
-                return ($mod->archetype === MOD_ARCHETYPE_RESOURCE);
+                $ok = ($mod->archetype === MOD_ARCHETYPE_RESOURCE);
+
+                if (function_exists('check_user_equipment')) {
+                    $ok = $ok && check_user_equipment('mod', $mod->name);
+                }
+
+                return $ok;
             });
             if (count($resources)) {
                 $sections[] = new chooser_section('resources', new lang_string('resources') , array_map(function ($module) use ($context) {
@@ -117,7 +134,13 @@ class modchooser extends chooser {
         if ($showonlycustom == 1 && $ismanager && $showallmanager) {
             // Activities.
             $activities = array_filter($modules, function ($mod) {
-                return ($mod->archetype !== MOD_ARCHETYPE_RESOURCE && $mod->archetype !== MOD_ARCHETYPE_SYSTEM);
+                $ok = ($mod->archetype !== MOD_ARCHETYPE_RESOURCE && $mod->archetype !== MOD_ARCHETYPE_SYSTEM);
+
+                if (function_exists('check_user_equipment')) {
+                    $ok = $ok && check_user_equipment('mod', $mod->modname);
+                }
+
+                return $ok;
             });
             if (count($activities)) {
                 $sections[] = new chooser_section('activities', new lang_string('activities') , array_map(function ($module) use ($context) {
@@ -128,7 +151,13 @@ class modchooser extends chooser {
 
             // Resources
             $resources = array_filter($modules, function ($mod) {
-                return ($mod->archetype === MOD_ARCHETYPE_RESOURCE);
+                $ok = ($mod->archetype === MOD_ARCHETYPE_RESOURCE);
+
+                if (function_exists('check_user_equipment')) {
+                    $ok = $ok && check_user_equipment('mod', $mod->modname);
+                }
+
+                return $ok;
             });
             if (count($resources)) {
                 $sections[] = new chooser_section('resources', new lang_string('resources') , array_map(function ($module) use ($context) {
@@ -141,7 +170,13 @@ class modchooser extends chooser {
         if ($issiteadmin && !$showallmanager && $showonlycustom) {
             // Activities.
             $activities = array_filter($modules, function ($mod) {
-                return ($mod->archetype !== MOD_ARCHETYPE_RESOURCE && $mod->archetype !== MOD_ARCHETYPE_SYSTEM);
+                $ok = ($mod->archetype !== MOD_ARCHETYPE_RESOURCE && $mod->archetype !== MOD_ARCHETYPE_SYSTEM);
+
+                if (function_exists('check_user_equipment')) {
+                    $ok = $ok && check_user_equipment('mod', $mod->modname);
+                }
+
+                return $ok;
             });
             if (count($activities)) {
                 $sections[] = new chooser_section('activities', new lang_string('activities') , array_map(function ($module) use ($context) {
@@ -152,7 +187,13 @@ class modchooser extends chooser {
 
             // Resources
             $resources = array_filter($modules, function ($mod) {
-                return ($mod->archetype === MOD_ARCHETYPE_RESOURCE);
+                $ok = ($mod->archetype === MOD_ARCHETYPE_RESOURCE);
+
+                if (function_exists('check_user_equipment')) {
+                    $ok = $ok && check_user_equipment('mod', $mod->modname);
+                }
+
+                return $ok;
             });
             if (count($resources)) {
                 $sections[] = new chooser_section('resources', new lang_string('resources') , array_map(function ($module) use ($context) {

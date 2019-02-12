@@ -34,9 +34,11 @@ $string['activitymenu_desc'] = 'Affiche la liste des activités du cours dans le
 $string['advancedsettings'] = 'Paramètres avancés';
 $string['alert'] = 'Alerte de la page d\'accueil';
 $string['alert_desc'] = 'Ceci est un message d\'alerte qui apparaîtra sur la page d\'accueil.';
+$string['backtocourse'] = 'Retour au cours';
 $string['backgroundimage'] = 'Image de fond par défaut de la page';
 $string['backgroundimage_desc'] = 'Image de fond pour les pages';
 $string['backtotop'] = 'Retour en haut de page et Scrollspy';
+$string['gotobottom'] = 'Aller en bas de page';
 $string['badges'] = 'Badges';
 $string['badges_desc'] = 'Récompensez vos étudiants';
 $string['blockwidthfordson_fel'] = 'Largeur du bloc de colonne';
@@ -51,26 +53,19 @@ $string['brandColour'] = 'Couleur principale';
 $string['brandColour_desc'] = 'Il s\'agit de la couleur principale de votre charte graphique.';
 $string['branddanger'] = 'Couleur « danger »';
 $string['branddanger_desc'] = 'Il s\'agit de la couleur utilisée par les panneaux et alertes marqués « danger ». Voir par exemple la classe CSS Bootstrap <i>alert-danger</i>';
-$string['brandemail'] = 'Courriel de l\'organisation';
-$string['brandemaildesc'] = 'Adresse de courriel de l\'organisation apparaissant dans le pied de page.';
 $string['brandgray'] = 'Base grise';
 $string['brandgray_desc'] = 'Paramètre de la base grise - Couleur utilisée afin de créer des ombres de gris. La valeur par défaut est #000, mais elle peut être adaptée afin d\'ajuster les niveaux de contraste';
 $string['brandinfo'] = 'Couleur « Info »';
 $string['brandinfo_desc'] = 'Il s\'agit de la couleur utilisée par les panneaux et alertes d\'information. Voir par exemple la classe CSS Bootstrap <i>alert-info</i>';
-$string['brandorganization'] = 'Nom de l\'organisation';
-$string['brandorganizationdesc'] = 'Nom de l\'organisation apparaissant dans le pied de page.';
-$string['brandphone'] = 'Numéro de téléphone de l\'organisation';
-$string['brandphonedesc'] = 'Numéro de téléphone apparaissant dans le pied de page.';
 $string['brandprimary'] = 'Couleur principale';
 $string['brandprimary_desc'] = 'Il s\'agit de la couleur principale de votre charte graphique.';
 $string['brandsuccess'] = 'Couleur « succès »';
 $string['brandsuccess_desc'] = 'Il s\'agit de la couleur utilisée par les panneaux, alertes et boutons pour marquer le succès et la réussite d\'une action. Voir par exemple la classe CSS Bootstrap <i>alert-success</i>';
 $string['brandwarning'] = 'Couleur « attention »';
 $string['brandwarning_desc'] = 'Il s\'agit de la couleur utilisée par les panneaux et alertes marqués « attention (warning) ». Voir par exemple la classe CSS Bootstrap <i>alert-warning</i>';
-$string['brandwebsite'] = 'Site de votre organisation';
-$string['brandwebsitedesc'] = 'Adresse du site web de votre organisation qui apparaîtra dans le pied de page.';
 $string['breadcrumbbkg'] = 'Couleur de fond de la piste de navigation';
 $string['breadcrumbbkg_desc'] = 'Couleur de fond de la piste de navigation.';
+$string['changeto'] = 'Changer vers {$a}';
 $string['cardbkg'] = 'Couleur d\'arrière-plan du contenu';
 $string['cardbkg_desc'] = 'Couleur de fond du contenu pour les cours et les blocs';
 $string['catsicon'] = 'Catégorie de l\'icône';
@@ -432,6 +427,9 @@ $string['thismyprofessionaldevelopment'] = 'Ce développement professionnel';
 $string['thismyprograms'] = 'Ce programme';
 $string['thismytraining'] = 'Cette formation';
 $string['thismyunits'] = 'Cette unité';
+$string['editmodthumb'] = 'Modifier la vignette de l\'activité';
+$string['modthumb'] = 'Vignette d\'activité/ressource';
+$string['cleanthumb'] = 'Supprimer le fichier de vignette';
 $string['titletooltip'] = 'Titre info-bulle du cours';
 $string['titletooltip_desc'] = 'Si le tronquage du titre du cours est utilisé, cette fonction peut être utilisée et affichera le titre entier du cours dans une info-bulle. Cocher cette case pour activer cette option.';
 $string['togglemarketing'] = 'Position de la zone d\'annonce de la page d\'accueil';
@@ -471,6 +469,12 @@ $string['errorcopyonself'] = 'Une variante ne peut être copiée sur elle-même'
 
 $string['presetadjustmentsettings'] = 'Adaptation du préréglage';
 $string['layoutinfodesc'] = 'Choisir des preset de design pour l\'agencement des pages.';
+$string['leftfooter'] = 'Pied de page gauche';
+$string['leftfooter_desc'] = '';
+$string['midfooter'] = 'Pied de page centre';
+$string['midfooter_desc'] = 'Le pied de page central ne sera pas visible sur les mobiles';
+$string['rightfooter'] = 'Pied de page droite';
+$string['rightfooter_desc'] = '';
 
 $string['pagelayout'] = 'Agencement';
 $string['pagelayout_desc'] = 'Choisir u nagencement parmi les agencements suivants.  <a href="https://goo.gl/fMXzSo" target="_new">Instructions for fordson_fel 3.5 Theme</a>';
@@ -490,3 +494,34 @@ $string['sectionlayout5'] = 'Boîte simple';
 $string['sectionlayout6'] = 'Fancy Section Title';
 $string['sectionlayout7'] = 'Style Académique';
 $string['sectionlayout8'] = 'Style Corporate';
+
+$string['hiddencourse'] = 'Ce cours est caché pour les étudiants';
+$string['publish'] = 'Ouvrir le cours';
+
+// Flexsection extras.
+$string['chooseclass'] = 'Changer le style';
+$string['sectionclass'] = 'Modifier l\'apparence de la section';
+$string['flexsectionsstyles'] = 'Styles displonibles pour la section';
+$string['nostyleoverride'] = 'Pas de modification d\'apparence';
+$string['sample'] = 'Echantillon';
+$string['collapseall'] = 'Tout fermer';
+$string['expandall'] = 'Tout ouvrir';
+$string['reset'] = 'Plan';
+$string['showactivitynames'] = 'Montrer les noms des activités';
+$string['hideactivitynames'] = 'Cacher les noms des activités';
+$string['activatestyle'] = 'Activer ce style ';
+
+$string['flexsectionsstylesdesc'] = '
+Vous pouvez entrer une liste (une définition par ligne) de définitions de style de type:
+
+<i>&lt;stylename&gt;</i>:<i>&lt;stylelabel&gt;</i>:{<i>&lt;stylerules&gt;</i>}
+
+ou :
+
+<i>&lt;stylename&gt;</i>:<i>&lt;stylelabel&gt;</i>:<i>&lt;classname&gt;</i>
+
+Les lignes vides, ou commençant par # ou / sont ignorées.
+
+Dans le cas où vous utilisez des noms de classe CSS, ces classes devront être définies dans les feuille de style du thème, ou ajoutées par l\'administrateur
+en utilisant la fonctionnalité de customisation de la CSS du theme si ce dernier le supporte.
+';
