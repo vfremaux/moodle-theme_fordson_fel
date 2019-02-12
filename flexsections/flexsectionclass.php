@@ -37,20 +37,21 @@ if (!$course = $DB->get_record('course', array('id' => $section->course))) {
 
 $context = context_course::instance($course->id);
 $PAGE->set_context($context);
-$PAGE->requires->js('/theme/archaius/flexsections/js/changesectionclass.js');
-$PAGE->requires->css('/theme/archaius/flexsections/styles.css');
+$PAGE->requires->js('/theme/fordson_fel/flexsections/js/changesectionclass.js');
+$PAGE->requires->css('/theme/fordson_fel/flexsections/styles.css');
 
 require_login($course);
 require_capability('moodle/course:manageactivities', $context);
 
 $PAGE->set_heading(get_string('sectionclass', 'theme_'.$PAGE->theme->name));
-$url = new moodle_url('/theme/archaius/flexsections/flexsectionclass.php', array('id' => $sectionid));
+$url = new moodle_url('/theme/fordson_fel/flexsections/flexsectionclass.php', array('id' => $sectionid));
 $PAGE->set_url($url);
 
 $renderer = $PAGE->get_renderer('format_flexsections');
-$availablestyles = $renderer->parse_styleconfig();
+$config = get_config('theme_'.$PAGE->theme->name);
+$availablestyles = $renderer->parse_styleconfig($config);
 
-require_once($CFG->dirroot.'/theme/archaius/flexsections/flexsectionclass_form.php');
+require_once($CFG->dirroot.'/theme/fordson_fel/flexsections/flexsectionclass_form.php');
 
 $params = array('courseid' => $course->id, 'sectionid' => $sectionid, 'name' => 'styleoverride');
 $styleoverride = $DB->get_field('course_format_options', 'value', $params);

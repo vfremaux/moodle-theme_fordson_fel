@@ -32,6 +32,7 @@ $string['activitylinkstitle_desc'] = 'Voir toutes les activités du cours';
 $string['activitymenu'] = 'Afficher les activités du cours dans le menu gestion du cours';
 $string['activitymenu_desc'] = 'Affiche la liste des activités du cours dans le tiroir de navigation du cours. Cette option affiche la liste de toutes les activités du cours pour les étudiants et les enseignants.';
 $string['advancedsettings'] = 'Paramètres avancés';
+$string['classparams'] = 'Paramètres de style des sections';
 $string['alert'] = 'Alerte de la page d\'accueil';
 $string['alert_desc'] = 'Ceci est un message d\'alerte qui apparaîtra sur la page d\'accueil.';
 $string['backtocourse'] = 'Retour au cours';
@@ -354,6 +355,7 @@ $string['region-side-post'] = 'Panneau escamotable droite';
 $string['sectionicon'] = 'Icône de section de cours';
 $string['sectionicon_desc'] = 'Cette option vous permet de changer l\'icône qui apparaît à côté de chaque semaine/sujet dans un cours. Ce sont des icônes « Font-Awesome »';
 $string['section_mods'] = 'Modules :';
+$string['sectionstyleoverride'] = 'Surcharge de style de section';
 $string['setting_navdrawersettings'] = 'Paramètres du tiroir de navigation';
 $string['setting_navdrawersettings_desc'] = 'Activer la fonctionnalité de zone de navigation Boost. fordson_fel ne nécessite pas de zone de navigation. Nous l\'avons remplacé par une liste déroulante Jump-to-section. Vous pouvez réactiver la zone de navigation ci-dessous.';
 $string['showalltomanager'] = 'Montrer toutes les activités et ressources aux gestionnaires';
@@ -511,7 +513,7 @@ $string['showactivitynames'] = 'Montrer les noms des activités';
 $string['hideactivitynames'] = 'Cacher les noms des activités';
 $string['activatestyle'] = 'Activer ce style ';
 
-$string['flexsectionsstylesdesc'] = '
+$string['flexsectionsstyles_desc'] = '
 Vous pouvez entrer une liste (une définition par ligne) de définitions de style de type:
 
 <i>&lt;stylename&gt;</i>:<i>&lt;stylelabel&gt;</i>:{<i>&lt;stylerules&gt;</i>}

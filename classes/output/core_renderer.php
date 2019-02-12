@@ -40,7 +40,6 @@ use theme_config;
 defined('MOODLE_INTERNAL') || die;
 
 require_once ($CFG->dirroot . "/course/renderer.php");
-require_once ($CFG->libdir . '/coursecatlib.php');
 
 /**
  * Renderers to align Moodle's HTML with that expected by Bootstrap
@@ -620,6 +619,9 @@ class core_renderer extends \theme_boost\output\core_renderer {
                         if (strpos($fieldname, 'profile_field_')) {
                             $fieldname = str_replace('profile_field_', '', $fieldname);
                             $field = $DB->get_record('user_info_field', array('shortname' => $fieldname));
+                            if (empty($USER) || empty($field)) {
+                                return false;
+                            }
                             $params = array('userid' => $USER->id, 'fieldid' => $field->id);
                             $fieldvalue = $DB->get_field('user_info_data', 'data', $params);
                         } else {
@@ -636,7 +638,7 @@ class core_renderer extends \theme_boost\output\core_renderer {
                     } else if (preg_match('/(.*)\^$/', $condition, $matches)) {
                         // Exclusive capability check : doanything wont pass.
                         $capability = $matches[1];
-                        if (has_capability($capability, $coursecontext, $USER->id, false)) {
+                        if (!empty($USER->id) && has_capability($capability, $coursecontext, $USER->id, false)) {
                             return str_replace('&amp;', '&', $targeturl);
                         } else {
                             return false;

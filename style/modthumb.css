@@ -56,5 +56,5 @@
 }
 
 .fullhide {
-    display: none;
+    display: none !important;
 }

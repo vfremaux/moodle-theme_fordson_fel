@@ -34,6 +34,11 @@ class flexsectionclass_form extends moodleform {
         $mform->addElement('hidden', 'overridestyle');
         $mform->setType('overridestyle', PARAM_TEXT);
 
+        $mform->addElement('header', 'classparams', get_string('classparams', 'theme_fordson_fel'));
+
+        $label = get_string('sectionstyleoverride', 'theme_fordson_fel');
+        $mform->addElement('header', 'styleoverridehdr', $label);
+
         $attrs = array();
         if (empty($this->_customdata['current'])) {
             $attrs['class'] = 'btn currentchoice';
@@ -41,7 +46,7 @@ class flexsectionclass_form extends moodleform {
             $attrs['class'] = 'btn';
             $attrs['onclick'] = 'submitclasschange(this, \'\')';
         }
-        $btnlabel = get_string('nostyleoverride', 'theme_archaius', '');
+        $btnlabel = get_string('nostyleoverride', 'theme_fordson_fel', '');
         $mform->addElement('button', 'styleoverride_none', $btnlabel, $attrs);
 
         if (!empty($this->_customdata['styles']['labels'])) {
@@ -51,7 +56,7 @@ class flexsectionclass_form extends moodleform {
                 $currentclass = ($name == $this->_customdata['current']) ? 'currentchoice' : '';
 
                 $attrs = array('onclick' => 'submitclasschange(this, \''.$name.'\');return true;', 'class' => $btncurrentclass);
-                $btnlabel = get_string('activatestyle', 'theme_archaius').' > '.$label;
+                $btnlabel = get_string('activatestyle', 'theme_fordson_fel').' > '.$label;
                 $mform->addElement('button', 'styleoverride_'.$name, $btnlabel, $attrs);
 
                 $attrs = array('class' => 'sectionname');
@@ -62,7 +67,7 @@ class flexsectionclass_form extends moodleform {
                 } else {
                     $attrs['class'] .= ' '.$this->_customdata['styles']['configs'][$name].' '.$currentclass;
                 }
-                $sectionsample = '<span class="sample-label">'.get_string('sample', 'theme_archaius').'</span><br/>';
+                $sectionsample = '<span class="sample-label">'.get_string('sample', 'theme_fordson_fel').'</span><br/>';
                 $sectionsample .= html_writer::tag('h3', get_string('section'), $attrs);
                 $html = '<div class="flexsectionstyle-sample-wrapper">
                     <div class="flexsectionstyle-sample '.$currentclass.'">'.$sectionsample.'</div>

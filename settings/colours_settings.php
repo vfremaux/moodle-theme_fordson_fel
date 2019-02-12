@@ -113,6 +113,14 @@ $page->add(new admin_setting_heading('theme_fordson_fel_colours', get_string('co
     $setting->set_updatedcallback('theme_reset_all_caches');
     $page->add($setting);
 
+    // Flex section style list.
+    $key = 'theme_forson_fel/flexsectionsstyles';
+    $label = get_string('flexsectionsstyles', 'theme_fordson_fel');
+    $desc = get_string('flexsectionsstyles_desc', 'theme_fordson_fel');
+    $default = '';
+    $setting = new admin_setting_configtextarea($key, $label, $desc, $default, PARAM_TEXT, 64, 10);
+    $page->add($setting);
+
     // Raw SCSS to include after the content.
     $setting = new admin_setting_configtextarea('theme_fordson_fel/scss', get_string('rawscss', 'theme_fordson_fel'),
     get_string('rawscss_desc', 'theme_fordson_fel'), '', PARAM_RAW);

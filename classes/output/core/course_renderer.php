@@ -54,14 +54,11 @@ global $PAGE;
 if ($PAGE->theme->settings->coursetilestyle < 8) {
     class course_renderer extends \theme_boost\output\core\course_renderer {
 
-        protected $thumbfiles;
-
         protected $countcategories = 0;
 
         public function frontpage_available_courses($id = 0) {
             /* available courses */
             global $CFG, $OUTPUT, $PAGE;
-            include_once($CFG->libdir . '/coursecatlib.php');
 
             $chelper = new coursecat_helper();
             $chelper->set_show_courses(self::COURSECAT_SHOW_COURSES_EXPANDED)->set_courses_display_options(array(
@@ -74,8 +71,8 @@ if ($PAGE->theme->settings->coursetilestyle < 8) {
             $chelper->set_attributes(array(
                 'class' => 'frontpage-course-list-all'
             ));
-            $courses = coursecat::get($id)->get_courses($chelper->get_courses_display_options());
-            $totalcount = coursecat::get($id)->get_courses_count($chelper->get_courses_display_options());
+            $courses = \core_course_category::get($id)->get_courses($chelper->get_courses_display_options());
+            $totalcount = \core_course_category::get($id)->get_courses_count($chelper->get_courses_display_options());
 
             $rcourseids = array_keys($courses);
             $acourseids = array_chunk($rcourseids, 3);
@@ -117,8 +114,7 @@ if ($PAGE->theme->settings->coursetilestyle < 8) {
                         ));
 
                         if ($course instanceof stdClass) {
-                            require_once ($CFG->libdir . '/coursecatlib.php');
-                            $course = new course_in_list($course);
+                            $course = new \core_course_list_element($course);
                         }
 
                         // Load from config if usea a img from course summary file if not exist a img then a default one ore use a fa-icon.
@@ -537,8 +533,7 @@ if ($PAGE->theme->settings->coursetilestyle < 8) {
                         ));
 
                         if ($course instanceof stdClass) {
-                            require_once ($CFG->libdir . '/coursecatlib.php');
-                            $course = new course_in_list($course);
+                            $course = new \core_course_list_element($course);
                         }
 
                         // Load from config if usea a img from course summary file if not exist a img then a default one ore use a fa-icon.
@@ -929,7 +924,7 @@ if ($PAGE->theme->settings->coursetilestyle < 8) {
                 }
             }
 
-            $totalcount = coursecat::get(0)->get_children_count();
+            $totalcount = \core_course_category::get(0)->get_children_count();
 
             $content = '';
             if ($this->countcategories == 0 || ($this->countcategories % 3) == 0) {

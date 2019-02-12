@@ -49,7 +49,7 @@ class theme_fordson_fel_format_flexsections_renderer extends format_flexsections
         parent::__construct($page, $target);
         static $initialized = false;
 
-        $this->config = get_config('theme_fordson_fel');
+        $this->config = get_config('theme_'.$PAGE->theme->name);
         $this->availablestyles = $this->parse_styleconfig();
 
         if (!$initialized) {
@@ -200,7 +200,7 @@ class theme_fordson_fel_format_flexsections_renderer extends format_flexsections
         // Theme adds style related additional attribute in format.
         if (!empty($this->availablestyles) && ($section->section > 0) && $PAGE->user_is_editing()) {
             if (has_capability('moodle/course:update', $context)) {
-                $contentclassurl = new moodle_url('/theme/'.$PAGE->theme->name.'/flexsections/flexsectionclass.php', array('id' => $section->id, 'sr' => $sr));
+                $contentclassurl = new moodle_url('/theme/fordson_fel/flexsections/flexsectionclass.php', array('id' => $section->id, 'sr' => $sr));
                 $text = new lang_string('chooseclass', 'theme_'.$PAGE->theme->name);
                 $controls[] = new format_flexsections_edit_control('contentclass', $contentclassurl, $text);
             }

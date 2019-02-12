@@ -28,6 +28,7 @@ defined('MOODLE_INTERNAL') || die();
 // Theme strings.
 $string['choosereadme'] = 'Fordson fel adds to the community Fordson theme valuable functional additions such as variant capabiity, side bloc panel and contextual custom menus.';
 $string['configtitle'] = 'Fordson FEL';
+$string['classparams'] = 'Section style params';
 $string['pluginname'] = 'Fordson FEL';
 $string['region-side-pre'] = 'Right';
 $string['generalsettings'] = 'General settings';
@@ -517,6 +518,7 @@ $string['publish'] = 'Open the course';
 $string['chooseclass'] = 'Change section style';
 $string['sectionclass'] = 'Change section apparearence';
 $string['flexsectionsstyles'] = 'Available styles for flexsections';
+$string['sectionstyleoverride'] = 'Section style override';
 $string['nostyleoverride'] = 'No style override';
 $string['sample'] = 'Sample';
 $string['collapseall'] = 'Close all';
@@ -525,7 +527,7 @@ $string['reset'] = 'Reset';
 $string['showactivitynames'] = 'Show activitynames';
 $string['hideactivitynames'] = 'Hide activitynames';
 $string['activatestyle'] = 'Use this style ';
-$string['flexsectionsstylesdesc'] = '
+$string['flexsectionsstyles_desc'] = '
 You may enter a list of (one per line) style descriptors as:
 
 <i>&lt;stylename&gt;</i>:<i>&lt;stylelabel&gt;</i>:{<i>&lt;stylerules&gt;</i>}

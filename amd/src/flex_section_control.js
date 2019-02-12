@@ -39,16 +39,19 @@ define(['jquery', 'core/config', 'core/log'], function($, config, log) {
             $('.flexsection-global-control').on('click', this.processglobal);
 
             $('.flexsections > .section > .content > .sectionname').on('click', this.proxysectionnameevent);
-            log.debug('Flex sections control initialized');
+            log.debug('AMD Flex sections control initialized');
         },
 
         // Init_editing will NOT take control of section name.
         init_editing: function() {
 
+            // Dim toggle buttons.
+            $('.flexsection-global-control').addClass('dimmed');
+
             // Attach togglestate handler to all flexsections in page.
             $('.flexcontrol').on('click', this.togglestate);
 
-            log.debug('Flex sections control initialized');
+            log.debug('AMD Flex sections control initialized');
         },
 
         proxysectionnameevent: function(e) {
@@ -66,22 +69,23 @@ define(['jquery', 'core/config', 'core/log'], function($, config, log) {
             e.preventDefault();
             var that = $(this);
 
-            var regex = /control-([0-9]+)-section-([0-9]+)/;
-            var matchs = regex.exec(that.attr('id'));
+            regex = /control-([0-9]+)-section-([0-9]+)/;
+            matchs = regex.exec(that.attr('id'));
             var sectionid = parseInt(matchs[1]);
             var sectionsection = parseInt(matchs[2]);
-            regex = /level-([0-9]+)/;
+            regex = /level-([0-9]+)/
             matchs = regex.exec(that.attr('class'));
             var level = parseInt(matchs[1]);
+            var nextlevel = level + 1;
 
             log.debug('Working for flex section ' + sectionsection + ' of id ' + sectionid);
 
             var url = config.wwwroot + '/theme/archaius/flexsections/ajax/flexregister.php?';
             url += 'sectionid=' + sectionid;
-            var handlesrc = $('#control-' + sectionid + '-section-' + sectionsection).attr('src');
+            handlesrc = $('#control-' + sectionid + '-section-' + sectionsection).attr('src');
 
             if (!hide) {
-                var parentid = that.closest('li').parent().closest('li').attr('id');
+                parentid = that.closest('li').parent().closest('li').attr('id');
                 // Trigger hide event on all siblings.
                 $.each($('#' + parentid + ' .flexcontrol.level-' + level), function(index, value) {
                     if ($(value).attr('id') != that.attr('id')) {
@@ -90,8 +94,7 @@ define(['jquery', 'core/config', 'core/log'], function($, config, log) {
                 });
             }
 
-            if (($('#section-' + sectionsection + ' > div > div.section-content').css('visibility') === 'visible') ||
-                        (hide === true)) {
+            if (($('#section-' + sectionsection + ' > div > div.section-content').css('visibility') === 'visible') || (hide === true)) {
                 $('#section-' + sectionsection + ' > div > div.section-content').css('visibility', 'hidden');
                 $('#section-' + sectionsection + ' > div > div.section-content').css('display', 'none');
                 $('#section-' + sectionsection + ' > div > ul.flexsections').css('visibility', 'hidden');
@@ -115,7 +118,7 @@ define(['jquery', 'core/config', 'core/log'], function($, config, log) {
 
             url += '&hide=' + hide;
 
-            $.get(url, function() {
+            $.get(url, function(data) {
             });
 
             return false;
@@ -126,11 +129,11 @@ define(['jquery', 'core/config', 'core/log'], function($, config, log) {
             e.preventDefault();
             var that = $(this);
 
-            var regex = /flexsections-control-([a-z]+)/;
-            var matchs = regex.exec(that.attr('id'));
-            var what = matchs[1];
+            regex = /flexsections-control-([a-z]+)/;
+            matchs = regex.exec(that.attr('id'));
+            what = matchs[1];
 
-            var url = config.wwwroot + '/theme/archaius/flexsections/ajax/flexregister.php?';
+            url = config.wwwroot + '/theme/archaius/flexsections/ajax/flexregister.php?';
             url += 'id=' + M.course.id;
             url += '&what=' + what;
 
@@ -179,7 +182,7 @@ define(['jquery', 'core/config', 'core/log'], function($, config, log) {
             // Update positions server side.
             $.get(url);
         }
-    };
+    }
 
     return flexsection_control;
 
