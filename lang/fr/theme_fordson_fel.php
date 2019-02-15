@@ -32,7 +32,6 @@ $string['activitylinkstitle_desc'] = 'Voir toutes les activités du cours';
 $string['activitymenu'] = 'Afficher les activités du cours dans le menu gestion du cours';
 $string['activitymenu_desc'] = 'Affiche la liste des activités du cours dans le tiroir de navigation du cours. Cette option affiche la liste de toutes les activités du cours pour les étudiants et les enseignants.';
 $string['advancedsettings'] = 'Paramètres avancés';
-$string['classparams'] = 'Paramètres de style des sections';
 $string['alert'] = 'Alerte de la page d\'accueil';
 $string['alert_desc'] = 'Ceci est un message d\'alerte qui apparaîtra sur la page d\'accueil.';
 $string['backtocourse'] = 'Retour au cours';

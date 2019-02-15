@@ -49,7 +49,7 @@ class theme_fordson_fel_format_flexsections_renderer extends format_flexsections
         parent::__construct($page, $target);
         static $initialized = false;
 
-        $this->config = get_config('theme_'.$PAGE->theme->name);
+        $this->config = get_config('theme_fordson_fel');
         $this->availablestyles = $this->parse_styleconfig();
 
         if (!$initialized) {
