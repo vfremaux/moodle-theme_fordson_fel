@@ -28,7 +28,6 @@ defined('MOODLE_INTERNAL') || die();
 // Theme strings.
 $string['choosereadme'] = 'Fordson fel adds to the community Fordson theme valuable functional additions such as variant capabiity, side bloc panel and contextual custom menus.';
 $string['configtitle'] = 'Fordson FEL';
-$string['classparams'] = 'Section style params';
 $string['pluginname'] = 'Fordson FEL';
 $string['region-side-pre'] = 'Right';
 $string['generalsettings'] = 'General settings';
