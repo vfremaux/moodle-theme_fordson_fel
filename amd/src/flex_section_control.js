@@ -45,11 +45,30 @@ define(['jquery', 'core/config', 'core/log'], function($, config, log) {
         // Init_editing will NOT take control of section name.
         init_editing: function() {
 
-            // Dim toggle buttons.
+            // Expand everything.
+            $('.section.sub > .content > .section-content').css('display', 'block');
+            $('.section.sub > .content > .section-content').css('visibility', 'visible');
+            $('.section.sub > .content > .summary').css('display', 'block');
+            $('.section.sub > .content > .summary').css('visibility', 'visible');
+            $('.section.sub >.content > .flexsections').css('display', 'block');
+            $('.section.sub >.content > .flexsections').css('visibility', 'visible');
+            $('img.flexcontrol').attr('src', $('img.flexcontrol').attr('src').replace('collapsed', 'expanded'));
+
+            // If collapse mode enabled in editing
+            // Attach togglestate handler to all flexsections in page.
+            $('.flexcontrol').on('click', this.togglestate);
+
+            // Attach global processings.
+            $('.flexsection-global-control').on('click', this.processglobal);
+
+            // Dim toggle buttons. (if collapse mode disabled in edting.
+            /*
             $('.flexsection-global-control').addClass('dimmed');
 
             // Attach togglestate handler to all flexsections in page.
-            $('.flexcontrol').on('click', this.togglestate);
+            // $('.flexcontrol').on('click', this.togglestate);
+            $('.flexcontrol').css('display', 'none');
+            */
 
             log.debug('AMD Flex sections control initialized');
         },
@@ -79,7 +98,7 @@ define(['jquery', 'core/config', 'core/log'], function($, config, log) {
 
             log.debug('Working for flex section ' + sectionsection + ' of id ' + sectionid);
 
-            var url = config.wwwroot + '/theme/archaius/flexsections/ajax/flexregister.php?';
+            var url = config.wwwroot + '/theme/fordson_fel/sections/ajax/register.php?';
             url += 'sectionid=' + sectionid;
             var handlesrc = $('#control-' + sectionid + '-section-' + sectionsection).attr('src');
 
@@ -105,6 +124,7 @@ define(['jquery', 'core/config', 'core/log'], function($, config, log) {
                 $('#control-' + sectionid + '-section-' + sectionsection).attr('src', handlesrc);
                 hide = 1;
             } else {
+                // Show section.
                 $('#section-' + sectionsection + ' > div > div.section-content').css('visibility', 'visible');
                 $('#section-' + sectionsection + ' > div > div.section-content').css('display', 'block');
                 $('#section-' + sectionsection + ' > div > ul.flexsections').css('visibility', 'visible');
@@ -114,6 +134,14 @@ define(['jquery', 'core/config', 'core/log'], function($, config, log) {
                 handlesrc = handlesrc.replace('collapsed', 'expanded');
                 $('#control-' + sectionid + '-section-' + sectionsection).attr('src', handlesrc);
                 hide = 0;
+
+                // Scroll to this section.
+                var offset = that.offset();
+                offset.top -= 70;
+                $('html, body').animate({
+                    scrollTop: offset.top,
+                    scrollLeft: 0
+                });
             }
 
             url += '&hide=' + hide;
@@ -133,7 +161,7 @@ define(['jquery', 'core/config', 'core/log'], function($, config, log) {
             var matchs = regex.exec(that.attr('id'));
             var what = matchs[1];
 
-            var url = config.wwwroot + '/theme/archaius/flexsections/ajax/flexregister.php?';
+            var url = config.wwwroot + '/theme/fordson_fel/sections/ajax/register.php?';
             url += 'id=' + M.course.id;
             url += '&what=' + what;
 

@@ -56,6 +56,12 @@ h3.sectionname {
 h3.sectionname a {
     color: $card-bg;
 }
+
+.section_action_menu {
+    background-color: $card-bg;
+    padding: .25rem .5rem;
+}
+
 .course-content ul.topics li.section .content,
 .course-content ul.weeks li.section .content {
     background-color: $card-bg;
@@ -119,8 +125,19 @@ a.add-sections {
     border-radius: $border-radius;
 }
 
-.path-course-view .completionprogress {
-    bottom: 10px;
+
+// Single Topic Fixes
+#page-course-view-topics .course-content .section-summary {
+    border: 0;
+}
+#page-course-view-topics .course-content ul.topics li.section-summary .content, #page-course-view-topics .course-content ul.weeks li.section-summary .content {
+    border: 0;
+}
+
+.single-section ul.topics li.section .content,
+.single-section ul.weeks li.section .content {
+    border: 0;
+    margin-top: 0rem;
 }
 
 // Activity Styling.
@@ -154,33 +171,85 @@ li.activity.label {
     background-color: $activityhover;
 }
 
-img.activityicon {
+.course-content img.activityicon {
     height: $activityiconsize;
     width: $activityiconsize;
     vertical-align: middle !important;
-}
-
-span.actions .icon {
-    width: 30px;
-    height: 30px;
 }
 
 span.instancename {
     margin-left: 1rem;
 }
 
-.m-t-2.m-b-1 {
-    background-color: $body-bg;
-    padding: 1rem;
-    border-radius: 3px;
-}
-
 .region_main_settings_menu_proxy {
     float: initial;
 }
 
-.path-course-view .actions img.icon {
-    width: $activityiconsize;
-    height: $activityiconsize;
+@if $spectrumpreset == 1 {
+    .course-content .section-summary {
+        border: 0; 
+    }
+    .section-go-link.btn.btn-secondary {
+        display: block;
+        margin-top: 2rem;
+    }
+    #page-course-view-topics .course-content ul.topics li.section-summary .content, #page-course-view-topics .course-content ul.weeks li.section-summary .content {
+        background-color: $gray-100;
+        padding-bottom: 1rem;
+        border: 1px solid $gray-200;
+        box-shadow: 0 1px 2px 0px rgba(0,0,0,.1);
+    }
+    .course-content .single-section ul.topics li.section .content, .course-content .single-section ul.weeks li.section .content {
+        background-color: initial;
+        padding-bottom: 1rem;
+        border: 0;
+        box-shadow: none;
+    }
+    .course-content .section-summary .section-title {
+        margin: 0;
+    }
+    .course-content .section-summary .summarytext {
+        margin: 0;
+        padding: 1rem;
+    }
+    .course-content ul.topics li.section, .course-content ul.weeks li.section {
+        padding-top: 0;
+    }
+    h3.sectionname {
+        background-color: $spectrum-base;
+    }
+    h3.sectionname.dimmed_text {
+        background-color: $gray-400;
+    }
+    .section-summary-activities {
+        width: 85%;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
 }
 
+@if $perceptionpreset == 1 {
+    .course-content ul.topics li.section .content, .course-content ul.weeks li.section .content {
+        margin: 0;
+        padding: 0;
+    }
+
+    h3.sectionname {
+        color: $primary;
+        padding: $spacer;
+        background-color: $perception-base;
+    }
+    h3.sectionname a {
+        color: $primary;
+    }
+    #page-course-view-topics .course-content .section-summary {
+        border: 0;
+    }
+    #page-course-view-topics .course-content ul.topics li.section-summary .content, #page-course-view-topics .course-content ul.weeks li.section-summary .content {
+        border: 1px solid $gray-300;
+    }
+    .course-content .section-summary .section-title {
+        margin:0;
+    }
+}

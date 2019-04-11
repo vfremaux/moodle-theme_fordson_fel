@@ -43,7 +43,7 @@ $setting = new admin_setting_configcheckbox($name, $title, $description, $defaul
 $setting->set_updatedcallback('theme_reset_all_caches');
 $page->add($setting);
 
-// Frontpage Textbox.
+// Dashboard Teacher Textbox.
 $name = 'theme_fordson_fel/coursemanagementtextbox';
 $title = get_string('coursemanagementtextbox', 'theme_fordson_fel');
 $description = get_string('coursemanagementtextbox_desc', 'theme_fordson_fel');
@@ -52,12 +52,34 @@ $setting = new admin_setting_confightmleditor($name, $title, $description, $defa
 $setting->set_updatedcallback('theme_reset_all_caches');
 $page->add($setting);
 
-// Frontpage Textbox.
+// Dashboard Student Textbox.
 $name = 'theme_fordson_fel/studentdashboardtextbox';
 $title = get_string('studentdashboardtextbox', 'theme_fordson_fel');
 $description = get_string('studentdashboardtextbox_desc', 'theme_fordson_fel');
 $default = '';
 $setting = new admin_setting_confightmleditor($name, $title, $description, $default);
+$setting->set_updatedcallback('theme_reset_all_caches');
+$page->add($setting);
+
+// Navbar Color switch toggle based on role
+$name = 'theme_fordson_fel/navbarcolorswitch';
+$title = get_string('navbarcolorswitch','theme_fordson_fel');
+$description = get_string('navbarcolorswitch_desc', 'theme_fordson_fel');
+$default = '2';
+$choices = array(
+	'1' => get_string('navbarcolorswitch_on', 'theme_fordson_fel'),
+	'2' => get_string('navbarcolorswitch_off', 'theme_fordson_fel'),
+	);
+$setting = new admin_setting_configselect($name, $title, $description, $default, $choices);
+$setting->set_updatedcallback('theme_reset_all_caches');
+$page->add($setting);
+
+// Show/hide course editing cog.
+$name = 'theme_fordson_fel/showactivitynav';
+$title = get_string('showactivitynav', 'theme_fordson_fel');
+$description = get_string('showactivitynav_desc', 'theme_fordson_fel');
+$default = 1;
+$setting = new admin_setting_configcheckbox($name, $title, $description, $default);
 $setting->set_updatedcallback('theme_reset_all_caches');
 $page->add($setting);
 
@@ -84,6 +106,15 @@ $name = 'theme_fordson_fel/showstudentcompletion';
 $title = get_string('showstudentcompletion', 'theme_fordson_fel');
 $description = get_string('showstudentcompletion_desc', 'theme_fordson_fel');
 $default = 1;
+$setting = new admin_setting_configcheckbox($name, $title, $description, $default);
+$setting->set_updatedcallback('theme_reset_all_caches');
+$page->add($setting);
+
+// Toggle show only your Group teachers in student course management panel.
+$name = 'theme_fordson_fel/showonlygroupteachers';
+$title = get_string('showonlygroupteachers', 'theme_fordson_fel');
+$description = get_string('showonlygroupteachers_desc', 'theme_fordson_fel');
+$default = 0;
 $setting = new admin_setting_configcheckbox($name, $title, $description, $default);
 $setting->set_updatedcallback('theme_reset_all_caches');
 $page->add($setting);

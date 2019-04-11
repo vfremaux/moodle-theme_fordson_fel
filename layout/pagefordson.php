@@ -23,7 +23,13 @@
  */
 
 defined('MOODLE_INTERNAL') || die();
-require_once($CFG->dirroot.'/local/technicalsignals/lib.php');
+if (is_dir($CFG->dirroot.'/local/technicalsignals')) {
+    require_once($CFG->dirroot.'/local/technicalsignals/lib.php');
+}
+
+if ($PAGE->theme->settings->breadcrumbstyle == '1') {
+    $PAGE->requires->js_call_amd('theme_fordson_fel/jBreadCrumb', 'init');
+}
 
 user_preference_allow_ajax_update('drawer-open-nav', PARAM_ALPHA);
 require_once($CFG->libdir . '/behat/lib.php');
@@ -73,9 +79,12 @@ $templatecontext = [
     'leftfooter' => @$PAGE->theme->settings->leftfooter,
     'midfooter' => @$PAGE->theme->settings->midfooter,
     'rightfooter' => @$PAGE->theme->settings->rightfooter,
-    'showlangmenu' => @$CFG->langmenu,
-    'technicalsignals' => local_print_administrator_message()
+    'showlangmenu' => @$CFG->langmenu
 ];
+
+if (is_dir($CFG->dirroot.'/local/technicalsignals')) {
+    $templatecontext['technicalsignals'] = local_print_administrator_message();
+}
 
 $PAGE->requires->jquery();
 if (isset($PAGE->theme->settings->showbacktotop) && $PAGE->theme->settings->showbacktotop == 1) {

@@ -92,6 +92,9 @@ function theme_fordson_fel_get_main_scss_content($theme) {
     }
 
     // Section Style
+    if ($theme->settings->sectionlayout == 1) {
+        $scss .= file_get_contents($CFG->dirroot . '/theme/fordson_fel/scss/sectionlayout/sectionstyle1.scss');
+    }
     if ($theme->settings->sectionlayout == 2) {
         $scss .= file_get_contents($CFG->dirroot . '/theme/fordson_fel/scss/sectionlayout/sectionstyle2.scss');
     }
@@ -112,6 +115,19 @@ function theme_fordson_fel_get_main_scss_content($theme) {
     }
     if ($theme->settings->sectionlayout == 8) {
         $scss .= file_get_contents($CFG->dirroot . '/theme/fordson_fel/scss/sectionlayout/sectionstyle8.scss');
+    }
+
+    if ($theme->settings->marketingstyle == 1) {
+        $scss .= file_get_contents($CFG->dirroot . '/theme/fordson_fel/scss/marketingstyle/marketingstyle1.scss');
+    }
+    if ($theme->settings->marketingstyle == 2) {
+        $scss .= file_get_contents($CFG->dirroot . '/theme/fordson_fel/scss/marketingstyle/marketingstyle2.scss');
+    }
+    if ($theme->settings->marketingstyle == 3) {
+        $scss .= file_get_contents($CFG->dirroot . '/theme/fordson_fel/scss/marketingstyle/marketingstyle3.scss');
+    }
+    if ($theme->settings->marketingstyle == 4) {
+        $scss .= file_get_contents($CFG->dirroot . '/theme/fordson_fel/scss/marketingstyle/marketingstyle4.scss');
     }
 
     $scss .= file_get_contents($CFG->dirroot . '/theme/fordson_fel/scss/styles.scss');
@@ -145,8 +161,10 @@ function theme_fordson_fel_get_pre_scss($theme) {
     'branddanger' => ['danger'],
     'bodybackground' => ['body-bg'],
     'breadcrumbbkg' => ['breadcrumb-bg'],
+    'breadcrumbfg' => ['breadcrumb-fg'],
     'cardbkg' => ['card-bg'],
     'drawerbkg' => ['drawer-bg'],
+    'footerbkg' => ['footer-bg'],
     'fploginform' => ['fploginform'],
     'headerimagepadding' => ['headerimagepadding'],
     'markettextbg' => ['markettextbg'],
@@ -157,6 +175,8 @@ function theme_fordson_fel_get_pre_scss($theme) {
     'slideshowheight' => ['slideshowheight'],
     'activityiconsize' => ['activityiconsize'],
     'gutterwidth' => ['gutterwidth'],
+    'topnavbarbg' => ['topnavbarbg'],
+    'topnavbarteacherbg' => ['teachernavbarcolor'],
     ];
 
     // Add settings variables.
@@ -264,6 +284,27 @@ function theme_fordson_fel_get_pre_scss($theme) {
         $prescss .= '.marketing6image {background-image: url("' . $marketing6image . '"); background-size:cover; background-position:center;}';
     }
 
+    // Set the image.
+    $marketing7image = $theme->setting_file_url('marketing7image', 'marketing7image');
+    if (isset($marketing7image)) {
+        // Add a fade in transition to avoid the flicker on course headers ***.
+        $prescss .= '.marketing7image {background-image: url("' . $marketing7image . '"); background-size:cover; background-position:center;}';
+    }
+
+    // Set the image.
+    $marketing8image = $theme->setting_file_url('marketing8image', 'marketing8image');
+    if (isset($marketing8image)) {
+        // Add a fade in transition to avoid the flicker on course headers ***.
+        $prescss .= '.marketing8image {background-image: url("' . $marketing8image . '"); background-size:cover; background-position:center;}';
+    }
+
+    // Set the image.
+    $marketing9image = $theme->setting_file_url('marketing9image', 'marketing9image');
+    if (isset($marketing9image)) {
+        // Add a fade in transition to avoid the flicker on course headers ***.
+        $prescss .= '.marketing9image {background-image: url("' . $marketing9image . '"); background-size:cover; background-position:center;}';
+    }
+
     return $prescss;
 }
 
@@ -273,13 +314,18 @@ function theme_fordson_fel_get_pre_scss($theme) {
  * @param theme_config $theme The theme config object.
  * @return string
  */
+
+/* Removed to fix double import of extra SCSS at bottom of color page
+
 function theme_fordson_fel_get_extra_scss($theme) {
     // Adapted from Boost to allow other changes or settings if required.
-    $extrascss = '';
+    
     if (!empty($theme->settings->scss)) {
         $extrascss .= $theme->settings->scss;
+    } else {
+        $extrascss = '';
     }
 
     return $extrascss;
-}
+}*/
 

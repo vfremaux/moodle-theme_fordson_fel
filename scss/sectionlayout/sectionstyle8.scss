@@ -36,60 +36,23 @@
 
 h3.sectionname {
     text-align: center;
-    border-top: 8px solid $body-bg;
     padding: $spacer;
-    border-bottom: 8px solid $body-bg;
-    transition: all 0.3s cubic-bezier(.25, .8, .25, 1);
+    background-color: $gray-300; 
 }
 
-h3.sectionname:hover {
-    background-color: $body-bg;
-}
-
-#page-course-view-topics .course-content ul.topics li.section {
+#page-course-view-topics .course-content ul.topics li.section, #page-course-view-weeks .course-content ul.weeks li.section {
     margin-bottom: 3rem;
+    padding-top: 0;
 }
 
-#page-course-view-weeks .course-content ul.weeks li.section {
-    margin-bottom: 3rem;
-}
-
-.section li.activity {
-    border-bottom: 1px dashed $gray-lighter;
-    font-size: 16px;
-}
-
-.section li.activity:hover {
-    transition: all 0.3s cubic-bezier(.25, .8, .25, 1);
-    background-color: $activityhover;
-}
-
-.editing .section .activity:hover,
-.editing .section .activity.action-menu-shown {
-    background-color: $activityhover;
-}
-
-img.activityicon {
+.course-content img.activityicon {
     height: $activityiconsize;
     width: $activityiconsize;
-    vertical-align: middle!important;
-}
-
-span.actions .icon {
-    width: 30px;
-    height: 30px;
+    vertical-align: middle !important;
 }
 
 .course-content .current::before {
     border-left: $brand-primary 8px solid;
-}
-
-.m-t-2.m-b-1 {
-    background-color: darken($body-bg, 10%);
-    padding: 1rem;
-    margin: 0!important;
-    border-top: 7px solid rgba(0,0,0,.2);
-    border-radius: 0;
 }
 
 .course-content .single-section .section-navigation {
@@ -100,4 +63,31 @@ span.actions .icon {
 }
 .course-content .section-summary {
     border: 0;
+}
+
+@if $perceptionpreset == 1 {
+    .course-content ul.topics li.section .content, .course-content ul.weeks li.section .content {
+        margin: 0;
+        padding: 0;
+    }
+    h3.sectionname {
+        text-align: left;
+        padding: $spacer;
+        background-color: $perception-base; 
+    }
+    .hidden h3.sectionname {
+        text-align: left;
+        padding: 1rem;
+        background-color: $gray-300;
+    }
+
+    .course-content .current::before {
+        border-left: 0;
+    }
+    .course-content ul.topics li.section.current h3.sectionname, .course-content ul.weeks li.section.current h3.sectionname {
+        background-color: $sectionnamehighlight;
+    }
+    .progress-bar {
+        background-color: $sectionnamehighlight;
+    }
 }

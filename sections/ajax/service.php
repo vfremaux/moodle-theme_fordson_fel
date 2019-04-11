@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 require('../../../../config.php');
-require_once($CFG->dirroot.'/theme/essential_fel/flexsections/flexlib.php');
+require_once($CFG->dirroot.'/theme/fordson_fel/sections/sectionslib.php');
 
 $sectionid = required_param('sectionid', PARAM_INT);
 $hide = required_param('hide', PARAM_BOOL);
@@ -34,12 +34,12 @@ require_login($course);
 if ($action == 'init') {
     // Removes all preceding preferences for the user and initializes expanding branches only.
     $select = ' name LIKE ? AND userid = ? ';
-    $DB->delete_records_select('user_preferences', $select, array('flexsection\\_%', $USER->id));
+    $DB->delete_records_select('user_preferences', $select, array('section_'.$course->format.'\\_%', $USER->id));
 
     $leaves = flexsection_get_leaves($course->id);
     if ($leaves) {
         foreach($leaves as $leaf) {
-            $hidekey = 'flexsection_'.$leaf->id.'_hidden';
+            $hidekey = 'section_'.$course->format.'_'.$leaf->id.'_hidden';
             $newrec = new StdClass;
             $newrec->userid = $USER->id;
             $newrec->name = $hidekey;
@@ -48,7 +48,7 @@ if ($action == 'init') {
         }
     }
 } else {
-    $hidekey = 'flexsection_'.$sectionid.'_hidden';
+    $hidekey = 'section_'.$course->format.'_'.$sectionid.'_hidden';
     $params = array('userid' => $USER->id, 'name' => $hidekey);
     if (!$hide) {
         $DB->delete_records('user_preferences', $params);

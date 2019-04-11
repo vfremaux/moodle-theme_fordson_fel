@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 require('../../../../config.php');
-require_once($CFG->dirroot.'/theme/archaius/flexsections/flexlib.php');
+require_once($CFG->dirroot.'/theme/fordson_fel/sections/sectionslib.php');
 
 $action = optional_param('what', '', PARAM_TEXT);
 
@@ -32,12 +32,12 @@ if (in_array($action, array('collapseall', 'reset', 'expandall'))) {
 if ($action == 'reset') {
     // Removes all preceding preferences for the user and initializes expanding branches only.
     $select = ' name LIKE ? AND userid = ? AND value = ?';
-    $DB->delete_records_select('user_preferences', $select, array('flexsection\\_%', $USER->id, $course->id));
+    $DB->delete_records_select('user_preferences', $select, array('section_'.$course->format.'\\_%', $USER->id, $course->id));
 
     $leaves = flexsection_get_leaves($course->id);
     if ($leaves) {
         foreach ($leaves as $leaf) {
-            $hidekey = 'flexsection_'.$leaf->id.'_hidden';
+            $hidekey = 'section_'.$course->format.'_'.$leaf->id.'_hidden';
             $newrec = new StdClass;
             $newrec->userid = $USER->id;
             $newrec->name = $hidekey;
@@ -50,7 +50,7 @@ if ($action == 'reset') {
     $allsections = $DB->get_records('course_sections', array('course' => $course->id));
     if ($allsections) {
         foreach ($allsections as $s) {
-            $hidekey = 'flexsection_'.$s->id.'_hidden';
+            $hidekey = 'section_'.$course->format.'_'.$s->id.'_hidden';
             $params = array('userid' => $USER->id, 'name' => $hidekey);
             if (!$DB->record_exists('user_preferences', $params)) {
                 $pref = new StdClass;
@@ -64,7 +64,7 @@ if ($action == 'reset') {
 } else if ($action == 'expandall') {
     // Remove all hiding keys from that course
     $select = ' name LIKE ? AND userid = ? AND value = ? ';
-    $DB->delete_records_select('user_preferences', $select, array('flexsection\\_%', $USER->id, $course->id));
+    $DB->delete_records_select('user_preferences', $select, array('section_'.$course->format.'\\_%', $USER->id, $course->id));
 } else {
 
     $sectionid = required_param('sectionid', PARAM_INT);
@@ -79,7 +79,7 @@ if ($action == 'reset') {
 
     require_login($course);
 
-    $hidekey = 'flexsection_'.$sectionid.'_hidden';
+    $hidekey = 'section_'.$course->format.'_'.$sectionid.'_hidden';
     $params = array('userid' => $USER->id, 'name' => $hidekey);
     if (!$hide) {
         $DB->delete_records('user_preferences', $params);

@@ -80,8 +80,11 @@ function theme_fordson_fel_pluginfile($course, $cm, $context, $filearea, $args, 
     }
 
     if ($context->contextlevel == CONTEXT_SYSTEM && ($filearea === '')) {
-        $theme = theme_config::load('fordson_fel');
         return $theme->setting_file_serve($filearea, $args, $forcedownload, $options);
+    } else if ($filearea === 'additionaljs') {
+        return $theme->setting_file_serve('additionaljs', $args, $forcedownload, $options);
+    } else if ($filearea === 'sectionimages') {
+        return $theme->setting_file_serve('sectionimages', $args, $forcedownload, $options);
     } else if ($filearea === 'headerlogo') {
         return $theme->setting_file_serve('headerlogo', $args, $forcedownload, $options);
     } else if ($filearea === 'favicon') {
@@ -112,6 +115,12 @@ function theme_fordson_fel_pluginfile($course, $cm, $context, $filearea, $args, 
         return $theme->setting_file_serve('marketing5image', $args, $forcedownload, $options);
     } else if ($filearea === 'marketing6image') {
         return $theme->setting_file_serve('marketing6image', $args, $forcedownload, $options);
+    } else if ($filearea === 'marketing7image') {
+        return $theme->setting_file_serve('marketing7image', $args, $forcedownload, $options);
+    } else if ($filearea === 'marketing8image') {
+        return $theme->setting_file_serve('marketing8image', $args, $forcedownload, $options);
+    } else if ($filearea === 'marketing9image') {
+        return $theme->setting_file_serve('marketing9image', $args, $forcedownload, $options);
     } else if ($filearea === 'slide1image') {
         return $theme->setting_file_serve('slide1image', $args, $forcedownload, $options);
     } else if ($filearea === 'slide2image') {

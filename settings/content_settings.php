@@ -60,5 +60,13 @@ $setting = new admin_setting_confightmleditor($name, $title, $description, $defa
 $setting->set_updatedcallback('theme_reset_all_caches');
 $page->add($setting);
 
+// Signal new items.
+$name = 'theme_fordson_fel/signalitemsnewerthan';
+$title = get_string('signalitemsnewerthan', 'theme_fordson_fel');
+$description = get_string('signalitemsnewerthan_desc', 'theme_fordson_fel');
+$default = 0;
+$setting = new admin_setting_configtext($name, $title, $description, $default);
+$page->add($setting);
+
 // Must add the page after definiting all the settings!
 $settings->add($page);

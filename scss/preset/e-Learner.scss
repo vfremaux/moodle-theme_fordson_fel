@@ -1,7 +1,7 @@
 
 
-//fordson_fel eLearning variables
-$elearningcontentbkg: rgba(255,255,255,0.9) !default;
+//Fordson eLearning variables
+$elearningcontentbkg: rgba(255,255,255,0.6) !default;
 
 // Bootstrap variables
 
@@ -44,6 +44,7 @@ $dark:          $gray-800 !default;
 //$enable-rounded: false !default;
 $border-radius: 4px !default;
 
+
 // Body
 $body-color:    $gray-800 !default;
 $body-bg:       #dae6e5 !default;
@@ -63,7 +64,7 @@ $breadcrumb-padding-y:              .25rem !default;
 $breadcrumb-padding-x:              0 !default;
 $breadcrumb-item-padding:           .5rem !default;
 $breadcrumb-margin-bottom:          0 !default;
-$breadcrumb-bg:                     transparent !default;
+$breadcrumb-bg:                     $primary !default;
 $breadcrumb-divider: "/" !default;
 $breadcrumb-divider-rtl: "/" !default;
 
@@ -119,6 +120,19 @@ body {
 #region-main .card-body {
     border: 0;
 }
+#region-main {
+    background-color: $card-bg !important;
+}
+.pagelayout-login #region-main {
+    background-color: transparent!important;
+}
+
+.pagelayout-mydashboard #region-main {
+    border: inherit;
+    padding: 1rem;
+    background-color: $card-bg;
+    margin-top: 0;
+}
 
 .course-content .current::before {
     border-left: 0;
@@ -129,12 +143,10 @@ body {
 }
 
 a#blocksliderbutton {
-    background-color: $card-bg;
+    background-color: $primary;
 }
 
 div#learningcontent {
-    position: relative;
-    margin-top: 0;
     background-color: $elearningcontentbkg !important;
     padding: 2rem !important;
 }
@@ -164,18 +176,53 @@ div#page-content {
     margin-right: 1px;
 }
 
-.m-t-2.m-b-1 {
-    position:relative;
-    background-color: darken($card-bg, 10%);
-    padding: 1rem;
-    border-radius: 3px;
-    margin: 0!important;
-    border-top: 7px solid rgba(0,0,0,.2);
-    border-radius: 0;
+.section-go-link {
+    padding: .25rem;
+    margin: .5rem;
+    background-color: $gray-100;
+    display: inline-block;
+    border: 1px solid $gray-300;
 }
 
 @media screen and (max-width: 576px) {
     div#learningcontent {
         padding: .25rem !important;
     }
+}
+
+div#blockslider {
+    margin-top: 1rem;
+}
+
+// Progress Bars
+
+.progress_bar {
+    background-color: $gray-100;
+    text-align: center;
+}
+
+.progress_bar_completed {
+    background-color: $primary;
+    text-align: right;
+}
+
+
+
+.m-t-2.m-b-1 {
+    position: relative;
+    background-color: darken($body-bg, 10%);
+    padding: $spacer;
+    border-radius: $border-radius;
+    margin: 0!important;
+    border-top: 7px solid rgba(0,0,0,.2);
+    border-radius: 0;
+}
+
+.activity-navigation {
+    background-color: $card-bg;
+    padding: 1rem 0;
+    margin: 0 $gutterwidth;
+    border: 1px solid $gray-400;
+    border-radius: $border-radius;
+    z-index: 1;
 }

@@ -83,6 +83,12 @@ $navbar-light-color:                rgba($black,.4) !default;
 $navbar-light-active-color:         rgba($black,.7) !default;
 $navbar-light-disabled-color:       rgba($black,.2) !default;
 
+// Breadcrumbs
+
+$breadcrumb-bg: $primary !default;
+$breadcrumb-bg-hover: darken($primary, 15%) !default;
+$breadcrumb-text-color: #ffffff !default;
+
 // Progress bars
 
 $progress-bg:                       $gray-300 !default;
@@ -211,11 +217,6 @@ $list-group-disabled-color:         lighten($list-group-bg, 30%);
   }
 }
 
-.breadcrumb {
-  &-item.active {
-    color: $gray-700;
-  }
-}
 
 // Indicators ==================================================================
 
@@ -231,7 +232,12 @@ $list-group-disabled-color:         lighten($list-group-bg, 30%);
 // Progress bars ===============================================================
 
 .progress {
-  height: 8px;
+  height: 18px;
+}
+
+.progress_bar_completed {
+    background-color: $gray-400;
+    text-align: right;
 }
 
 // Containers ==================================================================
@@ -262,7 +268,7 @@ $list-group-disabled-color:         lighten($list-group-bg, 30%);
 }
 
 
-// fordson_fel Styling
+// Fordson Styling
 .dropdown-item a {
     color: initial;
 }
@@ -270,4 +276,20 @@ $list-group-disabled-color:         lighten($list-group-bg, 30%);
 .list-group-item-action:active {
     color: #444;
     background-color: initial;
+}
+
+div#blockslider {
+    padding-top: 2rem!important;
+}
+
+.section-go-link {
+    padding: .25rem;
+    margin: .5rem;
+    background-color: $gray-100;
+    display: inline-block;
+    border: 1px solid $gray-300;
+}
+#region-main {
+    border: 0;
+    background-color: transparent;
 }

@@ -43,7 +43,9 @@ if ($ADMIN->fulltree) {
     require('settings/variants_settings.php');
     require('settings/presets_settings.php');
     require('settings/presets_adjustments_settings.php');
+    require('settings/javascript_settings.php');
     require('settings/menu_settings.php');
+    require('settings/breadcrumb_settings.php');
     require('settings/content_settings.php');
     require('settings/fpicons_settings.php');
     require('settings/footer_settings.php');

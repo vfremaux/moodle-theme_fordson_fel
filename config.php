@@ -40,7 +40,7 @@ $THEME->parents = ['boost'];
  * to generate dynamically from the scss presets and settings and is not
  * used by Moodle's default editor (Atto).
  */
-$THEME->sheets = ['customlabels', 'modthumb', 'flexsections', 'themefixes'];
+$THEME->sheets = ['customlabels', 'styledbreadcrumb', 'yuioverride', 'modthumb', 'flexsections', 'themefixes', 'responsiverules'];
 $THEME->editor_sheets = [''];
 $THEME->layouts = [
     // The site home page.
@@ -113,3 +113,11 @@ $THEME->iconsystem = \core\output\icon_system::FONTAWESOME;
 $THEME->enable_dock = false;
 $THEME->yuicssmodules = array();
 $THEME->requiredblocks = '';
+
+// Tabbed quickform addition for generalizing the Jquery.
+global $PAGE;
+if (!empty($PAGE) && !$PAGE->state) {
+    $PAGE->requires->jquery();
+    $PAGE->requires->js_call_amd('local_vflibs/docfix', 'init');
+    $PAGE->requires->js_call_amd('theme_fordson_fel/custommenu', 'init');
+}

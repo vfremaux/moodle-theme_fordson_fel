@@ -80,12 +80,36 @@ $page->add(new admin_setting_heading('theme_fordson_fel_colours', get_string('co
     $setting = new admin_setting_configcolourpicker($name, $title, $description, '');
     $setting->set_updatedcallback('theme_reset_all_caches');
     $page->add($setting);
+    
+    // Top navbar background setting.
+    $name = 'theme_fordson_fel/topnavbarbg';
+    $title = get_string('topnavbarbg', 'theme_fordson_fel');
+    $description = get_string('topnavbarbg_desc', 'theme_fordson_fel');
+    $setting = new admin_setting_configcolourpicker($name, $title, $description, '');
+    $setting->set_updatedcallback('theme_reset_all_caches');
+    $page->add($setting);
+
+    // Top navbar background setting.
+    $name = 'theme_fordson_fel/topnavbarteacherbg';
+    $title = get_string('topnavbarteacherbg', 'theme_fordson_fel');
+    $description = get_string('topnavbarteacherbg_desc', 'theme_fordson_fel');
+    $setting = new admin_setting_configcolourpicker($name, $title, $description, '');
+    $setting->set_updatedcallback('theme_reset_all_caches');
+    $page->add($setting);
 
     // @breadcrumbBackground setting.
     $name = 'theme_fordson_fel/breadcrumbbkg';
     $title = get_string('breadcrumbbkg', 'theme_fordson_fel');
     $description = get_string('breadcrumbbkg_desc', 'theme_fordson_fel');
-    $setting = new admin_setting_configcolourpicker($name, $title, $description, '');
+    $setting = new admin_setting_configcolourpicker($name, $title, $description, '#ffffff');
+    $setting->set_updatedcallback('theme_reset_all_caches');
+    $page->add($setting);
+
+    // @breadcrumbForeground setting.
+    $name = 'theme_fordson_fel/breadcrumbfg';
+    $title = get_string('breadcrumbfg', 'theme_fordson_fel');
+    $description = get_string('breadcrumbfg_desc', 'theme_fordson_fel');
+    $setting = new admin_setting_configcolourpicker($name, $title, $description, '#000000');
     $setting->set_updatedcallback('theme_reset_all_caches');
     $page->add($setting);
 
@@ -97,7 +121,7 @@ $page->add(new admin_setting_heading('theme_fordson_fel_colours', get_string('co
     $setting->set_updatedcallback('theme_reset_all_caches');
     $page->add($setting);
 
-    // layout card background
+    // Card background
     $name = 'theme_fordson_fel/cardbkg';
     $title = get_string('cardbkg', 'theme_fordson_fel');
     $description = get_string('cardbkg_desc', 'theme_fordson_fel');
@@ -105,7 +129,7 @@ $page->add(new admin_setting_heading('theme_fordson_fel_colours', get_string('co
     $setting->set_updatedcallback('theme_reset_all_caches');
     $page->add($setting);
 
-    // layout drawer background
+    // Drawer background
     $name = 'theme_fordson_fel/drawerbkg';
     $title = get_string('drawerbkg', 'theme_fordson_fel');
     $description = get_string('drawerbkg_desc', 'theme_fordson_fel');
@@ -113,12 +137,28 @@ $page->add(new admin_setting_heading('theme_fordson_fel_colours', get_string('co
     $setting->set_updatedcallback('theme_reset_all_caches');
     $page->add($setting);
 
+    // Footer drawer background
+    $name = 'theme_fordson_fel/footerbkg';
+    $title = get_string('footerbkg', 'theme_fordson_fel');
+    $description = get_string('footerbkg_desc', 'theme_fordson_fel');
+    $setting = new admin_setting_configcolourpicker($name, $title, $description, '');
+    $setting->set_updatedcallback('theme_reset_all_caches');
+    $page->add($setting);
+
     // Flex section style list.
-    $key = 'theme_forson_fel/flexsectionsstyles';
-    $label = get_string('flexsectionsstyles', 'theme_fordson_fel');
-    $desc = get_string('flexsectionsstyles_desc', 'theme_fordson_fel');
+    $key = 'theme_fordson_fel/sectionsstyles';
+    $label = get_string('sectionsstyles', 'theme_fordson_fel');
+    $desc = get_string('sectionsstyles_desc', 'theme_fordson_fel');
     $default = '';
     $setting = new admin_setting_configtextarea($key, $label, $desc, $default, PARAM_TEXT, 64, 10);
+    $page->add($setting);
+
+    $key = 'theme_fordson_fel/sectionsstyleimages';
+    $label = get_string('sectionsstyleimages', 'theme_fordson_fel');
+    $desc = get_string('sectionsstyleimages_desc', 'theme_fordson_fel');
+    $setting = new admin_setting_configstoredfile($key, $label, $desc, 'sectionimages', 0, 
+        ['maxfiles' => 100, 'accepted_types' => ['.jpg', '.gif', '.svg', '.png']]);
+    $setting->set_updatedcallback('theme_reset_all_caches');
     $page->add($setting);
 
     // Raw SCSS to include after the content.

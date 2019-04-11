@@ -1,7 +1,9 @@
 /* indent non customlabels */
 
-.path-course-view .activity:not(.customlabel):not(.label) {
-    margin-left: 95px !important;
+@media (min-width: 440px) {
+    .path-course-view .activity:not(.customlabel):not(.label) {
+        margin-left: 95px !important;
+    }
 }
 
 /* General rules */
@@ -11,6 +13,15 @@ td.custombox-header-thumb,
 td.custombox-thumb,
 td.custombox-thumb {
     padding-top: 1.2em;
+}
+
+.custombox-text.readmorelink {
+    text-align: left !important;
+    background-color: #aaa;
+    padding: 5px !important;
+    width: 100px;
+    border-radius: 4px;
+    margin-bottom: 10p !important;
 }
 
 #page-region-main td.custombox-header-thumb,

@@ -65,12 +65,17 @@ $string['brandwarning'] = 'Couleur « attention »';
 $string['brandwarning_desc'] = 'Il s\'agit de la couleur utilisée par les panneaux et alertes marqués « attention (warning) ». Voir par exemple la classe CSS Bootstrap <i>alert-warning</i>';
 $string['breadcrumbbkg'] = 'Couleur de fond de la piste de navigation';
 $string['breadcrumbbkg_desc'] = 'Couleur de fond de la piste de navigation.';
+$string['breadcrumbfg'] = 'Couleur de texte de la piste de navigation';
+$string['breadcrumbfg_desc'] = 'Couleur de texte de la piste de navigation.';
 $string['changeto'] = 'Changer vers {$a}';
 $string['cardbkg'] = 'Couleur d\'arrière-plan du contenu';
 $string['cardbkg_desc'] = 'Couleur de fond du contenu pour les cours et les blocs';
 $string['catsicon'] = 'Catégorie de l\'icône';
 $string['catsicon_desc'] = 'Choisir une icône qui représente les catégories de cours.';
 $string['choosereadme'] = 'Fordson FEL ajoute au theme fordson communautaire des fonctionnalités uniques telles que le menu global contextualisé, le panneau de blocs escamotable de droite et la possibilité de variantes.';
+$string['collapsedisabled'] = 'Désactivé';
+$string['collapsefirstvisible'] = 'Premier bloc ouvert au chargement';
+$string['collapseallcollapsed'] = 'Aucun bloc ouvert au chargement';
 $string['colours_desc'] = 'Le sélecteur de couleurs permet de personnaliser l\'apparence et le rendu des éléments principaux sur la page. Si vous utilisez un pré-réglage différent de celui par défaut, il vous faudra enlever toute couleur personnalisée en dessous pour un meilleur résultat puisque celle-ci remplacera le pré-réglage par des résultats non-désirés. Généralement, le pré-réglage aura des couleurs par défaut que vous souhaiterez voir avant toute modification ici.';
 $string['colours_headingsub'] = 'Paramètres de couleur';
 $string['colours_settings'] = 'Couleurs';
@@ -454,6 +459,41 @@ $string['website'] = 'URL du site web';
 $string['websitedesc'] = 'Saisir l\'URL de votre propre site web (ex : http://dearbornschools.org).';
 $string['youtube'] = 'URL YouTube';
 $string['youtubedesc'] = 'Saisir l\'URL de votre chaîne YouTube (ex : http://www.youtube.com/).';
+$string['signalitemsnewerthan'] = 'Ajouter le signal "Nouveau"';
+$string['signalitemsnewerthan_desc'] = 'Ajoute un signal aux noms des ressources ou activités lorsqu\'elles ont été ajoutées a moins de X heures. ajoute également un signal "modifié"';
+$string['newitem'] = 'New item';
+$string['updateditem'] = 'Recent change';
+
+// Breadcrumb settings.
+$string['breadcrumbsettings'] = 'Fil d\'ariane';
+$string['breadcrumbstyle'] = 'Style du fil d\'ariane';
+$string['breadcrumbstyle_desc'] = 'Vous pouvez changer ici le style du fil d\'ariane pour correspondre à votre mise en forme graphique.';
+$string['breadcrumbstyled'] = 'Chevrons avec compression';
+$string['breadcrumbstylednocollapse'] = 'Chevrons sans compression';
+$string['breadcrumbsimple'] = 'Simple';
+$string['breadcrumbthin'] = 'Fin';
+$string['nobreadcrumb'] = 'Caché';
+$string['breadcrumbskiprootnode'] = 'Cacher la racine';
+$string['breadcrumbskiprootnode_desc'] = 'Si activé, le noeud racine du fil d\'ariane ne sera pas affiché';
+$string['breadcrumbkeeplastcatonly'] = 'Garder la dernière catégorie uniquement';
+$string['breadcrumbkeeplastcatonly_desc'] = 'Si activé, seule la dernière catégorie avant le cours est conservée dans le fil d\'ariane';
+$string['breadcrumbmaskfirstcat'] = 'Masquer la première catégorie du chemin';
+$string['breadcrumbmaskfirstcat_desc'] = 'If set to on, masque le premier noeud de type catégorie de cours dans le chemin du fil d\'ariane';
+$string['jsextrabehaviourheadingsub'] = 'Autres réglages comportementaux du JS';
+$string['allowblockregionscollapse'] = 'Autoriser la compression des zones de blocs';
+$string['allowblockregionscollapse_desc'] = 'Certaines régions peuvent utiliser un sustèùme d\'accordéon pour comprimer la hauteur des blocs';
+$string['breadcrumbstandard'] = 'Standard';
+
+// Additional JS Settings.
+$string['js_settings'] = 'Javascript additionnel';
+$string['jsheadingsub'] = 'Fichiers Javascript ajoutés';
+$string['jsheading_desc'] = 'Cette section permet à l\'administrateur de rajouter des fichiers javascript qui seront chargés sur toute ou partie des pages.';
+$string['additionaljs'] = 'Fichiers à ajouter';
+$string['additionaljs_desc'] = 'Il est préférable d\'ajouter des paquetages javascripts à un seul fichier. ajouter des fichiers javascript reste une opération
+potentiellement risquée qui peut perturber d\'autres fonctionnalités de moodle.';
+$string['pagetyperestrictions'] = 'Restrictions sur les types de page';
+$string['pagetyperestrictions_desc'] = 'Si aucune restriction n\'est mentionnée, alors les scripts seront inclus dans toutes les pages, ce qui peut
+être contre-productif. Une liste à virgule de types de page permet de contingenter ces scripts aux types de page mentionnés.';
 
 $string['variant_settings'] = 'Réglage des variantes';
 $string['variantsheadingsub'] = 'Gestion des variantes';
@@ -502,7 +542,8 @@ $string['publish'] = 'Ouvrir le cours';
 // Flexsection extras.
 $string['chooseclass'] = 'Changer le style';
 $string['sectionclass'] = 'Modifier l\'apparence de la section';
-$string['flexsectionsstyles'] = 'Styles displonibles pour la section';
+$string['sectionsstyles'] = 'Styles displonibles pour la section';
+$string['sectionsstyleimages'] = 'Images pour les styles de section';
 $string['nostyleoverride'] = 'Pas de modification d\'apparence';
 $string['sample'] = 'Echantillon';
 $string['collapseall'] = 'Tout fermer';
@@ -511,8 +552,13 @@ $string['reset'] = 'Plan';
 $string['showactivitynames'] = 'Montrer les noms des activités';
 $string['hideactivitynames'] = 'Cacher les noms des activités';
 $string['activatestyle'] = 'Activer ce style ';
+$string['applyto'] = 'Appliquer à';
+$string['applytothiselementonly'] = 'cette section seulement';
+$string['applytoallsections'] = 'toutes les sections';
+$string['applytoallsiblings'] = 'toutes les sections du même niveau';
+$string['applytowholesubtree'] = 'cette section et ses sous-sections';
 
-$string['flexsectionsstyles_desc'] = '
+$string['sectionsstyles_desc'] = '
 Vous pouvez entrer une liste (une définition par ligne) de définitions de style de type:
 
 <i>&lt;stylename&gt;</i>:<i>&lt;stylelabel&gt;</i>:{<i>&lt;stylerules&gt;</i>}
@@ -525,4 +571,12 @@ Les lignes vides, ou commençant par # ou / sont ignorées.
 
 Dans le cas où vous utilisez des noms de classe CSS, ces classes devront être définies dans les feuille de style du thème, ou ajoutées par l\'administrateur
 en utilisant la fonctionnalité de customisation de la CSS du theme si ce dernier le supporte.
+';
+
+$string['sectionsstyleimages_desc'] = '<p>Ajouter des images appelables dans les styles de secton avec une url de la forme :</p>
+
+<pre>/pluginfile.php/1/theme_fordson_fel&lt;variant&gt;/flexsectionimages/-1/&lt;filepath&gt;&lt;filename&gt;</pre>
+
+<p>Note : &lt;variant&gt; sera vide pour la variante principale.</p>
+
 ';

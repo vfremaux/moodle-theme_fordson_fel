@@ -15,7 +15,9 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 defined('MOODLE_INTERNAL') || die();
-require_once($CFG->dirroot.'/local/technicalsignals/lib.php');
+if (is_dir($CFG->dirroot.'/local/technicalsignals')) {
+    require_once($CFG->dirroot.'/local/technicalsignals/lib.php');
+}
 
 /**
  * A login page layout for the boost theme.
@@ -49,7 +51,10 @@ $templatecontext = [
     'midfooter' => @$PAGE->theme->settings->midfooter,
     'rightfooter' => @$PAGE->theme->settings->rightfooter,
     'showlangmenu' => @$CFG->langmenu,
-    'technicalsignals' => local_print_administrator_message()
 ];
+
+if (is_dir($CFG->dirroot.'/local/technicalsignals')) {
+    $templatecontext['technicalsignals'] = local_print_administrator_message();
+}
 
 echo $OUTPUT->render_from_template('theme_fordson_fel/login', $templatecontext);

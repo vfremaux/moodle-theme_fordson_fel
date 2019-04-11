@@ -23,39 +23,43 @@
 //
 $bootstrap-sass-asset-helper: false !default;
 
-
-// Variables
-$breadcrumb-bg: #fff;
-
-/**
- * For background in content areas.
- */
-
-ol.breadcrumb {
-    background-color: $breadcrumb-bg;
-}
-
-#page-wrapper {
-    padding-bottom: 0; 
-}
-
 .page-context-header .page-header-headings {
+    padding: .25rem .5rem;
+    background-color: $primary;
+    border-radius: .5rem;
+    margin-top: 1.25rem;
+    margin-bottom: .25rem;
+}
+div#page-navbar {
+    z-index: 1;
+}
+
+//Add space on top for Fordson block slider button
+.pt-3, .py-3 {
+    padding-top: 3rem!important;
+}
+
+#region-main {
+    border: 1px solid $border-color !important;
+    background-color: initial;
+}
+
+.pagelayout-mydashboard #region-main {
     background-color: $card-bg;
-    padding: 0 1rem;
-    margin-bottom: 1rem;
+    padding: 1rem;
+}
+
+#page-content .page-context-header .page-header-headings {
+    background-color: initial;
 }
 
 .page-context-header .page-header-headings h1 {
-    color: initial;
+    color: $white;
+    margin: 0;
 }
 
- .default {
-    background-color: rgba(0,0,0,0.3);
-    background-blend-mode: overlay;
-}
-.withimage {
-    background-color: rgba(0,0,0,0.3);
-    background-blend-mode: overlay;
+#page-site-index .page-context-header .page-header-headings {
+    background-color: transparent;
 }
 
 .headerbkg {
@@ -69,8 +73,12 @@ ol.breadcrumb {
     z-index: 0;
 }
 
-#page-header div#page-navbar {
-    z-index: 1;
+//Button fixes for display over images
+#page-header .btn.btn-secondary {
+    background-color: $white;
+}
+#page-header .btn.btn-secondary:hover {
+    background-color: darken($primary, 10%);
 }
 
 div#learningcontent {
@@ -78,18 +86,19 @@ div#learningcontent {
     background-color: transparent;
 }
 
-#page-header div#page-navbar {
-    z-index: 1;
-}
-
 .breadcrumb {
-    padding: .5rem 1rem;
-}
-ol.breadcrumb {
-    margin: 0;
+    padding: .25rem .5rem;
+    background-color: $card-bg;
+    border-radius: $border-radius;
 }
 
-/* fordson_fel Default Styling */
+@media screen and (max-width: 576px) {
+    .breadcrumb {
+        background-color:rgba(255,255,255,0.8)!important;
+        padding: 1rem;
+    }
+}
+
 
 // Scrollbars
 
@@ -137,15 +146,6 @@ ol.breadcrumb {
 
 // Activity navigation
 
-.m-t-2.m-b-1 {
-    background-color: darken($body-bg, 10%);
-    padding: 1rem;
-    border-radius: 3px;
-    margin: 0!important;
-    border-top: 7px solid rgba(0,0,0,.2);
-    border-radius: 0;
-}
-
 .course-content .single-section .section-navigation {
     padding: 1rem;
     border-radius: 3px;
@@ -154,16 +154,19 @@ ol.breadcrumb {
     border-radius: 0;
 }
 
-// Restore padding at top of page
-#page-header .pb-3 {
-    padding-bottom: 1rem!important;
+// Preset specific styling.
+
+@if $spectrumpreset == 1 {
+    #page-header .pt-3, #page-header .py-3 {
+        padding-top: 0!important;
+    }
+    div#page-content {
+        padding: 0 2rem;
+    }
 }
-#page-header .card-body {
-    padding-bottom: 1rem;
-}
-.course-content li#section-0 .content {
-    margin-top: 0;
-}
-.editing .course-content li#section-0 .content {
-    margin-top: 2rem; 
+
+@if $modernmoodlepreset == 1 {
+    #page-header .pb-3 {
+        padding-top: 0!important;
+    }
 }

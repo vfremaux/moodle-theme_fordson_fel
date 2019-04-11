@@ -23,7 +23,13 @@
  */
 
 defined('MOODLE_INTERNAL') || die();
-require_once($CFG->dirroot.'/local/technicalsignals/lib.php');
+if (is_dir($CFG->dirroot.'/local/technicalsignals')) {
+    require_once($CFG->dirroot.'/local/technicalsignals/lib.php');
+}
+
+if ($PAGE->theme->settings->breadcrumbstyle == '1') {
+    $PAGE->requires->js_call_amd('theme_fordson_fel/jBreadCrumb', 'init');
+}
 
 user_preference_allow_ajax_update('drawer-open-nav', PARAM_ALPHA);
 user_preference_allow_ajax_update('spdrawer-open-nav', PARAM_ALPHA);
@@ -88,7 +94,7 @@ $templatecontext = [
     'navdraweropen' => $navdraweropen,
     'hasfhsdrawer' => $hasfhsdrawer,
     'navspdraweropen' => $navspdraweropen,
-    'hasspdrawer' => true,
+    'hasspdrawer' => !empty($blockshtmlsidepost) || $PAGE->user_is_editing(),
     'regionmainsettingsmenu' => $regionmainsettingsmenu,
     'hasregionmainsettingsmenu' => !empty($regionmainsettingsmenu),
     'hasfootenote' => !empty($footnote) && (preg_match('/[a-z]/', strip_tags($footnote))),
@@ -102,9 +108,12 @@ $templatecontext = [
     'leftfooter' => @$PAGE->theme->settings->leftfooter,
     'midfooter' => @$PAGE->theme->settings->midfooter,
     'rightfooter' => @$PAGE->theme->settings->rightfooter,
-    'showlangmenu' => @$CFG->langmenu,
-    'technicalsignals' => local_print_administrator_message()
+    'showlangmenu' => @$CFG->langmenu
 ];
+
+if (is_dir($CFG->dirroot.'/local/technicalsignals')) {
+    $templatecontext['technicalsignals'] = local_print_administrator_message();
+}
 
 $PAGE->requires->jquery();
 $PAGE->requires->js('/theme/fordson_fel/javascript/scrolltotop.js');
@@ -112,6 +121,11 @@ $PAGE->requires->js('/theme/fordson_fel/javascript/scrolltobottom.js');
 $PAGE->requires->js('/theme/fordson_fel/javascript/scrollspy.js');
 $PAGE->requires->js('/theme/fordson_fel/javascript/tooltipfix.js');
 $PAGE->requires->js('/theme/fordson_fel/javascript/blockslider.js');
+$PAGE->requires->js('/theme/fordson_fel/javascript/cardimg.js');
+
+if ($PAGE->theme->settings->preset != 'Spectrum-Achromatic') {
+    $PAGE->requires->js('/theme/fordson_fel/javascript/courseblock.js');
+}
 
 $templatecontext['flatnavigation'] = $PAGE->flatnav;
 echo $OUTPUT->render_from_template('theme_fordson_fel/columns2asidepost', $templatecontext);

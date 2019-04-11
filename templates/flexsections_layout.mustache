@@ -1,0 +1,91 @@
+
+
+
+<!-- theme_fordson_fel/flexsection_layout -->
+
+{{#istopfirst}}
+{{#hascancelmovingcontrols}}
+    {{{cancelmovingcontrols}}}
+{{/hascancelmovingcontrols}}
+{{/istopfirst}}
+
+<ul class="flexsections flexsections-level-{{level}}">
+
+    {{#ismoving}}
+    {{{preinsertsection}}}
+    {{/ismoving}}
+
+    <li class="section {{main}} {{isleafclass}} flexsections-level-{{level}}
+               {{ismovingclass}} {{currentclass}} {{hiddenclass}}" id="section-{{sectionnum}}" >
+
+        {{#hascontrols}}
+            <div class="controls">{{{controls}}}</div>
+        {{/hascontrols}}
+
+        <div class="content {{highlight}} {{hideactivityclass}}">
+
+            {{#hastitle}}
+            <a name="section-{{sectionnum}}"></a>
+            <h3 class="sectionname {{customclasses}}" style="{{customstyle}}">{{{title}}}</h3>
+            {{/hastitle}}
+
+            {{{sectionavailability}}}
+
+            {{#summary}}
+            <div class="summary">{{{summary}}}</div>
+            {{/summary}}
+
+            {{#iscontentvisible}}
+
+            <div class="section-content" style="{{contentstyle}}">
+
+                {{{coursemodulelist}}}
+
+                {{#isediting}}
+                {{#emptysection}}
+                <ul class="section img-text"></ul>
+                {{/emptysection}}
+
+                {{{coursemodulecontrols}}}
+                {{/isediting}}
+            </div>
+
+            {{#hassubs}}
+
+            {{#istopfirst}}
+            <div class="globalcontrols">
+                {{{globalcontrols}}}
+            </div>
+            {{/istopfirst}}
+
+            {{#subs}}
+                {{> theme_fordson_fel/flexsections_layout}}
+            {{/subs}}
+
+            {{/hassubs}}
+
+            {{^hassubs}}
+            {{#ismoving}}
+            <ul class="emptyinsertsection-empty-subs">
+                {{{emptyinsertsection}}}
+            </ul>
+            {{/ismoving}}
+            {{/hassubs}}
+
+            <div class="addsectioncontrols">
+                {{{addsectioncontrol}}}
+            </div>
+
+            {{/iscontentvisible}}
+        </div>
+    </li>
+</ul>
+
+{{#islastchild}}
+{{#ismoving}}
+<ul class="preinsertsection-empty-subs">
+    {{{postinsertsection}}}
+</ul>
+{{/ismoving}}
+{{/islastchild}}
+<!-- /theme_fordson_fel/flexsection_layout -->

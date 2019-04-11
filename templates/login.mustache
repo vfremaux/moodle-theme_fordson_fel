@@ -61,19 +61,19 @@
         </div>
     </div>
     <!-- fordson_fel:customlogincontent -->
-    {{#hascustomlogincontent}}
-    <div id="fordson_fellogin" class="fordson_fellogin">
+    {{#hascustomlogin}}
+    <div id="fordsonlogin" class="fordsonlogin">
         <div class="container">
         {{{ output.customlogin }}}
         </div>
     </div>
-    {{/hascustomlogincontent}}
+    {{/hascustomlogin}}
     <!-- /fordson_fel:customlogincontent -->
-</div>
 
-<!-- fordson_fel:footer -->
-{{> theme_fordson_fel/footer }}
-<!-- fordson_fel:footer -->
+    <!-- fordson_fel:footer -->
+    {{> theme_fordson_fel/footer }}
+    <!-- /fordson_fel:footer -->
+</div>
 
 </body>
 </html>

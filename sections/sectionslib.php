@@ -16,7 +16,7 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-function flexsection_get_leaves($courseid) {
+function sections_get_leaves($courseid) {
     global $DB;
 
     $sql = "

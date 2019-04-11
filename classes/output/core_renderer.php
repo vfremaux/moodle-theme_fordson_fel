@@ -39,7 +39,7 @@ use theme_config;
 
 defined('MOODLE_INTERNAL') || die;
 
-require_once ($CFG->dirroot . "/course/renderer.php");
+require_once($CFG->dirroot . "/course/renderer.php");
 
 /**
  * Renderers to align Moodle's HTML with that expected by Bootstrap
@@ -74,7 +74,7 @@ class core_renderer extends \theme_boost\output\core_renderer {
         $header = new stdClass();
 
         if ($pagelayout <= 4) {
-            $header->headerimagelocation = false; 
+            $header->headerimagelocation = false;
         }
 
         if (!$PAGE->theme->settings->coursemanagementtoggle) {
@@ -85,7 +85,9 @@ class core_renderer extends \theme_boost\output\core_renderer {
         }
 
         $header->boostimage = $theme->settings->pagelayout == 5;
-        $header->contextheader = html_writer::link(new moodle_url('/course/view.php', array('id' => $PAGE->course->id)) , $this->context_header());
+        $header->contextheader = html_writer::link(new moodle_url('/course/view.php', array(
+            'id' => $PAGE->course->id
+        )) , $this->context_header());
         $header->hasnavbar = empty($PAGE->layout_options['nonavbar']);
         $header->navbar = $this->navbar();
         $header->pageheadingbutton = $this->page_heading_button();
@@ -105,10 +107,77 @@ class core_renderer extends \theme_boost\output\core_renderer {
             $context = context_course::instance($COURSE->id);
             if (has_capability('moodle/course:manageactivities', $context) && $COURSE->visible == 0) {
                 $coursepublishurl = new moodle_url('/theme/fordson_fel/services/opencourse.php', ['id' => $COURSE->id]);
-                $str .= get_string('hiddencourse', 'theme_fordson_fel').'&nbsp;&nbsp;&nbsp; <a class="btn btn-success edit-btn" href="'.$coursepublishurl.'">'.get_string('publish', 'theme_fordson_fel').'</a>';
+                $str .= get_string('hiddencourse', 'theme_fordson_fel').'&nbsp;&nbsp;&nbsp; <a class="open-course-button btn btn-success edit-btn" href="'.$coursepublishurl.'">'.get_string('publish', 'theme_fordson_fel').'</a>';
             }
         }
         return $str;
+    }
+
+    /**
+     * This renders the breadcrumbs
+     * @return string $breadcrumbs
+     */
+    public function navbar() {
+        global $PAGE;
+
+        // Post process navbar.
+        $filterednavbar = new \StdClass;
+        $systemcontext = \context_system::instance();
+
+        if (!empty($PAGE->theme->settings->breadcrumbstyle)) {
+            $breadcrumbstyle = $PAGE->theme->settings->breadcrumbstyle;
+            if ($breadcrumbstyle == '4') {
+                $breadcrumbstyle = '1'; // Fancy style with no collapse.
+            }
+            $filterednavbar->styleclass = 'style'.$breadcrumbstyle;
+        }
+
+        $namedtypes = array(0 => 'system', 10 => 'category', 11 => 'mycategory', 20 => 'course', 30 => 'structure', 40 => 'activity',
+                              50 => 'resource', 60 => 'custom', 70 => 'setting', 71 => 'siteadmin', 80 => 'user',
+                              90 => 'container');
+
+        $filterednavbar->get_items = array();
+        $allitems = $this->page->navbar->get_items();
+        $firstcat = true;
+        $lastcatitem = null;
+        foreach ($allitems as $item) {
+
+            $item->itemtype = 'type-'.$item->type;
+            $item->typeclass = 'node-'.@$namedtypes[$item->type];
+
+            if (!has_capability('moodle/site:config', $systemcontext)) {
+                if (!empty($PAGE->theme->settings->breadcrumbskiprootnode)) {
+                    if ($item->type == \navigation_node::TYPE_ROOTNODE) {
+                        continue;
+                    }
+                }
+
+                if (in_array($item->type, array(\navigation_node::TYPE_CATEGORY, \navigation_node::TYPE_MY_CATEGORY))) {
+
+                    if (!empty($PAGE->theme->settings->breadcrumbmaskfirstcat) &&
+                        empty($PAGE->theme->settings->breadcrumbkeeplastcatonly)) {
+                        continue;
+                    }
+
+                    if ($firstcat) {
+                        $firstcat = false;
+                    }
+
+                    if (!empty($PAGE->theme->settings->breadcrumbkeeplastcatonly)) {
+                        $lastcatitem = $item;
+                        continue;
+                    }
+                }
+
+                if (!is_null($lastcatitem)) {
+                    $filterednavbar->get_items[] = $lastcatitem;
+                    $lastcatitem = null;
+                }
+            }
+
+            $filterednavbar->get_items[] = $item;
+        }
+        return $this->render_from_template('core/navbar', $filterednavbar);
     }
 
     public function image_url($imagename, $component = 'moodle') {
@@ -120,12 +189,15 @@ class core_renderer extends \theme_boost\output\core_renderer {
 
     public function headerimage() {
         global $CFG, $COURSE, $PAGE, $OUTPUT;
+
         // Get course overview files.
         if (empty($CFG->courseoverviewfileslimit)) {
             return '';
         }
+
         require_once ($CFG->libdir . '/filestorage/file_storage.php');
         require_once ($CFG->dirroot . '/course/lib.php');
+
         $fs = get_file_storage();
         $context = context_course::instance($COURSE->id);
         $files = $fs->get_area_files($context->id, 'course', 'overviewfiles', false, 'filename', false);
@@ -148,12 +220,19 @@ class core_renderer extends \theme_boost\output\core_renderer {
         }
 
         // Get course overview files as images - set $courseimage.
-        // The loop means that the LAST stored image will be the one displayed if >1 image file.
+        // Take the first available large width image.
         $courseimage = '';
         foreach ($files as $file) {
             $isimage = $file->is_valid_image();
             if ($isimage) {
-                $courseimage = file_encode_url("$CFG->wwwroot/pluginfile.php", '/' . $file->get_contextid() . '/' . $file->get_component() . '/' . $file->get_filearea() . $file->get_filepath() . $file->get_filename() , !$isimage);
+                $imageinfo = $file->get_imageinfo();
+                if ($imageinfo['width'] > 750) {
+                    $imageurl = "$CFG->wwwroot/pluginfile.php". '/' . $file->get_contextid();
+                    $imageurl .= '/' . $file->get_component() . '/' . $file->get_filearea();
+                    $imageurl .= $file->get_filepath() . $file->get_filename();
+                    $courseimage = file_encode_url($imageurl , !$isimage);
+                    break;
+                }
             }
         }
 
@@ -210,7 +289,7 @@ class core_renderer extends \theme_boost\output\core_renderer {
         if (!$PAGE->user_allowed_editing() || $COURSE->id <= 1) {
             return '';
         }
-        if  ($PAGE->pagelayout == 'course' || $PAGE->pagelayout == 'format_page') {
+        if ($PAGE->pagelayout == 'course' || $PAGE->pagelayout == 'format_page') {
             $url = new moodle_url($PAGE->url);
             $url->param('sesskey', sesskey());
             if ($PAGE->user_is_editing()) {
@@ -230,13 +309,12 @@ class core_renderer extends \theme_boost\output\core_renderer {
                 'href' => $url,
                 'class' => 'btn edit-btn ' . $btn,
                 'data-tooltip' => "tooltip",
-                'data-placement'=> "bottom", 
+                'data-placement' => "bottom",
                 'title' => $title,
             ));
             return $output;
         }
     }
-
 
     /**
      * Generates an array of sections and an array of activities for the given course.
@@ -256,7 +334,7 @@ class core_renderer extends \theme_boost\output\core_renderer {
         // For course formats using 'numsections' trim the sections list
         $courseformatoptions = course_get_format($course)->get_format_options();
         if (isset($courseformatoptions['numsections'])) {
-            $sections = array_slice($sections, 0, $courseformatoptions['numsections']+1, true);
+            $sections = array_slice($sections, 0, $courseformatoptions['numsections'] + 1, true);
         }
 
         $activities = array();
@@ -289,9 +367,6 @@ class core_renderer extends \theme_boost\output\core_renderer {
                 } else {
                     $activity->url = $url->out();
                     $activity->display = $cm->is_visible_on_course_page() ? true : false;
-      //              if (self::module_extends_navigation($cm->modname)) {
-      //                  $activity->nodetype = navigation_node::NODETYPE_BRANCH;
-      //              }
                 }
                 $activities[$cmid] = $activity;
                 if ($activity->display) {
@@ -299,9 +374,10 @@ class core_renderer extends \theme_boost\output\core_renderer {
                 }
             }
         }
-
-        return array($sections, $activities);
-                                                                                                                                                                                                                            
+        return array(
+            $sections,
+            $activities
+        );
     }
 
     /*
@@ -309,6 +385,33 @@ class core_renderer extends \theme_boost\output\core_renderer {
      *
      * This renderer is needed to enable the Bootstrap style navigation.
     */
+
+    protected static function timeaccesscompare($a, $b) {
+            // Timeaccess is lastaccess entry and timestart an enrol entry.
+            if ((!empty($a->timeaccess)) && (!empty($b->timeaccess))) {
+                // Both last access.
+                if ($a->timeaccess == $b->timeaccess) {
+                    return 0;
+                }
+                return ($a->timeaccess > $b->timeaccess) ? -1 : 1;
+            }
+            else if ((!empty($a->timestart)) && (!empty($b->timestart))) {
+                // Both enrol.
+                if ($a->timestart == $b->timestart) {
+                    return 0;
+                }
+                return ($a->timestart > $b->timestart) ? -1 : 1;
+            }
+            // Must be comparing an enrol with a last access.
+            // -1 is to say that 'a' comes before 'b'.
+            if (!empty($a->timestart)) {
+                // 'a' is the enrol entry.
+                return -1;
+            }
+            // 'b' must be the enrol entry.
+            return 1;
+        }
+
     public function fordson_fel_custom_menu() {
         global $CFG, $COURSE, $PAGE, $OUTPUT;
         $context = $this->page->context;
@@ -367,6 +470,7 @@ class core_renderer extends \theme_boost\output\core_renderer {
                 $thisbranchtitle = get_string('thismycourses', 'theme_fordson_fel');
                 $homebranchtitle = get_string('homemycourses', 'theme_fordson_fel');
             }
+
             $branchlabel = $branchtitle;
             $branchurl = new moodle_url('/my/index.php');
             $branchsort = 10000;
@@ -379,6 +483,64 @@ class core_renderer extends \theme_boost\output\core_renderer {
             $branch->add($dashlabel, $dashurl, $dashtitle);
 
             if ($courses = enrol_get_my_courses(NULL, 'fullname ASC')) {
+                if (theme_fordson_fel_get_setting('frontpagemycoursessorting')) {
+                $courses = enrol_get_my_courses(null, 'sortorder ASC');
+                $nomycourses = '<div class="alert alert-info alert-block">' . get_string('nomycourses', 'theme_fordson_fel') . '</div>';
+                if ($courses) {
+                    // We have something to work with.  Get the last accessed information for the user and populate.
+                    global $DB, $USER;
+                    $lastaccess = $DB->get_records('user_lastaccess', array('userid' => $USER->id) , '', 'courseid, timeaccess');
+                    if ($lastaccess) {
+                        foreach ($courses as $course) {
+                            if (!empty($lastaccess[$course->id])) {
+                                $course->timeaccess = $lastaccess[$course->id]->timeaccess;
+                            }
+                        }
+                    }
+                    // Determine if we need to query the enrolment and user enrolment tables.
+                    $enrolquery = false;
+                    foreach ($courses as $course) {
+                        if (empty($course->timeaccess)) {
+                            $enrolquery = true;
+                            break;
+                        }
+                    }
+                    if ($enrolquery) {
+                        // We do.
+                        $params = array(
+                            'userid' => $USER->id
+                        );
+                        $sql = "SELECT ue.id, e.courseid, ue.timestart
+                            FROM {enrol} e
+                            JOIN {user_enrolments} ue ON (ue.enrolid = e.id AND ue.userid = :userid)";
+                        $enrolments = $DB->get_records_sql($sql, $params, 0, 0);
+                        if ($enrolments) {
+                            // Sort out any multiple enrolments on the same course.
+                            $userenrolments = array();
+                            foreach ($enrolments as $enrolment) {
+                                if (!empty($userenrolments[$enrolment->courseid])) {
+                                    if ($userenrolments[$enrolment->courseid] < $enrolment->timestart) {
+                                        // Replace.
+                                        $userenrolments[$enrolment->courseid] = $enrolment->timestart;
+                                    }
+                                } else {
+                                    $userenrolments[$enrolment->courseid] = $enrolment->timestart;
+                                }
+                            }
+                            // We don't need to worry about timeend etc. as our course list will be valid for the user from above.
+                            foreach ($courses as $course) {
+                                if (empty($course->timeaccess)) {
+                                    $course->timestart = $userenrolments[$course->id];
+                                }
+                            }
+                        }
+                    }
+                    uasort($courses, array($this,'timeaccesscompare'));
+                } else {
+                    return $nomycourses;
+                }
+                $sortorder = $lastaccess;
+            } // SEARCH WHY INDENT
                 foreach ($courses as $course) {
                     if ($course->visible) {
                         $branch->add(format_string($course->fullname) , new moodle_url('/course/view.php?id=' . $course->id) , format_string($course->shortname));
@@ -392,52 +554,60 @@ class core_renderer extends \theme_boost\output\core_renderer {
             $hasdisplaythiscourse = (empty($this->page->theme->settings->displaythiscourse)) ? false : $this->page->theme->settings->displaythiscourse;
             $sections = $this->generate_sections_and_activities($COURSE);
             if ($sections && $COURSE->id > 1 && $hasdisplaythiscourse) {
-                
+
                 $branchlabel = $thisbranchtitle;
                 $branch = $menu->add($branchlabel, $branchurl, $branchtitle, $branchsort);
                 $course = course_get_format($COURSE)->get_course();
 
                 $coursehomelabel = $homebranchtitle;
-                $coursehomeurl = new moodle_url('/course/view.php?', array('id' => $PAGE->course->id));
+                $coursehomeurl = new moodle_url('/course/view.php?', array(
+                    'id' => $PAGE->course->id
+                ));
                 $coursehometitle = $coursehomelabel;
                 $branch->add($coursehomelabel, $coursehomeurl, $coursehometitle);
 
                 $callabel = get_string('calendar', 'calendar');
-                $calurl = new moodle_url('/calendar/view.php?view=month', array('course' => $PAGE->course->id));
+                $calurl = new moodle_url('/calendar/view.php?view=month', array(
+                    'course' => $PAGE->course->id
+                ));
                 $caltitle = $callabel;
                 $branch->add($callabel, $calurl, $caltitle);
 
                 $participantlabel = get_string('participants', 'moodle');
-                $participanturl = new moodle_url('/user/index.php', array('id' => $PAGE->course->id));
+                $participanturl = new moodle_url('/user/index.php', array(
+                    'id' => $PAGE->course->id
+                ));
                 $participanttitle = $participantlabel;
                 $branch->add($participantlabel, $participanturl, $participanttitle);
 
                 if ($CFG->enablebadges == 1){
                     $badgelabel = get_string('badges', 'badges');
-                    $badgeurl = new moodle_url('/badges/view.php?type=2', array('id' => $PAGE->course->id));
+                    $badgeurl = new moodle_url('/badges/view.php?type=2', array(
+                        'id' => $PAGE->course->id
+                    ));
                     $badgetitle = $badgelabel;
                     $branch->add($badgelabel, $badgeurl, $badgetitle);
                 }
 
                 if (get_config('core_competency', 'enabled')) {
                     $complabel = get_string('competencies', 'competency');
-                    $compurl = new moodle_url('/admin/tool/lp/coursecompetencies.php', array('courseid' => $PAGE->course->id));
+                    $compurl = new moodle_url('/admin/tool/lp/coursecompetencies.php', array(
+                        'courseid' => $PAGE->course->id
+                    ));
                     $comptitle = $complabel;
                     $branch->add($complabel, $compurl, $comptitle);
                 }
 
                 foreach ($sections[0] as $sectionid => $section) {
                     $sectionname = get_section_name($COURSE, $section);
-                    if ($course->coursedisplay == COURSE_DISPLAY_MULTIPAGE) {
+                    if (isset($course->coursedisplay) && $course->coursedisplay == COURSE_DISPLAY_MULTIPAGE) {
                         $sectionurl = '/course/view.php?id=' . $COURSE->id . '&section=' . $sectionid;
-                    }
-                    else {
+                    } else {
                         $sectionurl = '/course/view.php?id=' . $COURSE->id . '#section-' . $sectionid;
                     }
                     $branch->add(format_string($sectionname) , new moodle_url($sectionurl) , format_string($sectionname));
                 }
             }
-
         }
 
         $content = '';
@@ -457,12 +627,40 @@ class core_renderer extends \theme_boost\output\core_renderer {
      * @return string $content
      */
     protected function render_custom_menu(custom_menu $menu) {
-
+        /*
         $content = '<ul class="nav navbar-nav">';
         foreach ($menu->get_children() as $item) {
             $content .= $this->render_custom_menu_item($item, 1);
         }
         $content .= '</ul>';
+        return $content;
+        */
+
+        static $menucount = 0;
+        // If the menu has no children return an empty string
+        if (!$menu->has_children()) {
+            return '';
+        }
+        // Increment the menu count. This is used for ID's that get worked with
+        // in JavaScript as is essential
+        $menucount++;
+        // Initialise this custom menu (the custom menu object is contained in javascript-static
+        $jscode = \js_writer::function_call_with_Y('M.core_custom_menu.init', array('custom_menu_'.$menucount));
+        $jscode = "(function(){{$jscode}})";
+        $this->page->requires->yui_module('node-menunav', $jscode);
+        // Build the root nodes as required by YUI
+        $content = \html_writer::start_tag('div', array('id'=>'custom_menu_'.$menucount, 'style' => 'display:none', 'class'=>'yui3-menu yui3-menu-horizontal javascript-disabled custom-menu'));
+        $content .= \html_writer::start_tag('div', array('class'=>'yui3-menu-content'));
+        $content .= \html_writer::start_tag('ul');
+        // Render each child
+        foreach ($menu->get_children() as $item) {
+            $content .= $this->render_custom_menu_item($item);
+        }
+        // Close the open tags
+        $content .= \html_writer::end_tag('ul');
+        $content .= \html_writer::end_tag('div');
+        $content .= \html_writer::end_tag('div');
+        // Return the custom menu
         return $content;
     }
 
@@ -475,14 +673,109 @@ class core_renderer extends \theme_boost\output\core_renderer {
     protected function render_custom_menu_item(custom_menu_item $menunode, $level = 0) {
         global $USER, $COURSE, $CFG;
 
+        // Required to ensure we get unique trackable id's
+        static $submenucount = 0;
+
+        if ($menunode->has_children()) {
+            // If the child has menus render it as a sub menu
+            $submenucount++;
+            $content = html_writer::start_tag('li');
+            if ($menunode->get_url() !== null) {
+                $url = $menunode->get_url();
+                if ($url != '') {
+                    $url = $this->post_process_url_check_access($url, $xs);
+                    if (!$url) {
+                        return;
+                    }
+                    if ($xs) {
+                        $class .= ' xs-only';
+                    }
+                }
+            } else {
+                $url = '#cm_submenu_'.$submenucount;
+            }
+
+            // Url context variables replacement if needed in menu.
+            $url = str_replace('%25COURSEID%25', $COURSE->id, $url);
+            $url = str_replace('%25USERID%25', $USER->id, $url);
+            $url = str_replace('%25WWWROOT%25', $CFG->wwwroot, $url);
+            $url = str_replace('%COURSEID%', $COURSE->id, $url);
+            $url = str_replace('%USERID%', $USER->id, $url);
+            $url = str_replace('%WWWROOT%', $CFG->wwwroot, $url);
+
+            $content .= html_writer::link($url, format_string($menunode->get_text()), array('class'=>'yui3-menu-label', 'title' => format_string($menunode->get_title())));
+            $content .= html_writer::start_tag('div', array('id'=>'cm_submenu_'.$submenucount, 'class'=>'yui3-menu custom_menu_submenu custom_menu_submenu'.$level));
+            $content .= html_writer::start_tag('div', array('class'=>'yui3-menu-content'));
+            $content .= html_writer::start_tag('ul');
+            foreach ($menunode->get_children() as $menunode) {
+                $content .= $this->render_custom_menu_item($menunode, $level + 1);
+            }
+            $content .= html_writer::end_tag('ul');
+            $content .= html_writer::end_tag('div');
+            $content .= html_writer::end_tag('div');
+            $content .= html_writer::end_tag('li');
+        } else {
+            // The node doesn't have children so produce a final menuitem.
+            // Also, if the node's text matches '####', add a class so we can treat it as a divider.
+            $content = '';
+            if (preg_match("/^#+$/", $menunode->get_text())) {
+
+                // This is a divider.
+                $content = html_writer::start_tag('li', array('class' => 'yui3-menuitem divider'));
+            } else {
+                $content = html_writer::start_tag(
+                    'li',
+                    array(
+                        'class' => 'yui3-menuitem'
+                    )
+                );
+                if ($menunode->get_url() !== null) {
+                    $url = $menunode->get_url();
+                    if ($url != '') {
+                        $url = $this->post_process_url_check_access($url, $xs);
+                        if (!$url) {
+                            return;
+                        }
+                        if ($xs) {
+                            $class .= ' xs-only';
+                        }
+                    }
+                } else {
+                    $url = '#';
+                }
+
+                // Url context variables replacement if needed in menu.
+                $url = str_replace('%25COURSEID%25', $COURSE->id, $url);
+                $url = str_replace('%25USERID%25', $USER->id, $url);
+                $url = str_replace('%25WWWROOT%25', $CFG->wwwroot, $url);
+                $url = str_replace('%COURSEID%', $COURSE->id, $url);
+                $url = str_replace('%USERID%', $USER->id, $url);
+                $url = str_replace('%WWWROOT%', $CFG->wwwroot, $url);
+
+                $content .= html_writer::link(
+                    $url,
+                    format_string($menunode->get_text()),
+                    array('class' => 'yui3-menuitem-content', 'title' => format_string($menunode->get_title()))
+                );
+            }
+            $content .= html_writer::end_tag('li');
+        }
+        // Return the sub menu
+        return $content;
+
+        /*
+        global $USER, $COURSE, $CFG;
+
         static $submenucount = 0;
 
         if ($menunode->has_children()) {
 
             if ($level == 1) {
                 $class = 'dropdown nav-item';
+                $datatoggle = 'dropdown';
             } else {
-                $class = 'dropdown nav-item';
+                $class = 'dropdown-submenu nav-item';
+                $datatoggle = 'dropdown';
             }
 
             if ($menunode === $this->language) {
@@ -515,7 +808,12 @@ class core_renderer extends \theme_boost\output\core_renderer {
             $url = str_replace('%WWWROOT%', $CFG->wwwroot, $url);
 
             $content = html_writer::start_tag('li', array('class' => $class));
-            $content .= html_writer::start_tag('a', array('href' => $url, 'class' => 'dropdown-toggle nav-link', 'data-toggle' => 'dropdown', 'title' => $menunode->get_title()));
+
+            if ($level == 1) {
+                $content .= html_writer::start_tag('a', array('href' => $url, 'class' => 'dropdown-toggle nav-link', 'data-toggle' => $datatoggle, 'title' => $menunode->get_title()));
+            } else {
+                $content .= html_writer::start_tag('a', array('href' => '#', 'class' => 'dropdown-toggle nav-link', 'data-toggle' => $datatoggle, 'title' => $menunode->get_title()));
+            }
             $content .= format_string($menunode->get_text());
             $content .= '</a>';
             $content .= '<ul class="dropdown-menu">';
@@ -560,6 +858,7 @@ class core_renderer extends \theme_boost\output\core_renderer {
             $content .= '</li>';
         }
         return $content;
+        */
     }
 
     /**
@@ -573,12 +872,13 @@ class core_renderer extends \theme_boost\output\core_renderer {
 
         // Allow protected menu items to only logged in.
         if (preg_match('/^([^!]*)!(.*)$/', $url, $matches)) {
+            $realurl = $matches[2];
             if ($matches[1] === '') {
                 // Single ! marks for loggedin only.
                 if (!isloggedin() || isguestuser()) {
                     return false;
                 } else {
-                    return str_replace('&amp;', '&', preg_replace('/^!/', '', $url));
+                    return str_replace('&amp;', '&', $realurl);
                 }
             } else {
                 if ($matches[1] == '0') {
@@ -593,7 +893,7 @@ class core_renderer extends \theme_boost\output\core_renderer {
                     $mobile = new Mobile_Detect();
                     if ($mobile->isMobile()) {
                         $xs = true;
-                        return str_replace('&amp;', '&', preg_replace('/^m!/', '', $url));
+                        return str_replace('&amp;', '&', $realurl);
                     } else {
                         return false;
                     }
@@ -605,18 +905,19 @@ class core_renderer extends \theme_boost\output\core_renderer {
                     // Single m! marks for mobile only logged out.
                     $mobile = new Mobile_Detect();
                     if ((!isloggedin() || isguestuser()) && $mobile->isMobile()) {
-                        return str_replace('&amp;', '&', preg_replace('/^0m!/', '', $url));
+                        return str_replace('&amp;', '&', $realurl);
                     } else {
                         return false;
                     }
                 } else {
                     $condition = $matches[1];
+                    $condition = str_replace('user://', 'user:', $condition); // fix weird url-like preformatting.
                     $targeturl = $matches[2];
                     if (preg_match('/^user:(.*?)(=|~)(.*)$/', $condition, $matches)) {
                         $fieldname = $matches[1];
                         $op = $matches[2];
                         $requiredvalue = $matches[3];
-                        if (strpos($fieldname, 'profile_field_')) {
+                        if (preg_match('/profile_field_/', $fieldname)) {
                             $fieldname = str_replace('profile_field_', '', $fieldname);
                             $field = $DB->get_record('user_info_field', array('shortname' => $fieldname));
                             if (empty($USER) || empty($field)) {
@@ -634,19 +935,19 @@ class core_renderer extends \theme_boost\output\core_renderer {
                             return false;
                         }
 
-                        return str_replace('&amp;', '&', preg_replace('/^'.$condition.'!/', '', $url));
+                        return str_replace('&amp;', '&', $realurl);
                     } else if (preg_match('/(.*)\^$/', $condition, $matches)) {
                         // Exclusive capability check : doanything wont pass.
                         $capability = $matches[1];
                         if (!empty($USER->id) && has_capability($capability, $coursecontext, $USER->id, false)) {
-                            return str_replace('&amp;', '&', $targeturl);
+                            return str_replace('&amp;', '&', $realurl);
                         } else {
                             return false;
                         }
                     } else {
                         // Normal capability check.
                         if (has_capability($condition, $coursecontext)) {
-                            return str_replace('&amp;', '&', $targeturl);
+                            return str_replace('&amp;', '&', $realurl);
                         } else {
                             return false;
                         }
@@ -730,13 +1031,11 @@ class core_renderer extends \theme_boost\output\core_renderer {
                         'id' => $PAGE->course->id
                     )));
                 } else {
-
                     $branch->add($modfullname, new moodle_url('/mod/' . $modname . '/index.php', array(
                         'id' => $PAGE->course->id
                     )));
                 }
             }
-
         }
 
         return $this->render_courseactivities_menu($menu);
@@ -767,11 +1066,8 @@ class core_renderer extends \theme_boost\output\core_renderer {
         $social3icon = (empty($PAGE->theme->settings->socialicon3)) ? 'globe' : $PAGE->theme->settings->socialicon3;
 
         $socialcontext = [
-
         // If any of the above social networks are true, sets this to true.
-        'hassocialnetworks' => ($hasfacebook || $hastwitter || $hasgoogleplus || $hasflickr || $hasinstagram || $hasvk || $haslinkedin || $haspinterest || $hasskype || $haslinkedin || $haswebsite || $hasyoutube || $hasblog || $hasvimeo || $hastumblr || $hassocial1 || $hassocial2 || $hassocial3) ? true : false,
-
-        'socialicons' => array(
+        'hassocialnetworks' => ($hasfacebook || $hastwitter || $hasgoogleplus || $hasflickr || $hasinstagram || $hasvk || $haslinkedin || $haspinterest || $hasskype || $haslinkedin || $haswebsite || $hasyoutube || $hasblog || $hasvimeo || $hastumblr || $hassocial1 || $hassocial2 || $hassocial3) ? true : false, 'socialicons' => array(
             array(
                 'haslink' => $hasfacebook,
                 'linkicon' => 'facebook'
@@ -843,7 +1139,6 @@ class core_renderer extends \theme_boost\output\core_renderer {
         ) ];
 
         return $this->render_from_template('theme_fordson_fel/socialicons', $socialcontext);
-
     }
 
     public function fp_wonderbox() {
@@ -853,12 +1148,10 @@ class core_renderer extends \theme_boost\output\core_renderer {
 
         $hascreateicon = (empty($PAGE->theme->settings->createicon && isloggedin() && has_capability('moodle/course:create', $context))) ? false : $PAGE->theme->settings->createicon;
         $createbuttonurl = (empty($PAGE->theme->settings->createbuttonurl)) ? false : $PAGE->theme->settings->createbuttonurl;
-        $createbuttontext = (empty($PAGE->theme->settings->createbuttontext)) ? false : $PAGE->theme->settings->createbuttontext;
-
+        $createbuttontext = (empty($PAGE->theme->settings->createbuttontext)) ? false : format_string($PAGE->theme->settings->createbuttontext);
         $hasslideicon = (empty($PAGE->theme->settings->slideicon && isloggedin() && !isguestuser())) ? false : $PAGE->theme->settings->slideicon;
         $slideiconbuttonurl = 'data-toggle="collapse" data-target="#collapseExample';
-        $slideiconbuttontext = (empty($PAGE->theme->settings->slideiconbuttontext)) ? false : $PAGE->theme->settings->slideiconbuttontext;
-
+        $slideiconbuttontext = (empty($PAGE->theme->settings->slideiconbuttontext)) ? false : format_string($PAGE->theme->settings->slideiconbuttontext);
         $hasnav1icon = (empty($PAGE->theme->settings->nav1icon && isloggedin() && !isguestuser())) ? false : $PAGE->theme->settings->nav1icon;
         $hasnav2icon = (empty($PAGE->theme->settings->nav2icon && isloggedin() && !isguestuser())) ? false : $PAGE->theme->settings->nav2icon;
         $hasnav3icon = (empty($PAGE->theme->settings->nav3icon && isloggedin() && !isguestuser())) ? false : $PAGE->theme->settings->nav3icon;
@@ -876,76 +1169,104 @@ class core_renderer extends \theme_boost\output\core_renderer {
         $nav6buttonurl = (empty($PAGE->theme->settings->nav6buttonurl)) ? false : $PAGE->theme->settings->nav6buttonurl;
         $nav7buttonurl = (empty($PAGE->theme->settings->nav7buttonurl)) ? false : $PAGE->theme->settings->nav7buttonurl;
         $nav8buttonurl = (empty($PAGE->theme->settings->nav8buttonurl)) ? false : $PAGE->theme->settings->nav8buttonurl;
-
-        $nav1buttontext = (empty($PAGE->theme->settings->nav1buttontext)) ? false : format_text($PAGE->theme->settings->nav1buttontext);
-        $nav2buttontext = (empty($PAGE->theme->settings->nav2buttontext)) ? false : format_text($PAGE->theme->settings->nav2buttontext);
-        $nav3buttontext = (empty($PAGE->theme->settings->nav3buttontext)) ? false : format_text($PAGE->theme->settings->nav3buttontext);
-        $nav4buttontext = (empty($PAGE->theme->settings->nav4buttontext)) ? false : format_text($PAGE->theme->settings->nav4buttontext);
-        $nav5buttontext = (empty($PAGE->theme->settings->nav5buttontext)) ? false : format_text($PAGE->theme->settings->nav5buttontext);
-        $nav6buttontext = (empty($PAGE->theme->settings->nav6buttontext)) ? false : format_text($PAGE->theme->settings->nav6buttontext);
-        $nav7buttontext = (empty($PAGE->theme->settings->nav7buttontext)) ? false : format_text($PAGE->theme->settings->nav7buttontext);
-        $nav8buttontext = (empty($PAGE->theme->settings->nav8buttontext)) ? false : format_text($PAGE->theme->settings->nav8buttontext);
-
-        $fptextbox = (empty($PAGE->theme->settings->fptextbox && isloggedin())) ? false : format_text($PAGE->theme->settings->fptextbox);
-        $fptextboxlogout = (empty($PAGE->theme->settings->fptextboxlogout && !isloggedin())) ? false : format_text($PAGE->theme->settings->fptextboxlogout);
-        $slidetextbox = (empty($PAGE->theme->settings->slidetextbox && isloggedin())) ? false : format_text($PAGE->theme->settings->slidetextbox);
-        $alertbox = (empty($PAGE->theme->settings->alertbox)) ? false : format_text($PAGE->theme->settings->alertbox);
-
-        $hasmarketing1 = (empty($PAGE->theme->settings->marketing1) || empty($PAGE->theme->settings->togglemarketing == 1)) ? false : format_text($PAGE->theme->settings->marketing1);
+        $nav1buttontext = (empty($PAGE->theme->settings->nav1buttontext)) ? false : format_string($PAGE->theme->settings->nav1buttontext);
+        $nav2buttontext = (empty($PAGE->theme->settings->nav2buttontext)) ? false : format_string($PAGE->theme->settings->nav2buttontext);
+        $nav3buttontext = (empty($PAGE->theme->settings->nav3buttontext)) ? false : format_string($PAGE->theme->settings->nav3buttontext);
+        $nav4buttontext = (empty($PAGE->theme->settings->nav4buttontext)) ? false : format_string($PAGE->theme->settings->nav4buttontext);
+        $nav5buttontext = (empty($PAGE->theme->settings->nav5buttontext)) ? false : format_string($PAGE->theme->settings->nav5buttontext);
+        $nav6buttontext = (empty($PAGE->theme->settings->nav6buttontext)) ? false : format_string($PAGE->theme->settings->nav6buttontext);
+        $nav7buttontext = (empty($PAGE->theme->settings->nav7buttontext)) ? false : format_string($PAGE->theme->settings->nav7buttontext);
+        $nav8buttontext = (empty($PAGE->theme->settings->nav8buttontext)) ? false : format_string($PAGE->theme->settings->nav8buttontext);
+        $fptextbox = (empty($PAGE->theme->settings->fptextbox && isloggedin())) ? false : format_text($PAGE->theme->settings->fptextbox, FORMAT_HTML, array(
+            'noclean' => true
+        ));
+        $fptextboxlogout = (empty($PAGE->theme->settings->fptextboxlogout && !isloggedin())) ? false : format_text($PAGE->theme->settings->fptextboxlogout, FORMAT_HTML, array(
+            'noclean' => true
+        ));
+        $slidetextbox = (empty($PAGE->theme->settings->slidetextbox && isloggedin())) ? false : format_text($PAGE->theme->settings->slidetextbox, FORMAT_HTML, array(
+            'noclean' => true
+        ));
+        $alertbox = (empty($PAGE->theme->settings->alertbox)) ? false : format_text($PAGE->theme->settings->alertbox, FORMAT_HTML, array(
+            'noclean' => true
+        ));
+        
+        $hasmarketing1 = (empty($PAGE->theme->settings->marketing1 && $PAGE->theme->settings->togglemarketing == 1)) ? false : format_string($PAGE->theme->settings->marketing1);
         $marketing1content = (empty($PAGE->theme->settings->marketing1content)) ? false : format_text($PAGE->theme->settings->marketing1content);
-        $marketing1buttontext = (empty($PAGE->theme->settings->marketing1buttontext)) ? false : format_text($PAGE->theme->settings->marketing1buttontext);
+        $marketing1buttontext = (empty($PAGE->theme->settings->marketing1buttontext)) ? false : format_string($PAGE->theme->settings->marketing1buttontext);
         $marketing1buttonurl = (empty($PAGE->theme->settings->marketing1buttonurl)) ? false : $PAGE->theme->settings->marketing1buttonurl;
         $marketing1target = (empty($PAGE->theme->settings->marketing1target)) ? false : $PAGE->theme->settings->marketing1target;
         $marketing1image = (empty($PAGE->theme->settings->marketing1image)) ? false : 'marketing1image';
 
-        $hasmarketing2 = (empty($PAGE->theme->settings->marketing2) || empty($PAGE->theme->settings->togglemarketing == 1)) ? false : format_text($PAGE->theme->settings->marketing2);
+        $hasmarketing2 = (empty($PAGE->theme->settings->marketing2 && $PAGE->theme->settings->togglemarketing == 1)) ? false : format_string($PAGE->theme->settings->marketing2);
         $marketing2content = (empty($PAGE->theme->settings->marketing2content)) ? false : format_text($PAGE->theme->settings->marketing2content);
-        $marketing2buttontext = (empty($PAGE->theme->settings->marketing2buttontext)) ? false : format_text($PAGE->theme->settings->marketing2buttontext);
+        $marketing2buttontext = (empty($PAGE->theme->settings->marketing2buttontext)) ? false : format_string($PAGE->theme->settings->marketing2buttontext);
         $marketing2buttonurl = (empty($PAGE->theme->settings->marketing2buttonurl)) ? false : $PAGE->theme->settings->marketing2buttonurl;
         $marketing2target = (empty($PAGE->theme->settings->marketing2target)) ? false : $PAGE->theme->settings->marketing2target;
         $marketing2image = (empty($PAGE->theme->settings->marketing2image)) ? false : 'marketing2image';
 
-        $hasmarketing3 = (empty($PAGE->theme->settings->marketing3) || empty($PAGE->theme->settings->togglemarketing == 1)) ? false : format_text($PAGE->theme->settings->marketing3);
+        $hasmarketing3 = (empty($PAGE->theme->settings->marketing3 && $PAGE->theme->settings->togglemarketing == 1)) ? false : format_string($PAGE->theme->settings->marketing3);
         $marketing3content = (empty($PAGE->theme->settings->marketing3content)) ? false : format_text($PAGE->theme->settings->marketing3content);
-        $marketing3buttontext = (empty($PAGE->theme->settings->marketing3buttontext)) ? false : format_text($PAGE->theme->settings->marketing3buttontext);
+        $marketing3buttontext = (empty($PAGE->theme->settings->marketing3buttontext)) ? false : format_string($PAGE->theme->settings->marketing3buttontext);
         $marketing3buttonurl = (empty($PAGE->theme->settings->marketing3buttonurl)) ? false : $PAGE->theme->settings->marketing3buttonurl;
         $marketing3target = (empty($PAGE->theme->settings->marketing3target)) ? false : $PAGE->theme->settings->marketing3target;
         $marketing3image = (empty($PAGE->theme->settings->marketing3image)) ? false : 'marketing3image';
 
-        $hasmarketing4 = (empty($PAGE->theme->settings->marketing4) || empty($PAGE->theme->settings->togglemarketing == 1)) ? false : format_text($PAGE->theme->settings->marketing4);
+        $hasmarketing4 = (empty($PAGE->theme->settings->marketing4 && $PAGE->theme->settings->togglemarketing == 1)) ? false : format_string($PAGE->theme->settings->marketing4);
         $marketing4content = (empty($PAGE->theme->settings->marketing4content)) ? false : format_text($PAGE->theme->settings->marketing4content);
-        $marketing4buttontext = (empty($PAGE->theme->settings->marketing4buttontext)) ? false : format_text($PAGE->theme->settings->marketing4buttontext);
+        $marketing4buttontext = (empty($PAGE->theme->settings->marketing4buttontext)) ? false : format_string($PAGE->theme->settings->marketing4buttontext);
         $marketing4buttonurl = (empty($PAGE->theme->settings->marketing4buttonurl)) ? false : $PAGE->theme->settings->marketing4buttonurl;
         $marketing4target = (empty($PAGE->theme->settings->marketing4target)) ? false : $PAGE->theme->settings->marketing4target;
         $marketing4image = (empty($PAGE->theme->settings->marketing4image)) ? false : 'marketing4image';
 
-        $hasmarketing5 = (empty($PAGE->theme->settings->marketing5) || empty($PAGE->theme->settings->togglemarketing == 1)) ? false : format_text($PAGE->theme->settings->marketing5);
+        $hasmarketing5 = (empty($PAGE->theme->settings->marketing5 && $PAGE->theme->settings->togglemarketing == 1)) ? false : format_string($PAGE->theme->settings->marketing5);
         $marketing5content = (empty($PAGE->theme->settings->marketing5content)) ? false : format_text($PAGE->theme->settings->marketing5content);
-        $marketing5buttontext = (empty($PAGE->theme->settings->marketing5buttontext)) ? false : format_text($PAGE->theme->settings->marketing5buttontext);
+        $marketing5buttontext = (empty($PAGE->theme->settings->marketing5buttontext)) ? false : format_string($PAGE->theme->settings->marketing5buttontext);
         $marketing5buttonurl = (empty($PAGE->theme->settings->marketing5buttonurl)) ? false : $PAGE->theme->settings->marketing5buttonurl;
         $marketing5target = (empty($PAGE->theme->settings->marketing5target)) ? false : $PAGE->theme->settings->marketing5target;
         $marketing5image = (empty($PAGE->theme->settings->marketing5image)) ? false : 'marketing5image';
 
-        $hasmarketing6 = (empty($PAGE->theme->settings->marketing6) || empty($PAGE->theme->settings->togglemarketing == 1)) ? false : format_text($PAGE->theme->settings->marketing6);
+        $hasmarketing6 = (empty($PAGE->theme->settings->marketing6 && $PAGE->theme->settings->togglemarketing == 1)) ? false : format_string($PAGE->theme->settings->marketing6);
         $marketing6content = (empty($PAGE->theme->settings->marketing6content)) ? false : format_text($PAGE->theme->settings->marketing6content);
-        $marketing6buttontext = (empty($PAGE->theme->settings->marketing6buttontext)) ? false : format_text($PAGE->theme->settings->marketing6buttontext);
+        $marketing6buttontext = (empty($PAGE->theme->settings->marketing6buttontext)) ? false : format_string($PAGE->theme->settings->marketing6buttontext);
         $marketing6buttonurl = (empty($PAGE->theme->settings->marketing6buttonurl)) ? false : $PAGE->theme->settings->marketing6buttonurl;
         $marketing6target = (empty($PAGE->theme->settings->marketing6target)) ? false : $PAGE->theme->settings->marketing6target;
         $marketing6image = (empty($PAGE->theme->settings->marketing6image)) ? false : 'marketing6image';
 
-        $fp_wonderboxcontext = [
+        $hasmarketing7 = (empty($PAGE->theme->settings->marketing7 && $PAGE->theme->settings->togglemarketing == 1)) ? false : format_string($PAGE->theme->settings->marketing7);
+        $marketing7content = (empty($PAGE->theme->settings->marketing7content)) ? false : format_text($PAGE->theme->settings->marketing7content);
+        $marketing7buttontext = (empty($PAGE->theme->settings->marketing7buttontext)) ? false : format_string($PAGE->theme->settings->marketing7buttontext);
+        $marketing7buttonurl = (empty($PAGE->theme->settings->marketing7buttonurl)) ? false : $PAGE->theme->settings->marketing7buttonurl;
+        $marketing7target = (empty($PAGE->theme->settings->marketing7target)) ? false : $PAGE->theme->settings->marketing7target;
+        $marketing7image = (empty($PAGE->theme->settings->marketing7image)) ? false : 'marketing7image';
 
-        'logintoken' => \core\session\manager::get_login_token(),
+        $hasmarketing8 = (empty($PAGE->theme->settings->marketing8 && $PAGE->theme->settings->togglemarketing == 1)) ? false : format_string($PAGE->theme->settings->marketing8);
+        $marketing8content = (empty($PAGE->theme->settings->marketing8content)) ? false : format_text($PAGE->theme->settings->marketing8content);
+        $marketing8buttontext = (empty($PAGE->theme->settings->marketing8buttontext)) ? false : format_string($PAGE->theme->settings->marketing8buttontext);
+        $marketing8buttonurl = (empty($PAGE->theme->settings->marketing8buttonurl)) ? false : $PAGE->theme->settings->marketing8buttonurl;
+        $marketing8target = (empty($PAGE->theme->settings->marketing8target)) ? false : $PAGE->theme->settings->marketing8target;
+        $marketing8image = (empty($PAGE->theme->settings->marketing8image)) ? false : 'marketing8image';
 
-        'hasfptextbox' => (!empty($PAGE->theme->settings->fptextbox && isloggedin())) , 'fptextbox' => $fptextbox,
+        $hasmarketing9 = (empty($PAGE->theme->settings->marketing9 && $PAGE->theme->settings->togglemarketing == 1)) ? false : format_string($PAGE->theme->settings->marketing9);
+        $marketing9content = (empty($PAGE->theme->settings->marketing9content)) ? false : format_text($PAGE->theme->settings->marketing9content);
+        $marketing9buttontext = (empty($PAGE->theme->settings->marketing9buttontext)) ? false : format_string($PAGE->theme->settings->marketing9buttontext);
+        $marketing9buttonurl = (empty($PAGE->theme->settings->marketing9buttonurl)) ? false : $PAGE->theme->settings->marketing9buttonurl;
+        $marketing9target = (empty($PAGE->theme->settings->marketing9target)) ? false : $PAGE->theme->settings->marketing9target;
+        $marketing9image = (empty($PAGE->theme->settings->marketing9image)) ? false : 'marketing9image';
+        /*if (method_exists(new \core\session\manager, 'get_login_token')) {
+            $logintoken = \core\session\manager::get_login_token();
+        } else {
+            $logintoken = false;
+        }*/
+        /*if( method_exists ( "\core\session\manager", "get_login_token" ) ){
+            $logintoken = s(\core\session\manager::get_login_token());
+            echo '<input type="hidden" name="logintoken" value="' . $logintoken . '" />';
+        } else {
+            $logintoken = false;
+        }*/
 
-        'hasslidetextbox' => (!empty($PAGE->theme->settings->slidetextbox && isloggedin())) , 'slidetextbox' => $slidetextbox,
+        $logintoken = \core\session\manager::get_login_token();
 
-        'hasfptextboxlogout' => !isloggedin() , 'fptextboxlogout' => $fptextboxlogout, 'hasshowloginform' => $PAGE->theme->settings->showloginform,
-
-        'hasalert' => (!empty($PAGE->theme->settings->alertbox && isloggedin())) , 'alertbox' => $alertbox,
-
-        'hasmarkettiles' => ($hasmarketing1 || $hasmarketing2 || $hasmarketing3 || $hasmarketing4 || $hasmarketing5 || $hasmarketing6) ? true : false, 'markettiles' => array(
+        $fp_wonderboxcontext = ['logintoken' => $logintoken, 'hasfptextbox' => (!empty($PAGE->theme->settings->fptextbox && isloggedin())) , 'fptextbox' => $fptextbox, 'hasslidetextbox' => (!empty($PAGE->theme->settings->slidetextbox && isloggedin())) , 'slidetextbox' => $slidetextbox, 'hasfptextboxlogout' => !isloggedin() , 'fptextboxlogout' => $fptextboxlogout, 'hasshowloginform' => $PAGE->theme->settings->showloginform, 'hasalert' => (!empty($PAGE->theme->settings->alertbox && isloggedin())) , 'alertbox' => $alertbox, 'hasmarkettiles' => ($hasmarketing1 || $hasmarketing2 || $hasmarketing3 || $hasmarketing4 || $hasmarketing5 || $hasmarketing6) ? true : false, 'markettiles' => array(
             array(
                 'hastile' => $hasmarketing1,
                 'tileimage' => $marketing1image,
@@ -988,11 +1309,30 @@ class core_renderer extends \theme_boost\output\core_renderer {
                 'title' => $hasmarketing6,
                 'button' => "<a href = '$marketing6buttonurl' title = '$marketing6buttontext' alt='$marketing6buttontext' class='btn btn-primary' target='$marketing6target'> $marketing6buttontext </a>"
             ) ,
+            array(
+                'hastile' => $hasmarketing7,
+                'tileimage' => $marketing7image,
+                'content' => $marketing7content,
+                'title' => $hasmarketing7,
+                'button' => "<a href = '$marketing7buttonurl' title = '$marketing7buttontext' alt='$marketing7buttontext' class='btn btn-primary' target='$marketing7target'> $marketing7buttontext </a>"
+            ) ,
+            array(
+                'hastile' => $hasmarketing8,
+                'tileimage' => $marketing8image,
+                'content' => $marketing8content,
+                'title' => $hasmarketing8,
+                'button' => "<a href = '$marketing8buttonurl' title = '$marketing8buttontext' alt='$marketing8buttontext' class='btn btn-primary' target='$marketing8target'> $marketing8buttontext </a>"
+            ) ,
+            array(
+                'hastile' => $hasmarketing9,
+                'tileimage' => $marketing9image,
+                'content' => $marketing9content,
+                'title' => $hasmarketing9,
+                'button' => "<a href = '$marketing9buttonurl' title = '$marketing9buttontext' alt='$marketing9buttontext' class='btn btn-primary' target='$marketing9target'> $marketing9buttontext </a>"
+            ) ,
         ) ,
-
         // If any of the above social networks are true, sets this to true.
-        'hasfpiconnav' => ($hasnav1icon || $hasnav2icon || $hasnav3icon || $hasnav4icon || $hasnav5icon || $hasnav6icon || $hasnav7icon || $hasnav8icon || $hascreateicon || $hasslideicon) ? true : false, 
-        'fpiconnav' => array(
+        'hasfpiconnav' => ($hasnav1icon || $hasnav2icon || $hasnav3icon || $hasnav4icon || $hasnav5icon || $hasnav6icon || $hasnav7icon || $hasnav8icon || $hascreateicon || $hasslideicon) ? true : false, 'fpiconnav' => array(
             array(
                 'hasicon' => $hasnav1icon,
                 'linkicon' => $hasnav1icon,
@@ -1055,12 +1395,8 @@ class core_renderer extends \theme_boost\output\core_renderer {
                 'link' => $slideiconbuttonurl,
                 'linktext' => $slideiconbuttontext
             ) ,
-        ) ,
-
-        ];
-
+        ) , ];
         return $this->render_from_template('theme_fordson_fel/fpwonderbox', $fp_wonderboxcontext);
-
     }
 
     public function customlogin() {
@@ -1071,10 +1407,10 @@ class core_renderer extends \theme_boost\output\core_renderer {
         $hasloginnav3icon = (empty($PAGE->theme->settings->loginnav3icon)) ? false : $PAGE->theme->settings->loginnav3icon;
         $hasloginnav4icon = (empty($PAGE->theme->settings->loginnav4icon)) ? false : $PAGE->theme->settings->loginnav4icon;
 
-        $loginnav1titletext = (empty($PAGE->theme->settings->loginnav1titletext)) ? false : $PAGE->theme->settings->loginnav1titletext;
-        $loginnav2titletext = (empty($PAGE->theme->settings->loginnav2titletext)) ? false : $PAGE->theme->settings->loginnav2titletext;
-        $loginnav3titletext = (empty($PAGE->theme->settings->loginnav3titletext)) ? false : $PAGE->theme->settings->loginnav3titletext;
-        $loginnav4titletext = (empty($PAGE->theme->settings->loginnav4titletext)) ? false : $PAGE->theme->settings->loginnav4titletext;
+        $loginnav1titletext = (empty($PAGE->theme->settings->loginnav1titletext)) ? false : format_text($PAGE->theme->settings->loginnav1titletext);
+        $loginnav2titletext = (empty($PAGE->theme->settings->loginnav2titletext)) ? false : format_text($PAGE->theme->settings->loginnav2titletext);
+        $loginnav3titletext = (empty($PAGE->theme->settings->loginnav3titletext)) ? false : format_text($PAGE->theme->settings->loginnav3titletext);
+        $loginnav4titletext = (empty($PAGE->theme->settings->loginnav4titletext)) ? false : format_text($PAGE->theme->settings->loginnav4titletext);
 
         $loginnav1icontext = (empty($PAGE->theme->settings->loginnav1icontext)) ? false : format_text($PAGE->theme->settings->loginnav1icontext);
         $loginnav2icontext = (empty($PAGE->theme->settings->loginnav2icontext)) ? false : format_text($PAGE->theme->settings->loginnav2icontext);
@@ -1082,25 +1418,15 @@ class core_renderer extends \theme_boost\output\core_renderer {
         $loginnav4icontext = (empty($PAGE->theme->settings->loginnav4icontext)) ? false : format_text($PAGE->theme->settings->loginnav4icontext);
         $hascustomlogin = $PAGE->theme->settings->showcustomlogin == 1;
         $hasdefaultlogin = $PAGE->theme->settings->showcustomlogin == 0;
-
-        $customlogin_context = [
-
-        'hascustomlogin' => $hascustomlogin,
-        'hasdefaultlogin' => $hasdefaultlogin,
-
-        'hasfeature1' => !empty($PAGE->theme->setting_file_url('feature1image', 'feature1image')) && !empty($PAGE->theme->settings->feature1text),
-        'hasfeature2' => !empty($PAGE->theme->setting_file_url('feature2image', 'feature2image')) && !empty($PAGE->theme->settings->feature2text),
-        'hasfeature3' => !empty($PAGE->theme->setting_file_url('feature3image', 'feature3image')) && !empty($PAGE->theme->settings->feature3text),
-        'feature1image' => $PAGE->theme->setting_file_url('feature1image', 'feature1image'),
-        'feature2image' => $PAGE->theme->setting_file_url('feature2image', 'feature2image'),
-        'feature3image' => $PAGE->theme->setting_file_url('feature3image', 'feature3image'),
-        'feature1text' => (empty($PAGE->theme->settings->feature1text)) ? false : format_text($PAGE->theme->settings->feature1text),
-        'feature2text' => (empty($PAGE->theme->settings->feature2text)) ? false : format_text($PAGE->theme->settings->feature2text),
-        'feature3text' => (empty($PAGE->theme->settings->feature3text)) ? false : format_text($PAGE->theme->settings->feature3text),
-
+        $customlogin_context = ['hascustomlogin' => $hascustomlogin, 'hasdefaultlogin' => $hasdefaultlogin, 'hasfeature1' => !empty($PAGE->theme->setting_file_url('feature1image', 'feature1image')) && !empty($PAGE->theme->settings->feature1text) , 'hasfeature2' => !empty($PAGE->theme->setting_file_url('feature2image', 'feature2image')) && !empty($PAGE->theme->settings->feature2text) , 'hasfeature3' => !empty($PAGE->theme->setting_file_url('feature3image', 'feature3image')) && !empty($PAGE->theme->settings->feature3text) , 'feature1image' => $PAGE->theme->setting_file_url('feature1image', 'feature1image') , 'feature2image' => $PAGE->theme->setting_file_url('feature2image', 'feature2image') , 'feature3image' => $PAGE->theme->setting_file_url('feature3image', 'feature3image') , 'feature1text' => (empty($PAGE->theme->settings->feature1text)) ? false : format_text($PAGE->theme->settings->feature1text, FORMAT_HTML, array(
+            'noclean' => true
+        )) , 'feature2text' => (empty($PAGE->theme->settings->feature2text)) ? false : format_text($PAGE->theme->settings->feature2text, FORMAT_HTML, array(
+            'noclean' => true
+        )) , 'feature3text' => (empty($PAGE->theme->settings->feature3text)) ? false : format_text($PAGE->theme->settings->feature3text, FORMAT_HTML, array(
+            'noclean' => true
+        )) ,
         // If any of the above social networks are true, sets this to true.
-        'hasfpiconnav' => ($hasloginnav1icon || $hasloginnav2icon || $hasloginnav3icon || $hasloginnav4icon) ? true : false, 
-        'fpiconnav' => array(
+        'hasfpiconnav' => ($hasloginnav1icon || $hasloginnav2icon || $hasloginnav3icon || $hasloginnav4icon) ? true : false, 'fpiconnav' => array(
             array(
                 'hasicon' => $hasloginnav1icon,
                 'icon' => $hasloginnav1icon,
@@ -1125,64 +1451,77 @@ class core_renderer extends \theme_boost\output\core_renderer {
                 'title' => $loginnav4titletext,
                 'text' => $loginnav4icontext
             ) ,
-        ) ,
-
-        ];
-
+        ) , ];
         return $this->render_from_template('theme_fordson_fel/customlogin', $customlogin_context);
-
     }
 
     public function fp_marketingtiles() {
         global $PAGE;
 
-        $hasmarketing1 = (empty($PAGE->theme->settings->marketing1) || $PAGE->theme->settings->togglemarketing == 2) ? false : format_text($PAGE->theme->settings->marketing1);
+        $hasmarketing1 = (empty($PAGE->theme->settings->marketing1 && $PAGE->theme->settings->togglemarketing == 2)) ? false : format_string($PAGE->theme->settings->marketing1);
         $marketing1content = (empty($PAGE->theme->settings->marketing1content)) ? false : format_text($PAGE->theme->settings->marketing1content);
-        $marketing1buttontext = (empty($PAGE->theme->settings->marketing1buttontext)) ? false : format_text($PAGE->theme->settings->marketing1buttontext);
+        $marketing1buttontext = (empty($PAGE->theme->settings->marketing1buttontext)) ? false : format_string($PAGE->theme->settings->marketing1buttontext);
         $marketing1buttonurl = (empty($PAGE->theme->settings->marketing1buttonurl)) ? false : $PAGE->theme->settings->marketing1buttonurl;
         $marketing1target = (empty($PAGE->theme->settings->marketing1target)) ? false : $PAGE->theme->settings->marketing1target;
         $marketing1image = (empty($PAGE->theme->settings->marketing1image)) ? false : 'marketing1image';
 
-        $hasmarketing2 = (empty($PAGE->theme->settings->marketing2) || $PAGE->theme->settings->togglemarketing == 2) ? false : format_text($PAGE->theme->settings->marketing2);
+        $hasmarketing2 = (empty($PAGE->theme->settings->marketing2 && $PAGE->theme->settings->togglemarketing == 2)) ? false : format_string($PAGE->theme->settings->marketing2);
         $marketing2content = (empty($PAGE->theme->settings->marketing2content)) ? false : format_text($PAGE->theme->settings->marketing2content);
-        $marketing2buttontext = (empty($PAGE->theme->settings->marketing2buttontext)) ? false : format_text($PAGE->theme->settings->marketing2buttontext);
+        $marketing2buttontext = (empty($PAGE->theme->settings->marketing2buttontext)) ? false : format_string($PAGE->theme->settings->marketing2buttontext);
         $marketing2buttonurl = (empty($PAGE->theme->settings->marketing2buttonurl)) ? false : $PAGE->theme->settings->marketing2buttonurl;
         $marketing2target = (empty($PAGE->theme->settings->marketing2target)) ? false : $PAGE->theme->settings->marketing2target;
         $marketing2image = (empty($PAGE->theme->settings->marketing2image)) ? false : 'marketing2image';
 
-        $hasmarketing3 = (empty($PAGE->theme->settings->marketing3) || $PAGE->theme->settings->togglemarketing == 2) ? false : format_text($PAGE->theme->settings->marketing3);
+        $hasmarketing3 = (empty($PAGE->theme->settings->marketing3 && $PAGE->theme->settings->togglemarketing == 2)) ? false : format_string($PAGE->theme->settings->marketing3);
         $marketing3content = (empty($PAGE->theme->settings->marketing3content)) ? false : format_text($PAGE->theme->settings->marketing3content);
-        $marketing3buttontext = (empty($PAGE->theme->settings->marketing3buttontext)) ? false : format_text($PAGE->theme->settings->marketing3buttontext);
+        $marketing3buttontext = (empty($PAGE->theme->settings->marketing3buttontext)) ? false : format_string($PAGE->theme->settings->marketing3buttontext);
         $marketing3buttonurl = (empty($PAGE->theme->settings->marketing3buttonurl)) ? false : $PAGE->theme->settings->marketing3buttonurl;
         $marketing3target = (empty($PAGE->theme->settings->marketing3target)) ? false : $PAGE->theme->settings->marketing3target;
         $marketing3image = (empty($PAGE->theme->settings->marketing3image)) ? false : 'marketing3image';
 
-        $hasmarketing4 = (empty($PAGE->theme->settings->marketing4) || $PAGE->theme->settings->togglemarketing == 2) ? false : format_text($PAGE->theme->settings->marketing4);
+        $hasmarketing4 = (empty($PAGE->theme->settings->marketing4 && $PAGE->theme->settings->togglemarketing == 2)) ? false : format_string($PAGE->theme->settings->marketing4);
         $marketing4content = (empty($PAGE->theme->settings->marketing4content)) ? false : format_text($PAGE->theme->settings->marketing4content);
-        $marketing4buttontext = (empty($PAGE->theme->settings->marketing4buttontext)) ? false : format_text($PAGE->theme->settings->marketing4buttontext);
+        $marketing4buttontext = (empty($PAGE->theme->settings->marketing4buttontext)) ? false : format_string($PAGE->theme->settings->marketing4buttontext);
         $marketing4buttonurl = (empty($PAGE->theme->settings->marketing4buttonurl)) ? false : $PAGE->theme->settings->marketing4buttonurl;
         $marketing4target = (empty($PAGE->theme->settings->marketing4target)) ? false : $PAGE->theme->settings->marketing4target;
         $marketing4image = (empty($PAGE->theme->settings->marketing4image)) ? false : 'marketing4image';
 
-        $hasmarketing5 = (empty($PAGE->theme->settings->marketing5) || $PAGE->theme->settings->togglemarketing == 2) ? false : format_text($PAGE->theme->settings->marketing5);
+        $hasmarketing5 = (empty($PAGE->theme->settings->marketing5 && $PAGE->theme->settings->togglemarketing == 2)) ? false : format_string($PAGE->theme->settings->marketing5);
         $marketing5content = (empty($PAGE->theme->settings->marketing5content)) ? false : format_text($PAGE->theme->settings->marketing5content);
-        $marketing5buttontext = (empty($PAGE->theme->settings->marketing5buttontext)) ? false : format_text($PAGE->theme->settings->marketing5buttontext);
+        $marketing5buttontext = (empty($PAGE->theme->settings->marketing5buttontext)) ? false : format_string($PAGE->theme->settings->marketing5buttontext);
         $marketing5buttonurl = (empty($PAGE->theme->settings->marketing5buttonurl)) ? false : $PAGE->theme->settings->marketing5buttonurl;
         $marketing5target = (empty($PAGE->theme->settings->marketing5target)) ? false : $PAGE->theme->settings->marketing5target;
         $marketing5image = (empty($PAGE->theme->settings->marketing5image)) ? false : 'marketing5image';
 
-        $hasmarketing6 = (empty($PAGE->theme->settings->marketing6) || $PAGE->theme->settings->togglemarketing == 2) ? false : format_text($PAGE->theme->settings->marketing6);
+        $hasmarketing6 = (empty($PAGE->theme->settings->marketing6 && $PAGE->theme->settings->togglemarketing == 2)) ? false : format_string($PAGE->theme->settings->marketing6);
         $marketing6content = (empty($PAGE->theme->settings->marketing6content)) ? false : format_text($PAGE->theme->settings->marketing6content);
-        $marketing6buttontext = (empty($PAGE->theme->settings->marketing6buttontext)) ? false : format_text($PAGE->theme->settings->marketing6buttontext);
+        $marketing6buttontext = (empty($PAGE->theme->settings->marketing6buttontext)) ? false : format_string($PAGE->theme->settings->marketing6buttontext);
         $marketing6buttonurl = (empty($PAGE->theme->settings->marketing6buttonurl)) ? false : $PAGE->theme->settings->marketing6buttonurl;
         $marketing6target = (empty($PAGE->theme->settings->marketing6target)) ? false : $PAGE->theme->settings->marketing6target;
         $marketing6image = (empty($PAGE->theme->settings->marketing6image)) ? false : 'marketing6image';
 
-        $fp_marketingtiles = [
+        $hasmarketing7 = (empty($PAGE->theme->settings->marketing7 && $PAGE->theme->settings->togglemarketing == 2)) ? false : format_string($PAGE->theme->settings->marketing7);
+        $marketing7content = (empty($PAGE->theme->settings->marketing7content)) ? false : format_text($PAGE->theme->settings->marketing7content);
+        $marketing7buttontext = (empty($PAGE->theme->settings->marketing7buttontext)) ? false : format_string($PAGE->theme->settings->marketing7buttontext);
+        $marketing7buttonurl = (empty($PAGE->theme->settings->marketing7buttonurl)) ? false : $PAGE->theme->settings->marketing7buttonurl;
+        $marketing7target = (empty($PAGE->theme->settings->marketing7target)) ? false : $PAGE->theme->settings->marketing7target;
+        $marketing7image = (empty($PAGE->theme->settings->marketing7image)) ? false : 'marketing7image';
 
-        'hasmarkettiles' => ($hasmarketing1 || $hasmarketing2 || $hasmarketing3 || $hasmarketing4 || $hasmarketing5 || $hasmarketing6) ? true : false,
+        $hasmarketing8 = (empty($PAGE->theme->settings->marketing8 && $PAGE->theme->settings->togglemarketing == 2)) ? false : format_string($PAGE->theme->settings->marketing8);
+        $marketing8content = (empty($PAGE->theme->settings->marketing8content)) ? false : format_text($PAGE->theme->settings->marketing8content);
+        $marketing8buttontext = (empty($PAGE->theme->settings->marketing8buttontext)) ? false : format_string($PAGE->theme->settings->marketing8buttontext);
+        $marketing8buttonurl = (empty($PAGE->theme->settings->marketing8buttonurl)) ? false : $PAGE->theme->settings->marketing8buttonurl;
+        $marketing8target = (empty($PAGE->theme->settings->marketing8target)) ? false : $PAGE->theme->settings->marketing8target;
+        $marketing8image = (empty($PAGE->theme->settings->marketing8image)) ? false : 'marketing8image';
 
-        'markettiles' => array(
+        $hasmarketing9 = (empty($PAGE->theme->settings->marketing9 && $PAGE->theme->settings->togglemarketing == 2)) ? false : format_string($PAGE->theme->settings->marketing9);
+        $marketing9content = (empty($PAGE->theme->settings->marketing9content)) ? false : format_text($PAGE->theme->settings->marketing9content);
+        $marketing9buttontext = (empty($PAGE->theme->settings->marketing9buttontext)) ? false : format_string($PAGE->theme->settings->marketing9buttontext);
+        $marketing9buttonurl = (empty($PAGE->theme->settings->marketing9buttonurl)) ? false : $PAGE->theme->settings->marketing9buttonurl;
+        $marketing9target = (empty($PAGE->theme->settings->marketing9target)) ? false : $PAGE->theme->settings->marketing9target;
+        $marketing9image = (empty($PAGE->theme->settings->marketing9image)) ? false : 'marketing9image';
+
+        $fp_marketingtiles = ['hasmarkettiles' => ($hasmarketing1 || $hasmarketing2 || $hasmarketing3 || $hasmarketing4 || $hasmarketing5 || $hasmarketing6) ? true : false, 'markettiles' => array(
             array(
                 'hastile' => $hasmarketing1,
                 'tileimage' => $marketing1image,
@@ -1225,8 +1564,28 @@ class core_renderer extends \theme_boost\output\core_renderer {
                 'title' => $hasmarketing6,
                 'button' => "<a href = '$marketing6buttonurl' title = '$marketing6buttontext' alt='$marketing6buttontext' class='btn btn-primary' target='$marketing6target'> $marketing6buttontext </a>"
             ) ,
+            array(
+                'hastile' => $hasmarketing7,
+                'tileimage' => $marketing7image,
+                'content' => $marketing7content,
+                'title' => $hasmarketing7,
+                'button' => "<a href = '$marketing7buttonurl' title = '$marketing7buttontext' alt='$marketing7buttontext' class='btn btn-primary' target='$marketing7target'> $marketing7buttontext </a>"
+            ) ,
+            array(
+                'hastile' => $hasmarketing8,
+                'tileimage' => $marketing8image,
+                'content' => $marketing8content,
+                'title' => $hasmarketing8,
+                'button' => "<a href = '$marketing8buttonurl' title = '$marketing8buttontext' alt='$marketing8buttontext' class='btn btn-primary' target='$marketing8target'> $marketing8buttontext </a>"
+            ) ,
+            array(
+                'hastile' => $hasmarketing9,
+                'tileimage' => $marketing9image,
+                'content' => $marketing9content,
+                'title' => $hasmarketing9,
+                'button' => "<a href = '$marketing9buttonurl' title = '$marketing9buttontext' alt='$marketing9buttontext' class='btn btn-primary' target='$marketing9target'> $marketing9buttontext </a>"
+            ) ,
         ) , ];
-
         return $this->render_from_template('theme_fordson_fel/fpmarkettiles', $fp_marketingtiles);
     }
 
@@ -1234,64 +1593,47 @@ class core_renderer extends \theme_boost\output\core_renderer {
         global $PAGE;
 
         $theme = theme_config::load('fordson_fel');
-
         $slideshowon = $PAGE->theme->settings->showslideshow == 1;
-
         $hasslide1 = (empty($theme->setting_file_url('slide1image', 'slide1image'))) ? false : $theme->setting_file_url('slide1image', 'slide1image');
-        $slide1 = (empty($PAGE->theme->settings->slide1title)) ? false : format_text($PAGE->theme->settings->slide1title);
+        $slide1 = (empty($PAGE->theme->settings->slide1title)) ? false : $PAGE->theme->settings->slide1title;
         $slide1content = (empty($PAGE->theme->settings->slide1content)) ? false : format_text($PAGE->theme->settings->slide1content);
         $showtext1 = (empty($PAGE->theme->settings->slide1title)) ? false : format_text($PAGE->theme->settings->slide1title);
-
         $hasslide2 = (empty($theme->setting_file_url('slide2image', 'slide2image'))) ? false : $theme->setting_file_url('slide2image', 'slide2image');
-        $slide2 = (empty($PAGE->theme->settings->slide2title)) ? false : format_text($PAGE->theme->settings->slide2title);
+        $slide2 = (empty($PAGE->theme->settings->slide2title)) ? false : $PAGE->theme->settings->slide2title;
         $slide2content = (empty($PAGE->theme->settings->slide2content)) ? false : format_text($PAGE->theme->settings->slide2content);
         $showtext2 = (empty($PAGE->theme->settings->slide2title)) ? false : format_text($PAGE->theme->settings->slide2title);
-
         $hasslide3 = (empty($theme->setting_file_url('slide3image', 'slide3image'))) ? false : $theme->setting_file_url('slide3image', 'slide3image');
-        $slide3 = (empty($PAGE->theme->settings->slide3title)) ? false : format_text($PAGE->theme->settings->slide3title);
+        $slide3 = (empty($PAGE->theme->settings->slide3title)) ? false : $PAGE->theme->settings->slide3title;
         $slide3content = (empty($PAGE->theme->settings->slide3content)) ? false : format_text($PAGE->theme->settings->slide3content);
         $showtext3 = (empty($PAGE->theme->settings->slide3title)) ? false : format_text($PAGE->theme->settings->slide3title);
-
-        $fp_slideshow = [
-
-        'hasfpslideshow' => $slideshowon,
-
-        'hasslide1' => $hasslide1 ? true : false, 'hasslide2' => $hasslide2 ? true : false, 'hasslide3' => $hasslide3 ? true : false,
-
-        'showtext1' => $showtext1 ? true : false, 'showtext2' => $showtext2 ? true : false, 'showtext3' => $showtext3 ? true : false,
-
-        'slide1' => array(
+        $fp_slideshow = ['hasfpslideshow' => $slideshowon, 'hasslide1' => $hasslide1 ? true : false, 'hasslide2' => $hasslide2 ? true : false, 'hasslide3' => $hasslide3 ? true : false, 'showtext1' => $showtext1 ? true : false, 'showtext2' => $showtext2 ? true : false, 'showtext3' => $showtext3 ? true : false, 'slide1' => array(
             'slidetitle' => $slide1,
             'slidecontent' => $slide1content
-        ) , 
-        'slide2' => array(
+        ) , 'slide2' => array(
             'slidetitle' => $slide2,
             'slidecontent' => $slide2content
-        ) , 
-        'slide3' => array(
+        ) , 'slide3' => array(
             'slidetitle' => $slide3,
             'slidecontent' => $slide3content
-        ) ,
-
-        ];
-
+        ) , ];
         return $this->render_from_template('theme_fordson_fel/slideshow', $fp_slideshow);
     }
 
     public function teacherdashmenu() {
         global $PAGE, $COURSE, $CFG, $DB, $OUTPUT;
+
         $course = $this->page->course;
         $context = context_course::instance($course->id);
-
         $showincourseonly = isset($COURSE->id) && $COURSE->id > 1 && $PAGE->theme->settings->coursemanagementtoggle && isloggedin() && !isguestuser();
         $haspermission = has_capability('enrol/category:config', $context) && $PAGE->theme->settings->coursemanagementtoggle && isset($COURSE->id) && $COURSE->id > 1;
-
         $togglebutton = '';
         $togglebuttonstudent = '';
         $hasteacherdash = '';
         $hasstudentdash = '';
         $globalhaseasyenrollment = enrol_get_plugin('easy');
         $coursehaseasyenrollment = '';
+        $haseditcog = $PAGE->theme->settings->courseeditingcog;
+        $editcog = html_writer::div($this->context_header_settings_menu() , 'pull-xs-right context-header-settings-menu');
 
         if ($globalhaseasyenrollment) {
             $coursehaseasyenrollment = $DB->record_exists('enrol', array(
@@ -1324,10 +1666,6 @@ class core_renderer extends \theme_boost\output\core_renderer {
                 $togglebuttonstudent = get_string('studentdashbutton', 'theme_fordson_fel');
             }
         }
-
-        $haseditcog = $PAGE->theme->settings->courseeditingcog;
-        $editcog = html_writer::div($this->context_header_settings_menu() , 'pull-xs-right context-header-settings-menu');
-
         $siteadmintitle = get_string('siteadminquicklink', 'theme_fordson_fel');
         $siteadminurl = new moodle_url('/admin/search.php');
 
@@ -1363,15 +1701,16 @@ class core_renderer extends \theme_boost\output\core_renderer {
         return $this->render_from_template('theme_fordson_fel/teacherdashmenu', $dashmenu);
     }
 
-
     public function teacherdash() {
-        global $PAGE, $COURSE, $CFG, $DB, $OUTPUT;
+        global $PAGE, $COURSE, $CFG, $DB, $OUTPUT, $USER;
 
         require_once ($CFG->dirroot . '/completion/classes/progress.php');
         $togglebutton = '';
         $togglebuttonstudent = '';
         $hasteacherdash = '';
         $hasstudentdash = '';
+        $haseditcog = $PAGE->theme->settings->courseeditingcog;
+        $editcog = html_writer::div($this->context_header_settings_menu() , 'pull-xs-right context-header-settings-menu');
         if (isloggedin() && ISSET($COURSE->id) && $COURSE->id > 1) {
             $course = $this->page->course;
             $context = context_course::instance($course->id);
@@ -1412,9 +1751,12 @@ class core_renderer extends \theme_boost\output\core_renderer {
         $badgesdesc = get_string('badges_desc', 'theme_fordson_fel');
         $coursemanage = get_string('coursemanage', 'theme_fordson_fel');
         $coursemanagedesc = get_string('coursemanage_desc', 'theme_fordson_fel');
-        $coursemanagementmessage = (empty($PAGE->theme->settings->coursemanagementtextbox)) ? false : format_text($PAGE->theme->settings->coursemanagementtextbox);
-        $studentdashboardtextbox = (empty($PAGE->theme->settings->studentdashboardtextbox)) ? false : format_text($PAGE->theme->settings->studentdashboardtextbox);
-
+        $coursemanagementmessage = (empty($PAGE->theme->settings->coursemanagementtextbox)) ? false : format_text($PAGE->theme->settings->coursemanagementtextbox, FORMAT_HTML, array(
+            'noclean' => true
+        ));
+        $studentdashboardtextbox = (empty($PAGE->theme->settings->studentdashboardtextbox)) ? false : format_text($PAGE->theme->settings->studentdashboardtextbox, FORMAT_HTML, array(
+            'noclean' => true
+        ));
         // User links.
         if ($coursehaseasyenrollment && isset($COURSE->id) && $COURSE->id > 1) {
             $easycodetitle = get_string('header_coursecodes', 'enrol_easy');
@@ -1424,8 +1766,12 @@ class core_renderer extends \theme_boost\output\core_renderer {
                 'type' => 'easy'
             ));
         }
-        $gradestitle = get_string('gradesoverview', 'gradereport_overview');
-        $gradeslink = new moodle_url('/grade/report/index.php', array(
+        $gradestitle = get_string('gradebooksetup', 'grades');
+        $gradeslink = new moodle_url('/grade/edit/tree/index.php', array(
+            'id' => $PAGE->course->id
+        ));
+        $gradebooktitle = get_string('gradebook', 'grades');
+        $gradebooklink = new moodle_url('/grade/report/grader/index.php', array(
             'id' => $PAGE->course->id
         ));
         $participantstitle = ($PAGE->theme->settings->studentdashboardtextbox == 1) ? false : get_string('participants', 'moodle');
@@ -1467,6 +1813,7 @@ class core_renderer extends \theme_boost\output\core_renderer {
         $completionreportlink = new moodle_url('/report/completion/index.php', array(
             'course' => $PAGE->course->id
         ));
+        // FEL ADDS
         if (is_dir($CFG->dirroot.'/report/trainingsessions')) {
             $trainingsessionstitle = get_string('trainingsessions', 'report_trainingsessions');
             $trainingsessionslink = new moodle_url('/report/trainingsessions/index.php', array(
@@ -1483,6 +1830,7 @@ class core_renderer extends \theme_boost\output\core_renderer {
                 $hasltcs = true;
             }
         }
+        // /FEL ADDS
 
         // Questionbank.
         $qbanktitle = get_string('questionbank', 'question');
@@ -1513,8 +1861,9 @@ class core_renderer extends \theme_boost\output\core_renderer {
         ));
 
         $competencytitle = get_string('competencies', 'competency');
-        $competencyurl = new moodle_url('/admin/tool/lp/coursecompetencies.php', array('courseid' => $PAGE->course->id));
-
+        $competencyurl = new moodle_url('/admin/tool/lp/coursecompetencies.php', array(
+            'courseid' => $PAGE->course->id
+        ));
         $courseresettitle = get_string('reset', 'moodle');
         $courseresetlink = new moodle_url('/course/reset.php', array(
             'id' => $PAGE->course->id
@@ -1567,8 +1916,12 @@ class core_renderer extends \theme_boost\output\core_renderer {
             $comppercent = 0;
             $hasprogress = false;
         }
+        // Progresschart disapeared in 3.6.
+        // $progressbarcontext = ['hasprogress' => $hasprogress, 'progress' => $comppercent];
+        // $progresschart = $this->render_from_template('block_myoverview/progress-bar', $progressbarcontext);
         $progresschartcontext = ['hasprogress' => $hasprogress, 'progress' => $comppercent];
-        $progresschart = $this->render_from_template('block_myoverview/progress-chart', $progresschartcontext);
+        $progresschart = $this->render_from_template('theme_fordson_fel/progress-chart', $progresschartcontext);
+
         $gradeslinkstudent = new moodle_url('/grade/report/user/index.php', array(
             'id' => $PAGE->course->id
         ));
@@ -1590,6 +1943,16 @@ class core_renderer extends \theme_boost\output\core_renderer {
         );
         $courseteachers = array();
         $courseother = array();
+
+        $showonlygroupteachers = !empty(groups_get_all_groups($course->id, $USER->id)) && $PAGE->theme->settings->showonlygroupteachers == 1;
+        if ($showonlygroupteachers) {
+            $groupids = array();
+            $studentgroups = groups_get_all_groups($course->id, $USER->id);
+            foreach ($studentgroups as $grp) {
+                $groupids[] = $grp->id;
+            }
+        }
+
         // If you created custom roles, please change the shortname value to match the name of your role.  This is teacher.
         $role = $DB->get_record('role', array(
             'shortname' => 'editingteacher'
@@ -1597,10 +1960,23 @@ class core_renderer extends \theme_boost\output\core_renderer {
         if ($role) {
             $context = context_course::instance($PAGE->course->id);
             $teachers = get_role_users($role->id, $context, false, 'u.id, u.firstname, u.middlename, u.lastname, u.alternatename,
-                    u.firstnamephonetic, u.lastnamephonetic, u.email, u.picture,
+                    u.firstnamephonetic, u.lastnamephonetic, u.email, u.picture, u.maildisplay,
                     u.imagealt');
 
             foreach ($teachers as $staff) {
+                if ($showonlygroupteachers) {
+                    $staffgroups = groups_get_all_groups($course->id, $staff->id);
+                    $found = false;
+                    foreach ($staffgroups as $grp) {
+                        if (in_array($grp->id, $groupids)) {
+                            $found = true;
+                            break;
+                        }
+                    }
+                    if (!$found) {
+                        continue;
+                    }
+                }
                 $picture = $OUTPUT->user_picture($staff, array(
                     'size' => 50
                 ));
@@ -1613,10 +1989,12 @@ class core_renderer extends \theme_boost\output\core_renderer {
                     'email' => $staff->email,
                     'picture' => $picture,
                     'messaging' => $messaging,
-                    'hasmessaging' => $hasmessaging
+                    'hasmessaging' => $hasmessaging,
+                    'hasemail' => $staff->maildisplay
                 );
             }
         }
+
         // If you created custom roles, please change the shortname value to match the name of your role.  This is non-editing teacher.
         $role = $DB->get_record('role', array(
             'shortname' => 'teacher'
@@ -1624,7 +2002,7 @@ class core_renderer extends \theme_boost\output\core_renderer {
         if ($role) {
             $context = context_course::instance($PAGE->course->id);
             $teachers = get_role_users($role->id, $context, false, 'u.id, u.firstname, u.middlename, u.lastname, u.alternatename,
-                    u.firstnamephonetic, u.lastnamephonetic, u.email, u.picture,
+                    u.firstnamephonetic, u.lastnamephonetic, u.email, u.picture, u.maildisplay,
                     u.imagealt');
             foreach ($teachers as $staff) {
                 $picture = $OUTPUT->user_picture($staff, array(
@@ -1639,7 +2017,8 @@ class core_renderer extends \theme_boost\output\core_renderer {
                     'email' => $staff->email,
                     'picture' => $picture,
                     'messaging' => $messaging,
-                    'hasmessaging' => $hasmessaging
+                    'hasmessaging' => $hasmessaging,
+                    'hasemail' => $staff->maildisplay
                 );
             }
         }
@@ -1795,46 +2174,58 @@ class core_renderer extends \theme_boost\output\core_renderer {
         );
 
         // Course management
-        $dashlinks['dashlinks'][] = array(
-            'hascoursemanagelinks' => $courseedittitle,
-            'title' => $courseedittitle,
-            'url' => $courseeditlink
-        );
+        if (has_capability('moodle/course:update', $context)) {
+            $dashlinks['dashlinks'][] = array(
+                'hascoursemanagelinks' => $courseedittitle,
+                'title' => $courseedittitle,
+                'url' => $courseeditlink
+            );
+        }
         $dashlinks['dashlinks'][] = array(
             'hascoursemanagelinks' => $coursecompletiontitle,
             'title' => $coursecompletiontitle,
             'url' => $coursecompletionlink
         );
-        $dashlinks['dashlinks'][] = array(
-            'hascoursemanagelinks' => $hascompetency,
-            'title' => $competencytitle,
-            'url' => $competencyurl
-        );
-        $dashlinks['dashlinks'][] = array(
-            'hascoursemanagelinks' => $courseadmintitle,
-            'title' => $courseadmintitle,
-            'url' => $courseadminlink
-        );
-        $dashlinks['dashlinks'][] = array(
-            'hascoursemanagelinks' => $courseresettitle,
-            'title' => $courseresettitle,
-            'url' => $courseresetlink
-        );
-        $dashlinks['dashlinks'][] = array(
-            'hascoursemanagelinks' => $coursebackuptitle,
-            'title' => $coursebackuptitle,
-            'url' => $coursebackuplink
-        );
-        $dashlinks['dashlinks'][] = array(
-            'hascoursemanagelinks' => $courserestoretitle,
-            'title' => $courserestoretitle,
-            'url' => $courserestorelink
-        );
-        $dashlinks['dashlinks'][] = array(
-            'hascoursemanagelinks' => $courseimporttitle,
-            'title' => $courseimporttitle,
-            'url' => $courseimportlink
-        );
+        if (has_capability('moodle/competency:coursecompetencyview', $context)) {
+            $dashlinks['dashlinks'][] = array(
+                'hascoursemanagelinks' => $hascompetency,
+                'title' => $competencytitle,
+                'url' => $competencyurl
+            );
+        }
+        if (has_capability('moodle/course:update', $context)) {
+            $dashlinks['dashlinks'][] = array(
+                'hascoursemanagelinks' => $courseadmintitle,
+                'title' => $courseadmintitle,
+                'url' => $courseadminlink
+            );
+        }
+        if (has_capability('moodle/course:reset', $context)) {
+            $dashlinks['dashlinks'][] = array(
+                'hascoursemanagelinks' => $courseresettitle,
+                'title' => $courseresettitle,
+                'url' => $courseresetlink
+            );
+        }
+        if (has_capability('moodle/backup:backupcourse', $context)) {
+            $dashlinks['dashlinks'][] = array(
+                'hascoursemanagelinks' => $coursebackuptitle,
+                'title' => $coursebackuptitle,
+                'url' => $coursebackuplink
+            );
+        }
+        if (has_capability('moodle/restore:restorecourse', $context)) {
+            $dashlinks['dashlinks'][] = array(
+                'hascoursemanagelinks' => $courserestoretitle,
+                'title' => $courserestoretitle,
+                'url' => $courserestorelink
+            );
+            $dashlinks['dashlinks'][] = array(
+                'hascoursemanagelinks' => $courseimporttitle,
+                'title' => $courseimporttitle,
+                'url' => $courseimportlink
+            );
+        }
         $dashlinks['dashlinks'][] = array(
             'hascoursemanagelinks' => $recyclebintitle,
             'title' => $recyclebintitle,
@@ -1870,7 +2261,6 @@ class core_renderer extends \theme_boost\output\core_renderer {
                 'title' => $easycodetitle,
                 'url' => $easycodelink
             );
-
         }
         return $this->render_from_template('theme_fordson_fel/teacherdash', $dashlinks);
 
@@ -1887,6 +2277,28 @@ class core_renderer extends \theme_boost\output\core_renderer {
                 block_livedesk_setup_theme_notification();
             }
         }
+
+        // Add additional javascript requires from the theme settings.
+        if (!empty($PAGE->theme->settings->pagetyperestrictions)) {
+            if (!preg_match('\b'.$PAGE->pagetype.'\b', $PAGE->theme->settings->pagetyperestrictions)) {
+                return parent::header();
+            }
+        }
+
+        $fs = get_file_storage();
+        $systemcontext = \context_system::instance();
+        $contextid = $systemcontext->id;
+        $component = 'theme_'.$PAGE->theme->name;
+        $filearea = 'additionaljs';
+        // Only take the first level js files and entry points.
+        $addjsfiles = $fs->get_directory_files($contextid, $component, $filearea, 0, '/', false, false, "filename");
+        if (!empty($addjsfiles)) {
+            foreach ($addjsfiles as $js) {
+                $scripturl = \moodle_url::make_pluginfile_url($contextid, $component, $filearea, 0, '/', $js->get_filename());
+                $PAGE->requires->js($scripturl);
+            }
+        }
+
         return parent::header();
     }
 
@@ -1895,7 +2307,7 @@ class core_renderer extends \theme_boost\output\core_renderer {
      * @return string HTML fragment
      */
     public function footer() {
-        global $CFG, $PAGE, $COURSE, $OUTPUT;
+        global $CFG, $PAGE, $COURSE, $OUTPUT, $DB;
 
         $output = $this->container_end_all(true);
 
@@ -1913,7 +2325,7 @@ class core_renderer extends \theme_boost\output\core_renderer {
 
         // Prepare return to course button.
 
-        $returnablemodules = array('resource', 'forum', 'page', 'folder', 'quiz');
+        $returnablemodules = array('resource', 'forum', 'folder', 'page', 'quiz', 'hvp', 'assign', 'pdcertificate', 'url');
         $pagetypeexceptions = array('page-mod-quiz-attempt');
 
         $button = '';
@@ -1922,10 +2334,12 @@ class core_renderer extends \theme_boost\output\core_renderer {
         $me = me();
         if (!empty($cm) && in_array($PAGE->cm->modname, $returnablemodules) && !preg_match('/course\\/modedit\.php/', $me)) {
             if (!in_array($PAGE->pagetype, $pagetypeexceptions) && ($COURSE->id != SITEID)) {
-                // TODO : There should be other cases of form situation where we would'nt like to add a return button...
+                $sectionsection = $DB->get_field('course_sections', 'section', array('id' => $cm->section));
                 $courseurl = new moodle_url('/course/view.php', array('id' => $COURSE->id));
+                $courseurl->set_anchor('section-'.$sectionsection);
                 $button = '<div class="return-button">';
-                $button .= $OUTPUT->single_button($courseurl, get_string('backtocourse', 'theme_fordson_fel'));
+                $attrs = array('title' => get_string('backtocourse', 'theme_fordson_fel'), 'class' => 'btn btn-default');
+                $button .= html_writer::link($courseurl, get_string('backtocourse', 'theme_fordson_fel'), $attrs);
                 $button .= '</div>';
             }
         }
@@ -1935,14 +2349,16 @@ class core_renderer extends \theme_boost\output\core_renderer {
 
     public function footnote() {
         global $PAGE;
+
         $footnote = '';
         $footnote = (empty($PAGE->theme->settings->footnote)) ? false : format_text($PAGE->theme->settings->footnote);
+
         return $footnote;
     }
 
     public function brandorganization_footer() {
         $theme = theme_config::load('fordson_fel');
-        $setting = $theme->settings->brandorganization;
+        $setting = format_string($theme->settings->brandorganization);
         return $setting != '' ? $setting : '';
     }
 
@@ -1998,7 +2414,61 @@ class core_renderer extends \theme_boost\output\core_renderer {
     }
 
     public function favicon() {
-        return $this->page->theme->setting_file_url('favicon', 'favicon');
+        $favicon = $this->page->theme->setting_file_url('favicon', 'favicon');
+
+        if (empty($favicon)) {
+            return $this->page->theme->image_url('favicon', 'theme');
+        } else {
+            return $favicon;
+        }
+    }
+
+    public function display_ilearn_secure_alert() {
+        global $DB, $PAGE;
+        $cm = $PAGE->cm;
+        if ($cm) {
+            $quiz = $DB->get_record('quiz', array(
+                'id' => $cm->instance
+            ));
+            $globalhasilearnsecureplugin = $DB->get_manager()->table_exists('quizaccess_ilearnbrowser') ? true : false;
+        }
+        // Turn off alert while taking a quiz.
+        if (strpos($PAGE->url, '/mod/quiz/attempt.php')) {
+            return false;
+        }
+        if ($cm && $quiz && $globalhasilearnsecureplugin) {
+            $quiz_record = $DB->get_record('quizaccess_ilearnbrowser', array(
+                'quiz_id' => $quiz->id
+            ));
+            if ($quiz_record && $quiz_record->browserrequired == 1) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public function show_teacher_navbarcolor() {
+        global $PAGE;
+        $theme = theme_config::load('fordson_fel');
+        $context = $this->page->context;
+        $hasteacherrole = has_capability('moodle/course:viewhiddenactivities', $context);
+
+        if ($PAGE->theme->settings->navbarcolorswitch == 1 && $hasteacherrole) {
+            return true;
+        }
+        return false;
+    }
+
+    public function show_student_navbarcolor() {
+        global $PAGE;
+        $theme = theme_config::load('fordson_fel');
+        $context = $this->page->context;
+        $hasstudentrole = !has_capability('moodle/course:viewhiddenactivities', $context);
+
+        if ($PAGE->theme->settings->navbarcolorswitch == 1 && $hasstudentrole) {
+            return true;
+        }
+        return false;
     }
 
     public function headingfont() {
@@ -2037,6 +2507,61 @@ class core_renderer extends \theme_boost\output\core_renderer {
         // Use $CFG->themerev to prevent browser caching when the file changes.
         $logourl = \moodle_url::make_pluginfile_url(\context_system::instance()->id, $themecomponent, 'headerlogo', 0, $filepath, $logo);
         return $logourl;
+    }
+
+    /**
+     * Prints a nice side block with an optional header.
+     *
+     * @param block_contents $bc HTML for the content
+     * @param string $region the region the block is appearing in.
+     * @return string the HTML to be output.
+     */
+    public function block(block_contents $bc, $region) {
+        global $COURSE, $PAGE;
+
+        static $firstblockinregion = array();
+
+        if (!array_key_exists($region, $firstblockinregion)) {
+            $firstblockinregion[$region] = true;
+        }
+
+        $bc = clone($bc); // Avoid messing up the object passed in.
+        if (empty($bc->blockinstanceid) || !strip_tags($bc->title)) {
+            $bc->collapsible = block_contents::NOT_HIDEABLE;
+        }
+
+        $id = !empty($bc->attributes['id']) ? $bc->attributes['id'] : uniqid('block-');
+        $context = new stdClass();
+        $context->skipid = $bc->skipid;
+        $context->blockinstanceid = (empty($bc->blockinstanceid)) ? uniqid() : $bc->blockinstanceid;
+        $context->dockable = $bc->dockable;
+        $context->id = $id;
+        $context->hidden = $bc->collapsible == block_contents::HIDDEN;
+        $context->skiptitle = strip_tags($bc->title);
+        $context->showskiplink = !empty($context->skiptitle);
+        $context->arialabel = $bc->arialabel;
+        $context->ariarole = !empty($bc->attributes['role']) ? $bc->attributes['role'] : 'complementary';
+        $context->type = $bc->attributes['data-block'];
+        $context->title = $bc->title;
+        $context->content = $bc->content;
+        $context->annotation = $bc->annotation;
+        $context->footer = $bc->footer;
+        $context->region = $region;
+        $context->cancollapse = ($COURSE->format != 'page') &&
+                        ($bc->collapsible || !empty($PAGE->theme->settings->allowblockregionscollapse));
+        $context->hascontrols = !empty($bc->controls);
+        if ($context->hascontrols) {
+            $context->controls = $this->block_controls($bc->controls, $id);
+        }
+
+        $context->firstblockclass = '';
+
+        if ($firstblockinregion[$region] && !empty($PAGE->theme->settings->allowblockregionscollapse)) {
+            $context->firstblockclass = 'show';
+            $firstblockinregion[$region] = false;
+        }
+
+        return $this->render_from_template('theme_fordson_fel/block', $context);
     }
 
 }

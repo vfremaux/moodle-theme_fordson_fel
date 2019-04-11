@@ -15,20 +15,26 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * A two column layout for the boost theme.
+ * A two column layout for the fordson_fel theme.
  *
- * @package   theme_boost
- * @copyright 2016 Damyon Wiese
+ * @package   theme_fordson_fel
+ * @copyright 2018 Valery Fremaux
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die();
-require_once($CFG->dirroot.'/local/technicalsignals/lib.php');
+if (is_dir($CFG->dirroot.'/local/technicalsignals')) {
+    require_once($CFG->dirroot.'/local/technicalsignals/lib.php');
+}
+
+if ($PAGE->theme->settings->breadcrumbstyle == '1') {
+    $PAGE->requires->js_call_amd('theme_fordson_fel/jBreadCrumb', 'init');
+}
 
 user_preference_allow_ajax_update('drawer-open-nav', PARAM_ALPHA);
 require_once($CFG->libdir . '/behat/lib.php');
 
-$hasfhsdrawer = isset($PAGE->theme->settings->shownavdrawer) && $PAGE->theme->settings->shownavdrawer == 1;
+$hasfhsdrawer = !empty($PAGE->theme->settings->shownavdrawer);
 if (isloggedin() && $hasfhsdrawer && isset($PAGE->theme->settings->shownavclosed) && $PAGE->theme->settings->shownavclosed == 0) {
     $navdraweropen = (get_user_preferences('drawer-open-nav', 'true') == 'true');
 } else {
@@ -39,7 +45,7 @@ if ($navdraweropen) {
     $extraclasses[] = 'drawer-open-left';
 }
 
-$hasspdrawer = isset($PAGE->theme->settings->shownavspdrawer) && $PAGE->theme->settings->shownavspdrawer == 1;
+$hasspdrawer = !empty($PAGE->theme->settings->shownavspdrawer);
 if (isloggedin() && $hasspdrawer && isset($PAGE->theme->settings->showspclosed) && $PAGE->theme->settings->showspclosed == 0) {
     $navspdraweropen = (get_user_preferences('spdrawer-open-nav', 'true') == 'true');
 } else {
@@ -82,7 +88,7 @@ $templatecontext = [
     'hasfhsdrawer' => $hasfhsdrawer,
     'navspdraweropen' => $navspdraweropen,
     // 'hasspdrawer' => $hasspdrawer,
-    'hasspdrawer' => true,
+    'hasspdrawer' => !empty($blockshtmlsidepost) || $PAGE->user_is_editing(),
     'regionmainsettingsmenu' => $regionmainsettingsmenu,
     'hasregionmainsettingsmenu' => !empty($regionmainsettingsmenu),
     'hasfootenote' => !empty($footnote) && (preg_match('/[a-z]/', strip_tags($footnote))),
@@ -96,9 +102,12 @@ $templatecontext = [
     'leftfooter' => @$PAGE->theme->settings->leftfooter,
     'midfooter' => @$PAGE->theme->settings->midfooter,
     'rightfooter' => @$PAGE->theme->settings->rightfooter,
-    'showlangmenu' => @$CFG->langmenu,
-    'technicalsignals' => local_print_administrator_message()
+    'showlangmenu' => @$CFG->langmenu
 ];
+
+if (is_dir($CFG->dirroot.'/local/technicalsignals')) {
+    $templatecontext['technicalsignals'] = local_print_administrator_message();
+}
 
 $PAGE->requires->jquery();
 $PAGE->requires->js('/theme/fordson_fel/javascript/scrolltotop.js');

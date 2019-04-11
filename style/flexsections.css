@@ -29,3 +29,7 @@
 .flexcontrol {
     cursor:pointer;
 }
+
+body#page-course-view-flexsections.format-flexsections #section-0 ul.flexsections.flexsections-level-1 {
+    margin-left: -4em !important;
+}

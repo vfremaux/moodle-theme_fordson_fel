@@ -25,29 +25,43 @@ defined('MOODLE_INTERNAL') || die();
 
 require_once($CFG->libdir.'/formslib.php');
 
-class flexsectionclass_form extends moodleform {
+class sectionclass_form extends moodleform {
 
     public function definition() {
 
         $mform = $this->_form;
 
+        /*
         $mform->addElement('hidden', 'overridestyle');
         $mform->setType('overridestyle', PARAM_TEXT);
-
-        $mform->addElement('header', 'classparams', get_string('classparams', 'theme_fordson_fel'));
+        */
 
         $label = get_string('sectionstyleoverride', 'theme_fordson_fel');
         $mform->addElement('header', 'styleoverridehdr', $label);
 
-        $attrs = array();
+        $group = array();
+        $group[] = &$mform->createElement('radio', 'applyto', '', ' '.get_string('applytothiselementonly', 'theme_fordson_fel'), OVERRIDE_APPLIES_TO_SINGLE);
+        if ($this->_customdata['course']->format != 'flexsections') {
+            $group[] = &$mform->createElement('radio', 'applyto', '', ' '.get_string('applytoallsections', 'theme_fordson_fel'), OVERRIDE_APPLIES_TO_SIBLINGS);
+        } else {
+            $group[] = &$mform->createElement('radio', 'applyto', '', ' '.get_string('applytoallsiblings', 'theme_fordson_fel'), OVERRIDE_APPLIES_TO_SIBLINGS);
+            $group[] = &$mform->createElement('radio', 'applyto', '', ' '.get_string('applytowholesubtree', 'theme_fordson_fel'), OVERRIDE_APPLIES_TO_SUBTREE);
+        }
+        $mform->addGroup($group, 'applytogroup', get_string('applyto', 'theme_fordson_fel'), array(' '), false);
+
+        $attrs = array('value' => 'none',
+                       'type' => 'submit',
+                       'form' => 'mform1',
+                       'name' => 'overridestyle');
         if (empty($this->_customdata['current'])) {
             $attrs['class'] = 'btn currentchoice';
         } else {
             $attrs['class'] = 'btn';
-            $attrs['onclick'] = 'submitclasschange(this, \'\')';
         }
         $btnlabel = get_string('nostyleoverride', 'theme_fordson_fel', '');
-        $mform->addElement('button', 'styleoverride_none', $btnlabel, $attrs);
+        $btn = html_writer::tag('button', $btnlabel, $attrs)."<br/><br/>";
+        $mform->addElement('html', $btn);
+        // $mform->addElement('button', 'styleoverride_none', $btnlabel, $attrs);
 
         if (!empty($this->_customdata['styles']['labels'])) {
             foreach ($this->_customdata['styles']['labels'] as $name => $label) {
@@ -55,9 +69,15 @@ class flexsectionclass_form extends moodleform {
                 $btncurrentclass = ($name == $this->_customdata['current']) ? 'btn currentchoice' : 'btn';
                 $currentclass = ($name == $this->_customdata['current']) ? 'currentchoice' : '';
 
-                $attrs = array('onclick' => 'submitclasschange(this, \''.$name.'\');return true;', 'class' => $btncurrentclass);
+                // $attrs = array('onclick' => 'submitclasschange(this, \''.$name.'\');return true;', 'class' => $btncurrentclass);
+                $attrs = array('value' => $name,
+                               'type' => 'submit',
+                               'form' => 'mform1',
+                               'name' => 'overridestyle',
+                               'class' => 'btn');
                 $btnlabel = get_string('activatestyle', 'theme_fordson_fel').' > '.$label;
-                $mform->addElement('button', 'styleoverride_'.$name, $btnlabel, $attrs);
+                $btn = html_writer::tag('button', $btnlabel, $attrs);
+                $mform->addElement('html', $btn);
 
                 $attrs = array('class' => 'sectionname');
 
@@ -69,8 +89,8 @@ class flexsectionclass_form extends moodleform {
                 }
                 $sectionsample = '<span class="sample-label">'.get_string('sample', 'theme_fordson_fel').'</span><br/>';
                 $sectionsample .= html_writer::tag('h3', get_string('section'), $attrs);
-                $html = '<div class="flexsectionstyle-sample-wrapper">
-                    <div class="flexsectionstyle-sample '.$currentclass.'">'.$sectionsample.'</div>
+                $html = '<div class="sectionstyle-sample-wrapper">
+                    <div class="sectionstyle-sample '.$currentclass.'">'.$sectionsample.'</div>
                 </div>';
                 $mform->addElement('static', 'stylesample', '', $html);
 
@@ -79,5 +99,4 @@ class flexsectionclass_form extends moodleform {
 
         $mform->addElement('cancel', get_string('cancel'));
     }
-
 }

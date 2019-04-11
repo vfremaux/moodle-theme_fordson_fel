@@ -38,6 +38,15 @@ body {
     padding: 5px;
 }
 
+.purgecaches a {
+    color: #444 !important;
+}
+
+.tool_dataprivacy,
+.performanceinfo.pageinfo {
+    margin-left:2rem;
+}
+
 .navbar-nav .icon.shadow {
     -webkit-filter: grayscale(100%); /* Safari 6.0 - 9.0 */
     filter: grayscale(100%);
@@ -50,15 +59,6 @@ body {
     background-size: 30%;
     background-repeat: no-repeat;
     background-position: 100% 50%;
-}
-
-.format-page .headerbkg {
-    box-shadow: none;
-}
-
-.format-page div#learningcontent {
-    margin-top: 115px;
-    box-shadow: 0 1px 1px 1px rgba(0,0,0,.3);
 }
 
 .format-page #page-region-top {
@@ -75,4 +75,48 @@ a.block-pagetracker.current {
 .slick-dots {
     width: 100%;
     margin-bottom: 20px !important;
+}
+
+span.site-name.d-none.d-md-inline {
+    display:none!important;
+}
+
+[data-tooltip]::before {
+    opacity: 0;
+}
+
+#blockslider {
+    display: none;
+}
+
+#blocksliderbutton {
+    display: none;
+}
+
+.nav-link {
+    margin-left: 5px;
+}
+
+#page-course-view-grid .section-navigation.navigationtitle {
+    text-align: center;
+}
+
+.felement.fgroup input[type="radio"] {
+    margin-right:10px;
+    margin-left:20px;
+}
+
+#custom_menu_1 > div > ul > li > a {
+    cursor: pointer;
+}
+
+#page-mod-quiz-attempt .prompt {
+    background-color: #e6e6e6;
+    max-width: 30%;
+    -webkit-border-radius: 8px;
+    padding: .3rem .5rem;
+}
+
+#page-mod-quiz-attempt #region-main {
+    border:none;
 }
