@@ -43,7 +43,9 @@ define(['jquery', 'core/config', 'core/log'], function($, config, log) {
         },
 
         // Init_editing will NOT take control of section name.
-        init_editing: function() {
+        init_editing: function(attribs) {
+
+            M.course.id = attribs;
 
             // Expand everything.
             $('.section.sub > .content > .section-content').css('display', 'block');
@@ -173,7 +175,7 @@ define(['jquery', 'core/config', 'core/log'], function($, config, log) {
                     $('.section.sub > .content > .summary').css('visibility', 'hidden');
                     $('.section.sub > .content > .flexsections').css('display', 'none');
                     $('.section.sub > .content > .flexsections').css('visibility', 'hidden');
-                    $('img.flexcontrol').attr('src',$('img.flexcontrol').attr('src').replace('expanded', 'collapsed'));
+                    $('img.flexcontrol').attr('src', $('img.flexcontrol').attr('src').replace('expanded', 'collapsed'));
                     break;
 
                 case 'expandall':

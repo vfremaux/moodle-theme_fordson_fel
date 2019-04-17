@@ -101,7 +101,17 @@ class theme_fordson_fel_format_flexsections_renderer extends format_flexsections
                 $select = " name LIKE 'section_{$course->format}%' AND userid = ? AND value = ? ";
                 $DB->delete_records_select('user_preferences', $select, array($USER->id, $course->id));
 
-                $leaves = sections_get_leaves($course->id);
+                // One setting for all variants in master theme config.
+                $config = get_config('theme_fordson_fel');
+                $flexinitialstate = (empty($config->flexinitialstate)) ? 'collapsed' : $config->flexinitialstate;
+
+                if ($flexinitialstate == 'reset') {
+                    // Open roots and close all leaves.
+                    $leaves = sections_get_leaves($course->id);
+                } else if ($flexinitialstate == 'collapsed') {
+                    // close everything.
+                    $leaves = $DB->get_records('course_sections', array('course' => $course->id));
+                }
                 if ($leaves) {
                     foreach ($leaves as $leaf) {
                         $hidekey = 'section_'.$course->format.'_'.$leaf->id.'_hidden';
@@ -209,6 +219,16 @@ class theme_fordson_fel_format_flexsections_renderer extends format_flexsections
 
         // Display controls except for expanded/collapsed.
         $controls = course_get_format($course)->get_section_edit_controls($section, $sr);
+
+        // Fix all standard flexsections controls to respect the current section
+
+        foreach ($controls as &$acontrol) {
+            // Fix URL with section return.
+            if (isset($acontrol->url)) {
+                $acontrol->url->params(array('section' => $sr));
+                $acontrol->url->remove_params(array('sectionid'));
+            }
+        }
 
         // Get available section style overrides from config.
         $this->availablestyles = $this->parse_styleconfig();
@@ -366,6 +386,7 @@ class theme_fordson_fel_format_flexsections_renderer extends format_flexsections
                 }
             }
             if ($addsectioncontrol = course_get_format($course)->get_add_section_control($template->sectionnum)) {
+                $addsectioncontrol->url->params(array('section' => $sr));
                 $template->addsectioncontrol = $this->render($addsectioncontrol);
             }
         }
