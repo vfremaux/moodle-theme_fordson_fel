@@ -41,7 +41,7 @@ use image_url;
 use single_select;
 use core_text;
 
-require_once ($CFG->dirroot . '/course/renderer.php');
+require_once($CFG->dirroot . '/course/renderer.php');
 global $PAGE;
 /**
  * Course renderer class.
@@ -279,10 +279,10 @@ if ($PAGE->theme->settings->coursetilestyle < 10) {
                                 $tooltiptext = '';
                             }
                             $rowcontent .= '
-	                        <div class="col-md-4">
-	                        <div class="tilecontainer">
-	                            <div class="class-box-fp-style3" style="background-image: url(' . $imgurl . ');background-repeat: no-repeat;background-size:cover; background-position:center;">
-	                                ';
+                            <div class="col-md-4">
+                            <div class="tilecontainer">
+                                <div class="class-box-fp-style3" style="background-image: url(' . $imgurl . ');background-repeat: no-repeat;background-size:cover; background-position:center;">
+                                    ';
                             $rowcontent .= html_writer::start_tag('div', array(
                                 'class' => $course->visible ? 'coursevisible' : 'coursedimmed3'
                             ));
@@ -592,7 +592,6 @@ if ($PAGE->theme->settings->coursetilestyle < 10) {
          * @param int $depth depth of the category in the current tree
          * @return string
          */
-
         protected function coursecat_category(coursecat_helper $chelper, $coursecat, $depth) {
             if (!theme_fordson_fel_get_setting('enablecategoryicon')) {
                 return parent::coursecat_category($chelper, $coursecat, $depth);
@@ -664,6 +663,7 @@ if ($PAGE->theme->settings->coursetilestyle < 10) {
 
             return $content;
         }
+
         /**
          * Renders the list of subcategories in a category
          *
@@ -866,7 +866,7 @@ if ($PAGE->theme->settings->coursetilestyle < 10) {
                 if ($courses) {
                     // We have something to work with.  Get the last accessed information for the user and populate.
                     global $DB, $USER;
-                    $lastaccess = $DB->get_records('user_lastaccess', array('userid' => $USER->id) , '', 'courseid, timeaccess');
+                    $lastaccess = $DB->get_records('user_lastaccess', array('userid' => $USER->id), '', 'courseid, timeaccess');
                     if ($lastaccess) {
                         foreach ($courses as $course) {
                             if (!empty($lastaccess[$course->id])) {

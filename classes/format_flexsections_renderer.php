@@ -88,17 +88,20 @@ class theme_fordson_fel_format_flexsections_renderer extends format_flexsections
         }
 
         if (!isset($userstates)) {
+
+            $userstates = array();
+
             // Fills the cache of user states at first section called.
 
             /*
              * If user's preferences never initialized, then hide final leaves and show 
              * everything else
              */
-            $params = array('userid' => $USER->id, 'name' => 'section_'.$course->format.'_initialized_'.$course->id);
+            $params = array('userid' => $USER->id, 'name' => 'flexsection_initialized_'.$course->id);
             if (!$DB->record_exists('user_preferences', $params)) {
                 require_once($CFG->dirroot.'/theme/fordson_fel/sections/sectionslib.php');
 
-                $select = " name LIKE 'section_{$course->format}%' AND userid = ? AND value = ? ";
+                $select = " name LIKE 'flexsection\\_%' AND userid = ? AND value = ? ";
                 $DB->delete_records_select('user_preferences', $select, array($USER->id, $course->id));
 
                 // One setting for all variants in master theme config.
@@ -114,7 +117,7 @@ class theme_fordson_fel_format_flexsections_renderer extends format_flexsections
                 }
                 if ($leaves) {
                     foreach ($leaves as $leaf) {
-                        $hidekey = 'section_'.$course->format.'_'.$leaf->id.'_hidden';
+                        $hidekey = 'flexsection_'.$leaf->id.'_hidden';
                         $newrec = new StdClass;
                         $newrec->userid = $USER->id;
                         $newrec->name = $hidekey;
@@ -126,23 +129,26 @@ class theme_fordson_fel_format_flexsections_renderer extends format_flexsections
                 // Mark the course as initialized for the user.
                 $newrec = new StdClass;
                 $newrec->userid = $USER->id;
-                $newrec->name = 'section_'.$course->format.'_initialized_'.$course->id;
+                $newrec->name = 'flexsection_initialized_'.$course->id;
                 $newrec->value = 1;
                 $DB->insert_record('user_preferences', $newrec);
             }
 
             // Request is optimised to the current course scope, using preference value.
             $select = ' userid = :userid AND '.$DB->sql_like('name', ':prefname').' AND value = :value ';
-            $params = array('userid' => $USER->id, 'prefname' => 'section_'.$course->format.'\\_%\\_hidden', 'value' => $course->id);
+            $params = array('userid' => $USER->id, 'prefname' => 'flexsection\\_%\\_hidden', 'value' => $course->id);
             $flexprefs = $DB->get_records_select('user_preferences', $select, $params);
             if ($flexprefs) {
+                // Note flexprefs register only hidden (collpased) sections and have NO records for visible sections.
                 foreach ($flexprefs as $prf) {
-                    $name = str_replace('section_'.$course->format.'_', '', $prf->name);
+                    $name = str_replace('flexsection_', '', $prf->name);
                     $name = str_replace('_hidden', '', $name);
                     $userstates[$name] = $prf->value;
                 }
             }
         }
+
+        // Start building flexsection section template.
 
         $course = course_get_format($course)->get_course();
         $section = course_get_format($course)->get_section($section); // This converts $section from int to object.
@@ -156,14 +162,14 @@ class theme_fordson_fel_format_flexsections_renderer extends format_flexsections
                 // We are the happy candidate.
                 $sectiontoopen = clone($section);
                 while ($sectiontoopen->parent) {
-                    $userstates[$sectiontoopen->id] = FORMAT_FLEXSECTIONS_EXPANDED;
-                    $hidekey = 'section_'.$course->format.'_'.$sectiontoopen->id.'_hidden';
+                    unset($userstates[$sectiontoopen->id]);
+                    $hidekey = 'flexsection_'.$sectiontoopen->id.'_hidden';
                     $DB->delete_records('user_preferences', array('userid' => $USER->id, 'name' => $hidekey));
                     $sectiontoopen = course_get_format($course)->get_section($sectiontoopen->parent);
                 }
                 // Open top level.
-                $userstates[$sectiontoopen->id] = FORMAT_FLEXSECTIONS_EXPANDED;
-                $hidekey = 'section_'.$course->format.'_'.$sectiontoopen->id.'_hidden';
+                unset($userstates[$sectiontoopen->id]);
+                $hidekey = 'flexsection_'.$sectiontoopen->id.'_hidden';
                 $DB->delete_records('user_preferences', array('userid' => $USER->id, 'name' => $hidekey));
              }
         }
@@ -212,7 +218,6 @@ class theme_fordson_fel_format_flexsections_renderer extends format_flexsections
         $template->isleafclass = (empty($children)) ? 'isleaf' : '';
         $template->ismovingclass = ($movingsection === $template->sectionnum) ? 'ismoving' : '';
         $template->currentclass = (course_get_format($course)->is_section_current($section)) ? ' current' : '';
-        $template->hiddenclass = ($section->visible && $template->iscontentvisible) ? '' : ' hidden';
         $template->level = $level;
         $template->highlight = ($section->section == $tosection) ? 'highlight' : '';
         $template->hassubs = false;
@@ -262,24 +267,28 @@ class theme_fordson_fel_format_flexsections_renderer extends format_flexsections
         */
 
         $collapsedcontrol = null;
-        $hiddenvar = '';
         // Override add expand// collapse control for all users.
+        $hiddenvar = false;
         if ($level) {
-            if (@$userstates[$section->id] == FORMAT_FLEXSECTIONS_EXPANDED) {
+            if (!array_key_exists($section->id, $userstates)) {
                 $text = new lang_string('showcollapsed', 'format_flexsections');
-                $class = 'expanded flexcontrol level-'.$level;
+                $handleclass = 'expanded flexcontrol level-'.$level;
                 $src = $this->output->image_url('t/expanded');
+                $template->collapsedclass = 'expanded';
+                $template->contentcollapsedclass = 'expanded';
+                $hiddenvar = true;
             } else {
                 $text = new lang_string('showexpanded', 'format_flexsections');
-                $class = 'collapsed flexcontrol level-'.$level;
+                $handleclass = 'collapsed flexcontrol level-'.$level;
                 $src = $this->output->image_url('t/collapsed');
+                $template->collapsedclass = 'collapsed';
+                $template->contentcollapsedclass = 'collapsed';
             }
             $attrs = array('src' => $src,
-                           'class' => $class,
+                           'class' => $handleclass,
                            'title' => $text,
                            'id' => 'control-'.$section->id.'-section-'.$section->section);
             $collapsedcontrol = html_writer::tag('img', '', $attrs);
-            $hiddenvar = @$userstates[$section->id];
         }
 
         $controlsstr = '';

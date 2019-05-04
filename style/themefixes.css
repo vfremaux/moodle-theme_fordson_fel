@@ -120,3 +120,8 @@ span.site-name.d-none.d-md-inline {
 #page-mod-quiz-attempt #region-main {
     border:none;
 }
+
+img.activityicon {
+    margin-right: 20px;
+    margin-bottom: 10px;
+}

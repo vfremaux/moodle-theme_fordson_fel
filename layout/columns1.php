@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * A one column layout for the boost theme.
+ * A two column layout for the boost theme.
  *
  * @package   theme_boost
  * @copyright 2016 Damyon Wiese
@@ -27,45 +27,29 @@ if (is_dir($CFG->dirroot.'/local/technicalsignals')) {
     require_once($CFG->dirroot.'/local/technicalsignals/lib.php');
 }
 
-if (@$PAGE->theme->settings->breadcrumbstyle == '1') {
+if ($PAGE->theme->settings->breadcrumbstyle == '1') {
     $PAGE->requires->js_call_amd('theme_fordson_fel/jBreadCrumb', 'init');
 }
 
 user_preference_allow_ajax_update('drawer-open-nav', PARAM_ALPHA);
 require_once($CFG->libdir . '/behat/lib.php');
 
-$hasfhsdrawer = isset($PAGE->theme->settings->shownavdrawer) && $PAGE->theme->settings->shownavdrawer == 1;
-if (isloggedin() && $hasfhsdrawer && isset($PAGE->theme->settings->shownavclosed) && $PAGE->theme->settings->shownavclosed == 0) {
-    $navdraweropen = (get_user_preferences('drawer-open-nav', 'true') == 'true');
-} else {
-    $navdraweropen = false;
-}
 $extraclasses = [];
-if ($navdraweropen) {
-    $extraclasses[] = 'drawer-open-left';
-}
-
 $bodyattributes = $OUTPUT->body_attributes($extraclasses);
 $hasblocks = false;
-$haspostblocks = false;
-$hasfpblockregion = false;
 
+$hasfpblockregion = isset($PAGE->theme->settings->showblockregions) !== false;
+
+$regionmainsettingsmenu = $OUTPUT->region_main_settings_menu();
 $footnote = $OUTPUT->footnote();
 $pagedoclink = $OUTPUT->page_doc_link();
 $coursefooter = $OUTPUT->course_footer();
 
-$regionmainsettingsmenu = $OUTPUT->region_main_settings_menu();
-
 $templatecontext = [
-    'sitename' => format_string($SITE->shortname, true, ['context' => context_course::instance(SITEID) , "escape" => false]),
+    'sitename' => format_string($SITE->shortname, true, ['context' => context_course::instance(SITEID) , "escape" => false]) , 
     'output' => $OUTPUT,
-    'showbacktotop' => isset($PAGE->theme->settings->showbacktotop) && $PAGE->theme->settings->showbacktotop == 1,
-    'hasfpblockregion' => $hasfpblockregion,
     'hasblocks' => $hasblocks,
-    'haspostblocks' => $haspostblocks,
     'bodyattributes' => $bodyattributes,
-    'navdraweropen' => $navdraweropen,
-    'hasfhsdrawer' => $hasfhsdrawer,
     'regionmainsettingsmenu' => $regionmainsettingsmenu,
     'hasregionmainsettingsmenu' => !empty($regionmainsettingsmenu),
     'hasfootenote' => !empty($footnote) && (preg_match('/[a-z]/', strip_tags($footnote))),
@@ -87,14 +71,9 @@ if (is_dir($CFG->dirroot.'/local/technicalsignals')) {
 }
 
 $PAGE->requires->jquery();
-if (isset($PAGE->theme->settings->showbacktotop) && $PAGE->theme->settings->showbacktotop == 1) {
-    $PAGE->requires->js('/theme/fordson_fel/javascript/scrolltotop.js');
-    $PAGE->requires->js('/theme/fordson_fel/javascript/scrolltobottom.js');
-    $PAGE->requires->js('/theme/fordson_fel/javascript/scrollspy.js');
-}
+$PAGE->requires->js('/theme/fordson_fel/javascript/scrolltotop.js');
+$PAGE->requires->js('/theme/fordson_fel/javascript/scrolltobottom.js');
+$PAGE->requires->js('/theme/fordson_fel/javascript/scrollspy.js');
 $PAGE->requires->js('/theme/fordson_fel/javascript/tooltipfix.js');
-$PAGE->requires->js('/theme/fordson_fel/javascript/blockslider.js');
 
-$templatecontext['flatnavigation'] = $PAGE->flatnav;
-echo $OUTPUT->render_from_template('theme_fordson_fel/pagefordson_fel', $templatecontext);
-
+echo $OUTPUT->render_from_template('theme_fordson_fel/columns1', $templatecontext);

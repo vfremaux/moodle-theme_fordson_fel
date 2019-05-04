@@ -63,27 +63,43 @@ $THEME->layouts = [
         'regions' => array('side-post'),
         'defaultregion' => 'side-post',
     ),
+
     'incourse' => array(
         'file' => 'course.php',
         'regions' => array('side-pre', 'side-post'),
         'defaultregion' => 'side-pre',
     ),
+
     'coursecategory' => array(
         'file' => 'columns2.php',
         'regions' => array('side-pre'),
         'defaultregion' => 'side-pre',
     ),
+
+    'simplepage' => array(
+        'file' => 'columns1.php',
+        'regions' => array(),
+    ),
+
     // Server administration scripts.
     'admin' => array(
         'file' => 'columns2.php',
         'regions' => array('side-pre'),
         'defaultregion' => 'side-pre',
     ),
+
     'format_page' => array(
         'file' => 'pagefordson.php',
         'regions' => array('side-pre', 'main', 'side-post'),
-        'defaultregion' => 'side-post', // avoid putting in main, or standard course will fail showing the new block menu 
+        'defaultregion' => 'side-post', // avoid putting in main, or standard course will fail showing the new block menu
         'options' => array('langmenu' => true)
+    ),
+
+    'format_page_single' => array(
+        'file' => 'pagefordsonpage.php',
+        'regions' => array('side-pre', 'main', 'side-post'),
+        'defaultregion' => 'side-post', // avoid putting in main, or standard course will fail showing the new block menu
+        'options' => array('langmenu' => false)
     ),
 
     'format_page_action' => array(

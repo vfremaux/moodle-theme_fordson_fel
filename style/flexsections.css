@@ -33,3 +33,11 @@
 body#page-course-view-flexsections.format-flexsections #section-0 ul.flexsections.flexsections-level-1 {
     margin-left: -4em !important;
 }
+
+.section.collapsed > .content {
+    display:none;
+}
+
+.section-content.collapsed {
+    display: none;
+}

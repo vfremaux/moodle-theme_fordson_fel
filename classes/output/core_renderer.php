@@ -374,10 +374,9 @@ class core_renderer extends \theme_boost\output\core_renderer {
                 }
             }
         }
-        return array(
-            $sections,
-            $activities
-        );
+
+        return array($sections, $activities);
+                                                                                                                                                                                                                            
     }
 
     /*

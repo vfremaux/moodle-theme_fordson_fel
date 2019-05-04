@@ -16,28 +16,30 @@
     {{/ismoving}}
 
     <li class="section {{main}} {{isleafclass}} flexsections-level-{{level}}
-               {{ismovingclass}} {{currentclass}} {{hiddenclass}}" id="section-{{sectionnum}}" >
+               {{ismovingclass}} {{currentclass}} {{hiddenclass}} {{collapsedclass}}" id="section-{{sectionnum}}" >
 
         {{#hascontrols}}
             <div class="controls">{{{controls}}}</div>
         {{/hascontrols}}
 
-        <div class="content {{highlight}} {{hideactivityclass}}">
+        {{#hastitle}}
+        <div class="section-caption">
+        <a name="section-{{sectionnum}}"></a>
+        <h3 class="sectionname {{customclasses}}" style="{{customstyle}}">{{{title}}}</h3>
+        </div>
+        {{/hastitle}}
 
-            {{#hastitle}}
-            <a name="section-{{sectionnum}}"></a>
-            <h3 class="sectionname {{customclasses}}" style="{{customstyle}}">{{{title}}}</h3>
-            {{/hastitle}}
+        <div class="content {{highlight}} {{hideactivityclass}}">
 
             {{{sectionavailability}}}
 
-            {{#summary}}
-            <div class="summary">{{{summary}}}</div>
-            {{/summary}}
-
             {{#iscontentvisible}}
 
-            <div class="section-content" style="{{contentstyle}}">
+            <div class="section-content {{contentcollapsedclass}}">
+
+                {{#summary}}
+                <div class="summary">{{{summary}}}</div>
+                {{/summary}}
 
                 {{{coursemodulelist}}}
 

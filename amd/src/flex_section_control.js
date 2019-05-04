@@ -114,6 +114,7 @@ define(['jquery', 'core/config', 'core/log'], function($, config, log) {
                 });
             }
 
+            /*
             if (($('#section-' + sectionsection + ' > div > div.section-content').css('visibility') === 'visible') ||
                         (hide === true)) {
                 $('#section-' + sectionsection + ' > div > div.section-content').css('visibility', 'hidden');
@@ -133,6 +134,35 @@ define(['jquery', 'core/config', 'core/log'], function($, config, log) {
                 $('#section-' + sectionsection + ' > div > ul.flexsections').css('display', 'block');
                 $('#section-' + sectionsection + ' > div > div.summary').css('visibility', 'visible');
                 $('#section-' + sectionsection + ' > div > div.summary').css('display', 'block');
+                handlesrc = handlesrc.replace('collapsed', 'expanded');
+                $('#control-' + sectionid + '-section-' + sectionsection).attr('src', handlesrc);
+                hide = 0;
+
+                // Scroll to this section.
+                var offset = that.offset();
+                offset.top -= 70;
+                $('html, body').animate({
+                    scrollTop: offset.top,
+                    scrollLeft: 0
+                });
+            }
+            */
+
+            if (($('#section-' + sectionsection).hasClass('expanded')) ||
+                        (hide === true)) {
+                $('#section-' + sectionsection).addClass('collapsed');
+                $('#section-' + sectionsection).removeClass('expanded');
+                $('#section-' + sectionsection + ' > .content > .section-content').addClass('collpased');
+                $('#section-' + sectionsection + ' > .content > .section-content').removeClass('expanded');
+                handlesrc = handlesrc.replace('expanded', 'collapsed');
+                $('#control-' + sectionid + '-section-' + sectionsection).attr('src', handlesrc);
+                hide = 1;
+            } else {
+                // Show section.
+                $('#section-' + sectionsection).addClass('expanded');
+                $('#section-' + sectionsection).removeClass('collapsed');
+                $('#section-' + sectionsection + ' > .content > .section-content').addClass('expanded');
+                $('#section-' + sectionsection + ' > .content > .section-content').removeClass('collapsed');
                 handlesrc = handlesrc.replace('collapsed', 'expanded');
                 $('#control-' + sectionid + '-section-' + sectionsection).attr('src', handlesrc);
                 hide = 0;
@@ -169,36 +199,58 @@ define(['jquery', 'core/config', 'core/log'], function($, config, log) {
 
             switch (what) {
                 case 'collapseall':
+                    $('.section.sub').removeClass('expanded');
+                    $('.section.sub').addClass('collapsed');
+                    $('.section-content').addClass('collpased');
+                    $('.section-content').removeClass('expanded');
+                    /*
                     $('.section.sub > .content > .section-content').css('display', 'none');
                     $('.section.sub > .content > .section-content').css('visibility', 'hidden');
                     $('.section.sub > .content > .summary').css('display', 'none');
                     $('.section.sub > .content > .summary').css('visibility', 'hidden');
                     $('.section.sub > .content > .flexsections').css('display', 'none');
                     $('.section.sub > .content > .flexsections').css('visibility', 'hidden');
+                    */
                     $('img.flexcontrol').attr('src', $('img.flexcontrol').attr('src').replace('expanded', 'collapsed'));
                     break;
 
                 case 'expandall':
+                    $('.section').removeClass('collapsed');
+                    $('.section').addClass('expanded');
+                    $('.section-content').addClass('expanded');
+                    $('.section-content').removeClass('collapsed');
+                    /*
                     $('.section.sub > .content > .section-content').css('display', 'block');
                     $('.section.sub > .content > .section-content').css('visibility', 'visible');
                     $('.section.sub > .content > .summary').css('display', 'block');
                     $('.section.sub > .content > .summary').css('visibility', 'visible');
                     $('.section.sub >.content > .flexsections').css('display', 'block');
                     $('.section.sub >.content > .flexsections').css('visibility', 'visible');
+                    */
                     $('img.flexcontrol').attr('src',$('img.flexcontrol').attr('src').replace('collapsed', 'expanded'));
                     break;
 
                 case 'reset':
+                    $('.section').removeClass('collapsed');
+                    $('.section').addClass('expanded');
+                    $('.section-content').removeClass('expanded');
+                    $('.section-content').addClass('collapsed');
                     // Open all.
+                    /*
                     $('.section >.content > .section-content').css('display', 'none');
                     $('.section >.content > .section-content').css('visibility', 'hidden');
                     $('.section >.content > .summary').css('display', 'block');
                     $('.section >.content > .summary').css('visibility', 'visible');
                     $('.section >.content > .flexsections').css('display', 'block');
                     $('.section >.content > .flexsections').css('visibility', 'visible');
+                    */
                     // Close leaves.
+                    /*
                     $('.section.isleaf >.content > .section-content').css('display', 'none');
                     $('.section.isleaf >.content > .section-content').css('visibility', 'hidden');
+                    */
+                    $('.section.isleaf').addClass('expanded');
+                    $('.section.isleaf').removeClass('collapsed');
 
                     // $('.section.isleaf >.content > .summary').css('display', 'none');
                     // $('.section.isleaf >.content > .summary').css('visibility', 'hidden');
