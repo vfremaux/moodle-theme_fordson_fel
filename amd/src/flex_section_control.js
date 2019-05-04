@@ -90,7 +90,11 @@ define(['jquery', 'core/config', 'core/log'], function($, config, log) {
             e.preventDefault();
             var that = $(this);
 
-            var regex = /control-([0-9]+)-section-([0-9]+)/;
+            if (that.hasClass('sectioname')) {
+                var regex = /sectioname-([0-9]+)-section-([0-9]+)/;
+            } else {
+                var regex = /control-([0-9]+)-section-([0-9]+)/;
+            }
             var matchs = regex.exec(that.attr('id'));
             var sectionid = parseInt(matchs[1]);
             var sectionsection = parseInt(matchs[2]);

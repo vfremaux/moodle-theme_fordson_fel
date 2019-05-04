@@ -311,9 +311,13 @@ class theme_fordson_fel_format_flexsections_renderer extends format_flexsections
         // Display section name and expanded/collapsed control.
         $template->hastitle = false;
         if ($template->sectionnum && ($title = $this->section_title($template->sectionnum, $course, true))) {
+            if (!$PAGE->user_is_editing()) {
+                $sectionnameid = 'sectioname-'.$section->id.'-section-'.$section->section;
+                $title = '<span id="'.$sectionnameid.'" class="sectioname '.$handleclass.'">'.$title.'</span>';
+            }
             $template->hastitle = true;
             if (is_object($collapsedcontrol)) {
-                $template->title = $this->render($collapsedcontrol). $title;
+                $template->title = $this->render($collapsedcontrol).$title;
             } else {
                 $template->title = $collapsedcontrol.$title;
             }
