@@ -64,13 +64,6 @@ define(['jquery', 'core/config', 'core/log'], function($, config, log) {
             $('.flexsection-global-control').on('click', this.processglobal);
 
             // Dim toggle buttons. (if collapse mode disabled in edting.
-            /*
-            $('.flexsection-global-control').addClass('dimmed');
-
-            // Attach togglestate handler to all flexsections in page.
-            // $('.flexcontrol').on('click', this.togglestate);
-            $('.flexcontrol').css('display', 'none');
-            */
 
             log.debug('AMD Flex sections control initialized');
         },
@@ -117,40 +110,6 @@ define(['jquery', 'core/config', 'core/log'], function($, config, log) {
                     }
                 });
             }
-
-            /*
-            if (($('#section-' + sectionsection + ' > div > div.section-content').css('visibility') === 'visible') ||
-                        (hide === true)) {
-                $('#section-' + sectionsection + ' > div > div.section-content').css('visibility', 'hidden');
-                $('#section-' + sectionsection + ' > div > div.section-content').css('display', 'none');
-                $('#section-' + sectionsection + ' > div > ul.flexsections').css('visibility', 'hidden');
-                $('#section-' + sectionsection + ' > div > ul.flexsections').css('display', 'none');
-                $('#section-' + sectionsection + ' > div > div.summary').css('visibility', 'hidden');
-                $('#section-' + sectionsection + ' > div > div.summary').css('display', 'none');
-                handlesrc = handlesrc.replace('expanded', 'collapsed');
-                $('#control-' + sectionid + '-section-' + sectionsection).attr('src', handlesrc);
-                hide = 1;
-            } else {
-                // Show section.
-                $('#section-' + sectionsection + ' > div > div.section-content').css('visibility', 'visible');
-                $('#section-' + sectionsection + ' > div > div.section-content').css('display', 'block');
-                $('#section-' + sectionsection + ' > div > ul.flexsections').css('visibility', 'visible');
-                $('#section-' + sectionsection + ' > div > ul.flexsections').css('display', 'block');
-                $('#section-' + sectionsection + ' > div > div.summary').css('visibility', 'visible');
-                $('#section-' + sectionsection + ' > div > div.summary').css('display', 'block');
-                handlesrc = handlesrc.replace('collapsed', 'expanded');
-                $('#control-' + sectionid + '-section-' + sectionsection).attr('src', handlesrc);
-                hide = 0;
-
-                // Scroll to this section.
-                var offset = that.offset();
-                offset.top -= 70;
-                $('html, body').animate({
-                    scrollTop: offset.top,
-                    scrollLeft: 0
-                });
-            }
-            */
 
             if (($('#section-' + sectionsection).hasClass('expanded')) ||
                         (hide === true)) {
@@ -207,14 +166,6 @@ define(['jquery', 'core/config', 'core/log'], function($, config, log) {
                     $('.section.sub').addClass('collapsed');
                     $('.section-content').addClass('collpased');
                     $('.section-content').removeClass('expanded');
-                    /*
-                    $('.section.sub > .content > .section-content').css('display', 'none');
-                    $('.section.sub > .content > .section-content').css('visibility', 'hidden');
-                    $('.section.sub > .content > .summary').css('display', 'none');
-                    $('.section.sub > .content > .summary').css('visibility', 'hidden');
-                    $('.section.sub > .content > .flexsections').css('display', 'none');
-                    $('.section.sub > .content > .flexsections').css('visibility', 'hidden');
-                    */
                     $('img.flexcontrol').attr('src', $('img.flexcontrol').attr('src').replace('expanded', 'collapsed'));
                     break;
 
@@ -223,14 +174,6 @@ define(['jquery', 'core/config', 'core/log'], function($, config, log) {
                     $('.section').addClass('expanded');
                     $('.section-content').addClass('expanded');
                     $('.section-content').removeClass('collapsed');
-                    /*
-                    $('.section.sub > .content > .section-content').css('display', 'block');
-                    $('.section.sub > .content > .section-content').css('visibility', 'visible');
-                    $('.section.sub > .content > .summary').css('display', 'block');
-                    $('.section.sub > .content > .summary').css('visibility', 'visible');
-                    $('.section.sub >.content > .flexsections').css('display', 'block');
-                    $('.section.sub >.content > .flexsections').css('visibility', 'visible');
-                    */
                     $('img.flexcontrol').attr('src',$('img.flexcontrol').attr('src').replace('collapsed', 'expanded'));
                     break;
 
@@ -239,30 +182,9 @@ define(['jquery', 'core/config', 'core/log'], function($, config, log) {
                     $('.section').addClass('expanded');
                     $('.section-content').removeClass('expanded');
                     $('.section-content').addClass('collapsed');
-                    // Open all.
-                    /*
-                    $('.section >.content > .section-content').css('display', 'none');
-                    $('.section >.content > .section-content').css('visibility', 'hidden');
-                    $('.section >.content > .summary').css('display', 'block');
-                    $('.section >.content > .summary').css('visibility', 'visible');
-                    $('.section >.content > .flexsections').css('display', 'block');
-                    $('.section >.content > .flexsections').css('visibility', 'visible');
-                    */
                     // Close leaves.
-                    /*
-                    $('.section.isleaf >.content > .section-content').css('display', 'none');
-                    $('.section.isleaf >.content > .section-content').css('visibility', 'hidden');
-                    */
                     $('.section.isleaf').addClass('expanded');
                     $('.section.isleaf').removeClass('collapsed');
-
-                    // $('.section.isleaf >.content > .summary').css('display', 'none');
-                    // $('.section.isleaf >.content > .summary').css('visibility', 'hidden');
-                    /*
-                    // Leaves should not have subsections.
-                    $('.section.isleaf >.content > .flexsections').css('display', 'none');
-                    $('.section.isleaf >.content > .flexsections').css('visibility', 'hidden');
-                    */
             }
 
             // Update positions server side.

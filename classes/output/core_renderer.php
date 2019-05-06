@@ -702,7 +702,12 @@ class core_renderer extends \theme_boost\output\core_renderer {
             $url = str_replace('%USERID%', $USER->id, $url);
             $url = str_replace('%WWWROOT%', $CFG->wwwroot, $url);
 
-            $content .= html_writer::link($url, format_string($menunode->get_text()), array('class'=>'yui3-menu-label', 'title' => format_string($menunode->get_title())));
+            $attrs = array('class'=>'yui3-menu-label', 'title' => format_string($menunode->get_title()));
+            if (!preg_match('#^'.$CFG->wwwroot.'#', $url)) {
+                $attrs['target'] ='_blank';
+            }
+
+            $content .= html_writer::link($url, format_string($menunode->get_text()), $attrs);
             $content .= html_writer::start_tag('div', array('id'=>'cm_submenu_'.$submenucount, 'class'=>'yui3-menu custom_menu_submenu custom_menu_submenu'.$level));
             $content .= html_writer::start_tag('div', array('class'=>'yui3-menu-content'));
             $content .= html_writer::start_tag('ul');
@@ -751,15 +756,18 @@ class core_renderer extends \theme_boost\output\core_renderer {
                 $url = str_replace('%USERID%', $USER->id, $url);
                 $url = str_replace('%WWWROOT%', $CFG->wwwroot, $url);
 
+                $attrs = array('class' => 'yui3-menuitem-content', 'title' => format_string($menunode->get_title()));
+                if (!preg_match('#^'.$CFG->wwwroot.'#', $url)) {
+                    $attrs['target'] = '_blank';
+                }
                 $content .= html_writer::link(
                     $url,
                     format_string($menunode->get_text()),
-                    array('class' => 'yui3-menuitem-content', 'title' => format_string($menunode->get_title()))
-                );
+                    $attrs);
             }
             $content .= html_writer::end_tag('li');
         }
-        // Return the sub menu
+        // Return the sub menu.
         return $content;
 
         /*

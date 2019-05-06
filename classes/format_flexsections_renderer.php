@@ -289,6 +289,8 @@ class theme_fordson_fel_format_flexsections_renderer extends format_flexsections
                            'title' => $text,
                            'id' => 'control-'.$section->id.'-section-'.$section->section);
             $collapsedcontrol = html_writer::tag('img', '', $attrs);
+        } else {
+            $handleclass = 'flexcontrol level-'.$level;
         }
 
         $controlsstr = '';
