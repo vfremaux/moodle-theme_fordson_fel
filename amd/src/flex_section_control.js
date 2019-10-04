@@ -99,7 +99,7 @@ define(['jquery', 'core/config', 'core/log'], function($, config, log) {
 
             var url = config.wwwroot + '/theme/fordson_fel/sections/ajax/register.php?';
             url += 'sectionid=' + sectionid;
-            var handlesrc = $('#control-' + sectionid + '-section-' + sectionsection).attr('src');
+            var handlesrc = $('#control-' + sectionid + '-section-' + sectionsection + ' > img').attr('src');
 
             if (!hide) {
                 var parentid = that.closest('li').parent().closest('li').attr('id');
@@ -120,7 +120,7 @@ define(['jquery', 'core/config', 'core/log'], function($, config, log) {
                 $('#section-' + sectionsection + ' > .content > .section-content').addClass('collpased');
                 $('#section-' + sectionsection + ' > .content > .section-content').removeClass('expanded');
                 handlesrc = handlesrc.replace('expanded', 'collapsed');
-                $('#control-' + sectionid + '-section-' + sectionsection).attr('src', handlesrc);
+                $('#control-' + sectionid + '-section-' + sectionsection + ' > img ').attr('src', handlesrc);
                 hide = 1;
             } else {
                 // Show section.
@@ -131,7 +131,7 @@ define(['jquery', 'core/config', 'core/log'], function($, config, log) {
                 $('#section-' + sectionsection + ' > .content > .section-content').addClass('expanded');
                 $('#section-' + sectionsection + ' > .content > .section-content').removeClass('collapsed');
                 handlesrc = handlesrc.replace('collapsed', 'expanded');
-                $('#control-' + sectionid + '-section-' + sectionsection).attr('src', handlesrc);
+                $('#control-' + sectionid + '-section-' + sectionsection + ' > img ').attr('src', handlesrc);
                 hide = 0;
 
                 // Scroll to this section.
@@ -171,7 +171,7 @@ define(['jquery', 'core/config', 'core/log'], function($, config, log) {
                     $('.section-content').addClass('collpased');
                     $('.section-content').removeClass('expanded');
                     $('.section-title').attr('aria-expanded', 'false');
-                    $('img.flexcontrol').attr('src', $('img.flexcontrol').attr('src').replace('expanded', 'collapsed'));
+                    $('.flexcontrol > img').attr('src', $('.flexcontrol > img').attr('src').replace('expanded', 'collapsed'));
                     break;
 
                 case 'expandall':
@@ -180,7 +180,7 @@ define(['jquery', 'core/config', 'core/log'], function($, config, log) {
                     $('.section-content').addClass('expanded');
                     $('.section-content').removeClass('collapsed');
                     $('.section-title').attr('aria-expanded', 'true');
-                    $('img.flexcontrol').attr('src',$('img.flexcontrol').attr('src').replace('collapsed', 'expanded'));
+                    $('.flexcontrol > img').attr('src',$('.flexcontrol > img').attr('src').replace('collapsed', 'expanded'));
                     break;
 
                 case 'reset':
