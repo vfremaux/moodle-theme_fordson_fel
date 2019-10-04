@@ -65,7 +65,7 @@ define(['jquery', 'core/config', 'core/log'], function($, config, log) {
 
             // Dim toggle buttons. (if collapse mode disabled in edting.
 
-            log.debug('AMD Flex sections control initialized');
+            log.debug('AMD Flex sections control initialized v1.2');
         },
 
         proxysectionnameevent: function(e) {
@@ -115,6 +115,7 @@ define(['jquery', 'core/config', 'core/log'], function($, config, log) {
                         (hide === true)) {
                 $('#section-' + sectionsection).addClass('collapsed');
                 $('#section-' + sectionsection).removeClass('expanded');
+                log.debug('Changing section #section-title-' + sectionsection + ' to false');
                 $('#section-title-' + sectionsection).attr('aria-expanded', 'false');
                 $('#section-' + sectionsection + ' > .content > .section-content').addClass('collpased');
                 $('#section-' + sectionsection + ' > .content > .section-content').removeClass('expanded');
@@ -125,6 +126,7 @@ define(['jquery', 'core/config', 'core/log'], function($, config, log) {
                 // Show section.
                 $('#section-' + sectionsection).addClass('expanded');
                 $('#section-' + sectionsection).removeClass('collapsed');
+                log.debug('Changing section #section-title-' + sectionsection + ' to true');
                 $('#section-title-' + sectionsection).attr('aria-expanded', 'true');
                 $('#section-' + sectionsection + ' > .content > .section-content').addClass('expanded');
                 $('#section-' + sectionsection + ' > .content > .section-content').removeClass('collapsed');
