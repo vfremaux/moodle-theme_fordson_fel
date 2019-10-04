@@ -34,6 +34,46 @@ nav[role="navigation"] ol.breadcrumb.style1 li .dimmed_text {
     font-style:italic;
 }
 
+/* To add to customisation with breadcrumb background color */
+/*
+nav[role="navigation"] ol.breadcrumb.style1 li::after {
+    border-left-color: $background;
+}
+
+nav[role="navigation"] ol.breadcrumb.style1 li {
+    background-color: $background;
+}
+
+nav[role="navigation"] ol.breadcrumb.style1 li::before {
+    border-left-color: $foreground;
+}
+
+nav[role="navigation"] ol.breadcrumb.style1 li:hover::after {
+    border-left-color: $background;
+}
+
+nav[role="navigation"] ol.breadcrumb.style1 li:hover {
+    background-color: $foreground;
+}
+
+nav[role="navigation"] ol.breadcrumb.style1 li:hover::before {
+    border-left-color: $background;
+}
+
+nav[role="navigation"] ol.breadcrumb.style1 li a:hover {
+    color: $background !important;
+}
+
+nav[role="navigation"] ol.breadcrumb.style1 li a::before {
+    color: $foreground;
+}
+
+nav[role="navigation"] ol.breadcrumb.style1 li:hover a::before {
+    color: $background;
+}
+
+*/
+
 nav[role="navigation"] ol.breadcrumb.style1 li:after,
 nav[role="navigation"] ol.breadcrumb.style1 li:before {
     content:" ";

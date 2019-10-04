@@ -54,6 +54,8 @@ if ($PAGE->theme->settings->coursetilestyle < 10) {
     class course_renderer extends \theme_boost\output\core\course_renderer {
         protected $countcategories = 0;
 
+        protected $thumbfiles;
+
         public function view_available_courses($id = 0, $courses = null, $totalcount = null) {
             /* available courses */
             global $CFG, $OUTPUT, $PAGE;
@@ -117,24 +119,24 @@ if ($PAGE->theme->settings->coursetilestyle < 10) {
                             $hasprogress = false;
                         }
 
-				        // Course completion Progress bar
-				        if ($course->enablecompletion == 1 && $systemcontext == 'page-site-index') {
-				        	$completiontext = get_string('coursecompletion', 'completion');
-				        	$compbar = "<div class='progress'>";
-				            $compbar .= "<div class='progress-bar progress-bar-info barfill' role='progressbar' aria-valuenow='{$comppercent}' ";
-				            $compbar .= " aria-valuemin='0' aria-valuemax='100' style='width: {$comppercent}%;'>";
-				            $compbar .= "{$comppercent}%";
-				            $compbar .= "</div>";
-				            $compbar .= "</div>";
-				            $progressbar = $compbar;
-				        } else {	
-				        	$progressbar = '';
-				        	$completiontext = '';
-				        }
-	                    if ($course instanceof stdClass) {
-	                        //require_once ($CFG->libdir . '/coursecatlib.php');
-	                        $course = new core_course_list_element($course);
-	                    }
+                        // Course completion Progress bar
+                        if ($course->enablecompletion == 1 && $systemcontext == 'page-site-index') {
+                            $completiontext = get_string('coursecompletion', 'completion');
+                            $compbar = "<div class='progress'>";
+                            $compbar .= "<div class='progress-bar progress-bar-info barfill' role='progressbar' aria-valuenow='{$comppercent}' ";
+                            $compbar .= " aria-valuemin='0' aria-valuemax='100' style='width: {$comppercent}%;'>";
+                            $compbar .= "{$comppercent}%";
+                            $compbar .= "</div>";
+                            $compbar .= "</div>";
+                            $progressbar = $compbar;
+                        } else {
+                            $progressbar = '';
+                            $completiontext = '';
+                        }
+                        if ($course instanceof stdClass) {
+                            //require_once ($CFG->libdir . '/coursecatlib.php');
+                            $course = new core_course_list_element($course);
+                        }
                         // print enrolmenticons
                         $pixcontent = '';
                         if ($icons = enrol_get_course_info_icons($course)) {
@@ -524,50 +526,50 @@ if ($PAGE->theme->settings->coursetilestyle < 10) {
                             ));
                             $rowcontent .= '
                                 <div class="col-md-6">
-                            	<h4><a href="' . $courseurl . '">' . $trimtitle . '</a></h4>';
+                                <h4><a href="' . $courseurl . '">' . $trimtitle . '</a></h4>';
                             if ($systemcontext !== 'page-site-index') {
-                            	$rowcontent .= '<div class="course-summary">
-	                                    ' . $summary . '
-	                            </div>';
+                                $rowcontent .= '<div class="course-summary">
+                                        ' . $summary . '
+                                </div>';
                             }
-	                        $rowcontent .= '</div>';
-		                        if ($systemcontext !== 'page-site-index') {
-		                            $rowcontent .= ' 
-		                            	<div class="col-md-6 row">
-			                            	<div class="col-md-6">
-			                                  ' . $catcontent . '
-			                                </div>
-			                                <div class="col-md-6">';
-			                        if ($course->has_course_contacts()) {
-		                                $rowcontent .= html_writer::start_tag('ul', array(
-		                                    'class' => 'teacherscourseview'
-		                                ));
-		                                foreach ($course->get_course_contacts() as $userid => $coursecontact) {
-		                                    $name = $coursecontact['rolename'] . ': ' . $coursecontact['username'];
-		                                    $rowcontent .= html_writer::tag('li', $name);
-		                                }
-		                                $rowcontent .= html_writer::end_tag('ul');
-		                            }
-			                                  
-			                        $rowcontent .= '
-			                        	</div>
-		                                </div>';
-	                            }
-	                        if ($systemcontext == 'page-site-index' && $course->enablecompletion == 1) {
-	                        	
-	                            $rowcontent .= '
-	                            	<div class="col-md-6 row">
-		                            	<div class="col-md-4 text-right">
-		                                  ' . $completiontext  . '
-		                                </div>
-		                                <div class="col-md-8">
-		                                  '. $progressbar . '
-		                                </div>
-	                                </div>';
-	                        }
+                            $rowcontent .= '</div>';
+                                if ($systemcontext !== 'page-site-index') {
+                                    $rowcontent .= ' 
+                                        <div class="col-md-6 row">
+                                            <div class="col-md-6">
+                                              ' . $catcontent . '
+                                            </div>
+                                            <div class="col-md-6">';
+                                    if ($course->has_course_contacts()) {
+                                        $rowcontent .= html_writer::start_tag('ul', array(
+                                            'class' => 'teacherscourseview'
+                                        ));
+                                        foreach ($course->get_course_contacts() as $userid => $coursecontact) {
+                                            $name = $coursecontact['rolename'] . ': ' . $coursecontact['username'];
+                                            $rowcontent .= html_writer::tag('li', $name);
+                                        }
+                                        $rowcontent .= html_writer::end_tag('ul');
+                                    }
+                                              
+                                    $rowcontent .= '
+                                        </div>
+                                        </div>';
+                                }
+                            if ($systemcontext == 'page-site-index' && $course->enablecompletion == 1) {
+                                
+                                $rowcontent .= '
+                                    <div class="col-md-6 row">
+                                        <div class="col-md-4 text-right">
+                                          ' . $completiontext  . '
+                                        </div>
+                                        <div class="col-md-8">
+                                          '. $progressbar . '
+                                        </div>
+                                    </div>';
+                            }
                             $rowcontent .= '
                             
-	                        </div>';
+                            </div>';
                         }
                         
                     }
@@ -1173,7 +1175,7 @@ if ($PAGE->theme->settings->coursetilestyle < 10) {
                 return '';
             }
 
-            $baseurl = '/theme/'.$PAGE->theme->name.'/mod_thumb.php';
+            $baseurl = '/theme/fordson_fel/mod_thumb.php';
             $editthumbstr = get_string('editmodthumb', 'theme_fordson_fel');
             $actions['thumb'] = new \action_menu_link_primary(
                 new moodle_url($baseurl, array('id' => $mod->id)),

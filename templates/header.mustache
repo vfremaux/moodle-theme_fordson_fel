@@ -22,7 +22,9 @@
     <div class="col-12 pt-3 pb-3">
         <div class="card {{^contextheader}}border-0{{/contextheader}}">
             {{#boostimage}}
+            {{^debug}}
                 {{{ headerimage }}}
+            {{/debug}}
             {{/boostimage}}
             <div class="card-body {{^contextheader}}p-2{{/contextheader}}">
                 <div class="d-flex">

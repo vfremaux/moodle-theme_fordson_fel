@@ -30,6 +30,8 @@ $string['choosereadme'] = 'Fordson fel adds to the community Fordson theme valua
 $string['configtitle'] = 'Fordson FEL';
 $string['pluginname'] = 'Fordson FEL';
 $string['region-side-pre'] = 'Right';
+$string['breadcrumbmaskcatsforstudents'] = 'Mask cats for students';
+$string['breadcrumbmaskcatsforstudents_desc'] = 'Mask all categroy links for students';
 $string['generalsettings'] = 'General settings';
 $string['advancedsettings'] = 'Advanced settings';
 $string['iconnavheading'] = 'Icon Navigation';
@@ -251,11 +253,16 @@ $string['layoutinfo'] = 'Layout Settings';
 $string['layoutinfodesc'] = 'Control page layout by chooseing a design.';
 $string['signalitemsnewerthan'] = 'Add "new item" signal';
 $string['signalitemsnewerthan_desc'] = 'Adds a signal when the item (module or activity) has been added later than X hours ago';
-$string['newitem'] = 'Nouveau';
-$string['updateditem'] = 'Modification récente';
+$string['newitem'] = 'New item';
+$string['updateditem'] = 'Recently updated items';
+$string['flexinitialstate'] = 'Flex initial state';
+$string['flexinitialstate_desc'] = 'Set the initial state of section tree when first arriving to course without any user preferences.';
+$string['flexcollapsed'] = 'Closed';
+$string['flexexpanded'] = 'Expanded';
+$string['flexreset'] = 'Top expanded, leaves closed';
 
 $string['pagelayout'] = 'Layout Chooser';
-$string['pagelayout_desc'] = 'Choose from the following layouts. Certain page layouts require additional adjustments on the Preset Adjustments Page.  Be sure to pay attention to: Learning Content Spacing, Header Image Height, and Content Padding as these will help adjust header image placement and padding to the left and right of the main learning content. <a href="https://goo.gl/fMXzSo" target="_new">Instructions for fordson_fel 3.5 Theme</a>';
+$string['pagelayout_desc'] = 'Choose from the following layouts. Some page layouts require additional adjustments on the Preset Adjustments Page.  Be sure to pay attention to: Learning Content Spacing, Header Image Height, and Content Padding as these will help adjust header image placement and padding to the left and right of the main learning content. <a href="https://goo.gl/fMXzSo" target="_new">Instructions for fordson_fel 3.5 Theme</a>';
 $string['pagelayout1'] = 'Default Boost Layout';
 $string['pagelayout2'] = 'Full-Width / Top Header Image';
 $string['pagelayout3'] = 'Centered Content / Overlapping Top Header Image';

@@ -47,7 +47,7 @@ $PAGE->set_heading(get_string('copytheme', 'theme_fordson_fel'));
 require_once($CFG->dirroot.'/theme/fordson_fel/themecopy_form.php');
 
 $variantpaths = glob($CFG->dirroot.'/theme/fordson_fel*');
-$variants['fordson'] = get_string('pluginname', 'theme_fordson').' Origin';
+$variants['fordson'] = get_string('pluginname', 'theme_fordson_fel').' Origin';
 foreach ($variantpaths as $path) {
     $path = basename($path);
     $variants[$path] = get_string('pluginname', 'theme_'.$path);

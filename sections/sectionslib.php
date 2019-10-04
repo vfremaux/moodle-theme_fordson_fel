@@ -53,4 +53,3 @@ function sections_get_leaves($courseid) {
 
     return $leaves;
 }
-

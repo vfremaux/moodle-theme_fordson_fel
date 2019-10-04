@@ -40,6 +40,7 @@ use theme_config;
 defined('MOODLE_INTERNAL') || die;
 
 require_once($CFG->dirroot . "/course/renderer.php");
+require_once($CFG->dirroot . "/course/format/lib.php");
 
 /**
  * Renderers to align Moodle's HTML with that expected by Bootstrap
@@ -66,7 +67,7 @@ class core_renderer extends \theme_boost\output\core_renderer {
     }
 
     public function full_header() {
-        global $PAGE, $COURSE;
+        global $PAGE, $COURSE, $CFG;
 
         $theme = theme_config::load($PAGE->theme->name);
         $pagelayout = $theme->settings->pagelayout;
@@ -77,7 +78,7 @@ class core_renderer extends \theme_boost\output\core_renderer {
             $header->headerimagelocation = false;
         }
 
-        if (!$PAGE->theme->settings->coursemanagementtoggle) {
+        if (!@$PAGE->theme->settings->coursemanagementtoggle) {
             $header->settingsmenu = $this->context_header_settings_menu();
         }
         else if (isset($COURSE->id) && $COURSE->id == 1) {
@@ -85,9 +86,16 @@ class core_renderer extends \theme_boost\output\core_renderer {
         }
 
         $header->boostimage = $theme->settings->pagelayout == 5;
-        $header->contextheader = html_writer::link(new moodle_url('/course/view.php', array(
-            'id' => $PAGE->course->id
-        )) , $this->context_header());
+        $header->contextheader = html_writer::link(new moodle_url('/course/view.php', array('id' => $PAGE->course->id)) , $this->context_header());
+
+        if ($PAGE->pagetype == 'my-index') {
+            if (is_dir($CFG->dirroot.'/local/my')) {
+                include_once($CFG->dirroot.'/local/my/lib.php');
+                list($view, $isstudent, $isteacher, $iscoursemanager, $isadmin) = local_my_resolve_view();
+                $header->contextheader .= '<div class="page-context-header"><div class="page-header-headings"><h1>'.get_string($view.'pagetitle', 'local_my').'</h1></dir></dir>';
+            }
+        }
+
         $header->hasnavbar = empty($PAGE->layout_options['nonavbar']);
         $header->navbar = $this->navbar();
         $header->pageheadingbutton = $this->page_heading_button();
@@ -118,7 +126,7 @@ class core_renderer extends \theme_boost\output\core_renderer {
      * @return string $breadcrumbs
      */
     public function navbar() {
-        global $PAGE;
+        global $PAGE, $CFG;
 
         // Post process navbar.
         $filterednavbar = new \StdClass;
@@ -135,6 +143,18 @@ class core_renderer extends \theme_boost\output\core_renderer {
         $namedtypes = array(0 => 'system', 10 => 'category', 11 => 'mycategory', 20 => 'course', 30 => 'structure', 40 => 'activity',
                               50 => 'resource', 60 => 'custom', 70 => 'setting', 71 => 'siteadmin', 80 => 'user',
                               90 => 'container');
+
+        if (is_dir($CFG->dirroot.'/local/my')) {
+            include_once($CFG->dirroot.'/local/my/lib.php');
+            /*
+            $hasteachingcapability = local_my_has_capability_somewhere('local/my:isteacher');
+            $haseditingcapability = local_my_has_capability_somewhere('local/my:isauthor');
+            */
+            global $COURSE;
+            $context = context_course::instance($COURSE->id);
+            $hasteachingcapability = has_capability('local/my:isteacher', $context);
+            $haseditingcapability = has_capability('local/my:isauthor', $context);
+        }
 
         $filterednavbar->get_items = array();
         $allitems = $this->page->navbar->get_items();
@@ -154,8 +174,16 @@ class core_renderer extends \theme_boost\output\core_renderer {
 
                 if (in_array($item->type, array(\navigation_node::TYPE_CATEGORY, \navigation_node::TYPE_MY_CATEGORY))) {
 
+                    if (is_dir($CFG->dirroot.'/local/my')) {
+                        if (!empty($PAGE->theme->settings->breadcrumbmaskcatsforstudents) &&
+                            !$hasteachingcapability) {
+                            continue;
+                        }
+                    }
+
                     if (!empty($PAGE->theme->settings->breadcrumbmaskfirstcat) &&
-                        empty($PAGE->theme->settings->breadcrumbkeeplastcatonly)) {
+                        empty($PAGE->theme->settings->breadcrumbkeeplastcatonly) && $firstcat) {
+                        $firstcat = false;
                         continue;
                     }
 
@@ -1676,7 +1704,7 @@ class core_renderer extends \theme_boost\output\core_renderer {
         $siteadmintitle = get_string('siteadminquicklink', 'theme_fordson_fel');
         $siteadminurl = new moodle_url('/admin/search.php');
 
-        $hasadminlink = is_siteadmin();
+        $hasadminlink = is_siteadmin() || has_capability('moodle/site:config', \context_system::instance());
 
         $course = $this->page->course;
 
@@ -2554,6 +2582,9 @@ class core_renderer extends \theme_boost\output\core_renderer {
         $context->annotation = $bc->annotation;
         $context->footer = $bc->footer;
         $context->region = $region;
+        if ($COURSE->format == 'page' && $context->type == 'page_module') {
+            $context->modname = $bc->modname;
+        }
         $context->cancollapse = ($COURSE->format != 'page') &&
                         ($bc->collapsible || !empty($PAGE->theme->settings->allowblockregionscollapse));
         $context->hascontrols = !empty($bc->controls);

@@ -27,7 +27,7 @@ if (is_dir($CFG->dirroot.'/local/technicalsignals')) {
     require_once($CFG->dirroot.'/local/technicalsignals/lib.php');
 }
 
-if ($PAGE->theme->settings->breadcrumbstyle == '1') {
+if (@$PAGE->theme->settings->breadcrumbstyle == '1') {
     $PAGE->requires->js_call_amd('theme_fordson_fel/jBreadCrumb', 'init');
 }
 
@@ -64,7 +64,7 @@ $haspostblocks = strpos($postblockshtml, 'data-block=') !== false;
 $blockshtmla = $OUTPUT->blocks('fp-a');
 $blockshtmlb = $OUTPUT->blocks('fp-b');
 $blockshtmlc = $OUTPUT->blocks('fp-c');
-$blockshtmlsidepost = $OUTPUT->blocks('side-post');
+// $blockshtmlsidepost = $OUTPUT->blocks('side-post');
 $hasfpblockregion = isset($PAGE->theme->settings->showblockregions) !== false;
 
 $footnote = $OUTPUT->footnote();
@@ -79,7 +79,7 @@ $templatecontext = [
     'fpablocks' => $blockshtmla,
     'fpbblocks' => $blockshtmlb,
     'fpcblocks' => $blockshtmlc,
-    'sidepostblocks' => $blockshtmlsidepost,
+    'sidepostblocks' => $postblockshtml,
     'hasfpblockregion' => $hasfpblockregion,
     'hasblocks' => $hasblocks,
     'haspostblocks' => $haspostblocks,
@@ -87,7 +87,6 @@ $templatecontext = [
     'navdraweropen' => $navdraweropen,
     'hasfhsdrawer' => $hasfhsdrawer,
     'navspdraweropen' => $navspdraweropen,
-    // 'hasspdrawer' => $hasspdrawer,
     'hasspdrawer' => !empty($blockshtmlsidepost) || $PAGE->user_is_editing(),
     'regionmainsettingsmenu' => $regionmainsettingsmenu,
     'hasregionmainsettingsmenu' => !empty($regionmainsettingsmenu),

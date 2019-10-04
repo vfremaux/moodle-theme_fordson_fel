@@ -27,7 +27,7 @@ if (is_dir($CFG->dirroot.'/local/technicalsignals')) {
     require_once($CFG->dirroot.'/local/technicalsignals/lib.php');
 }
 
-if ($PAGE->theme->settings->breadcrumbstyle == '1') {
+if (@$PAGE->theme->settings->breadcrumbstyle == '1') {
     $PAGE->requires->js_call_amd('theme_fordson_fel/jBreadCrumb', 'init');
 }
 
@@ -56,17 +56,19 @@ if ($navspdraweropen) {
     $extraclasses[] = 'drawer-open-right';
 }
 $bodyattributes = $OUTPUT->body_attributes($extraclasses);
-$blockshtml = $OUTPUT->blocks('side-pre');
-$hasblocks = strpos($blockshtml, 'data-block=') !== false;
 
+$blockshtmlpre = $OUTPUT->blocks('side-pre');
 $blockshtmla = $OUTPUT->blocks('fp-a');
 $blockshtmlb = $OUTPUT->blocks('fp-b');
 $blockshtmlc = $OUTPUT->blocks('fp-c');
 $blockshtmlpost = $OUTPUT->blocks('side-post');
+
+$checkpreblocks = strpos($blockshtmlpre, 'data-block=') !== false;
 $checkblocka = strpos($blockshtmla, 'data-block=') !== false;
 $checkblockb = strpos($blockshtmlb, 'data-block=') !== false;
 $checkblockc = strpos($blockshtmlc, 'data-block=') !== false;
 $checkpostblocks = strpos($blockshtmlpost, 'data-block=') !== false;
+
 $hasfpblockregion = isset($PAGE->theme->settings->showblockregions) !== false;
 
 $hascourseblocks = false;
@@ -82,19 +84,23 @@ $coursefooter = $OUTPUT->course_footer();
 $templatecontext = [
     'sitename' => format_string($SITE->shortname, true, ['context' => context_course::instance(SITEID) , "escape" => false]) , 
     'output' => $OUTPUT,
-    'sidepreblocks' => $blockshtml,
+    'debug' => ($CFG->debug == DEBUG_DEVELOPER),
+
+    'sidepreblocks' => $blockshtmlpre,
     'fpablocks' => $blockshtmla,
     'fpbblocks' => $blockshtmlb,
     'fpcblocks' => $blockshtmlc,
     'sidepostblocks' => $blockshtmlpost,
-    'hasblocks' => $hasblocks,
+
+    'hasblocks' => $checkpreblocks,
     'hascourseblocks' => $hascourseblocks,
     'hasfpblockregion' => $hasfpblockregion,
+
     'bodyattributes' => $bodyattributes,
     'navdraweropen' => $navdraweropen,
     'hasfhsdrawer' => $hasfhsdrawer,
     'navspdraweropen' => $navspdraweropen,
-    'hasspdrawer' => !empty($blockshtmlsidepost) || $PAGE->user_is_editing(),
+    'hasspdrawer' => !empty($blockshtmlpost) || $PAGE->user_is_editing(),
     'regionmainsettingsmenu' => $regionmainsettingsmenu,
     'hasregionmainsettingsmenu' => !empty($regionmainsettingsmenu),
     'hasfootenote' => !empty($footnote) && (preg_match('/[a-z]/', strip_tags($footnote))),

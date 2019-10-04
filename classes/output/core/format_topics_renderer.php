@@ -125,6 +125,15 @@ class theme_fordson_fel_format_topics_renderer extends format_topics_renderer {
         $sectionbottomnav .= html_writer::end_tag('div');
         echo $sectionbottomnav;
 
+        /*
+        if (is_dir($CFG->dirroot.'/availability/condition/sectiontime')) {
+            global $CFG;
+            global $USER;
+
+            include_once($CFG->dirroot.'/availability/condition/sectiontime/classes/condition.php');
+        }
+        */
+
         // Close single-section div.
         echo html_writer::end_tag('div');
     }

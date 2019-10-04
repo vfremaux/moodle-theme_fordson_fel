@@ -155,6 +155,12 @@ class theme_fordson_fel_format_flexsections_renderer extends format_flexsections
         $context = context_course::instance($course->id);
         $template->iscontentvisible = true;
 
+        // resolve level to H<n>
+        $template->hlevel = $level + 1;
+        if ($template->hlevel > 6) {
+            $template->hlevel = 6;
+        }
+
         $tosection = $tosection = optional_param('tosection', false, PARAM_INT);
         if ($tosection) {
             // When specifying a 'tosection' argument, we will open the path down to this section.
@@ -269,12 +275,14 @@ class theme_fordson_fel_format_flexsections_renderer extends format_flexsections
         $collapsedcontrol = null;
         // Override add expand// collapse control for all users.
         $hiddenvar = false;
+        $template->ariaexpanded = 'false';
         if ($level) {
             if (!array_key_exists($section->id, $userstates)) {
                 $text = new lang_string('showcollapsed', 'format_flexsections');
                 $handleclass = 'expanded flexcontrol level-'.$level;
                 $src = $this->output->image_url('t/expanded');
                 $template->collapsedclass = 'expanded';
+                $template->ariaexpanded = 'true';
                 $template->contentcollapsedclass = 'expanded';
                 $hiddenvar = true;
             } else {
@@ -282,11 +290,13 @@ class theme_fordson_fel_format_flexsections_renderer extends format_flexsections
                 $handleclass = 'collapsed flexcontrol level-'.$level;
                 $src = $this->output->image_url('t/collapsed');
                 $template->collapsedclass = 'collapsed';
+                $template->ariaexpanded = 'false';
                 $template->contentcollapsedclass = 'collapsed';
             }
             $attrs = array('src' => $src,
                            'class' => $handleclass,
                            'title' => $text,
+                           'aria-hidden' => 'true',
                            'id' => 'control-'.$section->id.'-section-'.$section->section);
             $collapsedcontrol = html_writer::tag('img', '', $attrs);
         } else {

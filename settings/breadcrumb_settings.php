@@ -66,6 +66,15 @@ $default = 0;
 $setting = new admin_setting_configcheckbox($name, $heading, $description, $default);
 $page->add($setting);
 
+if (is_dir($CFG->dirroot.'/local/my')) {
+    $name = 'theme_fordson_fel/breadcrumbmaskcatsforstudents';
+    $heading = get_string('breadcrumbmaskcatsforstudents', 'theme_fordson_fel');
+    $description = get_string('breadcrumbmaskcatsforstudents_desc', 'theme_fordson_fel');
+    $default = 0;
+    $setting = new admin_setting_configcheckbox($name, $heading, $description, $default);
+    $page->add($setting);
+}
+
 $name = 'theme_fordson_fel/breadcrumbkeeplastcatonly';
 $heading = get_string('breadcrumbkeeplastcatonly', 'theme_fordson_fel');
 $description = get_string('breadcrumbkeeplastcatonly_desc', 'theme_fordson_fel');

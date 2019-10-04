@@ -27,7 +27,7 @@ if (is_dir($CFG->dirroot.'/local/technicalsignals')) {
     require_once($CFG->dirroot.'/local/technicalsignals/lib.php');
 }
 
-if ($PAGE->theme->settings->breadcrumbstyle == '1') {
+if (@$PAGE->theme->settings->breadcrumbstyle == '1') {
     $PAGE->requires->js_call_amd('theme_fordson_fel/jBreadCrumb', 'init');
 }
 
