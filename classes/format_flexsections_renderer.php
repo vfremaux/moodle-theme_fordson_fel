@@ -294,11 +294,12 @@ class theme_fordson_fel_format_flexsections_renderer extends format_flexsections
                 $template->contentcollapsedclass = 'collapsed';
             }
             $attrs = array('src' => $src,
-                           'class' => $handleclass,
                            'title' => $text,
-                           'aria-hidden' => 'true',
+                           'aria-hidden' => 'true');
+            $collapsedcontrolicon = html_writer::tag('img', '', $attrs);
+            $attrs = array('class' => $handleclass,
                            'id' => 'control-'.$section->id.'-section-'.$section->section);
-            $collapsedcontrol = html_writer::tag('img', '', $attrs);
+            $collapsedcontrol = html_writer::tag('div', $collapsedcontrolicon, $attrs);
         } else {
             $handleclass = 'flexcontrol level-'.$level;
         }

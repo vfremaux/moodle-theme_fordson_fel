@@ -65,7 +65,7 @@ define(['jquery', 'core/config', 'core/log'], function($, config, log) {
 
             // Dim toggle buttons. (if collapse mode disabled in edting.
 
-            log.debug('AMD Flex sections control initialized v1.2');
+            log.debug('AMD Flex sections control initialized v1.3');
         },
 
         proxysectionnameevent: function(e) {
