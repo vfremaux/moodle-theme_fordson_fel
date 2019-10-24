@@ -48,6 +48,7 @@
         "hasregionmainsettingsmenu": false
     }
 }}
+<!-- fordson_fel/mydashboard -->
 {{> theme_boost/head }}
 
 <body {{{ bodyattributes }}}>
@@ -56,7 +57,9 @@
 
     {{{ output.standard_top_of_body_html }}}
 
-    {{>theme_fordson/navbar}}
+    <!-- theme_fordson_fel:navbar -->
+    {{>theme_fordson_fel/navbar}}
+    <!-- /theme_fordson_fel:navbar -->
 
     {{#output.headerbkglocation}}
         {{{ output.headerimage }}}
@@ -71,7 +74,7 @@
                 <img src="{{{ headerlogo }}}" class="img-fluid" alt="Responsive image">
             </div>
         {{/headerlogo}}
-        {{>theme_fordson/blockspanelslider}}
+        {{>theme_fordson_fel/blockspanelslider}}
         {{{ output.fp_slideshow }}}
         {{{ output.full_header }}}
 
@@ -109,7 +112,7 @@
 {{> theme_boost/nav-drawer }}
 {{/hasfhsdrawer}}
 
-{{> theme_fordson/footer }}
+{{> theme_fordson_fel/footer }}
 
 </div>
 
@@ -124,3 +127,4 @@ require(['theme_boost/drawer'], function(mod) {
     mod.init();
 });
 {{/js}}
+<!-- /fordson_fel/mydashboard -->

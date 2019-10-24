@@ -35,9 +35,9 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-require_once('lib/scss_lib.php');
-require_once('lib/filesettings_lib.php');
-require_once('lib/fordson_fel_lib.php');
+require_once($CFG->dirroot.'/theme/fordson_fel/lib/scss_lib.php');
+require_once($CFG->dirroot.'/theme/fordson_fel/lib/filesettings_lib.php');
+require_once($CFG->dirroot.'/theme/fordson_fel/lib/fordson_fel_lib.php');
 
 function theme_fordson_fel_page_init() {
     global $PAGE;

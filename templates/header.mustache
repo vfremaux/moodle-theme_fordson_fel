@@ -20,23 +20,22 @@
 <!-- fordson_fel:header -->
 <header id="page-header" class="row">
     <div class="col-12 pt-3 pb-3">
-        <div class="card {{^contextheader}}border-0{{/contextheader}}">
+        <div class="card">
             {{#boostimage}}
-            {{^debug}}
                 {{{ headerimage }}}
-            {{/debug}}
             {{/boostimage}}
-            <div class="card-body {{^contextheader}}p-2{{/contextheader}}">
+            <div class="card-body">
                 <div class="d-flex">
-                    {{#contextheader}}
                     <div class="mr-auto">
-                        {{{contextheader}}}
+                    <!-- contextheader -->
+                    {{{contextheader}}}
+                    <!-- /contextheader -->
                     </div>
-                    {{/contextheader}}
-
                     {{#settingsmenu}}
                     <div class="context-header-settings-menu">
+                        <!-- settingsmenu  -->
                         {{{settingsmenu}}}
+                        <!-- /settingsmenu -->
                     </div>
                     {{/settingsmenu}}
                 </div>
@@ -46,7 +45,7 @@
                         {{{navbar}}}
                     </div>
                     {{/hasnavbar}}
-                    <div class="ml-auto d-flex">
+                    <div class="ml-auto d-flex header-pageheadingbutton">
                         {{{pageheadingbutton}}}
                     </div>
                     <div id="course-header">

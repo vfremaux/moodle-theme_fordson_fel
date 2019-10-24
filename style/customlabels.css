@@ -1,19 +1,12 @@
 /* indent non customlabels */
 
-@media (min-width: 440px) {
+@media (min-width: 480px) {
     .path-course-view .activity:not(.customlabel):not(.label) {
         margin-left: 95px !important;
     }
 }
 
 /* General rules */
-
-td.custombox-header-thumb,
-td.custombox-header-thumb,
-td.custombox-thumb,
-td.custombox-thumb {
-    padding-top: 1.2em;
-}
 
 .custombox-text.readmorelink {
     text-align: left !important;
@@ -332,8 +325,19 @@ td.custombox-header-thumb.important:after {
     content: "!"; /* fa-bookmark-o */
     font-family: "sans-serif";
     color:#ffffff;
-    font-size:48px;
     font-weight: bold;
+}
+
+@media all and (min-width: 480px) {
+    td.custombox-header-thumb.important:after {
+        font-size: 48px;
+    }
+}
+
+@media all and (max-width: 480px) {
+    td.custombox-header-thumb:after {
+        font-size: 18px;
+    }
 }
 
 #page-region-main td.custombox-header-thumb.important,

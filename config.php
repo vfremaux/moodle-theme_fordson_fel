@@ -42,72 +42,189 @@ $THEME->parents = ['boost'];
  */
 $THEME->sheets = ['customlabels', 'styledbreadcrumb', 'yuioverride', 'modthumb', 'flexsections', 'themefixes', 'responsiverules'];
 $THEME->editor_sheets = [''];
+
+// Toggle display of blocks
 $THEME->layouts = [
+    'base' => [
+        'file' => 'columns2.php',
+        'regions' => array(),
+    ],
+
+    // Standard layout with blocks, this is recommended for most pages with general information.
+    'standard' => [
+        'file' => 'course.php',
+        'regions' => ['side-pre', 'fp-a', 'fp-b', 'fp-c', 'side-post'],
+        'defaultregion' => 'side-post',
+    ],
+
     // The site home page.
-    'frontpage' => array(
+    'frontpage' => [
         'file' => 'frontpage.php',
-        'regions' => array('side-pre', 'fp-a', 'fp-b', 'fp-c'),
+        'regions' => ['side-pre', 'fp-a', 'fp-b', 'fp-c'],
         'defaultregion' => 'fp-c',
-        'options' => array('nonavbar' => true, 'langmenu' => true),
-    ),
+        'options' => ['nonavbar' => true, 'langmenu' => true],
+    ],
+
     // Main course page.
     /*
-    'course' => array(
+    'course' => [
         'file' => 'course.php',
-        'regions' => array('fp-a', 'fp-b', 'fp-c', 'side-post'),
+        'regions' => ['fp-a', 'fp-b', 'fp-c', 'side-post'],
         'defaultregion' => 'fp-c',
-    ),
+    ],
     */
-    'course' => array(
+
+    'course' => [
         'file' => 'course.php',
-        'regions' => array('side-post'),
+        'regions' => ['side-post'],
         'defaultregion' => 'side-post',
-    ),
+    ],
 
-    'incourse' => array(
+    'incourse' => [
         'file' => 'course.php',
-        'regions' => array('side-pre', 'side-post'),
-        'defaultregion' => 'side-pre',
-    ),
+        'regions' => ['side-pre', 'side-post'],
+        'defaultregion' => 'side-post',
+    ],
 
-    'coursecategory' => array(
+    'coursecategory' => [
         'file' => 'columns2.php',
-        'regions' => array('side-pre'),
+        'regions' => ['side-pre'],
         'defaultregion' => 'side-pre',
-    ),
+    ],
 
-    'simplepage' => array(
-        'file' => 'columns1.php',
-        'regions' => array(),
-    ),
+    // The pagelayout used for safebrowser and securewindow.
+    'secure' => [
+        'file' => 'secure.php',
+        'regions' => array('side-pre'),
+        'defaultregion' => 'side-pre'
+    ],
 
     // Server administration scripts.
-    'admin' => array(
+    'admin' => [
+        'file' => 'columns2.php',
+        'regions' => ['side-pre'],
+        'defaultregion' => 'side-pre',
+    ],
+
+    // My dashboard page.
+    'mydashboard' => [
         'file' => 'columns2.php',
         'regions' => array('side-pre'),
         'defaultregion' => 'side-pre',
-    ),
+        'options' => array('nonavbar' => true, 'langmenu' => true, 'nocontextheader' => true),
+    ],
 
-    'format_page' => array(
+    // Pages that appear in pop-up windows - no navigation, no blocks, no header.
+    'popup' => [
+        'file' => 'columns1.php',
+        'regions' => array(),
+        'options' => array('nofooter' => true, 'nonavbar' => true),
+    ],
+
+    // No blocks and minimal footer - used for legacy frame layouts only!
+    'frametop' => [
+        'file' => 'columns1.php',
+        'regions' => array(),
+        'options' => array('nofooter' => true, 'nocoursefooter' => true),
+    ],
+
+    // Embeded pages, like iframe/object embeded in moodleform - it needs as much space as possible.
+    'embedded' => [
+        'file' => 'embedded.php',
+        'regions' => array()
+    ],
+
+    // Used during upgrade and install, and for the 'This site is undergoing maintenance' message.
+    // This must not have any blocks, links, or API calls that would lead to database or cache interaction.
+    // Please be extremely careful if you are modifying this layout.
+    'maintenance' => [
+        'file' => 'maintenance.php',
+        'regions' => array(),
+    ],
+
+    // Should display the content and basic headers only.
+    'print' => [
+        'file' => 'columns1.php',
+        'regions' => array(),
+        'options' => array('nofooter' => true, 'nonavbar' => false),
+    ],
+
+    // The pagelayout used when a redirection is occuring.
+    'redirect' => [
+        'file' => 'embedded.php',
+        'regions' => array(),
+    ],
+
+    // My public page.
+    'mypublic' => [
+        'file' => 'columns2.php',
+        'regions' => array('side-pre'),
+        'defaultregion' => 'side-pre',
+    ],
+
+    // The pagelayout used for reports.
+    'report' => [
+        'file' => 'columns2.php',
+        'regions' => array('side-pre'),
+        'defaultregion' => 'side-pre',
+    ],
+
+    'login' => [
+        'file' => 'login.php',
+        'regions' => array(),
+        'options' => array('langmenu' => true),
+    ],
+
+    'format_page' => [
         'file' => 'pagefordson.php',
         'regions' => array('side-pre', 'main', 'side-post'),
         'defaultregion' => 'side-post', // avoid putting in main, or standard course will fail showing the new block menu
         'options' => array('langmenu' => true)
-    ),
+    ],
 
-    'format_page_single' => array(
+    'format_page_single' => [
         'file' => 'pagefordsonpage.php',
         'regions' => array('side-pre', 'main', 'side-post'),
         'defaultregion' => 'side-post', // avoid putting in main, or standard course will fail showing the new block menu
         'options' => array('langmenu' => false)
-    ),
+    ],
 
-    'format_page_action' => array(
+    'format_page_action' => [
         'file' => 'pagefordson.php',
         'regions' => array(),
         'options' => array('langmenu' => true, 'noblocks' => true),
-    ),
+    ],
 ];
+
+if ($THEME->settings->enhancedmydashboard == 1 && $THEME->settings->blockdisplay == 1) {
+    $THEME->layouts['mydashboard'] = [
+        'file' => 'mydashboard.php',
+        'regions' => ['fp-a', 'fp-b', 'fp-c', 'side-pre'],
+        'defaultregion' => 'side-pre',
+        'options' => ['nonavbar' => true, 'langmenu' => true],
+    ];
+}
+if ($THEME->settings->blockdisplay == 2) {
+    $THEME->layouts['course'] = [
+        'file' => 'course.php',
+        'regions' => ['side-pre'],
+        'defaultregion' => 'side-pre',
+    ];
+    $THEME->layouts['frontpage'] = [
+        'file' => 'frontpage.php',
+        'regions' => ['side-pre'],
+        'defaultregion' => 'side-pre',
+        'options' => ['nonavbar' => true, 'langmenu' => true],
+    ];
+}
+if ($THEME->settings->blockdisplay == 2 && $THEME->settings->enhancedmydashboard == 1) {
+    $THEME->layouts['mydashboard'] = [
+        'file' => 'mydashboard.php',
+        'regions' => ['side-pre'],
+        'defaultregion' => 'side-pre',
+        'options' => ['nonavbar' => true, 'langmenu' => true],
+    ];
+}
 
 // Call main theme scss - including the selected preset.
 $THEME->scss = function($theme) {
@@ -118,12 +235,21 @@ $THEME->scss = function($theme) {
 $THEME->supportscssoptimisation = false;
 
 // Call css/scss processing functions and renderers.
-$THEME->csstreepostprocessor = 'theme_fordson_fel_css_tree_post_processor';
+// $THEME->csstreepostprocessor = 'theme_fordson_fel_css_tree_post_processor';
+$THEME->csstreepostprocessor = null;
+
 $THEME->prescsscallback = 'theme_fordson_fel_get_pre_scss';
 $THEME->extrascsscallback = 'theme_fordson_fel_get_extra_scss';
 $THEME->rendererfactory = 'theme_overridden_renderer_factory';
 
-$THEME->addblockposition = BLOCK_ADDBLOCK_POSITION_DEFAULT;
+// Toggle display of blocks
+if ($THEME->settings->blockdisplay == 1) {
+    $THEME->addblockposition = BLOCK_ADDBLOCK_POSITION_DEFAULT;
+}
+if ($THEME->settings->blockdisplay == 2) {
+    $THEME->addblockposition = BLOCK_ADDBLOCK_POSITION_FLATNAV;
+}
+
 $THEME->iconsystem = \core\output\icon_system::FONTAWESOME;
 
 $THEME->enable_dock = false;

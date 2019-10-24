@@ -35,6 +35,8 @@ $bodyattributes = $OUTPUT->body_attributes($extraclasses);
 $hasblocks = false;
 $haspostblocks = false;
 
+$footnote = $OUTPUT->footnote();
+$pagedoclink = $OUTPUT->page_doc_link();
 $coursefooter = $OUTPUT->course_footer();
 
 $templatecontext = [
@@ -42,9 +44,22 @@ $templatecontext = [
     'output' => $OUTPUT,
     'showbacktotop' => isset($PAGE->theme->settings->showbacktotop) && $PAGE->theme->settings->showbacktotop == 1,
     'bodyattributes' => $bodyattributes,
+    'hasfootnote' => !empty($footnote) && (preg_match('/[a-z]/', strip_tags($footnote))),
+    'footnote' => $footnote,
+    'custommenupullright' => $PAGE->theme->settings->custommenupullright,
     'hascoursefooter' => !empty($coursefooter) && (preg_match('/[a-z]/', strip_tags($coursefooter))),
     'coursefooter' => $coursefooter,
+    'hasdoclink' => !empty($pagedoclink) && (preg_match('/[a-z]/', strip_tags($pagedoclink))),
+    'pagedoclink' => $pagedoclink,
+    'hascustomlogin' => @$PAGE->theme->settings->showcustomlogin == 1,
+    'hasfooterelements' => !empty($PAGE->theme->settings->leftfooter) || !empty($PAGE->theme->settings->midfooter) || !empty($PAGE->theme->settings->rightfooter),
+    'leftfooter' => @$PAGE->theme->settings->leftfooter,
+    'midfooter' => @$PAGE->theme->settings->midfooter,
+    'rightfooter' => @$PAGE->theme->settings->rightfooter,
+    'showlangmenu' => @$CFG->langmenu,
 ];
+
+theme_fordson_fel_process_footer_texts($templatecontext);
 
 if (is_dir($CFG->dirroot.'/local/technicalsignals')) {
     $templatecontext['technicalsignals'] = local_print_administrator_message();

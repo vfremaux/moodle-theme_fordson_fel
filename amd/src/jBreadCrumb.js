@@ -49,37 +49,36 @@ define(['jquery', 'core/log'], function($, log) {
         } else {
            _easingEquation = 'swing'
         }
-    
+
         //The reference object containing all of the breadcrumb elements
         _breadCrumbElements = $(_container).find('li');
         
         //Keep it from overflowing in ie6 & 7
         $(_container).find('ul').wrap('<div style="overflow:hidden; position:relative;  width: ' + $(_container).css("width") + ';"><div>');
-        
+
         //If the breadcrumb contains nothing, don't do anything
         if (_breadCrumbElements.length > 0) {
             $(_breadCrumbElements[_breadCrumbElements.length - 1]).addClass('last');
             $(_breadCrumbElements[0]).addClass('first');
-            
+
             //If the breadcrumb object length is long enough, compress.
-            
+
             if (_breadCrumbElements.length > _options.minimumCompressionElements) {
                 compressBreadCrumb();
             };
         };
     };
-    
+
     function compressBreadCrumb() {
-    
+
         // Factor to determine if we should compress the element at all
         var finalElement = $(_breadCrumbElements[_breadCrumbElements.length - 1]);
-        
-        
+
         // If the final element is really long, compress more elements
         if ($(finalElement).width() > _options.maxFinalElementLength) {
             if (_options.beginningElementsToLeaveOpen > 0) {
                 _options.beginningElementsToLeaveOpen--;
-                
+
             }
             if (_options.endElementsToLeaveOpen > 0) {
                 _options.endElementsToLeaveOpen--;
@@ -90,16 +89,16 @@ define(['jquery', 'core/log'], function($, log) {
         if ($(finalElement).width() < _options.maxFinalElementLength && $(finalElement).width() > _options.minFinalElementLength) {
             if (_options.beginningElementsToLeaveOpen > 0) {
                 _options.beginningElementsToLeaveOpen--;
-                
+
             }
         }
-        
+
         var itemsToRemove = _breadCrumbElements.length - 1 - _options.endElementsToLeaveOpen;
-        
+
         // We compress only elements determined by the formula setting below.
         $(_breadCrumbElements).each(function(i, listElement) {
             if (i > _options.beginningElementsToLeaveOpen && i < itemsToRemove) {
-            
+
                 $(listElement).find('a').wrap('<span></span>').width($(listElement).find('a').width() + _options.previewWidth);
                 var options = {
                     id: i,
@@ -107,7 +106,7 @@ define(['jquery', 'core/log'], function($, log) {
                     listElement: $(listElement).find('span'),
                     isAnimating: false,
                     element: $(listElement).find('span')
-                
+
                 };
                 $(listElement).bind('mouseover', options, expandBreadCrumb).bind('mouseout', options, shrinkBreadCrumb);
                 $(listElement).find('a').unbind('mouseover', expandBreadCrumb).unbind('mouseout', shrinkBreadCrumb);
@@ -120,7 +119,7 @@ define(['jquery', 'core/log'], function($, log) {
             }
         });
     };
-    
+
     function expandBreadCrumb(e) {
         var originalWidth = e.data.width;
         $(e.data.element).stop();
@@ -133,7 +132,7 @@ define(['jquery', 'core/log'], function($, log) {
         });
         return false;
     };
-    
+
     function shrinkBreadCrumb(e) {
         $(e.data.element).stop();
         $(e.data.element).animate({
@@ -163,7 +162,12 @@ define(['jquery', 'core/log'], function($, log) {
   return {
     init: function() {
       $(document).ready(function($) {
-        $('.breadcrumb.style1').jBreadCrumb();
+        if (window.matchMedia('(min-width:480px)').matches) {
+           $('.breadcrumb.style1').jBreadCrumb();
+           log.debug('Fordson Fel jBreadCrumb AMD binded');
+        } else {
+           log.debug('Fordson Fel jBreadCrumb AMD blocked for media');
+        }
       });
       log.debug('Fordson Fel jBreadCrumb AMD init');
     }

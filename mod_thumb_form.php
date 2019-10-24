@@ -44,7 +44,7 @@ class mod_thumb_form extends moodleform {
                                    'maxbytes' => $COURSE->maxbytes,
                                    'accepted_types' => array('.jpg', '.gif', '.png', '.svg'));
 
-        $mform->addElement('filepicker', 'thumb', get_string('modthumb', 'theme_'.$PAGE->theme->name), $this->fileoptions);
+        $mform->addElement('filepicker', 'thumb', get_string('modthumb', 'theme_'.$PAGE->theme->name), null, $this->fileoptions);
 
         $mform->addElement('checkbox', 'cleanthumb', '', get_string('cleanthumb', 'theme_'.$PAGE->theme->name));
 

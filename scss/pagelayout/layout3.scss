@@ -166,16 +166,6 @@ div#learningcontent {
 
 // Activity navigation
 
-.m-t-2.m-b-1 {
-    position: relative;
-    background-color: darken($body-bg, 10%);
-    padding: $spacer;
-    border-radius: $border-radius;
-    margin: 0!important;
-    border-top: 7px solid rgba(0,0,0,.2);
-    border-radius: 0;
-}
-
 .course-content .single-section .section-navigation {
     position: relative;
     padding: $spacer;

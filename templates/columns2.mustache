@@ -70,10 +70,12 @@
         <div id="learningcontent">
 
             {{{ output.teacherdash }}}
-            {{>theme_fordson_fel/blockspanelslider}}
+            <!-- O(full_header) -->
             {{{ output.full_header }}}
-            
-            <div id="page-content" class="row pb-3">
+            <!-- /O(full_header) -->
+            {{>theme_fordson_fel/blockspanelslider}}
+
+            <div id="page-content" class="row">
                 <div id="region-main-box" class="col-12">
                     {{#hasregionmainsettingsmenu}}
                     <div id="region-main-settings-menu" class="d-print-none {{#hasblocks}}has-blocks{{/hasblocks}}">
@@ -81,7 +83,8 @@
                     </div>
                     {{/hasregionmainsettingsmenu}}
                     <section id="region-main" {{#hasblocks}}class="has-blocks mb-3"{{/hasblocks}}>
-
+                        <div class="card">
+                            <div class="card-body">
                                 {{#hasregionmainsettingsmenu}}
                                     <div class="region_main_settings_menu_proxy"></div>
                                 {{/hasregionmainsettingsmenu}}
@@ -96,7 +99,8 @@
                                 {{{ output.course_content_header }}}
                                 {{{ output.main_content }}}
                                 {{{ output.course_content_footer }}}
-
+                            </div>
+                        </div>
                     </section>
                     {{#hasblocks}}
                     <section data-region="blocks-column" class="hidden-print">
@@ -122,9 +126,10 @@
 
 </div>
 
-{{> theme_fordson_fel/footer }}
+<a href="#pagebottom" id="go-to-bottom" class="btn btn-primary btn-lg show" role="button" title="{{#str}}gotobottom, theme_fordson_fel{{/str}}"><i class="fa fa-arrow-circle-down" aria-hidden="true"></i></a>
+<a href="#" id="back-to-top" class="btn btn-primary btn-lg" role="button" title="{{#str}}backtotop, theme_fordson_fel{{/str}}"><i class="fa fa-arrow-circle-up" aria-hidden="true"></i></a>
 
-<a href="#" id="back-to-top" class="btn btn-primary btn-lg" role="button" title="{{#str}}backtotop, theme_fordson_fel{{/str}}"><i class="fa fa-chevron-circle-up" aria-hidden="true"></i></a>
+{{> theme_fordson_fel/footer }}
 
 </body>
 </html>

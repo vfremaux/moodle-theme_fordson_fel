@@ -38,7 +38,7 @@ $page->add($setting);
 // Icon width setting.
 $name = 'theme_fordson_fel/iconwidth';
 $title = get_string('iconwidth', 'theme_fordson_fel');
-$description = get_string('iconwidth_desc', 'theme_fordson_fel');;
+$description = get_string('iconwidth_desc', 'theme_fordson_fel');
 $default = '100px';
 $choices = array(
     '75px' => '75px',

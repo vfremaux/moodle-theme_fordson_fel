@@ -1,0 +1,32 @@
+
+
+nav[role="navigation"] ol.breadcrumb.style1 li a,
+nav[role="navigation"] ol.breadcrumb.style4 li a {
+    color: $breadcrumb-bg;
+}
+
+nav[role="navigation"] ol.breadcrumb.style1 li::after,
+nav[role="navigation"] ol.breadcrumb.style1 li::after {
+    border-left-color: $breadcrumb-fg;
+}
+
+nav[role="navigation"] ol.breadcrumb.style1 li,
+nav[role="navigation"] ol.breadcrumb.style4 li {
+    color: $breadcrumb-bg;
+    background-color: $breadcrumb-fg;
+    border-color: $breadcrumb-fg;
+}
+
+nav[role="navigation"] ol.breadcrumb.style1 li::before,
+nav[role="navigation"] ol.breadcrumb.style4 li::before {
+    border-left-color: $breadcrumb-bg;
+}
+
+ul.breadcrumb.style1 li.active, .breadcrumb.style1 li:hover,
+ul.breadcrumb.style4 li.active, .breadcrumb.style4 li:hover{
+    background-color: transparent;
+}
+ul.breadcrumb.style1 li.active:after, .breadcrumb.style1 li:hover:after,
+ul.breadcrumb.style4 li.active:after, .breadcrumb.style4 li:hover:after {
+    background-color: transparent;
+}

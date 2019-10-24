@@ -54,7 +54,7 @@ define(['jquery', 'core/config', 'core/log'], function($, config, log) {
             $('.section.sub > .content > .summary').css('visibility', 'visible');
             $('.section.sub >.content > .flexsections').css('display', 'block');
             $('.section.sub >.content > .flexsections').css('visibility', 'visible');
-            $('img.flexcontrol').attr('src', $('img.flexcontrol').attr('src').replace('collapsed', 'expanded'));
+            $('.flexcontrol > img').attr('src', $('.flexcontrol > img').attr('src').replace('collapsed', 'expanded'));
 
             // If collapse mode enabled in editing
             // Attach togglestate handler to all flexsections in page.

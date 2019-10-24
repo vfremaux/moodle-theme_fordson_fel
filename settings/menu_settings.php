@@ -43,7 +43,7 @@ $setting = new admin_setting_configcheckbox($name, $title, $description, $defaul
 $setting->set_updatedcallback('theme_reset_all_caches');
 $page->add($setting);
 
-// Dashboard Teacher Textbox.
+// Frontpage Textbox.
 $name = 'theme_fordson_fel/coursemanagementtextbox';
 $title = get_string('coursemanagementtextbox', 'theme_fordson_fel');
 $description = get_string('coursemanagementtextbox_desc', 'theme_fordson_fel');
@@ -52,7 +52,7 @@ $setting = new admin_setting_confightmleditor($name, $title, $description, $defa
 $setting->set_updatedcallback('theme_reset_all_caches');
 $page->add($setting);
 
-// Dashboard Student Textbox.
+// Frontpage Textbox.
 $name = 'theme_fordson_fel/studentdashboardtextbox';
 $title = get_string('studentdashboardtextbox', 'theme_fordson_fel');
 $description = get_string('studentdashboardtextbox_desc', 'theme_fordson_fel');
@@ -63,7 +63,7 @@ $page->add($setting);
 
 // Navbar Color switch toggle based on role
 $name = 'theme_fordson_fel/navbarcolorswitch';
-$title = get_string('navbarcolorswitch','theme_fordson_fel');
+$title = get_string('navbarcolorswitch', 'theme_fordson_fel');
 $description = get_string('navbarcolorswitch_desc', 'theme_fordson_fel');
 $default = '2';
 $choices = array(
@@ -200,6 +200,12 @@ $setting = new admin_setting_configcheckbox($name, $title, $description, $defaul
 $setting->set_updatedcallback('theme_reset_all_caches');
 $page->add($setting);
 
+$name = 'theme_fordson_fel/custommenupullright';
+$title = get_string('custommenupullright', 'theme_fordson_fel');
+$description = get_string('custommenupullright_desc', 'theme_fordson_fel');
+$default = false;
+$setting = new admin_setting_configcheckbox($name, $title, $description, $default, true, false);
+$page->add($setting);
 
 
 // Must add the page after definiting all the settings!

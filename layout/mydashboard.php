@@ -62,6 +62,9 @@ if ($checkblocka || $checkblockb || $checkblockc) {
     $hascourseblocks = true;
 }
 
+$footnote = $OUTPUT->footnote();
+$coursefooter = $OUTPUT->course_footer();
+
 $regionmainsettingsmenu = $OUTPUT->region_main_settings_menu();
 $templatecontext = [
     'sitename' => format_string($SITE->shortname, true, array('context' => context_course::instance(SITEID))),
@@ -80,7 +83,19 @@ $templatecontext = [
     'regionmainsettingsmenu' => $regionmainsettingsmenu,
     'hasregionmainsettingsmenu' => !empty($regionmainsettingsmenu),
     'enrolform' => $enrolform,
+    'hasfootnote' => !empty($footnote) && (preg_match('/[a-z]/', strip_tags($footnote))),
+    'footnote' => $footnote,
+    'custommenupullright' => $PAGE->theme->settings->custommenupullright,
+    'hascoursefooter' => !empty($coursefooter) && (preg_match('/[a-z]/', strip_tags($coursefooter))),
+    'coursefooter' => $coursefooter,
+    'hasfooterelements' => !empty($PAGE->theme->settings->leftfooter) || !empty($PAGE->theme->settings->midfooter) || !empty($PAGE->theme->settings->rightfooter),
+    'leftfooter' => @$PAGE->theme->settings->leftfooter,
+    'midfooter' => @$PAGE->theme->settings->midfooter,
+    'rightfooter' => @$PAGE->theme->settings->rightfooter,
+    'showlangmenu' => @$CFG->langmenu
 ];
+
+theme_fordson_fel_process_footer_texts($templatecontext);
 
 $PAGE->requires->jquery();
 $PAGE->requires->js('/theme/fordson_fel/javascript/scrolltotop.js');

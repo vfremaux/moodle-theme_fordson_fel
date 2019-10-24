@@ -40,7 +40,7 @@ $page->add($setting);
 // Header size setting.
 $name = 'theme_fordson_fel/slideshowheight';
 $title = get_string('slideshowheight', 'theme_fordson_fel');
-$description = get_string('slideshowheight_desc', 'theme_fordson_fel');;
+$description = get_string('slideshowheight_desc', 'theme_fordson_fel');
 $default = '250px';
 $choices = array(
         '175px' => '175px',

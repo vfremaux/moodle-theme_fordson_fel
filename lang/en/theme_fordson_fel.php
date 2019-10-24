@@ -30,8 +30,6 @@ $string['choosereadme'] = 'Fordson fel adds to the community Fordson theme valua
 $string['configtitle'] = 'Fordson FEL';
 $string['pluginname'] = 'Fordson FEL';
 $string['region-side-pre'] = 'Right';
-$string['breadcrumbmaskcatsforstudents'] = 'Mask cats for students';
-$string['breadcrumbmaskcatsforstudents_desc'] = 'Mask all categroy links for students';
 $string['generalsettings'] = 'General settings';
 $string['advancedsettings'] = 'Advanced settings';
 $string['iconnavheading'] = 'Icon Navigation';
@@ -53,36 +51,19 @@ $string['region-fp-a'] = 'Column A';
 $string['region-fp-b'] = 'Column B';
 $string['region-fp-c'] = 'Column C';
 $string['changeto'] = 'Change to {$a}';
-$string['courseblockpanelbtn'] = 'Course Blocks';
+$string['courseblockpanelbtn'] = 'Course Block Panel';
 $string['courseblockpanelbtnclose'] = 'Close';
 $string['showblockregions'] = 'Show Additional Frontpage Block Regions';
 $string['showblockregions_desc'] = 'Turn on three more block regions on the site frontpage.  These appear just below the icon navigation bar.';
 $string['viewsectionmodules'] = 'View Section Modules';
 $string['privacy:metadata'] = 'The fordson_fel theme does not store any individual user data.';
 $string['blockdisplay'] = 'Block Display Location Options';
-$string['blockdisplay_desc'] = 'Choose how to display blocks on the homepage and course pages.  fordson_fel adds a 3 column collapsible block panel that can be hidden by the user.  Choose the Boost default option to use a single right side column for blocks.  The Boost default option also moves the Add a Block button back to the Nav Drawer on the left of the page.  We also recommend using "Single Column Boost Default" when using any of the Boost page layouts from the settings above.';
+$string['blockdisplay_desc'] = 'Choose how to display blocks on the homepage and course pages. Fordson FEL adds a 3 column collapsible block panel that can be hidden by the user.  Choose the Boost default option to use a single right side column for blocks.  The Boost default option also moves the Add a Block button back to the Nav Drawer on the left of the page.  We also recommend using "Single Column Boost Default" when using any of the Boost page layouts from the settings above.';
 $string['blockdisplay_off'] = 'Single Column Boost Default';
 $string['blockdisplay_on'] = 'Three Column fordson_fel Default';
 $string['ilearnsecurebrowser'] ='This Quiz is secured with iLearn Secure Browser (A Chromebook using the iLearn app must be used to attempt this quiz)';
-
-// Thums management.
-$string['editmodthumb'] = 'Edit the module thumbnail';
-$string['modthumb'] = 'Module thumbnail';
-$string['cleanthumb'] = 'Remove the thumbnail file';
-
-// Theme variants
-$string['variant_settings'] = 'Settings for theme variants';
-$string['variantsheadingsub'] = 'Theme variant management';
-$string['variantsheading_desc'] = 'Go to this additional screen to <a href="/theme/fordson_fel/themecopy.php">clone variant settings.</a>';
-$string['themetitle'] = 'Theme variant title';
-$string['themetitledesc'] = 'Non functional variant name. Use for memory.';
-$string['fromtheme'] = 'From theme variant';
-$string['totheme'] = 'To theme variant';
-$string['copytheme'] = 'Copy theme variant settings';
-$string['themecopied'] = 'Theme settings successfully cloned';
-$string['copy'] = 'Copy';
-$string['withfiles'] = 'With files';
-$string['errorcopyonself'] = 'A variant cannot be copied on itself';
+$string['sitealternatename'] = 'Site alternate name';
+$string['newwindow'] = 'New window'; 
 
 // Presets Settings.
 $string['presets_settings'] = 'Presets';
@@ -96,7 +77,6 @@ $string['favicon'] = 'Favicon';
 $string['favicon_desc'] = 'Change the favicon for fordson_fel. Images with a transparent background and 32px height will work best.  Allowed types: PNG, JPG, ICO';
 $string['enhancedmydashboard'] = 'Enhanced MyDashboard';
 $string['enhancedmydashboard_desc'] = 'Turning this on will enhance the MyDashboard page to include all the fordson_fel features such as the Easy Enrollment Form, block sliders, Icon Navigation bar, Custom Homepage Text, Slideshow, and more.';
-
 
 // Colours Settings.
 $string['colours_settings'] = 'Colours';
@@ -224,23 +204,6 @@ $string['sociallinkdesc'] = 'Enter the URL of your your custom social media link
 $string['sociallinkicon'] = 'Link Icon';
 $string['sociallinkicondesc'] = 'Enter the fontawesome name of the icon for your link<br />A full list of FontAwesome icons can be found at http://fontawesome.io/icons/';
 
-// Breadcrumb settings
-$string['breadcrumbsettings'] = 'Breadcrumb settings';
-$string['breadcrumbstyle'] = 'Breadcrumb style';
-$string['breadcrumbstyle_desc'] = 'Here you can change the style of the breadcrumbs.';
-$string['breadcrumbstyled'] = 'Fancy';
-$string['breadcrumbstylednocollapse'] = 'Fancy with no collapse';
-$string['breadcrumbsimple'] = 'Simple';
-$string['breadcrumbthin'] = 'Thin';
-$string['nobreadcrumb'] = 'Hide';
-$string['breadcrumbskiprootnode'] = 'Skip root node';
-$string['breadcrumbskiprootnode_desc'] = 'If set to on, will not show the root nodes';
-$string['breadcrumbkeeplastcatonly'] = 'Keep last category only';
-$string['breadcrumbkeeplastcatonly_desc'] = 'If set to on, will only keep the closest to course category in the breadcrumb';
-$string['breadcrumbmaskfirstcat'] = 'Mask first category in category path';
-$string['breadcrumbmaskfirstcat_desc'] = 'If set to on, masks the first category when the node is a course category';
-$string['breadcrumbstandard'] = 'Standard';
-
 // Content settings.
 $string['coursetileinfo'] = 'Course Display Options';
 $string['coursetileinfodesc'] = 'These settings allow you to customize how courses will be displayed on the frontpage as well as course categories.';
@@ -251,15 +214,6 @@ $string['generalcontentinfodesc'] = 'The options below help you customize the wa
 $string['enrollcoursecard'] = 'Access';
 $string['layoutinfo'] = 'Layout Settings';
 $string['layoutinfodesc'] = 'Control page layout by chooseing a design.';
-$string['signalitemsnewerthan'] = 'Add "new item" signal';
-$string['signalitemsnewerthan_desc'] = 'Adds a signal when the item (module or activity) has been added later than X hours ago';
-$string['newitem'] = 'New item';
-$string['updateditem'] = 'Recently updated items';
-$string['flexinitialstate'] = 'Flex initial state';
-$string['flexinitialstate_desc'] = 'Set the initial state of section tree when first arriving to course without any user preferences.';
-$string['flexcollapsed'] = 'Closed';
-$string['flexexpanded'] = 'Expanded';
-$string['flexreset'] = 'Top expanded, leaves closed';
 
 $string['pagelayout'] = 'Layout Chooser';
 $string['pagelayout_desc'] = 'Choose from the following layouts. Some page layouts require additional adjustments on the Preset Adjustments Page.  Be sure to pay attention to: Learning Content Spacing, Header Image Height, and Content Padding as these will help adjust header image placement and padding to the left and right of the main learning content. <a href="https://goo.gl/fMXzSo" target="_new">Instructions for fordson_fel 3.5 Theme</a>';
@@ -369,7 +323,7 @@ $string['activitymenu'] = 'Show Grouped Activities Menu';
 $string['activitymenu_desc'] = 'Show the grouped activity listings in the student and teacher panels.  This menu displays a grouped list of all activities for the student and teacher.';
 
 $string['coursemanagementinfo'] = 'Course Administration Panel Menu';
-$string['coursemanagementinfodesc'] = 'fordson_fel provides a unique and organized Course Administration Panel which can be accessed from anywhere within a course by teachers to access their course management links. Students also can access a Student Course Dashboard which includes information relevant to the course.  It is highly recommended you keep this turned on.  ';
+$string['coursemanagementinfodesc'] = 'Fordson FEL provides a unique and organized Course Administration Panel which can be accessed from anywhere within a course by teachers to access their course management links. Students also can access a Student Course Dashboard which includes information relevant to the course.  It is highly recommended you keep this turned on.  ';
 $string['coursemanagementtoggle'] = 'Show Student and Teacher Course Management Panels';
 $string['coursemanagementtoggle_desc'] = 'This displays the Course Administration links in an organized panel for teachers that provides a dashboard of all the links they need to manage their course and users. It will also display a course overview panel for students with grades, course completion, and other items from the course.';
 $string['coursemanagementtextbox'] = 'Course Management Message';
@@ -446,20 +400,6 @@ $string['siteadminquicklink'] = 'Site Administration';
 $string['shownavclosed'] = 'Nav Drawer Closed by Default';
 $string['shownavclosed_desc'] = 'Show the navigation drawer collapsed for all users by default on each page.';
 
-// Additional JS Settings.
-$string['js_settings'] = 'Additional Javascript settings';
-$string['jsheadingsub'] = 'Additional Javascript';
-$string['jsheading_desc'] = 'This section allows you add custom additional javascript to some moodle page types';
-$string['additionaljs'] = 'Additional Javascript files';
-$string['additionaljs_desc'] = 'Prefer adding single files javascript packages. Take care javascript addition may be not safe and
-corrupt some other features.';
-$string['pagetyperestrictions'] = 'Page type restrictions';
-$string['pagetyperestrictions_desc'] = 'If empty, javascript will be loaded on every page, this may be quite useless in reality.
-By giving a comma separated list of page types, you will restrict the application of javascript to those page types only.';
-$string['jsextrabehaviourheadingsub'] = 'Other extra JS behavioural settings';
-$string['allowblockregionscollapse'] = 'Allow collapsible bloc regions to collapse';
-$string['allowblockregionscollapse_desc'] = 'Some regions can use an accordion collapser to compress the block\'s height';
-
 // FP Icon Nav.
 $string['navicon1'] = 'Homepage Icon One';
 $string['navicon2'] = 'Homepage Icon Two';
@@ -518,8 +458,8 @@ $string['iconwidth'] = 'Homepage Icon Width';
 $string['iconwidth_desc'] = 'Width of the 8 individual icons in the icon navigation bar on the homepage.';
 
 $string['navicon'] = 'Icon';
-$string['navicondesc'] = 'Name of the icon you wish to use. List is <a href="http://fortawesome.github.io/Font-Awesome/cheatsheet/" target="_new">here</a>.  Just enter what is after "fa-", e.g. "star".';
-$string['naviconslidedesc'] = 'Suggested icon text: arrow-circle-down . Or choose from the list is <a href="http://fortawesome.github.io/Font-Awesome/cheatsheet/" target="_new">here</a>.  Just enter what is after "fa-", e.g. "star".';
+$string['navicondesc'] = 'Name of the icon you wish to use. List is <a href="https://fontawesome.com/v4.7.0/icons/" target="_new">here</a>.  Just enter what is after "fa-", e.g. "star".';
+$string['naviconslidedesc'] = 'Suggested icon text: arrow-circle-down . Or choose from the list is <a href="https://fontawesome.com/v4.7.0/icons/" target="_new">here</a>.  Just enter what is after "fa-", e.g. "star".';
 
 $string['naviconbuttontext'] = 'Link Text';
 $string['naviconbuttontextdesc'] = 'Text to appear below the icon.';
@@ -587,7 +527,7 @@ $string['commonlyused'] = 'Customized activity and resource modules.';
 $string['commonlyuseddesc'] = 'Comma separated list of activities/resources to list at top of Activity/Resource Picker.<br>
 Default Activities:<br>
 assign,chat,choice,data,feedback,forum,glossary,lesson,lti,quiz,scorm,survey,wiki,workshop<br>
-DEfault Resources:<br>
+Default Resources:<br>
 book,file,folder,imscp,label,page,resource,url';
 $string['modchoosercommonlyused'] = 'Commonly Used';
 $string['showonlycustomactivities'] = 'Show Only Custom Menu';
@@ -599,13 +539,89 @@ $string['modchoosercustomlabel_desc'] = 'Add your own custom label for this new 
 $string['showalltomanager'] = 'Show All Activities and Resources to Managers';
 $string['showalltomanager_desc'] = 'This setting will allow users who have the role of Manager see and access ALL activities and resources even if it is set to only show the custom menu.  Generally, a manager role is given to a user at the site or category level.  Teachers will still only see the custom menu.  This feature is determined by the user permission: View the Site Administration Tree - moodle/site:configview . Site Administrators will always see all activities and resources.';
 
+// Fordson Plugin Integration Enhancements.
+$string['integrationinfo'] = 'Plugin Integrations';
+$string['integrationinfo_desc'] = 'Fordson can activate enhanced features and better integrate with certain plugins. The settings below will allow you to use the default plugin behavior or turn on advanced features that the developers of Fordson have implemented.';
+$string['integrationon'] = 'Turn Integration On';
+$string['integrationoff'] = 'Turn Integration Off';
+
+$string['collapsibletopics'] = 'Collapsible Topics Course Format';
+$string['collapsibletopics_desc'] = 'If you install the Collapsible Topics Format ( <a href="https://moodle.org/plugins/format_collapsibletopics">format_collapsibletopics</a> ) the Fordson theme can provide an enhanced course format view and special styling that better integrates with the overall look and feel of Fordson. Special care and attention has been developed to provide a smoother user experience for users of all ages and skills.';
+$string['viewfcfmodules'] = 'View Activities and Resources';
+
+$string['easyenrollmentintegration'] = 'Easy Enrollment Plugin';
+$string['easyenrollmentintegration_desc'] = 'The Easy Enrollment plugin (<a href="https://moodle.org/plugins/enrol_easy"> Easy Enrollment Plugin</a>) allows students to enroll in courses directly from the Moodle homepage.  The enrollment plugin uses a 6 digit code or a auto-generated QR code with webcam support to enroll students.  The student enters the code or scans the QR code and is instantly enrolled into the intended course or group within the course.  This plugin auto-activates once you install Easy Enrollment and activate it in Site Administration.  It is only activated if the plugin is installed and properly configured.';
+
 $string['hiddencourse'] = 'This course is still hidden to students';
 $string['publish'] = 'Open the course';
+
+// Thumbs management.
+$string['editmodthumb'] = 'Edit the module thumbnail';
+$string['modthumb'] = 'Module thumbnail';
+$string['cleanthumb'] = 'Remove the thumbnail file';
+
+// Theme variants.
+$string['variant_settings'] = 'Settings for theme variants';
+$string['variantsheadingsub'] = 'Theme variant management';
+$string['variantsheading_desc'] = 'Go to this additional screen to <a href="/theme/fordson_fel/themecopy.php">clone variant settings.</a>';
+$string['themetitle'] = 'Theme variant title';
+$string['themetitledesc'] = 'Non functional variant name. Use for memory.';
+$string['fromtheme'] = 'From theme variant';
+$string['totheme'] = 'To theme variant';
+$string['copytheme'] = 'Copy theme variant settings';
+$string['themecopied'] = 'Theme settings successfully cloned';
+$string['copy'] = 'Copy';
+$string['withfiles'] = 'With files';
+$string['errorcopyonself'] = 'A variant cannot be copied on itself';
+
+// Breadcrumb settings
+$string['breadcrumbsettings'] = 'Breadcrumb settings';
+$string['breadcrumbstyle'] = 'Breadcrumb style';
+$string['breadcrumbstyle_desc'] = 'Here you can change the style of the breadcrumbs.';
+$string['breadcrumbstyled'] = 'Fancy';
+$string['breadcrumbstylednocollapse'] = 'Fancy with no collapse';
+$string['breadcrumbsimple'] = 'Simple';
+$string['breadcrumbthin'] = 'Thin';
+$string['nobreadcrumb'] = 'Hide';
+$string['breadcrumbskiprootnode'] = 'Skip root node';
+$string['breadcrumbskiprootnode_desc'] = 'If set to on, will not show the root nodes';
+$string['breadcrumbkeeplastcatonly'] = 'Keep last category only';
+$string['breadcrumbkeeplastcatonly_desc'] = 'If set to on, will only keep the closest to course category in the breadcrumb';
+$string['breadcrumbmaskfirstcat'] = 'Mask first category in category path';
+$string['breadcrumbmaskfirstcat_desc'] = 'If set to on, masks the first category when the node is a course category';
+$string['breadcrumbstandard'] = 'Standard';
+$string['breadcrumbmaskcatsforstudents'] = 'Mask categories for students';
+$string['breadcrumbmaskcatsforstudents_desc'] = 'If set no course categories will be shown in breadcrumb for non editing users';
+
+// Additional JS Settings.
+$string['js_settings'] = 'Additional Javascript settings';
+$string['jsheadingsub'] = 'Additional Javascript';
+$string['jsheading_desc'] = 'This section allows you add custom additional javascript to some moodle page types';
+$string['additionaljs'] = 'Additional Javascript files';
+$string['additionaljs_desc'] = 'Prefer adding single files javascript packages. Take care javascript addition may be not safe and
+corrupt some other features.';
+$string['pagetyperestrictions'] = 'Page type restrictions';
+$string['pagetyperestrictions_desc'] = 'If empty, javascript will be loaded on every page, this may be quite useless in reality.
+By giving a comma separated list of page types, you will restrict the application of javascript to those page types only.';
+$string['jsextrabehaviourheadingsub'] = 'Other extra JS behavioural settings';
+$string['allowblockregionscollapse'] = 'Allow collapsible bloc regions to collapse';
+$string['allowblockregionscollapse_desc'] = 'Some regions can use an accordion collapser to compress the block\'s height';
 
 // Flexsection extras.
 $string['collapseall'] = 'Close all';
 $string['expandall'] = 'Open all';
 $string['reset'] = 'Reset';
+$string['flexinitialstate'] = 'Flex initial state';
+$string['flexinitialstate_desc'] = 'Set the initial state of section tree when first arriving to course without any user preferences.';
+$string['flexcollapsed'] = 'Closed';
+$string['flexexpanded'] = 'Expanded';
+$string['flexreset'] = 'Top expanded, leaves closed';
+
+// New item signal.
+$string['signalitemsnewerthan'] = 'Add "new item" signal';
+$string['signalitemsnewerthan_desc'] = 'Adds a signal when the item (module or activity) has been added later than X hours ago';
+$string['newitem'] = 'New item';
+$string['updateditem'] = 'Recently updated items';
 
 // Stylable sections.
 $string['showactivitynames'] = 'Show activitynames';
@@ -646,3 +662,21 @@ $string['sectionsstyleimages_desc'] = '<p>Add images to call into styles with an
 
 ';
 
+// Footer adds
+$string['leftfooter'] = 'Left Footer';
+$string['leftfooter_desc'] = '';
+$string['midfooter'] = 'Mid Footer';
+$string['midfooter_desc'] = '';
+$string['rightfooter'] = 'Right Footer';
+$string['rightfooter_desc'] = '';
+
+$string['topnavbarbg'] = 'Top navbar background';
+$string['topnavbarbg_desc'] = 'Top navbar background';
+$string['topnavbarteacherbg'] = 'Top navbar teacher background';
+$string['topnavbarteacherbg_desc'] = 'Top navbar teacher background';
+$string['footerbkg'] = 'Footer background';
+$string['footerbkg_desc'] = 'Footer background';
+
+/* Menu adds */
+$string['custommenupullright'] = 'Pull right custom menu';
+$string['custommenupullright_desc'] = 'If enabled, the custom menu will be pulled right close to the lang or user menu';

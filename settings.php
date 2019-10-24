@@ -40,7 +40,9 @@ if ($ADMIN->fulltree) {
     // Note new tabs layout for admin settings pages.
     $settings = new theme_boost_admin_settingspage_tabs('themesettingfordson_fel', get_string('configtitle', 'theme_fordson_fel'));
 
-    require('settings/variants_settings.php');
+    if (is_dir($CFG->dirroot.'/theme/fordson_fel01')) {
+        require('settings/variants_settings.php');
+    }
     require('settings/presets_settings.php');
     require('settings/presets_adjustments_settings.php');
     require('settings/javascript_settings.php');

@@ -58,14 +58,20 @@ if ($navspdraweropen) {
 $bodyattributes = $OUTPUT->body_attributes($extraclasses);
 $blockshtml = $OUTPUT->blocks('side-pre');
 $postblockshtml = $OUTPUT->blocks('side-post');
-$hasblocks = strpos($blockshtml, 'data-block=') !== false;
-$haspostblocks = strpos($postblockshtml, 'data-block=') !== false;
 
 $blockshtmla = $OUTPUT->blocks('fp-a');
 $blockshtmlb = $OUTPUT->blocks('fp-b');
 $blockshtmlc = $OUTPUT->blocks('fp-c');
 // $blockshtmlsidepost = $OUTPUT->blocks('side-post');
 $hasfpblockregion = isset($PAGE->theme->settings->showblockregions) !== false;
+
+$checkpreblocks = strpos($blockshtmlpre, 'data-block=') !== false;
+$checkblocka = strpos($blockshtmla, 'data-block=') !== false;
+$checkblockb = strpos($blockshtmlb, 'data-block=') !== false;
+$checkblockc = strpos($blockshtmlc, 'data-block=') !== false;
+$checkpostblocks = strpos($blockshtmlpost, 'data-block=') !== false;
+
+$hasblocks = strpos($blockshtml, 'data-block=') !== false;
 
 $footnote = $OUTPUT->footnote();
 $pagedoclink = $OUTPUT->page_doc_link();
@@ -86,12 +92,13 @@ $templatecontext = [
     'bodyattributes' => $bodyattributes,
     'navdraweropen' => $navdraweropen,
     'hasfhsdrawer' => $hasfhsdrawer,
-    'navspdraweropen' => $navspdraweropen,
-    'hasspdrawer' => !empty($blockshtmlsidepost) || $PAGE->user_is_editing(),
+    'hasspdrawer' => $checkpostblocks || $PAGE->user_is_editing(),
+    'navspdraweropen' => $navspdraweropen && ($checkpostblocks || $PAGE->user_is_editing()),
     'regionmainsettingsmenu' => $regionmainsettingsmenu,
     'hasregionmainsettingsmenu' => !empty($regionmainsettingsmenu),
-    'hasfootenote' => !empty($footnote) && (preg_match('/[a-z]/', strip_tags($footnote))),
+    'hasfootnote' => !empty($footnote) && (preg_match('/[a-z]/', strip_tags($footnote))),
     'footnote' => $footnote,
+    'custommenupullright' => $PAGE->theme->settings->custommenupullright,
     'hascoursefooter' => !empty($coursefooter) && (preg_match('/[a-z]/', strip_tags($coursefooter))),
     'coursefooter' => $coursefooter,
     'hasdoclink' => !empty($pagedoclink) && (preg_match('/[a-z]/', strip_tags($pagedoclink))),
@@ -103,6 +110,8 @@ $templatecontext = [
     'rightfooter' => @$PAGE->theme->settings->rightfooter,
     'showlangmenu' => @$CFG->langmenu
 ];
+
+theme_fordson_fel_process_footer_texts($templatecontext);
 
 if (is_dir($CFG->dirroot.'/local/technicalsignals')) {
     $templatecontext['technicalsignals'] = local_print_administrator_message();

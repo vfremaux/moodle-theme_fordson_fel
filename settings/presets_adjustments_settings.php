@@ -61,10 +61,19 @@ $setting = new admin_setting_configcheckbox($name, $title, $description, $defaul
 $setting->set_updatedcallback('theme_reset_all_caches');
 $page->add($setting);
 
+// Frontpage show additional block regions
+$name = 'theme_fordson_fel/showblockregions';
+$title = get_string('showblockregions', 'theme_fordson_fel');
+$description = get_string('showblockregions_desc', 'theme_fordson_fel');
+$default = 1;
+$setting = new admin_setting_configcheckbox($name, $title, $description, $default);
+$setting->set_updatedcallback('theme_reset_all_caches');
+$page->add($setting);
+
 // Content spacing
 $name = 'theme_fordson_fel/learningcontentpadding';
 $title = get_string('learningcontentpadding', 'theme_fordson_fel');
-$description = get_string('learningcontentpadding_desc', 'theme_fordson_fel');;
+$description = get_string('learningcontentpadding_desc', 'theme_fordson_fel');
 $default = '125px';
 $choices = array(
         '0px' => '0px',
@@ -100,8 +109,8 @@ $page->add($setting);
 // Header size setting.
 $name = 'theme_fordson_fel/headerimagepadding';
 $title = get_string('headerimagepadding', 'theme_fordson_fel');
-$description = get_string('headerimagepadding_desc', 'theme_fordson_fel');;
-$default = '400px';
+$description = get_string('headerimagepadding_desc', 'theme_fordson_fel');
+$default = '200px';
 $choices = array(
     '0px' => '0px',
     '25px' => '25px',
@@ -148,8 +157,8 @@ $page->add($setting);
 // gutter width
 $name = 'theme_fordson_fel/gutterwidth';
 $title = get_string('gutterwidth', 'theme_fordson_fel');
-$description = get_string('gutterwidth_desc', 'theme_fordson_fel');;
-$default = '3rem';
+$description = get_string('gutterwidth_desc', 'theme_fordson_fel');
+$default = '4rem';
 $choices = array(
         '0rem' => '0rem',
         '1rem' => '1rem',
@@ -177,9 +186,11 @@ $page->add($setting);
 // Block and Content widths
 $name = 'theme_fordson_fel/blockwidthfordson_fel';
 $title = get_string('blockwidthfordson_fel', 'theme_fordson_fel');
-$description = get_string('blockwidthfordson_fel_desc', 'theme_fordson_fel');;
+$description = get_string('blockwidthfordson_fel_desc', 'theme_fordson_fel');
 $default = '280px';
 $choices = array(
+        '180px' => '150px',
+        '230px' => '200px',
         '280px' => '250px',
         '305px' => '275px',
         '330px' => '300px',
@@ -189,6 +200,9 @@ $choices = array(
         '430px' => '400px',
         '455px' => '425px',
         '480px' => '450px',
+        '20%' => '20%',
+        '25%' => '25%',
+        '30%' => '30%',
     );
 $setting = new admin_setting_configselect($name, $title, $description, $default, $choices);
 $setting->set_updatedcallback('theme_reset_all_caches');
@@ -197,7 +211,7 @@ $page->add($setting);
 // Courses height
 $name = 'theme_fordson_fel/activityiconsize';
 $title = get_string('activityiconsize', 'theme_fordson_fel');
-$description = get_string('activityiconsize_desc', 'theme_fordson_fel');;
+$description = get_string('activityiconsize_desc', 'theme_fordson_fel');
 $default = '32px';
 $choices = array(
         '24px' => '24px',
@@ -289,7 +303,7 @@ $page->add($setting);
 // Courses height
 $name = 'theme_fordson_fel/courseboxheight';
 $title = get_string('courseboxheight', 'theme_fordson_fel');
-$description = get_string('courseboxheight_desc', 'theme_fordson_fel');;
+$description = get_string('courseboxheight_desc', 'theme_fordson_fel');
 $default = '250px';
 $choices = array(
         '200px' => '200px',

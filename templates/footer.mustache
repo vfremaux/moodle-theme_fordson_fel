@@ -17,18 +17,18 @@
 {{!
     Page footer.
 }}
-<!-- fordson_fel:footer -->
+<!-- fordson_fel/footer -->
 <footer id="page-footer" class="py-3 text-light">
     <div class="container">
 
         {{#hascoursefooter}}
-        <div id="course-footer">{{{ output.course_footer }}}</div>
+        <div id="course-footer">{{{output.course_footer}}}</div>
         {{/hascoursefooter}}
-    
+
         {{#hasfootnote}}
         <div class="footnote">{{{footnote}}}</div>
         {{/hasfootnote}}
-    
+
         {{#hasfooterelements}}
         <div class="container">
             <div class="row">
@@ -51,10 +51,7 @@
         </div>
         {{/hasdoclink}}
 
-
         {{{ output.login_info }}}
-
-
 
         <nav class="nav navbar-nav d-md-none">
             {{# output.custom_menu_flat }}
@@ -68,6 +65,5 @@
         {{{ output.standard_end_of_body_html }}}
 
     </div>
-
 </footer>
-<!-- /fordson_fel:footer -->
+<!-- /fordson_fel/footer -->

@@ -296,7 +296,7 @@ class theme_fordson_fel_format_flexsections_renderer extends format_flexsections
             $attrs = array('src' => $src,
                            'title' => $text,
                            'aria-hidden' => 'true');
-            $collapsedcontrolicon = html_writer::tag('img', '', $attrs);
+            $collapsedcontrolicon = '<span class="overlay"></span>'.html_writer::tag('img', '', $attrs);
             $attrs = array('class' => $handleclass,
                            'id' => 'control-'.$section->id.'-section-'.$section->section);
             $collapsedcontrol = html_writer::tag('div', $collapsedcontrolicon, $attrs);

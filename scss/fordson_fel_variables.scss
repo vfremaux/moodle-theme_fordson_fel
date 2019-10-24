@@ -22,7 +22,7 @@ $border-radius: 4px !default;
 
 $learningcontentpadding: 400px !default;
 
-$blockwidthfordson: 280px !default;
+$blockwidthfordson_fel: 280px !default;
 
 $drawer-padding-x: 0.5rem;
 $drawer-padding-y: 0.5rem;
@@ -30,6 +30,7 @@ $drawer-bg: darken($body-bg, 5%) !default;
 $spdrawer-bg: darken($body-bg, 5%) !default;
 $footer-bg: $gray-800 !default;
 $breadcrumb-bg: $primary !default;
+$breadcrumb-fg: #ffffff !default;
 $breadcrumb-bg-hover: darken($breadcrumb-bg, 15%) !default;
 $breadcrumb-text-color: #ffffff !default;
 
@@ -56,14 +57,14 @@ $spectrumpreset: 0 !default;
 $modernmoodlepreset: 0 !default;
 $perceptionpreset: 0 !default;
 
-$topnavbarbg: 						$white !default;
-$teachernavbarcolor: 				#f3e420 !default;
-$studentnavbarcolor: 				$topnavbarbg !default;
+$topnavbarbg:                       $white !default;
+$teachernavbarcolor:                #f3e420 !default;
+$studentnavbarcolor:                $topnavbarbg !default;
 $navbar-fhs-color:                  $black !default;
-$navbar-fhs-active-color:           $black !default;              
+$navbar-fhs-active-color:           $black !default;
 $navbar-fhs-hover-color:            $black !default;
 $navbar-fhs-disabled-color:         $black !default;
-$navbar-fhs-toggler-border-color:	initial !default;
-$navbar-fhs-toggler-icon-bg:		initial !default;
+$navbar-fhs-toggler-border-color:   initial !default;
+$navbar-fhs-toggler-icon-bg:        initial !default;
 
-$perceptionfontsize:    			1.25rem !default;
+$perceptionfontsize:                1.25rem !default;

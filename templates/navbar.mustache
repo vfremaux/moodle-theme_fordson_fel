@@ -17,78 +17,95 @@
 {{!
     Page navbar.
 }}
-<!-- fordson_fel:navbar -->
-<div style="width:100%;display:block;position:fixed;top:50px;z-index:100000">
+<!-- fordson_fel/navbar -->
+<div style="width:100%;display:block;position:fixed;top:50px;z-index:100000" id="technicalsignals">
 {{{technicalsignals}}}
 </div>
 <nav class="fixed-top navbar navbar-light bg-white navbar-expand moodle-has-zindex">
     {{#hasfhsdrawer}}
-        <div data-region="drawer-toggle" class="d-inline-block mr-3">
-            <button aria-expanded="{{#navdraweropen}}true{{/navdraweropen}}{{^navdraweropen}}false{{/navdraweropen}}" aria-controls="nav-drawer" type="button" class="btn nav-link float-sm-left mr-1 btn-secondary" data-action="toggle-drawer" data-side="left" data-preference="drawer-open-nav">{{#pix}}i/menubars{{/pix}}<span class="sr-only">{{#str}}sidepanel, core{{/str}}</span></button>
-        </div>
+    <div data-region="drawer-toggle" class="d-inline-block mr-3">
+        <button aria-expanded="{{#navdraweropen}}true{{/navdraweropen}}{{^navdraweropen}}false{{/navdraweropen}}" aria-controls="nav-drawer" type="button" class="btn nav-link float-sm-left mr-1 btn-secondary" data-action="toggle-drawer" data-side="left" data-preference="drawer-open-nav">{{#pix}}i/menubars{{/pix}}<span class="sr-only">{{#str}}sidepanel, core{{/str}}</span></button>
+    </div>
     {{/hasfhsdrawer}}
 
-        <!-- logo -->
-        <a href="{{{ config.wwwroot }}}" class="navbar-brand {{# output.should_display_navbar_logo }}has-logo{{/ output.should_display_navbar_logo }}
-            {{^ output.should_display_navbar_logo }}
-                d-none d-sm-inline
-            {{/ output.should_display_navbar_logo }}
-                ">
-            {{# output.should_display_navbar_logo }}
-                <span class="logo d-none d-sm-inline">
-                    <img src="{{output.get_compact_logo_url}}" alt="{{sitename}}">
-                </span>
-            {{/ output.should_display_navbar_logo }}
-            <span class="site-name d-none d-md-inline">{{{ sitename }}}</span>
-        </a>
+    <!-- logo -->
+    <a href="{{{ config.wwwroot }}}" class="navbar-brand {{# output.should_display_navbar_logo }}has-logo{{/ output.should_display_navbar_logo }}
+        {{^ output.should_display_navbar_logo }}
+            d-none d-sm-inline
+        {{/ output.should_display_navbar_logo }}
+            ">
+        {{# output.should_display_navbar_logo }}
+            <span class="logo d-none d-sm-inline">
+                <img src="{{output.get_compact_logo_url}}" alt="Logo {{sitename}}">
+            </span>
+        {{/ output.should_display_navbar_logo }}
+        <span class="site-name d-none d-md-inline">{{{ sitename }}}</span>
+        <span class="sitename alternate-name" aria-hidden="true">{{#str}}sitealternatename, theme_fordson_fel{{/str}}</span>
+    </a>
 
-        <!-- /logo -->
-        <!-- course_controls -->
-        <div class="coursecontrols nav-item d-flex">
-            {{{ output.teacherdashmenu }}}
-            {{{ output.edit_button_fhs }}}
+    <!-- /logo -->
+    <!-- fordson_fel/course_controls -->
+    <div class="coursecontrols nav-item d-flex">
+        {{{ output.teacherdashmenu }}}
+        {{{ output.edit_button_fhs }}}
+    </div>
+    <!-- /fordson_fel/course_controls -->
+
+    <ul class="navbar-nav d-none d-md-flex">
+        {{^custommenupullright}}
+        <!-- navbar_fordson_fel:custom_menu -->
+        <li>
+        {{{ output.fordson_fel_custom_menu }}}
+        {{{ output.custom_menu }}}
+        <!-- navbar_fordson_fel:page_heading_menu -->
+        {{{ output.page_heading_menu }}}
+        </li>
+        {{/custommenupullright}}
+    </ul>
+
+    <ul class="nav navbar-nav ml-auto">
+
+        {{#custommenupullright}}
+        <!-- navbar_fordson_fel:custom_menu -->
+        <li>
+        {{{ output.fordson_fel_custom_menu }}}
+        {{{ output.custom_menu }}}
+        <!-- navbar_fordson_fel:page_heading_menu -->
+        {{{ output.page_heading_menu }}}
+        </li>
+        {{/custommenupullright}}
+
+        <!-- navbar_fordson:lang -->
+        {{#showlangmenu}}
+        <li>
+        <div class="d-none d-lg-block">
+        {{{ output.lang_menu }}}
         </div>
-        <!-- /course_controls -->
+        </li>
+        {{/showlangmenu}}
+        <!-- /navbar_fordson_fel:lang -->
 
-        <ul class="navbar-nav d-none d-md-flex">
-            <!-- navbar_forsdson_custom_menu -->
-            {{{ output.fordson_fel_custom_menu }}}
-            {{{ output.custom_menu }}}
-            <!-- page_heading_menu -->
-            {{{ output.page_heading_menu }}}
-        </ul>
-        <ul class="nav navbar-nav ml-auto">
-            <!-- navbar_lang -->
-            {{#showlangmenu}}
-            <li>
-            <div class="d-none d-lg-block">
-            {{{ output.lang_menu }}}
-            </div>
-            </li>
-            {{/showlangmenu}}
-            <!-- /navbar_lang -->
-
-            <!-- navbar_search -->
-            <div class="d-none d-lg-block">
-            {{{ output.search_box }}}
-            </div>
-
-            <!-- navbar_plugin_output -->
-            <li class="nav-item">
-            {{{ output.navbar_plugin_output }}}
-            </li>
-            <!-- user_menu -->
-            <li class="nav-item d-flex align-items-center">
-                {{{ output.user_menu }}}
-            </li>
-        </ul>
-        <!-- search_box -->
-
-        {{#hasspdrawer}}
-        <div data-region="spdrawer-toggle" class="d-inline-block mr-3">
-            <button aria-expanded="{{#navspdraweropen}}true{{/navspdraweropen}}{{^navspdraweropen}}false{{/navspdraweropen}}" aria-controls="nav-spdrawer" type="button" class="btn nav-link float-sm-left mr-1 btn-secondary" data-action="toggle-spdrawer" data-side="right" data-preference="spdrawer-open-nav">{{#navspdraweropen}}{{#pix}}t/right{{/pix}}{{/navspdraweropen}}{{^navspdraweropen}}{{#pix}}t/left{{/pix}}{{/navspdraweropen}}<span class="sr-only">{{#str}}sidepanel, core{{/str}}</span></button>
+        <!-- navbar_fordson:search -->
+        <div class="d-none d-lg-block">
+        {{{ output.search_box }}}
         </div>
-        {{/hasspdrawer}}
+
+        <!-- navbar_fordson:plugin_output -->
+        <li class="nav-item">
+        {{{ output.navbar_plugin_output }}}
+        </li>
+        <!-- navbar_fordson:user_menu -->
+        <li class="nav-item d-flex align-items-center">
+            {{{ output.user_menu }}}
+        </li>
+    </ul>
+    <!-- search_box -->
+
+    {{#hasspdrawer}}
+    <div data-region="spdrawer-toggle" class="d-inline-block mr-3">
+        <button aria-expanded="{{#navspdraweropen}}true{{/navspdraweropen}}{{^navspdraweropen}}false{{/navspdraweropen}}" aria-controls="nav-spdrawer" type="button" class="btn nav-link float-sm-left mr-1 btn-secondary" data-action="toggle-spdrawer" data-side="right" data-preference="spdrawer-open-nav">{{#navspdraweropen}}{{#pix}}t/right{{/pix}}{{/navspdraweropen}}{{^navspdraweropen}}{{#pix}}t/left{{/pix}}{{/navspdraweropen}}<span class="sr-only">{{#str}}sidepanel, core{{/str}}</span></button>
+    </div>
+    {{/hasspdrawer}}
 </nav>
-<!-- /fordson_fel:navbar -->
+<!-- /fordson_fel/navbar -->
 

@@ -235,6 +235,7 @@ $heading = get_string('feature3info', 'theme_fordson_fel');
 $information = get_string('featureinfo_desc', 'theme_fordson_fel');
 $setting = new admin_setting_heading($name, $heading, $information);
 $page->add($setting);
+
 // Feature text.
 $name = 'theme_fordson_fel/feature3text';
 $title = get_string('featuretext', 'theme_fordson_fel');
@@ -243,6 +244,7 @@ $default = '';
 $setting = new admin_setting_confightmleditor($name, $title, $description, $default);
 $setting->set_updatedcallback('theme_reset_all_caches');
 $page->add($setting);
+
 // Feature image.
 $name = 'theme_fordson_fel/feature3image';
 $title = get_string('featureimage', 'theme_fordson_fel');

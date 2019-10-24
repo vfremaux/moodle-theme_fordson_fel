@@ -113,7 +113,7 @@ $page->add(new admin_setting_heading('theme_fordson_fel_colours', get_string('co
     $setting->set_updatedcallback('theme_reset_all_caches');
     $page->add($setting);
 
-    // marketing tile text background
+    // Marketing tile text background.
     $name = 'theme_fordson_fel/markettextbg';
     $title = get_string('markettextbg', 'theme_fordson_fel');
     $description = get_string('markettextbg_desc', 'theme_fordson_fel');
@@ -121,7 +121,7 @@ $page->add(new admin_setting_heading('theme_fordson_fel_colours', get_string('co
     $setting->set_updatedcallback('theme_reset_all_caches');
     $page->add($setting);
 
-    // Card background
+    // Layout card background.
     $name = 'theme_fordson_fel/cardbkg';
     $title = get_string('cardbkg', 'theme_fordson_fel');
     $description = get_string('cardbkg_desc', 'theme_fordson_fel');
@@ -129,7 +129,7 @@ $page->add(new admin_setting_heading('theme_fordson_fel_colours', get_string('co
     $setting->set_updatedcallback('theme_reset_all_caches');
     $page->add($setting);
 
-    // Drawer background
+    // Layout drawer background.
     $name = 'theme_fordson_fel/drawerbkg';
     $title = get_string('drawerbkg', 'theme_fordson_fel');
     $description = get_string('drawerbkg_desc', 'theme_fordson_fel');
@@ -162,8 +162,10 @@ $page->add(new admin_setting_heading('theme_fordson_fel_colours', get_string('co
     $page->add($setting);
 
     // Raw SCSS to include after the content.
-    $setting = new admin_setting_configtextarea('theme_fordson_fel/scss', get_string('rawscss', 'theme_fordson_fel'),
-    get_string('rawscss_desc', 'theme_fordson_fel'), '', PARAM_RAW);
+    $key = 'theme_fordson_fel/scss';
+    $label = get_string('rawscss', 'theme_fordson_fel');
+    $desc = get_string('rawscss_desc', 'theme_fordson_fel');
+    $setting = new admin_setting_configtextarea($key, $label, $desc, '', PARAM_RAW);
     $setting->set_updatedcallback('theme_reset_all_caches');
     $page->add($setting);
 

@@ -28,6 +28,7 @@
 .flexsections > .main > .content > .sectionname,
 .flexcontrol {
     cursor:pointer;
+    display: inline-block;
 }
 
 body#page-course-view-flexsections.format-flexsections #section-0 ul.flexsections.flexsections-level-1 {
@@ -40,4 +41,27 @@ body#page-course-view-flexsections.format-flexsections #section-0 ul.flexsection
 
 .section-content.collapsed {
     display: none;
+}
+
+li.section.collapsed > div.section-caption > .sectionname > .flexcontrol > img,
+li.section.expanded  > div.section-caption > .sectionname > .flexcontrol > img {
+    visibility: hidden;
+}
+
+li.section.collapsed  > div.section-caption > .sectionname > .flexcontrol > .overlay::before {
+    color: black;
+    content: '\f078';
+    font-family: 'FontAwesome';
+}
+
+li.section.expanded > div.section-caption > .sectionname > .flexcontrol > .overlay::before {
+    color: black;
+    content: '\f077';
+    font-family: 'FontAwesome';
+}
+
+li.section .sectionname > span,
+.flexcontrol {
+    position: relative;
+    left: -36px;
 }

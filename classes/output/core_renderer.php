@@ -15,27 +15,28 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 namespace theme_fordson_fel\output;
 
-use coding_exception;
-use html_writer;
-use tabobject;
-use tabtree;
-use custom_menu_item;
-use custom_menu;
-use block_contents;
-use navigation_node;
-use action_link;
-use stdClass;
-use moodle_url;
-use preferences_groups;
-use action_menu;
-use help_icon;
-use single_button;
-use single_select;
-use paging_bar;
-use url_select;
-use context_course;
-use pix_icon;
-use theme_config;
+use \coding_exception;
+use \html_writer;
+use \renderer_base;
+use \tabobject;
+use \tabtree;
+use \custom_menu_item;
+use \custom_menu;
+use \block_contents;
+use \navigation_node;
+use \action_link;
+use \stdClass;
+use \moodle_url;
+use \preferences_groups;
+use \action_menu;
+use \help_icon;
+use \single_button;
+use \single_select;
+use \paging_bar;
+use \url_select;
+use \context_course;
+use \pix_icon;
+use \theme_config;
 
 defined('MOODLE_INTERNAL') || die;
 
@@ -103,6 +104,25 @@ class core_renderer extends \theme_boost\output\core_renderer {
         $header->headerimage = $this->headerimage();
 
         return $this->render_from_template('theme_fordson_fel/header', $header);
+    }
+
+    public function context_header($headerinfo = null, $headinglevel = 1) {
+        return '';
+    }
+
+    /**
+     * Invalidates the boost override using the standard version again.
+     *
+     * @param string $classes A space-separated list of CSS classes
+     * @param string $id An optional ID
+     * @param array $attributes An array of other attributes to give the box.
+     * @return string the HTML to output.
+     */
+    public function box_start($classes = 'generalbox', $id = null, $attributes = array()) {
+        $this->opencontainers->push('box', html_writer::end_tag('div'));
+        $attributes['id'] = $id;
+        $attributes['class'] = 'box ' . renderer_base::prepare_classes($classes);
+        return html_writer::start_tag('div', $attributes);
     }
 
     public function page_heading_button() {
@@ -414,33 +434,39 @@ class core_renderer extends \theme_boost\output\core_renderer {
     */
 
     protected static function timeaccesscompare($a, $b) {
-            // Timeaccess is lastaccess entry and timestart an enrol entry.
-            if ((!empty($a->timeaccess)) && (!empty($b->timeaccess))) {
-                // Both last access.
-                if ($a->timeaccess == $b->timeaccess) {
-                    return 0;
-                }
-                return ($a->timeaccess > $b->timeaccess) ? -1 : 1;
+        // Timeaccess is lastaccess entry and timestart an enrol entry.
+        if ((!empty($a->timeaccess)) && (!empty($b->timeaccess))) {
+            // Both last access.
+            if ($a->timeaccess == $b->timeaccess) {
+                return 0;
             }
-            else if ((!empty($a->timestart)) && (!empty($b->timestart))) {
-                // Both enrol.
-                if ($a->timestart == $b->timestart) {
-                    return 0;
-                }
-                return ($a->timestart > $b->timestart) ? -1 : 1;
-            }
-            // Must be comparing an enrol with a last access.
-            // -1 is to say that 'a' comes before 'b'.
-            if (!empty($a->timestart)) {
-                // 'a' is the enrol entry.
-                return -1;
-            }
-            // 'b' must be the enrol entry.
-            return 1;
+            return ($a->timeaccess > $b->timeaccess) ? -1 : 1;
         }
+        else if ((!empty($a->timestart)) && (!empty($b->timestart))) {
+            // Both enrol.
+            if ($a->timestart == $b->timestart) {
+                return 0;
+            }
+            return ($a->timestart > $b->timestart) ? -1 : 1;
+        }
+        // Must be comparing an enrol with a last access.
+        // -1 is to say that 'a' comes before 'b'.
+        if (!empty($a->timestart)) {
+            // 'a' is the enrol entry.
+            return -1;
+        }
+        // 'b' must be the enrol entry.
+        return 1;
+    }
 
+    /*
+     * This renders the bootstrap top menu.
+     *
+     * This renderer is needed to enable the Bootstrap style navigation.
+    */
     public function fordson_fel_custom_menu() {
         global $CFG, $COURSE, $PAGE, $OUTPUT;
+
         $context = $this->page->context;
 
         $menu = new custom_menu();
@@ -510,7 +536,7 @@ class core_renderer extends \theme_boost\output\core_renderer {
             $branch->add($dashlabel, $dashurl, $dashtitle);
 
             if ($courses = enrol_get_my_courses(NULL, 'fullname ASC')) {
-                if (theme_fordson_fel_get_setting('frontpagemycoursessorting')) {
+                if ($this->page->theme->settings->frontpagemycoursessorting) {
                 $courses = enrol_get_my_courses(null, 'sortorder ASC');
                 $nomycourses = '<div class="alert alert-info alert-block">' . get_string('nomycourses', 'theme_fordson_fel') . '</div>';
                 if ($courses) {
@@ -607,7 +633,7 @@ class core_renderer extends \theme_boost\output\core_renderer {
                 $participanttitle = $participantlabel;
                 $branch->add($participantlabel, $participanturl, $participanttitle);
 
-                if ($CFG->enablebadges == 1){
+                if ($CFG->enablebadges == 1) {
                     $badgelabel = get_string('badges', 'badges');
                     $badgeurl = new moodle_url('/badges/view.php?type=2', array(
                         'id' => $PAGE->course->id
@@ -784,13 +810,16 @@ class core_renderer extends \theme_boost\output\core_renderer {
                 $url = str_replace('%USERID%', $USER->id, $url);
                 $url = str_replace('%WWWROOT%', $CFG->wwwroot, $url);
 
+                $linktext = format_string($menunode->get_text());
                 $attrs = array('class' => 'yui3-menuitem-content', 'title' => format_string($menunode->get_title()));
+                $attrs['tabindex'] = 0;
                 if (!preg_match('#^'.$CFG->wwwroot.'#', $url)) {
                     $attrs['target'] = '_blank';
+                    $attrs['aria-label'] = $linktext.' '.get_string('newwindow', 'theme_fordson_fel');
                 }
                 $content .= html_writer::link(
                     $url,
-                    format_string($menunode->get_text()),
+                    $linktext,
                     $attrs);
             }
             $content .= html_writer::end_tag('li');
@@ -1021,7 +1050,7 @@ class core_renderer extends \theme_boost\output\core_renderer {
 
             $attrs = array('style' => 'width:30px; height:24px;position:relative;top:5px');
             if ($lang != $l) {
-                $str .= '<a href="'.$currenturl.$langattr.'">';
+                $str .= '<a role="menuitem" href="'.$currenturl.$langattr.'">';
                 $attrs['class'] = 'shadow';
             }
             $str .= $OUTPUT->pix_icon('current_lang_'.$l, get_string('changeto', 'theme_fordson_fel', strtoupper($l)), 'theme_fordson_fel', $attrs);
@@ -1204,6 +1233,7 @@ class core_renderer extends \theme_boost\output\core_renderer {
         $nav6buttonurl = (empty($PAGE->theme->settings->nav6buttonurl)) ? false : $PAGE->theme->settings->nav6buttonurl;
         $nav7buttonurl = (empty($PAGE->theme->settings->nav7buttonurl)) ? false : $PAGE->theme->settings->nav7buttonurl;
         $nav8buttonurl = (empty($PAGE->theme->settings->nav8buttonurl)) ? false : $PAGE->theme->settings->nav8buttonurl;
+
         $nav1buttontext = (empty($PAGE->theme->settings->nav1buttontext)) ? false : format_string($PAGE->theme->settings->nav1buttontext);
         $nav2buttontext = (empty($PAGE->theme->settings->nav2buttontext)) ? false : format_string($PAGE->theme->settings->nav2buttontext);
         $nav3buttontext = (empty($PAGE->theme->settings->nav3buttontext)) ? false : format_string($PAGE->theme->settings->nav3buttontext);
@@ -1212,55 +1242,48 @@ class core_renderer extends \theme_boost\output\core_renderer {
         $nav6buttontext = (empty($PAGE->theme->settings->nav6buttontext)) ? false : format_string($PAGE->theme->settings->nav6buttontext);
         $nav7buttontext = (empty($PAGE->theme->settings->nav7buttontext)) ? false : format_string($PAGE->theme->settings->nav7buttontext);
         $nav8buttontext = (empty($PAGE->theme->settings->nav8buttontext)) ? false : format_string($PAGE->theme->settings->nav8buttontext);
-        $fptextbox = (empty($PAGE->theme->settings->fptextbox && isloggedin())) ? false : format_text($PAGE->theme->settings->fptextbox, FORMAT_HTML, array(
-            'noclean' => true
-        ));
-        $fptextboxlogout = (empty($PAGE->theme->settings->fptextboxlogout && !isloggedin())) ? false : format_text($PAGE->theme->settings->fptextboxlogout, FORMAT_HTML, array(
-            'noclean' => true
-        ));
-        $slidetextbox = (empty($PAGE->theme->settings->slidetextbox && isloggedin())) ? false : format_text($PAGE->theme->settings->slidetextbox, FORMAT_HTML, array(
-            'noclean' => true
-        ));
-        $alertbox = (empty($PAGE->theme->settings->alertbox)) ? false : format_text($PAGE->theme->settings->alertbox, FORMAT_HTML, array(
-            'noclean' => true
-        ));
-        
-        $hasmarketing1 = (empty($PAGE->theme->settings->marketing1 && $PAGE->theme->settings->togglemarketing == 1)) ? false : format_string($PAGE->theme->settings->marketing1);
+
+        $fptextbox = (empty($PAGE->theme->settings->fptextbox && isloggedin())) ? false : format_text($PAGE->theme->settings->fptextbox, FORMAT_HTML, ['noclean' => true]);
+        $fptextboxlogout = (empty($PAGE->theme->settings->fptextboxlogout && !isloggedin())) ? false : format_text($PAGE->theme->settings->fptextboxlogout, FORMAT_HTML, ['noclean' => true]);
+        $slidetextbox = (empty($PAGE->theme->settings->slidetextbox && isloggedin())) ? false : format_text($PAGE->theme->settings->slidetextbox, FORMAT_HTML, ['noclean' => true]);
+        $alertbox = (empty($PAGE->theme->settings->alertbox)) ? false : format_text($PAGE->theme->settings->alertbox, FORMAT_HTML, ['noclean' => true]);
+
+        $hasmarketing1 = (empty($PAGE->theme->settings->marketing1) || empty($PAGE->theme->settings->togglemarketing == 1)) ? false : format_text($PAGE->theme->settings->marketing1);
         $marketing1content = (empty($PAGE->theme->settings->marketing1content)) ? false : format_text($PAGE->theme->settings->marketing1content);
         $marketing1buttontext = (empty($PAGE->theme->settings->marketing1buttontext)) ? false : format_string($PAGE->theme->settings->marketing1buttontext);
         $marketing1buttonurl = (empty($PAGE->theme->settings->marketing1buttonurl)) ? false : $PAGE->theme->settings->marketing1buttonurl;
         $marketing1target = (empty($PAGE->theme->settings->marketing1target)) ? false : $PAGE->theme->settings->marketing1target;
         $marketing1image = (empty($PAGE->theme->settings->marketing1image)) ? false : 'marketing1image';
 
-        $hasmarketing2 = (empty($PAGE->theme->settings->marketing2 && $PAGE->theme->settings->togglemarketing == 1)) ? false : format_string($PAGE->theme->settings->marketing2);
+        $hasmarketing2 = (empty($PAGE->theme->settings->marketing2) || empty($PAGE->theme->settings->togglemarketing == 1)) ? false : format_text($PAGE->theme->settings->marketing2);
         $marketing2content = (empty($PAGE->theme->settings->marketing2content)) ? false : format_text($PAGE->theme->settings->marketing2content);
         $marketing2buttontext = (empty($PAGE->theme->settings->marketing2buttontext)) ? false : format_string($PAGE->theme->settings->marketing2buttontext);
         $marketing2buttonurl = (empty($PAGE->theme->settings->marketing2buttonurl)) ? false : $PAGE->theme->settings->marketing2buttonurl;
         $marketing2target = (empty($PAGE->theme->settings->marketing2target)) ? false : $PAGE->theme->settings->marketing2target;
         $marketing2image = (empty($PAGE->theme->settings->marketing2image)) ? false : 'marketing2image';
 
-        $hasmarketing3 = (empty($PAGE->theme->settings->marketing3 && $PAGE->theme->settings->togglemarketing == 1)) ? false : format_string($PAGE->theme->settings->marketing3);
+        $hasmarketing3 = (empty($PAGE->theme->settings->marketing3) || empty($PAGE->theme->settings->togglemarketing == 1)) ? false : format_text($PAGE->theme->settings->marketing3);
         $marketing3content = (empty($PAGE->theme->settings->marketing3content)) ? false : format_text($PAGE->theme->settings->marketing3content);
         $marketing3buttontext = (empty($PAGE->theme->settings->marketing3buttontext)) ? false : format_string($PAGE->theme->settings->marketing3buttontext);
         $marketing3buttonurl = (empty($PAGE->theme->settings->marketing3buttonurl)) ? false : $PAGE->theme->settings->marketing3buttonurl;
         $marketing3target = (empty($PAGE->theme->settings->marketing3target)) ? false : $PAGE->theme->settings->marketing3target;
         $marketing3image = (empty($PAGE->theme->settings->marketing3image)) ? false : 'marketing3image';
 
-        $hasmarketing4 = (empty($PAGE->theme->settings->marketing4 && $PAGE->theme->settings->togglemarketing == 1)) ? false : format_string($PAGE->theme->settings->marketing4);
+        $hasmarketing4 = (empty($PAGE->theme->settings->marketing4) || empty($PAGE->theme->settings->togglemarketing == 1)) ? false : format_text($PAGE->theme->settings->marketing4);
         $marketing4content = (empty($PAGE->theme->settings->marketing4content)) ? false : format_text($PAGE->theme->settings->marketing4content);
         $marketing4buttontext = (empty($PAGE->theme->settings->marketing4buttontext)) ? false : format_string($PAGE->theme->settings->marketing4buttontext);
         $marketing4buttonurl = (empty($PAGE->theme->settings->marketing4buttonurl)) ? false : $PAGE->theme->settings->marketing4buttonurl;
         $marketing4target = (empty($PAGE->theme->settings->marketing4target)) ? false : $PAGE->theme->settings->marketing4target;
         $marketing4image = (empty($PAGE->theme->settings->marketing4image)) ? false : 'marketing4image';
 
-        $hasmarketing5 = (empty($PAGE->theme->settings->marketing5 && $PAGE->theme->settings->togglemarketing == 1)) ? false : format_string($PAGE->theme->settings->marketing5);
+        $hasmarketing5 = (empty($PAGE->theme->settings->marketing5) || empty($PAGE->theme->settings->togglemarketing == 1)) ? false : format_text($PAGE->theme->settings->marketing5);
         $marketing5content = (empty($PAGE->theme->settings->marketing5content)) ? false : format_text($PAGE->theme->settings->marketing5content);
         $marketing5buttontext = (empty($PAGE->theme->settings->marketing5buttontext)) ? false : format_string($PAGE->theme->settings->marketing5buttontext);
         $marketing5buttonurl = (empty($PAGE->theme->settings->marketing5buttonurl)) ? false : $PAGE->theme->settings->marketing5buttonurl;
         $marketing5target = (empty($PAGE->theme->settings->marketing5target)) ? false : $PAGE->theme->settings->marketing5target;
         $marketing5image = (empty($PAGE->theme->settings->marketing5image)) ? false : 'marketing5image';
 
-        $hasmarketing6 = (empty($PAGE->theme->settings->marketing6 && $PAGE->theme->settings->togglemarketing == 1)) ? false : format_string($PAGE->theme->settings->marketing6);
+        $hasmarketing6 = (empty($PAGE->theme->settings->marketing6) || empty($PAGE->theme->settings->togglemarketing == 1)) ? false : format_text($PAGE->theme->settings->marketing6);
         $marketing6content = (empty($PAGE->theme->settings->marketing6content)) ? false : format_text($PAGE->theme->settings->marketing6content);
         $marketing6buttontext = (empty($PAGE->theme->settings->marketing6buttontext)) ? false : format_string($PAGE->theme->settings->marketing6buttontext);
         $marketing6buttonurl = (empty($PAGE->theme->settings->marketing6buttonurl)) ? false : $PAGE->theme->settings->marketing6buttonurl;
@@ -1287,6 +1310,7 @@ class core_renderer extends \theme_boost\output\core_renderer {
         $marketing9buttonurl = (empty($PAGE->theme->settings->marketing9buttonurl)) ? false : $PAGE->theme->settings->marketing9buttonurl;
         $marketing9target = (empty($PAGE->theme->settings->marketing9target)) ? false : $PAGE->theme->settings->marketing9target;
         $marketing9image = (empty($PAGE->theme->settings->marketing9image)) ? false : 'marketing9image';
+
         /*if (method_exists(new \core\session\manager, 'get_login_token')) {
             $logintoken = \core\session\manager::get_login_token();
         } else {
@@ -1299,138 +1323,153 @@ class core_renderer extends \theme_boost\output\core_renderer {
             $logintoken = false;
         }*/
 
-        $logintoken = \core\session\manager::get_login_token();
+        $fp_wonderboxcontext = [
+            'logintoken' => \core\session\manager::get_login_token(),
+            'hasfptextbox' => (!empty($PAGE->theme->settings->fptextbox && isloggedin())),
+            'fptextbox' => $fptextbox,
+            'hasslidetextbox' => (!empty($PAGE->theme->settings->slidetextbox && isloggedin())),
+            'slidetextbox' => $slidetextbox,
+            'hasfptextboxlogout' => !isloggedin() ,
+            'fptextboxlogout' => $fptextboxlogout,
+            'hasshowloginform' => $PAGE->theme->settings->showloginform,
+            'hasalert' => (!empty($PAGE->theme->settings->alertbox && isloggedin())),
+            'alertbox' => $alertbox,
+            'hasmarkettiles' => ($hasmarketing1 || $hasmarketing2 || $hasmarketing3 || $hasmarketing4 || $hasmarketing5 || $hasmarketing6) ? true : false,
+            'markettiles' => array(
+                array(
+                    'hastile' => $hasmarketing1,
+                    'tileimage' => $marketing1image,
+                    'content' => $marketing1content,
+                    'title' => $hasmarketing1,
+                    'button' => "<a href = '$marketing1buttonurl' title = '$marketing1buttontext' alt='$marketing1buttontext' class='btn btn-primary' target='$marketing1target'> $marketing1buttontext </a>"
+                ),
+                array(
+                    'hastile' => $hasmarketing2,
+                    'tileimage' => $marketing2image,
+                    'content' => $marketing2content,
+                    'title' => $hasmarketing2,
+                    'button' => "<a href = '$marketing2buttonurl' title = '$marketing2buttontext' alt='$marketing2buttontext' class='btn btn-primary' target='$marketing2target'> $marketing2buttontext </a>"
+                ),
+                array(
+                    'hastile' => $hasmarketing3,
+                    'tileimage' => $marketing3image,
+                    'content' => $marketing3content,
+                    'title' => $hasmarketing3,
+                    'button' => "<a href = '$marketing3buttonurl' title = '$marketing3buttontext' alt='$marketing3buttontext' class='btn btn-primary' target='$marketing3target'> $marketing3buttontext </a>"
+                ),
+                array(
+                    'hastile' => $hasmarketing4,
+                    'tileimage' => $marketing4image,
+                    'content' => $marketing4content,
+                    'title' => $hasmarketing4,
+                    'button' => "<a href = '$marketing4buttonurl' title = '$marketing4buttontext' alt='$marketing4buttontext' class='btn btn-primary' target='$marketing4target'> $marketing4buttontext </a>"
+                ),
+                array(
+                    'hastile' => $hasmarketing5,
+                    'tileimage' => $marketing5image,
+                    'content' => $marketing5content,
+                    'title' => $hasmarketing5,
+                    'button' => "<a href = '$marketing5buttonurl' title = '$marketing5buttontext' alt='$marketing5buttontext' class='btn btn-primary' target='$marketing5target'> $marketing5buttontext </a>"
+                ),
+                array(
+                    'hastile' => $hasmarketing6,
+                    'tileimage' => $marketing6image,
+                    'content' => $marketing6content,
+                    'title' => $hasmarketing6,
+                    'button' => "<a href = '$marketing6buttonurl' title = '$marketing6buttontext' alt='$marketing6buttontext' class='btn btn-primary' target='$marketing6target'> $marketing6buttontext </a>"
+                ),
+                array(
+                    'hastile' => $hasmarketing7,
+                    'tileimage' => $marketing7image,
+                    'content' => $marketing7content,
+                    'title' => $hasmarketing7,
+                    'button' => "<a href = '$marketing7buttonurl' title = '$marketing7buttontext' alt='$marketing7buttontext' class='btn btn-primary' target='$marketing7target'> $marketing7buttontext </a>"
+                ),
+                array(
+                    'hastile' => $hasmarketing8,
+                    'tileimage' => $marketing8image,
+                    'content' => $marketing8content,
+                    'title' => $hasmarketing8,
+                    'button' => "<a href = '$marketing8buttonurl' title = '$marketing8buttontext' alt='$marketing8buttontext' class='btn btn-primary' target='$marketing8target'> $marketing8buttontext </a>"
+                ),
+                array(
+                    'hastile' => $hasmarketing9,
+                    'tileimage' => $marketing9image,
+                    'content' => $marketing9content,
+                    'title' => $hasmarketing9,
+                    'button' => "<a href = '$marketing9buttonurl' title = '$marketing9buttontext' alt='$marketing9buttontext' class='btn btn-primary' target='$marketing9target'> $marketing9buttontext </a>"
+                ),
+            ),
+            // If any of the above social networks are true, sets this to true.
+            'hasfpiconnav' => ($hasnav1icon || $hasnav2icon || $hasnav3icon || $hasnav4icon || $hasnav5icon || $hasnav6icon || $hasnav7icon || $hasnav8icon || $hascreateicon || $hasslideicon) ? true : false,
+            'fpiconnav' => array(
+                array(
+                    'hasicon' => $hasnav1icon,
+                    'linkicon' => $hasnav1icon,
+                    'link' => $nav1buttonurl,
+                    'linktext' => $nav1buttontext
+                ),
+                array(
+                    'hasicon' => $hasnav2icon,
+                    'linkicon' => $hasnav2icon,
+                    'link' => $nav2buttonurl,
+                    'linktext' => $nav2buttontext
+                ),
+                array(
+                    'hasicon' => $hasnav3icon,
+                    'linkicon' => $hasnav3icon,
+                    'link' => $nav3buttonurl,
+                    'linktext' => $nav3buttontext
+                ),
+                array(
+                    'hasicon' => $hasnav4icon,
+                    'linkicon' => $hasnav4icon,
+                    'link' => $nav4buttonurl,
+                    'linktext' => $nav4buttontext
+                ),
+                array(
+                    'hasicon' => $hasnav5icon,
+                    'linkicon' => $hasnav5icon,
+                    'link' => $nav5buttonurl,
+                    'linktext' => $nav5buttontext
+                ),
+                array(
+                    'hasicon' => $hasnav6icon,
+                    'linkicon' => $hasnav6icon,
+                    'link' => $nav6buttonurl,
+                    'linktext' => $nav6buttontext
+                ),
+                array(
+                    'hasicon' => $hasnav7icon,
+                    'linkicon' => $hasnav7icon,
+                    'link' => $nav7buttonurl,
+                    'linktext' => $nav7buttontext
+                ),
+                array(
+                    'hasicon' => $hasnav8icon,
+                    'linkicon' => $hasnav8icon,
+                    'link' => $nav8buttonurl,
+                    'linktext' => $nav8buttontext
+                ),
+            ),
+            'fpcreateicon' => array(
+                array(
+                    'hasicon' => $hascreateicon,
+                    'linkicon' => $hascreateicon,
+                    'link' => $createbuttonurl,
+                    'linktext' => $createbuttontext
+                ),
+            ),
+            'fpslideicon' => array(
+                array(
+                    'hasicon' => $hasslideicon,
+                    'linkicon' => $hasslideicon,
+                    'link' => $slideiconbuttonurl,
+                    'linktext' => $slideiconbuttontext
+                ),
+            ),
+        ];
 
-        $fp_wonderboxcontext = ['logintoken' => $logintoken, 'hasfptextbox' => (!empty($PAGE->theme->settings->fptextbox && isloggedin())) , 'fptextbox' => $fptextbox, 'hasslidetextbox' => (!empty($PAGE->theme->settings->slidetextbox && isloggedin())) , 'slidetextbox' => $slidetextbox, 'hasfptextboxlogout' => !isloggedin() , 'fptextboxlogout' => $fptextboxlogout, 'hasshowloginform' => $PAGE->theme->settings->showloginform, 'hasalert' => (!empty($PAGE->theme->settings->alertbox && isloggedin())) , 'alertbox' => $alertbox, 'hasmarkettiles' => ($hasmarketing1 || $hasmarketing2 || $hasmarketing3 || $hasmarketing4 || $hasmarketing5 || $hasmarketing6) ? true : false, 'markettiles' => array(
-            array(
-                'hastile' => $hasmarketing1,
-                'tileimage' => $marketing1image,
-                'content' => $marketing1content,
-                'title' => $hasmarketing1,
-                'button' => "<a href = '$marketing1buttonurl' title = '$marketing1buttontext' alt='$marketing1buttontext' class='btn btn-primary' target='$marketing1target'> $marketing1buttontext </a>"
-            ) ,
-            array(
-                'hastile' => $hasmarketing2,
-                'tileimage' => $marketing2image,
-                'content' => $marketing2content,
-                'title' => $hasmarketing2,
-                'button' => "<a href = '$marketing2buttonurl' title = '$marketing2buttontext' alt='$marketing2buttontext' class='btn btn-primary' target='$marketing2target'> $marketing2buttontext </a>"
-            ) ,
-            array(
-                'hastile' => $hasmarketing3,
-                'tileimage' => $marketing3image,
-                'content' => $marketing3content,
-                'title' => $hasmarketing3,
-                'button' => "<a href = '$marketing3buttonurl' title = '$marketing3buttontext' alt='$marketing3buttontext' class='btn btn-primary' target='$marketing3target'> $marketing3buttontext </a>"
-            ) ,
-            array(
-                'hastile' => $hasmarketing4,
-                'tileimage' => $marketing4image,
-                'content' => $marketing4content,
-                'title' => $hasmarketing4,
-                'button' => "<a href = '$marketing4buttonurl' title = '$marketing4buttontext' alt='$marketing4buttontext' class='btn btn-primary' target='$marketing4target'> $marketing4buttontext </a>"
-            ) ,
-            array(
-                'hastile' => $hasmarketing5,
-                'tileimage' => $marketing5image,
-                'content' => $marketing5content,
-                'title' => $hasmarketing5,
-                'button' => "<a href = '$marketing5buttonurl' title = '$marketing5buttontext' alt='$marketing5buttontext' class='btn btn-primary' target='$marketing5target'> $marketing5buttontext </a>"
-            ) ,
-            array(
-                'hastile' => $hasmarketing6,
-                'tileimage' => $marketing6image,
-                'content' => $marketing6content,
-                'title' => $hasmarketing6,
-                'button' => "<a href = '$marketing6buttonurl' title = '$marketing6buttontext' alt='$marketing6buttontext' class='btn btn-primary' target='$marketing6target'> $marketing6buttontext </a>"
-            ) ,
-            array(
-                'hastile' => $hasmarketing7,
-                'tileimage' => $marketing7image,
-                'content' => $marketing7content,
-                'title' => $hasmarketing7,
-                'button' => "<a href = '$marketing7buttonurl' title = '$marketing7buttontext' alt='$marketing7buttontext' class='btn btn-primary' target='$marketing7target'> $marketing7buttontext </a>"
-            ) ,
-            array(
-                'hastile' => $hasmarketing8,
-                'tileimage' => $marketing8image,
-                'content' => $marketing8content,
-                'title' => $hasmarketing8,
-                'button' => "<a href = '$marketing8buttonurl' title = '$marketing8buttontext' alt='$marketing8buttontext' class='btn btn-primary' target='$marketing8target'> $marketing8buttontext </a>"
-            ) ,
-            array(
-                'hastile' => $hasmarketing9,
-                'tileimage' => $marketing9image,
-                'content' => $marketing9content,
-                'title' => $hasmarketing9,
-                'button' => "<a href = '$marketing9buttonurl' title = '$marketing9buttontext' alt='$marketing9buttontext' class='btn btn-primary' target='$marketing9target'> $marketing9buttontext </a>"
-            ) ,
-        ) ,
-        // If any of the above social networks are true, sets this to true.
-        'hasfpiconnav' => ($hasnav1icon || $hasnav2icon || $hasnav3icon || $hasnav4icon || $hasnav5icon || $hasnav6icon || $hasnav7icon || $hasnav8icon || $hascreateicon || $hasslideicon) ? true : false, 'fpiconnav' => array(
-            array(
-                'hasicon' => $hasnav1icon,
-                'linkicon' => $hasnav1icon,
-                'link' => $nav1buttonurl,
-                'linktext' => $nav1buttontext
-            ) ,
-            array(
-                'hasicon' => $hasnav2icon,
-                'linkicon' => $hasnav2icon,
-                'link' => $nav2buttonurl,
-                'linktext' => $nav2buttontext
-            ) ,
-            array(
-                'hasicon' => $hasnav3icon,
-                'linkicon' => $hasnav3icon,
-                'link' => $nav3buttonurl,
-                'linktext' => $nav3buttontext
-            ) ,
-            array(
-                'hasicon' => $hasnav4icon,
-                'linkicon' => $hasnav4icon,
-                'link' => $nav4buttonurl,
-                'linktext' => $nav4buttontext
-            ) ,
-            array(
-                'hasicon' => $hasnav5icon,
-                'linkicon' => $hasnav5icon,
-                'link' => $nav5buttonurl,
-                'linktext' => $nav5buttontext
-            ) ,
-            array(
-                'hasicon' => $hasnav6icon,
-                'linkicon' => $hasnav6icon,
-                'link' => $nav6buttonurl,
-                'linktext' => $nav6buttontext
-            ) ,
-            array(
-                'hasicon' => $hasnav7icon,
-                'linkicon' => $hasnav7icon,
-                'link' => $nav7buttonurl,
-                'linktext' => $nav7buttontext
-            ) ,
-            array(
-                'hasicon' => $hasnav8icon,
-                'linkicon' => $hasnav8icon,
-                'link' => $nav8buttonurl,
-                'linktext' => $nav8buttontext
-            ) ,
-        ) , 'fpcreateicon' => array(
-            array(
-                'hasicon' => $hascreateicon,
-                'linkicon' => $hascreateicon,
-                'link' => $createbuttonurl,
-                'linktext' => $createbuttontext
-            ) ,
-        ) , 'fpslideicon' => array(
-            array(
-                'hasicon' => $hasslideicon,
-                'linkicon' => $hasslideicon,
-                'link' => $slideiconbuttonurl,
-                'linktext' => $slideiconbuttontext
-            ) ,
-        ) , ];
         return $this->render_from_template('theme_fordson_fel/fpwonderbox', $fp_wonderboxcontext);
     }
 
@@ -1453,40 +1492,50 @@ class core_renderer extends \theme_boost\output\core_renderer {
         $loginnav4icontext = (empty($PAGE->theme->settings->loginnav4icontext)) ? false : format_text($PAGE->theme->settings->loginnav4icontext);
         $hascustomlogin = $PAGE->theme->settings->showcustomlogin == 1;
         $hasdefaultlogin = $PAGE->theme->settings->showcustomlogin == 0;
-        $customlogin_context = ['hascustomlogin' => $hascustomlogin, 'hasdefaultlogin' => $hasdefaultlogin, 'hasfeature1' => !empty($PAGE->theme->setting_file_url('feature1image', 'feature1image')) && !empty($PAGE->theme->settings->feature1text) , 'hasfeature2' => !empty($PAGE->theme->setting_file_url('feature2image', 'feature2image')) && !empty($PAGE->theme->settings->feature2text) , 'hasfeature3' => !empty($PAGE->theme->setting_file_url('feature3image', 'feature3image')) && !empty($PAGE->theme->settings->feature3text) , 'feature1image' => $PAGE->theme->setting_file_url('feature1image', 'feature1image') , 'feature2image' => $PAGE->theme->setting_file_url('feature2image', 'feature2image') , 'feature3image' => $PAGE->theme->setting_file_url('feature3image', 'feature3image') , 'feature1text' => (empty($PAGE->theme->settings->feature1text)) ? false : format_text($PAGE->theme->settings->feature1text, FORMAT_HTML, array(
-            'noclean' => true
-        )) , 'feature2text' => (empty($PAGE->theme->settings->feature2text)) ? false : format_text($PAGE->theme->settings->feature2text, FORMAT_HTML, array(
-            'noclean' => true
-        )) , 'feature3text' => (empty($PAGE->theme->settings->feature3text)) ? false : format_text($PAGE->theme->settings->feature3text, FORMAT_HTML, array(
-            'noclean' => true
-        )) ,
-        // If any of the above social networks are true, sets this to true.
-        'hasfpiconnav' => ($hasloginnav1icon || $hasloginnav2icon || $hasloginnav3icon || $hasloginnav4icon) ? true : false, 'fpiconnav' => array(
-            array(
-                'hasicon' => $hasloginnav1icon,
-                'icon' => $hasloginnav1icon,
-                'title' => $loginnav1titletext,
-                'text' => $loginnav1icontext
-            ) ,
-            array(
-                'hasicon' => $hasloginnav2icon,
-                'icon' => $hasloginnav2icon,
-                'title' => $loginnav2titletext,
-                'text' => $loginnav2icontext
-            ) ,
-            array(
-                'hasicon' => $hasloginnav3icon,
-                'icon' => $hasloginnav3icon,
-                'title' => $loginnav3titletext,
-                'text' => $loginnav3icontext
-            ) ,
-            array(
-                'hasicon' => $hasloginnav4icon,
-                'icon' => $hasloginnav4icon,
-                'title' => $loginnav4titletext,
-                'text' => $loginnav4icontext
-            ) ,
-        ) , ];
+
+        $customlogin_context = [
+
+            'hascustomlogin' => $hascustomlogin,
+            'hasdefaultlogin' => $hasdefaultlogin,
+
+            'hasfeature1' => !empty($PAGE->theme->setting_file_url('feature1image', 'feature1image')) && !empty($PAGE->theme->settings->feature1text),
+            'hasfeature2' => !empty($PAGE->theme->setting_file_url('feature2image', 'feature2image')) && !empty($PAGE->theme->settings->feature2text),
+            'hasfeature3' => !empty($PAGE->theme->setting_file_url('feature3image', 'feature3image')) && !empty($PAGE->theme->settings->feature3text),
+            'feature1image' => $PAGE->theme->setting_file_url('feature1image', 'feature1image'),
+            'feature2image' => $PAGE->theme->setting_file_url('feature2image', 'feature2image'),
+            'feature3image' => $PAGE->theme->setting_file_url('feature3image', 'feature3image'),
+            'feature1text' => (empty($PAGE->theme->settings->feature1text)) ? false : format_text($PAGE->theme->settings->feature1text, FORMAT_HTML, ['noclean' => true]),
+            'feature2text' => (empty($PAGE->theme->settings->feature2text)) ? false : format_text($PAGE->theme->settings->feature2text, FORMAT_HTML, ['noclean' => true]),
+            'feature3text' => (empty($PAGE->theme->settings->feature3text)) ? false : format_text($PAGE->theme->settings->feature3text, FORMAT_HTML, ['noclean' => true]) ,
+
+            // If any of the above social networks are true, sets this to true.
+            'hasfpiconnav' => ($hasloginnav1icon || $hasloginnav2icon || $hasloginnav3icon || $hasloginnav4icon) ? true : false, 'fpiconnav' => array(
+                array(
+                    'hasicon' => $hasloginnav1icon,
+                    'icon' => $hasloginnav1icon,
+                    'title' => $loginnav1titletext,
+                    'text' => $loginnav1icontext
+                ),
+                array(
+                    'hasicon' => $hasloginnav2icon,
+                    'icon' => $hasloginnav2icon,
+                    'title' => $loginnav2titletext,
+                    'text' => $loginnav2icontext
+                ),
+                array(
+                    'hasicon' => $hasloginnav3icon,
+                    'icon' => $hasloginnav3icon,
+                    'title' => $loginnav3titletext,
+                    'text' => $loginnav3icontext
+                ),
+                array(
+                    'hasicon' => $hasloginnav4icon,
+                    'icon' => $hasloginnav4icon,
+                    'title' => $loginnav4titletext,
+                    'text' => $loginnav4icontext
+                ),
+            ),
+        ];
         return $this->render_from_template('theme_fordson_fel/customlogin', $customlogin_context);
     }
 
@@ -1556,71 +1605,74 @@ class core_renderer extends \theme_boost\output\core_renderer {
         $marketing9target = (empty($PAGE->theme->settings->marketing9target)) ? false : $PAGE->theme->settings->marketing9target;
         $marketing9image = (empty($PAGE->theme->settings->marketing9image)) ? false : 'marketing9image';
 
-        $fp_marketingtiles = ['hasmarkettiles' => ($hasmarketing1 || $hasmarketing2 || $hasmarketing3 || $hasmarketing4 || $hasmarketing5 || $hasmarketing6) ? true : false, 'markettiles' => array(
-            array(
-                'hastile' => $hasmarketing1,
-                'tileimage' => $marketing1image,
-                'content' => $marketing1content,
-                'title' => $hasmarketing1,
-                'button' => "<a href = '$marketing1buttonurl' title = '$marketing1buttontext' alt='$marketing1buttontext' class='btn btn-primary' target='$marketing1target'> $marketing1buttontext </a>"
-            ) ,
-            array(
-                'hastile' => $hasmarketing2,
-                'tileimage' => $marketing2image,
-                'content' => $marketing2content,
-                'title' => $hasmarketing2,
-                'button' => "<a href = '$marketing2buttonurl' title = '$marketing2buttontext' alt='$marketing2buttontext' class='btn btn-primary' target='$marketing2target'> $marketing2buttontext </a>"
-            ) ,
-            array(
-                'hastile' => $hasmarketing3,
-                'tileimage' => $marketing3image,
-                'content' => $marketing3content,
-                'title' => $hasmarketing3,
-                'button' => "<a href = '$marketing3buttonurl' title = '$marketing3buttontext' alt='$marketing3buttontext' class='btn btn-primary' target='$marketing3target'> $marketing3buttontext </a>"
-            ) ,
-            array(
-                'hastile' => $hasmarketing4,
-                'tileimage' => $marketing4image,
-                'content' => $marketing4content,
-                'title' => $hasmarketing4,
-                'button' => "<a href = '$marketing4buttonurl' title = '$marketing4buttontext' alt='$marketing4buttontext' class='btn btn-primary' target='$marketing4target'> $marketing4buttontext </a>"
-            ) ,
-            array(
-                'hastile' => $hasmarketing5,
-                'tileimage' => $marketing5image,
-                'content' => $marketing5content,
-                'title' => $hasmarketing5,
-                'button' => "<a href = '$marketing5buttonurl' title = '$marketing5buttontext' alt='$marketing5buttontext' class='btn btn-primary' target='$marketing5target'> $marketing5buttontext </a>"
-            ) ,
-            array(
-                'hastile' => $hasmarketing6,
-                'tileimage' => $marketing6image,
-                'content' => $marketing6content,
-                'title' => $hasmarketing6,
-                'button' => "<a href = '$marketing6buttonurl' title = '$marketing6buttontext' alt='$marketing6buttontext' class='btn btn-primary' target='$marketing6target'> $marketing6buttontext </a>"
-            ) ,
-            array(
-                'hastile' => $hasmarketing7,
-                'tileimage' => $marketing7image,
-                'content' => $marketing7content,
-                'title' => $hasmarketing7,
-                'button' => "<a href = '$marketing7buttonurl' title = '$marketing7buttontext' alt='$marketing7buttontext' class='btn btn-primary' target='$marketing7target'> $marketing7buttontext </a>"
-            ) ,
-            array(
-                'hastile' => $hasmarketing8,
-                'tileimage' => $marketing8image,
-                'content' => $marketing8content,
-                'title' => $hasmarketing8,
-                'button' => "<a href = '$marketing8buttonurl' title = '$marketing8buttontext' alt='$marketing8buttontext' class='btn btn-primary' target='$marketing8target'> $marketing8buttontext </a>"
-            ) ,
-            array(
-                'hastile' => $hasmarketing9,
-                'tileimage' => $marketing9image,
-                'content' => $marketing9content,
-                'title' => $hasmarketing9,
-                'button' => "<a href = '$marketing9buttonurl' title = '$marketing9buttontext' alt='$marketing9buttontext' class='btn btn-primary' target='$marketing9target'> $marketing9buttontext </a>"
-            ) ,
-        ) , ];
+        $fp_marketingtiles = [
+            'hasmarkettiles' => ($hasmarketing1 || $hasmarketing2 || $hasmarketing3 || $hasmarketing4 || $hasmarketing5 || $hasmarketing6) ? true : false,
+            'markettiles' => array(
+                array(
+                    'hastile' => $hasmarketing1,
+                    'tileimage' => $marketing1image,
+                    'content' => $marketing1content,
+                    'title' => $hasmarketing1,
+                    'button' => "<a href = '$marketing1buttonurl' title = '$marketing1buttontext' alt='$marketing1buttontext' class='btn btn-primary' target='$marketing1target'> $marketing1buttontext </a>"
+                ),
+                array(
+                    'hastile' => $hasmarketing2,
+                    'tileimage' => $marketing2image,
+                    'content' => $marketing2content,
+                    'title' => $hasmarketing2,
+                    'button' => "<a href = '$marketing2buttonurl' title = '$marketing2buttontext' alt='$marketing2buttontext' class='btn btn-primary' target='$marketing2target'> $marketing2buttontext </a>"
+                ),
+                array(
+                    'hastile' => $hasmarketing3,
+                    'tileimage' => $marketing3image,
+                    'content' => $marketing3content,
+                    'title' => $hasmarketing3,
+                    'button' => "<a href = '$marketing3buttonurl' title = '$marketing3buttontext' alt='$marketing3buttontext' class='btn btn-primary' target='$marketing3target'> $marketing3buttontext </a>"
+                ),
+                array(
+                    'hastile' => $hasmarketing4,
+                    'tileimage' => $marketing4image,
+                    'content' => $marketing4content,
+                    'title' => $hasmarketing4,
+                    'button' => "<a href = '$marketing4buttonurl' title = '$marketing4buttontext' alt='$marketing4buttontext' class='btn btn-primary' target='$marketing4target'> $marketing4buttontext </a>"
+                ),
+                array(
+                    'hastile' => $hasmarketing5,
+                    'tileimage' => $marketing5image,
+                    'content' => $marketing5content,
+                    'title' => $hasmarketing5,
+                    'button' => "<a href = '$marketing5buttonurl' title = '$marketing5buttontext' alt='$marketing5buttontext' class='btn btn-primary' target='$marketing5target'> $marketing5buttontext </a>"
+                ),
+                array(
+                    'hastile' => $hasmarketing6,
+                    'tileimage' => $marketing6image,
+                    'content' => $marketing6content,
+                    'title' => $hasmarketing6,
+                    'button' => "<a href = '$marketing6buttonurl' title = '$marketing6buttontext' alt='$marketing6buttontext' class='btn btn-primary' target='$marketing6target'> $marketing6buttontext </a>"
+                ),
+                array(
+                    'hastile' => $hasmarketing7,
+                    'tileimage' => $marketing7image,
+                    'content' => $marketing7content,
+                    'title' => $hasmarketing7,
+                    'button' => "<a href = '$marketing7buttonurl' title = '$marketing7buttontext' alt='$marketing7buttontext' class='btn btn-primary' target='$marketing7target'> $marketing7buttontext </a>"
+                ),
+                array(
+                    'hastile' => $hasmarketing8,
+                    'tileimage' => $marketing8image,
+                    'content' => $marketing8content,
+                    'title' => $hasmarketing8,
+                    'button' => "<a href = '$marketing8buttonurl' title = '$marketing8buttontext' alt='$marketing8buttontext' class='btn btn-primary' target='$marketing8target'> $marketing8buttontext </a>"
+                ),
+                array(
+                    'hastile' => $hasmarketing9,
+                    'tileimage' => $marketing9image,
+                    'content' => $marketing9content,
+                    'title' => $hasmarketing9,
+                    'button' => "<a href = '$marketing9buttonurl' title = '$marketing9buttontext' alt='$marketing9buttontext' class='btn btn-primary' target='$marketing9target'> $marketing9buttontext </a>"
+                ),
+            ),
+        ];
         return $this->render_from_template('theme_fordson_fel/fpmarkettiles', $fp_marketingtiles);
     }
 
@@ -1628,6 +1680,7 @@ class core_renderer extends \theme_boost\output\core_renderer {
         global $PAGE;
 
         $theme = theme_config::load('fordson_fel');
+
         $slideshowon = $PAGE->theme->settings->showslideshow == 1;
         $hasslide1 = (empty($theme->setting_file_url('slide1image', 'slide1image'))) ? false : $theme->setting_file_url('slide1image', 'slide1image');
         $slide1 = (empty($PAGE->theme->settings->slide1title)) ? false : $PAGE->theme->settings->slide1title;
@@ -1641,16 +1694,28 @@ class core_renderer extends \theme_boost\output\core_renderer {
         $slide3 = (empty($PAGE->theme->settings->slide3title)) ? false : $PAGE->theme->settings->slide3title;
         $slide3content = (empty($PAGE->theme->settings->slide3content)) ? false : format_text($PAGE->theme->settings->slide3content);
         $showtext3 = (empty($PAGE->theme->settings->slide3title)) ? false : format_text($PAGE->theme->settings->slide3title);
-        $fp_slideshow = ['hasfpslideshow' => $slideshowon, 'hasslide1' => $hasslide1 ? true : false, 'hasslide2' => $hasslide2 ? true : false, 'hasslide3' => $hasslide3 ? true : false, 'showtext1' => $showtext1 ? true : false, 'showtext2' => $showtext2 ? true : false, 'showtext3' => $showtext3 ? true : false, 'slide1' => array(
-            'slidetitle' => $slide1,
-            'slidecontent' => $slide1content
-        ) , 'slide2' => array(
-            'slidetitle' => $slide2,
-            'slidecontent' => $slide2content
-        ) , 'slide3' => array(
-            'slidetitle' => $slide3,
-            'slidecontent' => $slide3content
-        ) , ];
+
+        $fp_slideshow = [
+            'hasfpslideshow' => $slideshowon,
+            'hasslide1' => $hasslide1 ? true : false,
+            'hasslide2' => $hasslide2 ? true : false,
+            'hasslide3' => $hasslide3 ? true : false,
+            'showtext1' => $showtext1 ? true : false,
+            'showtext2' => $showtext2 ? true : false,
+            'showtext3' => $showtext3 ? true : false,
+            'slide1' => array(
+                'slidetitle' => $slide1,
+                'slidecontent' => $slide1content
+            ),
+            'slide2' => array(
+                'slidetitle' => $slide2,
+                'slidecontent' => $slide2content
+            ),
+            'slide3' => array(
+                'slidetitle' => $slide3,
+                'slidecontent' => $slide3content
+            ),
+        ];
         return $this->render_from_template('theme_fordson_fel/slideshow', $fp_slideshow);
     }
 
@@ -1659,16 +1724,14 @@ class core_renderer extends \theme_boost\output\core_renderer {
 
         $course = $this->page->course;
         $context = context_course::instance($course->id);
-        $showincourseonly = isset($COURSE->id) && $COURSE->id > 1 && $PAGE->theme->settings->coursemanagementtoggle && isloggedin() && !isguestuser();
-        $haspermission = has_capability('enrol/category:config', $context) && $PAGE->theme->settings->coursemanagementtoggle && isset($COURSE->id) && $COURSE->id > 1;
+        $showincourseonly = isset($COURSE->id) && $COURSE->id > 1 && @$PAGE->theme->settings->coursemanagementtoggle && isloggedin() && !isguestuser();
+        $haspermission = has_capability('enrol/category:config', $context) && @$PAGE->theme->settings->coursemanagementtoggle && isset($COURSE->id) && $COURSE->id > 1;
         $togglebutton = '';
         $togglebuttonstudent = '';
         $hasteacherdash = '';
         $hasstudentdash = '';
         $globalhaseasyenrollment = enrol_get_plugin('easy');
         $coursehaseasyenrollment = '';
-        $haseditcog = $PAGE->theme->settings->courseeditingcog;
-        $editcog = html_writer::div($this->context_header_settings_menu() , 'pull-xs-right context-header-settings-menu');
 
         if ($globalhaseasyenrollment) {
             $coursehaseasyenrollment = $DB->record_exists('enrol', array(
@@ -1704,7 +1767,7 @@ class core_renderer extends \theme_boost\output\core_renderer {
         $siteadmintitle = get_string('siteadminquicklink', 'theme_fordson_fel');
         $siteadminurl = new moodle_url('/admin/search.php');
 
-        $hasadminlink = is_siteadmin() || has_capability('moodle/site:config', \context_system::instance());
+        $hasadminlink = has_capability('moodle/site:configview', $context);
 
         $course = $this->page->course;
 
@@ -1719,8 +1782,6 @@ class core_renderer extends \theme_boost\output\core_renderer {
             'hasadminlink' => $hasadminlink,
             'siteadmintitle' => $siteadmintitle,
             'siteadminurl' => $siteadminurl,
-            'haseditcog' => $haseditcog,
-            'editcog' => $editcog,
         ];
 
         // Attach easy enrollment links if active.
@@ -1744,7 +1805,7 @@ class core_renderer extends \theme_boost\output\core_renderer {
         $togglebuttonstudent = '';
         $hasteacherdash = '';
         $hasstudentdash = '';
-        $haseditcog = $PAGE->theme->settings->courseeditingcog;
+        $haseditcog = @$PAGE->theme->settings->courseeditingcog;
         $editcog = html_writer::div($this->context_header_settings_menu() , 'pull-xs-right context-header-settings-menu');
         if (isloggedin() && ISSET($COURSE->id) && $COURSE->id > 1) {
             $course = $this->page->course;
@@ -1762,7 +1823,7 @@ class core_renderer extends \theme_boost\output\core_renderer {
         $coursemanagementmessage = (empty($PAGE->theme->settings->coursemanagementtextbox)) ? false : format_text($PAGE->theme->settings->coursemanagementtextbox);
 
         $courseactivities = $this->courseactivities_menu();
-        $showincourseonly = isset($COURSE->id) && $COURSE->id > 1 && $PAGE->theme->settings->coursemanagementtoggle && isloggedin() && !isguestuser();
+        $showincourseonly = isset($COURSE->id) && $COURSE->id > 1 && @$PAGE->theme->settings->coursemanagementtoggle && isloggedin() && !isguestuser();
         $globalhaseasyenrollment = enrol_get_plugin('easy');
         $coursehaseasyenrollment = '';
         if ($globalhaseasyenrollment) {
@@ -1777,7 +1838,7 @@ class core_renderer extends \theme_boost\output\core_renderer {
         }
 
         // Link catagories.
-        $haspermission = has_capability('enrol/category:config', $context) && $PAGE->theme->settings->coursemanagementtoggle && isset($COURSE->id) && $COURSE->id > 1;
+        $haspermission = has_capability('enrol/category:config', $context) && @$PAGE->theme->settings->coursemanagementtoggle && isset($COURSE->id) && $COURSE->id > 1;
         $userlinks = get_string('userlinks', 'theme_fordson_fel');
         $userlinksdesc = get_string('userlinks_desc', 'theme_fordson_fel');
         $qbank = get_string('qbank', 'theme_fordson_fel');
@@ -1809,7 +1870,7 @@ class core_renderer extends \theme_boost\output\core_renderer {
         $gradebooklink = new moodle_url('/grade/report/grader/index.php', array(
             'id' => $PAGE->course->id
         ));
-        $participantstitle = ($PAGE->theme->settings->studentdashboardtextbox == 1) ? false : get_string('participants', 'moodle');
+        $participantstitle = (@$PAGE->theme->settings->studentdashboardtextbox == 1) ? false : get_string('participants', 'moodle');
         $participantslink = new moodle_url('/user/index.php', array(
             'id' => $PAGE->course->id
         ));
@@ -1890,7 +1951,7 @@ class core_renderer extends \theme_boost\output\core_renderer {
         $courseadminlink = new moodle_url('/course/admin.php', array(
             'courseid' => $PAGE->course->id
         ));
-        $coursecompletiontitle = get_string('coursecompletion', 'moodle');
+        $coursecompletiontitle = get_string('editcoursecompletionsettings', 'completion');
         $coursecompletionlink = new moodle_url('/course/completion.php', array(
             'id' => $PAGE->course->id
         ));
@@ -2040,6 +2101,19 @@ class core_renderer extends \theme_boost\output\core_renderer {
                     u.firstnamephonetic, u.lastnamephonetic, u.email, u.picture, u.maildisplay,
                     u.imagealt');
             foreach ($teachers as $staff) {
+                if ($showonlygroupteachers) {
+                    $staffgroups = groups_get_all_groups($course->id, $staff->id);
+                    $found = false;
+                    foreach ($staffgroups as $grp) {
+                        if (in_array($grp->id, $groupids)) {
+                            $found = true;
+                            break;
+                        }
+                    }
+                    if (!$found) {
+                        continue;
+                    }
+                }
                 $picture = $OUTPUT->user_picture($staff, array(
                     'size' => 50
                 ));
@@ -2074,6 +2148,8 @@ class core_renderer extends \theme_boost\output\core_renderer {
         $hascompetency = get_config('core_competency', 'enabled');
 
         // Send to template.
+        $haseditcog = $PAGE->theme->settings->courseeditingcog;
+        $editcog = html_writer::div($this->context_header_settings_menu() , 'pull-xs-right context-header-settings-menu');
         $dashlinks = [
             'showincourseonly' => $showincourseonly,
             'haspermission' => $haspermission,
@@ -2103,7 +2179,14 @@ class core_renderer extends \theme_boost\output\core_renderer {
             'mygradestext' => $mygradestext,
             'studentdashboardtextbox' => $studentdashboardtextbox,
             'hasteacherdash' => $hasteacherdash,
-            'teacherdash' => array('hasquestionpermission' => $hasquestionpermission, 'hasbadgepermission' => $hasbadgepermission, 'hascoursepermission' => $hascoursepermission, 'hasuserpermission' => $hasuserpermission),
+            'haseditcog' => $haseditcog,
+            'editcog' => $editcog,
+            'teacherdash' => array(
+                'hasquestionpermission' => $hasquestionpermission,
+                'hasbadgepermission' => $hasbadgepermission,
+                'hascoursepermission' => $hascoursepermission,
+                'hasuserpermission' => $hasuserpermission
+            ),
             'hasstudentdash' => $hasstudentdash,
             'hasgradebookshow' => $hasgradebookshow,
             'hascompletionshow' => $hascompletionshow,
@@ -2298,7 +2381,6 @@ class core_renderer extends \theme_boost\output\core_renderer {
             );
         }
         return $this->render_from_template('theme_fordson_fel/teacherdash', $dashlinks);
-
     }
 
     public function header() {
@@ -2347,7 +2429,7 @@ class core_renderer extends \theme_boost\output\core_renderer {
         $output = $this->container_end_all(true);
 
         $footer = parent::footer();
-        $footer = str_replace('</footer>', '', $footer);
+        list($footerpart, $endhtml) = explode('</footer>', $footer);
 
         $perfreport = '';
         if ($PAGE->pagelayout != 'embedded') {
@@ -2360,7 +2442,8 @@ class core_renderer extends \theme_boost\output\core_renderer {
 
         // Prepare return to course button.
 
-        $returnablemodules = array('resource', 'forum', 'folder', 'page', 'quiz', 'hvp', 'assign', 'pdcertificate', 'url');
+        $returnablemodules = array('resource', 'forum', 'folder', 'page', 'quiz', 'hvp', 'assign',
+        'pdcertificate', 'url', 'questionnaire', 'workshop', 'bigbluebuttonbn');
         $pagetypeexceptions = array('page-mod-quiz-attempt');
 
         $button = '';
@@ -2379,7 +2462,7 @@ class core_renderer extends \theme_boost\output\core_renderer {
             }
         }
 
-        return $button.$output.$footer.$perfreport.'</footer>';
+        return $button.$output.$footerpart.$perfreport.'</footer>'.$endhtml;
     }
 
     public function footnote() {
@@ -2392,31 +2475,40 @@ class core_renderer extends \theme_boost\output\core_renderer {
     }
 
     public function brandorganization_footer() {
+
         $theme = theme_config::load('fordson_fel');
+
         $setting = format_string($theme->settings->brandorganization);
         return $setting != '' ? $setting : '';
     }
 
     public function brandwebsite_footer() {
+
         $theme = theme_config::load('fordson_fel');
+
         $setting = $theme->settings->brandwebsite;
         return $setting != '' ? $setting : '';
     }
 
     public function brandphone_footer() {
+
         $theme = theme_config::load('fordson_fel');
+
         $setting = $theme->settings->brandphone;
         return $setting != '' ? $setting : '';
     }
 
     public function brandemail_footer() {
+
         $theme = theme_config::load('fordson_fel');
+
         $setting = $theme->settings->brandemail;
         return $setting != '' ? $setting : '';
     }
 
     public function logintext_custom() {
         global $PAGE;
+
         $logintext_custom = '';
         $logintext_custom = (empty($PAGE->theme->settings->fptextboxlogout)) ? false : format_text($PAGE->theme->settings->fptextboxlogout);
         return $logintext_custom;
@@ -2437,7 +2529,7 @@ class core_renderer extends \theme_boost\output\core_renderer {
         $context->logintopimage = $PAGE->theme->setting_file_url('logintopimage', 'logintopimage');
         $context->hascustomlogin = $PAGE->theme->settings->showcustomlogin == 1;
         $context->hasdefaultlogin = $PAGE->theme->settings->showcustomlogin == 0;
-        $context->alertbox = format_text($PAGE->theme->settings->alertbox);
+        $context->alertbox = format_text($PAGE->theme->settings->alertbox, FORMAT_HTML, ['noclean' => true]);
         if ($url) {
             $url = $url->out(false);
         }
@@ -2460,7 +2552,13 @@ class core_renderer extends \theme_boost\output\core_renderer {
 
     public function display_ilearn_secure_alert() {
         global $DB, $PAGE;
+
+        if (strpos($PAGE->url, '/mod/quiz/view.php') === false) {
+            return false;
+        }
+
         $cm = $PAGE->cm;
+
         if ($cm) {
             $quiz = $DB->get_record('quiz', array(
                 'id' => $cm->instance
@@ -2602,4 +2700,23 @@ class core_renderer extends \theme_boost\output\core_renderer {
         return $this->render_from_template('theme_fordson_fel/block', $context);
     }
 
+    /**
+     * Renders the skip links for the page.
+     * TODO : avoid the standard skip_links to be produced in local/my page.
+     * HOW : call a hook in the local_my plugin if installed. (modularity).
+     * Or : keep only the first ? 
+     *
+     * @param array $links List of skip links.
+     * @return string HTML for the skip links.
+     */
+    public function render_skip_links($links) {
+        $context = [ 'links' => []];
+
+        foreach ($links as $url => $text) {
+            $context['links'][] = [ 'url' => $url, 'text' => $text];
+            break;
+        }
+
+        return $this->render_from_template('core/skip_links', $context);
+    }
 }

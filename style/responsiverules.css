@@ -1,6 +1,6 @@
 
 
-@media all and (max-width: 440px) {
+@media all and (max-width: 480px) {
 
     .container-fluid {
         width: 100%;
@@ -16,5 +16,9 @@
 
     nav .btn {
         height: 40px;
+    }
+
+    #learningcontent {
+        padding: 1rem 0;
     }
 }

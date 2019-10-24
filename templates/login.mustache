@@ -51,6 +51,8 @@
 
     {{{ output.standard_top_of_body_html }}}
 
+    {{>theme_fordson_fel/navbar}}
+
     <div id="page" class="container-fluid mt-0 {{#hascustomlogin}}customloginimage{{/hascustomlogin}}">
         <div id="page-content" class="row">
                 <section id="region-main" class="col-12">
@@ -61,19 +63,19 @@
         </div>
     </div>
     <!-- fordson_fel:customlogincontent -->
-    {{#hascustomlogin}}
-    <div id="fordsonlogin" class="fordsonlogin">
+    {{#hascustomlogincontent}}
+    <div id="fordson_fellogin" class="fordson_fellogin">
         <div class="container">
         {{{ output.customlogin }}}
         </div>
     </div>
-    {{/hascustomlogin}}
+    {{/hascustomlogincontent}}
     <!-- /fordson_fel:customlogincontent -->
-
-    <!-- fordson_fel:footer -->
-    {{> theme_fordson_fel/footer }}
-    <!-- /fordson_fel:footer -->
 </div>
+
+<!-- fordson_fel:footer -->
+{{> theme_fordson_fel/footer }}
+<!-- fordson_fel:footer -->
 
 </body>
 </html>
