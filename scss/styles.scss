@@ -11,8 +11,8 @@
 }
 
 /**
-* Block Width
-**/
+ * Block Width
+ */
 
 @media screen and (min-width: 1200px) {
     #region-main.has-blocks {
@@ -920,7 +920,12 @@ ul.teacherscourseview {
 }
 
 .navbar {
-    background-color: $topnavbarbg;
+    background-color: $topnavbar-bg;
+    color: $topnavbar-fg;
+}
+
+.navbar a {
+    color: $topnavbar-fg;
 }
 
 // FHS Navbar
@@ -1371,5 +1376,58 @@ h3.sectionname {
 }
 
 .custom_menu_submenu {
-   background-color: #fff;
+    background-color: $topnavbar-bg;
+    color: $topnavbar-fg;
+}
+
+.lang-menu-label {
+    background-color: $topnavbar-bg;
+    color: $topnavbar-fg;
+    line-height: 2em;
+}
+
+.lang-menu-label:after {
+    font-family: "fontAwesome";
+    padding-left: 10px;
+    color: $topnavbar-fg;
+}
+
+.lang-menu-label[aria-expanded="true"]:after {
+    content: "\f077";
+}
+
+.lang-menu-label[aria-expanded="false"]:after {
+    content: "\f078";
+}
+
+.lang-menu li {
+    list-style-type: none;
+}
+
+.lang-menu li > a {
+    padding: 0 20px;
+    color: $topnavbar-fg;
+    text-decoration: none;
+}
+
+.lang-menu > div > ul > li {
+    float: left;
+    width: auto;
+}
+
+.lang-menu-submenu {
+    background-color: $topnavbar-bg;
+    position: absolute;
+    top: $navbar-height;
+    display: flex;
+}
+
+.lang-menu-submenu > div > ul > li {
+    padding: 10px 5px;
+    border-bottom: 1px solid $topnavbar-fg;
+}
+
+.lang-menu-submenu > div > ul {
+    padding: 0;
+    margin: 0;
 }

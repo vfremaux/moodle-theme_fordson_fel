@@ -80,11 +80,19 @@ $page->add(new admin_setting_heading('theme_fordson_fel_colours', get_string('co
     $setting = new admin_setting_configcolourpicker($name, $title, $description, '');
     $setting->set_updatedcallback('theme_reset_all_caches');
     $page->add($setting);
-    
+
     // Top navbar background setting.
     $name = 'theme_fordson_fel/topnavbarbg';
     $title = get_string('topnavbarbg', 'theme_fordson_fel');
     $description = get_string('topnavbarbg_desc', 'theme_fordson_fel');
+    $setting = new admin_setting_configcolourpicker($name, $title, $description, '');
+    $setting->set_updatedcallback('theme_reset_all_caches');
+    $page->add($setting);
+
+    // Top navbar background setting.
+    $name = 'theme_fordson_fel/topnavbarfg';
+    $title = get_string('topnavbarfg', 'theme_fordson_fel');
+    $description = get_string('topnavbarfg_desc', 'theme_fordson_fel');
     $setting = new admin_setting_configcolourpicker($name, $title, $description, '');
     $setting->set_updatedcallback('theme_reset_all_caches');
     $page->add($setting);

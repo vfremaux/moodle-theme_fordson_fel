@@ -30,6 +30,8 @@ $string['choosereadme'] = 'Fordson fel adds to the community Fordson theme valua
 $string['configtitle'] = 'Fordson FEL';
 $string['pluginname'] = 'Fordson FEL';
 $string['region-side-pre'] = 'Right';
+$string['breadcrumbmaskcatsforstudents'] = 'Mask cats for students';
+$string['breadcrumbmaskcatsforstudents_desc'] = 'Mask all categroy links for students';
 $string['generalsettings'] = 'General settings';
 $string['advancedsettings'] = 'Advanced settings';
 $string['iconnavheading'] = 'Icon Navigation';
@@ -63,7 +65,7 @@ $string['blockdisplay_off'] = 'Single Column Boost Default';
 $string['blockdisplay_on'] = 'Three Column fordson_fel Default';
 $string['ilearnsecurebrowser'] ='This Quiz is secured with iLearn Secure Browser (A Chromebook using the iLearn app must be used to attempt this quiz)';
 $string['sitealternatename'] = 'Site alternate name';
-$string['newwindow'] = 'New window'; 
+$string['newwindow'] = 'New window';
 
 // Presets Settings.
 $string['presets_settings'] = 'Presets';

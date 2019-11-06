@@ -60,8 +60,7 @@ li.section.expanded > div.section-caption > .sectionname > .flexcontrol > .overl
     font-family: 'FontAwesome';
 }
 
-li.section .sectionname > span,
-.flexcontrol {
+li.section .sectionname > span.flexcontrol {
     position: relative;
     left: -36px;
 }

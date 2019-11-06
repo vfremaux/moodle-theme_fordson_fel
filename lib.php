@@ -39,6 +39,15 @@ require_once($CFG->dirroot.'/theme/fordson_fel/lib/scss_lib.php');
 require_once($CFG->dirroot.'/theme/fordson_fel/lib/filesettings_lib.php');
 require_once($CFG->dirroot.'/theme/fordson_fel/lib/fordson_fel_lib.php');
 
+function theme_fordson_fel_supports_feature($feature) {
+
+    if ($feature == 'course/modthumbs') {
+        return true;
+    }
+
+    return false;
+}
+
 function theme_fordson_fel_page_init() {
     global $PAGE;
 

@@ -207,6 +207,19 @@ $default = false;
 $setting = new admin_setting_configcheckbox($name, $title, $description, $default, true, false);
 $page->add($setting);
 
+$langstyleoptions = [
+    'icons' => get_string('langmenustyleicons', 'theme_fordson_fel'),
+    'dropdown' => get_string('langmenustyledropdown', 'theme_fordson_fel'),
+    'dropdownicons' => get_string('langmenustyledropdownicons', 'theme_fordson_fel'),
+];
+
+$name = 'theme_fordson_fel/langmenustyle';
+$title = get_string('langmenustyle', 'theme_fordson_fel');
+$description = get_string('langmenustyle_desc', 'theme_fordson_fel');
+$default = 'icons';
+$setting = new admin_setting_configselect($name, $title, $description, $default, $langstyleoptions);
+$page->add($setting);
+
 
 // Must add the page after definiting all the settings!
 $settings->add($page);

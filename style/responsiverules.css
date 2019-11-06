@@ -17,8 +17,73 @@
     nav .btn {
         height: 40px;
     }
+}
 
-    #learningcontent {
-        padding: 1rem 0;
+/* courses */
+
+@media screen and (max-width: 480px) {
+
+    /*contenu presque collé à la navbar*/
+    div#learningcontent {
+        margin-top: 2px;
+    }
+
+    /*diminuer les padding*/
+    #region-main {
+        padding: 0rem;
+    }
+
+
+    /*coller à droite le bouton */
+    #go-to-bottom {
+        right: 5px;
+    }
+
+    /*masquer le footer*/
+    #page-footer {
+        display:none;
+    }
+
+    /*masquer info pour completude*/
+    .path-course-view .completionprogress {
+        display:none;
+    }
+
+    /*oter le padding des activités et textes sans liens*/
+    .section .label .contentwithoutlink, .section .label .activityinstance {
+        padding-right: 0px;
+    }
+
+    #mydashboard {
+        border: 0;
+        padding: 0;
+    }
+
+    /*pas de bouton secondaire sur les pages*/
+    .btn.btn-secondary {
+        display: none;
+    }
+
+}
+
+/* Guided tour */
+
+@media all and (max-width: 480px) {
+    .modal-footer {
+        flex-wrap: wrap;
+        max-width: 480 px;
+        justify-content: center;
+    }
+
+    .modal-footer button {
+        margin-bottom: 10px;
+    }
+
+    .modal-dialog {
+        left: 10px;
+    }
+
+    .mform {
+        padding-left: 10px;
     }
 }

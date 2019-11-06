@@ -82,6 +82,8 @@ $checkpostblocks = strpos($blockshtmlpost, 'data-block=') !== false;
 
 $hasfpblockregion = isset($PAGE->theme->settings->showblockregions) !== false;
 
+$isblockmanagepage = preg_match('/^page-blocks-.*-manage$/', $PAGE->pagetype);
+
 $hascourseblocks = false;
 if ($checkblocka || $checkblockb || $checkblockc || $checkpostblocks) {
     $hascourseblocks = true;
@@ -110,7 +112,7 @@ $templatecontext = [
     'bodyattributes' => $bodyattributes,
     'navdraweropen' => $navdraweropen,
     'hasfhsdrawer' => $hasfhsdrawer,
-    'hasspdrawer' => $checkpostblocks || $PAGE->user_is_editing(),
+    'hasspdrawer' => $checkpostblocks || $PAGE->user_is_editing() || !$isblockmanagepage,
     'navspdraweropen' => $navspdraweropen && ($checkpostblocks || $PAGE->user_is_editing()),
     'regionmainsettingsmenu' => $regionmainsettingsmenu,
     'hasregionmainsettingsmenu' => !empty($regionmainsettingsmenu),

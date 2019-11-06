@@ -331,8 +331,8 @@ td.custombox-thumb.authornote:after {
 td.custombox-header-thumb.important:after {
     content: "!"; /* fa-bookmark-o */
     font-family: "sans-serif";
-    color:#ffffff;
-    font-size:48px;
+    color: #ffffff;
+    font-size: 48px;
     font-weight: bold;
 }
 

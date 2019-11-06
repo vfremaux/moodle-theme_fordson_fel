@@ -17,3 +17,37 @@ body.is-tablet .not-for-tablet {
 body:not(.is-tablet) .for-tablet {
     display: none;
 }
+
+.is-mobile #learningcontent,
+.mobiletheme #learningcontent {
+    width: 100% !important;
+    margin-top: 20px !important;
+}
+
+.is-mobile #page,
+.mobiletheme #page {
+    width: 100% !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+}
+
+@media all and (min-width: 480px) {
+    .is-mobile #page,
+    .mobiletheme #page {
+        margin-top: 0 !important;
+    }
+}
+
+@media all and (max-width: 480px) {
+    .is-mobile #page,
+    .mobiletheme #page {
+        margin-top: 50px !important;
+    }
+
+    .is-mobile a {
+        text-decoration: none;
+    }
+}
+

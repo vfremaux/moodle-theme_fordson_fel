@@ -68,7 +68,8 @@ function theme_fordson_fel_get_main_scss_content($theme) {
         }
         else {
             // Safety fallback - maybe new installs etc.
-            $scss .= file_get_contents($CFG->dirroot . '/theme/fordson_fel/scss/preset/Modern Moodle.scss');
+            // Nothing presetted.
+            $scss .= file_get_contents($CFG->dirroot . '/theme/fordson_fel/scss/preset/Default.scss');
         }
     }
 
@@ -176,7 +177,8 @@ function theme_fordson_fel_get_pre_scss($theme) {
     'slideshowheight' => ['slideshowheight'],
     'activityiconsize' => ['activityiconsize'],
     'gutterwidth' => ['gutterwidth'],
-    'topnavbarbg' => ['topnavbarbg'],
+    'topnavbarbg' => ['topnavbar-bg'],
+    'topnavbarfg' => ['topnavbar-fg'],
     'topnavbarteacherbg' => ['teachernavbarcolor'],
     ];
 

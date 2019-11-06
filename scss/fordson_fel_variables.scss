@@ -42,7 +42,6 @@ $activityhover: #fff6ae !default;
 $gutterwidth: 2rem !default;
 
 $calendartoday: #fbffba !default;
-$custommenu-bg: #fff !default;
 
 $sectionnamehighlight : #43d0f3 !default;
 $dpsaccentcolor: #44d4a6 !default;
@@ -57,9 +56,10 @@ $spectrumpreset: 0 !default;
 $modernmoodlepreset: 0 !default;
 $perceptionpreset: 0 !default;
 
-$topnavbarbg:                       $white !default;
+$topnavbar-bg:                       $white !default;
+$topnavbar-fg:                       $black !default;
 $teachernavbarcolor:                #f3e420 !default;
-$studentnavbarcolor:                $topnavbarbg !default;
+$studentnavbarcolor:                $topnavbar-bg !default;
 $navbar-fhs-color:                  $black !default;
 $navbar-fhs-active-color:           $black !default;
 $navbar-fhs-hover-color:            $black !default;

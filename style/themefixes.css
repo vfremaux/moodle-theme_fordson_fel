@@ -114,6 +114,12 @@ span.site-name.d-none.d-md-inline {
     cursor: pointer;
 }
 
+#menu_lang > div > ul > li > a {
+    cursor: pointer;
+    background: none;
+    border: none;
+}
+
 #page-mod-quiz-attempt .prompt {
     background-color: #e6e6e6;
     max-width: 30%;
