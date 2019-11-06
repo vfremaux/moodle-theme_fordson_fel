@@ -135,3 +135,35 @@ img.activityicon {
     width: 100%;
     background-position: top;
 }
+
+/* Dashboard panels fixes */
+.dashtitle h3 {
+    color:#fff;
+    background-color: #ccc;
+    border: 1px solid #ccc;
+    padding: .3rem;
+    font-size: 1.3rem;
+}
+
+.dashtitle > p {
+    display:none;
+}
+
+.staffmember img {
+    display:none;
+}
+
+.studentdashboard .list-group-item {
+    padding: .2rem .5rem;
+}
+
+.studentdashboard .fa-map::before,
+.studentdashboard .fa-check-square-o::before,
+.studentdashboard .fa-users::before,
+.studentdashboard .fa-question-circle::before,
+.studentdashboard .fa-trophy::before,
+.teacherdashboard i.dashicon {
+    display:none;
+}
+
+

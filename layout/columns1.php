@@ -23,6 +23,9 @@
  */
 
 defined('MOODLE_INTERNAL') || die();
+
+require_once($CFG->dirroot.'/theme/fordson_fel/lib/mobile_detect_lib.php');
+
 if (is_dir($CFG->dirroot.'/local/technicalsignals')) {
     require_once($CFG->dirroot.'/local/technicalsignals/lib.php');
 }
@@ -35,6 +38,13 @@ user_preference_allow_ajax_update('drawer-open-nav', PARAM_ALPHA);
 require_once($CFG->libdir . '/behat/lib.php');
 
 $extraclasses = [];
+if (is_mobile()) {
+    $extraclasses[] = 'is-mobile';
+}
+if (is_tablet()) {
+    $extraclasses[] = 'is-tablet';
+}
+
 $bodyattributes = $OUTPUT->body_attributes($extraclasses);
 $hasblocks = false;
 

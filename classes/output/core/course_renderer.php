@@ -489,6 +489,7 @@ if ($PAGE->theme->settings->coursetilestyle < 10) {
             $options['withcats'] = $config->printcategories;
             $options['gaugewidth'] = 60;
             $options['gaugeheight'] = 15;
+            $options['gaugetype'] = $config->progressgaugetype;
 
             $catcourses = [];
             foreach ($courses as $cid => $c) {

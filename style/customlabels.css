@@ -8,6 +8,13 @@
 
 /* General rules */
 
+td.custombox-header-thumb,
+td.custombox-header-thumb,
+td.custombox-thumb,
+td.custombox-thumb {
+    padding-top: 1.2em;
+}
+
 .custombox-text.readmorelink {
     text-align: left !important;
     background-color: #aaa;
@@ -325,6 +332,7 @@ td.custombox-header-thumb.important:after {
     content: "!"; /* fa-bookmark-o */
     font-family: "sans-serif";
     color:#ffffff;
+    font-size:48px;
     font-weight: bold;
 }
 

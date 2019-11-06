@@ -1,0 +1,19 @@
+
+
+body.is-mobile .not-for-mobile,
+body.mobiletheme .not-for-mobile {
+    display: none;
+}
+
+body:not(.is-mobile) .for-mobile,
+body:not(.mobiletheme) .for-mobile {
+    display: none;
+}
+
+body.is-tablet .not-for-tablet {
+    display: none;
+}
+
+body:not(.is-tablet) .for-tablet {
+    display: none;
+}

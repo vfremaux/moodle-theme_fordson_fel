@@ -1026,6 +1026,7 @@ class core_renderer extends \theme_boost\output\core_renderer {
 
     public function lang_menu() {
         global $OUTPUT, $CFG, $ME;
+        static $singlejs = false;
 
         $lang = current_language();
 
@@ -1035,9 +1036,24 @@ class core_renderer extends \theme_boost\output\core_renderer {
             $langs = get_string_manager()->get_list_of_translations();
         }
 
-        $str = '';
+        $template = new Stdclass;
+
+        $template->asmenu = false;
+        $template->withicons = true;
+
+        if ($this->page->theme->settings->langmenustyle == 'dropdown') {
+            if (!$singlejs) {
+                $this->page->requires->js_call_amd('theme_fordson_fel/langmenu', 'init');
+                $singlejs = true;
+            }
+            $template->asmenu = true;
+            $template->withicons = false;
+        }
 
         foreach ($langs as $l => $lname) {
+
+            $langtpl = new StdClass;
+            $langtpl->langname = $lname;
 
             $currenturl = $ME;
             $currenturl = preg_replace('/(\&|\?)lang=[a-z]{2}/', '', $currenturl);
@@ -1048,18 +1064,20 @@ class core_renderer extends \theme_boost\output\core_renderer {
                 $langattr = '&lang='.$l;
             }
 
-            $attrs = array('style' => 'width:30px; height:24px;position:relative;top:5px');
+            $iconattrs = array('style' => 'width:30px; height:24px;position:relative;top:5px');
             if ($lang != $l) {
-                $str .= '<a role="menuitem" href="'.$currenturl.$langattr.'">';
-                $attrs['class'] = 'shadow';
+                $langtpl->isotherlang = true;
+                $langtpl->langurl = $currenturl.$langattr;
+                $iconattrs['class'] = 'shadow';
+            } else {
+                $langtpl->isotherlang = false;
+                $template->currentlang = $lname;
             }
-            $str .= $OUTPUT->pix_icon('current_lang_'.$l, get_string('changeto', 'theme_fordson_fel', strtoupper($l)), 'theme_fordson_fel', $attrs);
-            if ($lang != $l) {
-                $str .= '</a>';
-            }
-            $str .= ' ';
+            $langtpl->langicon = $OUTPUT->pix_icon('current_lang_'.$l, get_string('changeto', 'theme_fordson_fel', strtoupper($l)), 'theme_fordson_fel', $iconattrs);
+
+            $template->langs[] = $langtpl;
         }
-        return $str;
+        return $OUTPUT->render_from_template('theme_fordson_fel/langmenu', $template);
     }
 
     // #####################
@@ -2681,7 +2699,7 @@ class core_renderer extends \theme_boost\output\core_renderer {
         $context->footer = $bc->footer;
         $context->region = $region;
         if ($COURSE->format == 'page' && $context->type == 'page_module') {
-            $context->modname = $bc->modname;
+            $context->modname = @$bc->modname;
         }
         $context->cancollapse = ($COURSE->format != 'page') &&
                         ($bc->collapsible || !empty($PAGE->theme->settings->allowblockregionscollapse));

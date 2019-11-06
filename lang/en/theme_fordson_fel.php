@@ -321,6 +321,11 @@ $string['headerimagepadding'] = 'Header Image Height';
 $string['headerimagepadding_desc'] = 'Control the padding and height of the header image for courses.';
 $string['activitymenu'] = 'Show Grouped Activities Menu';
 $string['activitymenu_desc'] = 'Show the grouped activity listings in the student and teacher panels.  This menu displays a grouped list of all activities for the student and teacher.';
+$string['langmenustyle'] = 'Lang Menu style';
+$string['langmenustyle_desc'] = 'Chooses the layout of the lang menu';
+$string['langmenustyleicons'] = 'Icons';
+$string['langmenustyledropdown'] = 'Dropdown menu';
+$string['langmenustyledropdownicons'] = 'Dropdown menu with icons';
 
 $string['coursemanagementinfo'] = 'Course Administration Panel Menu';
 $string['coursemanagementinfodesc'] = 'Fordson FEL provides a unique and organized Course Administration Panel which can be accessed from anywhere within a course by teachers to access their course management links. Students also can access a Student Course Dashboard which includes information relevant to the course.  It is highly recommended you keep this turned on.  ';
@@ -672,6 +677,8 @@ $string['rightfooter_desc'] = '';
 
 $string['topnavbarbg'] = 'Top navbar background';
 $string['topnavbarbg_desc'] = 'Top navbar background';
+$string['topnavbarfg'] = 'Top navbar text color';
+$string['topnavbarfg_desc'] = 'Top navbar text color';
 $string['topnavbarteacherbg'] = 'Top navbar teacher background';
 $string['topnavbarteacherbg_desc'] = 'Top navbar teacher background';
 $string['footerbkg'] = 'Footer background';

@@ -246,6 +246,11 @@ $string['ilearnsecurebrowser'] = 'Ce test est sécurisé au moyen de iLearn Secu
 $string['imagesettings'] = 'Paramètres d\'image personnalisée';
 $string['instagram'] = 'URL Instagram';
 $string['instagramdesc'] = 'Saisir l\'URL de votre page Instagram (ex : http://instagram.com/).';
+$string['langmenustyle'] = 'Style du menu de langue';
+$string['langmenustyle_desc'] = 'Choisit la disposition du menu de changement de langues';
+$string['langmenustyleicons'] = 'Icones';
+$string['langmenustyledropdown'] = 'Menu déroulant';
+$string['langmenustyledropdownicons'] = 'Menu déroulant et icones';
 $string['layoutinfo'] = 'Paramètres d\'affichage';
 $string['layoutinfodesc'] = 'Gérer la disposition de la page en choisissant divers réglages.';
 $string['learningcontentpadding'] = 'Espacement du contenu d\'apprentissage';
@@ -487,8 +492,10 @@ $string['thismyprofessionaldevelopment'] = 'Ce développement professionnel';
 $string['thismyprograms'] = 'Ce programme';
 $string['thismytraining'] = 'Cette formation';
 $string['thismyunits'] = 'Cette unité';
-$string['topnavbarbg'] = 'Couleur par défaut de la barre de navigation';
-$string['topnavbarbg_desc'] = 'Couleur par défaut de la barre de navigation';
+$string['topnavbarbg'] = 'Couleur de fond de la barre de navigation';
+$string['topnavbarbg_desc'] = 'Couleur de fond de la barre de navigation';
+$string['topnavbarfg'] = 'Couleur de texte de la barre de navigation';
+$string['topnavbarfg_desc'] = 'Couleur de texte de la barre de navigation';
 $string['topnavbarteacherbg'] = 'Couleur par défaut de la barre de navigation des enseignants';
 $string['topnavbarteacherbg_desc'] = 'Couleur par défaut de la barre de navigation des enseignants';
 $string['editmodthumb'] = 'Modifier la vignette de l\'activité';
@@ -658,13 +665,6 @@ $string['sectionsstyleimages_desc'] = '<p>Ajouter des images appelables dans les
 <p>Note : &lt;variant&gt; sera vide pour la variante principale.</p>
 
 ';
-
-$string['topnavbarbg'] = 'Top navbar background';
-$string['topnavbarbg_desc'] = 'Top navbar background';
-$string['topnavbarteacherbg'] = 'Top navbar teacher background';
-$string['topnavbarteacherbg_desc'] = 'Top navbar teacher background';
-$string['footerbkg'] = 'Footer background';
-$string['footerbkg_desc'] = 'Footer background';
 
 /* Menu adds */
 $string['custommenupullright'] = 'Pousser le menu personnalisé à droite';
