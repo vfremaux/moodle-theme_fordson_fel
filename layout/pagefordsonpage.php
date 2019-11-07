@@ -67,6 +67,7 @@ $templatecontext = [
     'midfooter' => @$PAGE->theme->settings->midfooter,
     'rightfooter' => @$PAGE->theme->settings->rightfooter,
     'showlangmenu' => @$CFG->langmenu,
+    'sitealternatename' => @$PAGE->theme->settings->sitealternatename
 ];
 
 theme_fordson_fel_process_footer_texts($templatecontext);

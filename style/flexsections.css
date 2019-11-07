@@ -64,3 +64,17 @@ li.section .sectionname > span.flexcontrol {
     position: relative;
     left: -36px;
 }
+
+.flexsection-handle::before {
+    font-family: "FontAwesome";
+    font-size: 0.9em;
+    color: white;
+}
+
+.sectionname[aria-expanded="true"] .flexsection-handle::before {
+    content: " \f077 ";
+}
+
+.sectionname[aria-expanded="false"] .flexsection-handle::before {
+    content: " \f078 ";
+}

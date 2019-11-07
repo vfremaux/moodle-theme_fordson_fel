@@ -702,9 +702,14 @@ class core_renderer extends \theme_boost\output\core_renderer {
         $jscode = "(function(){{$jscode}})";
         $this->page->requires->yui_module('node-menunav', $jscode);
         // Build the root nodes as required by YUI
-        $content = \html_writer::start_tag('div', array('id'=>'custom_menu_'.$menucount, 'style' => 'display:none', 'class'=>'yui3-menu yui3-menu-horizontal javascript-disabled custom-menu'));
+        $attrs = array(
+            'id'=>'custom_menu_'.$menucount,
+            'style' => 'display:none',
+            'class'=>'yui3-menu yui3-menu-horizontal javascript-disabled custom-menu'
+        );
+        $content = \html_writer::start_tag('div', $attrs);
         $content .= \html_writer::start_tag('div', array('class'=>'yui3-menu-content'));
-        $content .= \html_writer::start_tag('ul');
+        $content .= \html_writer::start_tag('ul', array('id' => 'menu-list-'.$menucount));
         // Render each child
         foreach ($menu->get_children() as $item) {
             $content .= $this->render_custom_menu_item($item);
@@ -762,9 +767,13 @@ class core_renderer extends \theme_boost\output\core_renderer {
             }
 
             $content .= html_writer::link($url, format_string($menunode->get_text()), $attrs);
-            $content .= html_writer::start_tag('div', array('id'=>'cm_submenu_'.$submenucount, 'class'=>'yui3-menu custom_menu_submenu custom_menu_submenu'.$level));
+            $attrs = array(
+                'id'=>'cm_submenu_'.$submenucount,
+                'class'=>'yui3-menu custom_menu_submenu custom_menu_submenu'.$level
+            );
+            $content .= html_writer::start_tag('div', $attrs);
             $content .= html_writer::start_tag('div', array('class'=>'yui3-menu-content'));
-            $content .= html_writer::start_tag('ul');
+            $content .= html_writer::start_tag('ul', array('id' => 'submenu-list-'.$submenucount));
             foreach ($menunode->get_children() as $menunode) {
                 $content .= $this->render_custom_menu_item($menunode, $level + 1);
             }
@@ -781,12 +790,7 @@ class core_renderer extends \theme_boost\output\core_renderer {
                 // This is a divider.
                 $content = html_writer::start_tag('li', array('class' => 'yui3-menuitem divider'));
             } else {
-                $content = html_writer::start_tag(
-                    'li',
-                    array(
-                        'class' => 'yui3-menuitem'
-                    )
-                );
+                $content = html_writer::start_tag('li', array('class' => 'yui3-menuitem'));
                 if ($menunode->get_url() !== null) {
                     $url = $menunode->get_url();
                     if ($url != '') {
@@ -926,9 +930,8 @@ class core_renderer extends \theme_boost\output\core_renderer {
     }
 
     /**
-    * removes and process access markers in URL
-    *
-    */
+     * removes and process access markers in URL
+     */
     function post_process_url_check_access($url, &$xs) {
         global $COURSE, $USER, $DB;
 
