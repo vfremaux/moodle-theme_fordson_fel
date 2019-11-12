@@ -86,4 +86,8 @@
     .mform {
         padding-left: 10px;
     }
+
+    .nav-link {
+        padding: 5px;
+    }
 }

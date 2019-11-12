@@ -1788,7 +1788,7 @@ class core_renderer extends \theme_boost\output\core_renderer {
         $siteadmintitle = get_string('siteadminquicklink', 'theme_fordson_fel');
         $siteadminurl = new moodle_url('/admin/search.php');
 
-        $hasadminlink = has_capability('moodle/site:configview', $context);
+        $hasadminlink = is_siteadmin() || has_capability('moodle/site:config', \context_system::instance());
 
         $course = $this->page->course;
 
@@ -2705,7 +2705,8 @@ class core_renderer extends \theme_boost\output\core_renderer {
             $context->modname = @$bc->modname;
         }
         $context->cancollapse = ($COURSE->format != 'page') &&
-                        ($bc->collapsible || !empty($PAGE->theme->settings->allowblockregionscollapse));
+                $bc->collapsible &&
+                        !empty($PAGE->theme->settings->allowblockregionscollapse);
         $context->hascontrols = !empty($bc->controls);
         if ($context->hascontrols) {
             $context->controls = $this->block_controls($bc->controls, $id);
@@ -2713,7 +2714,7 @@ class core_renderer extends \theme_boost\output\core_renderer {
 
         $context->firstblockclass = '';
 
-        if ($firstblockinregion[$region] && !empty($PAGE->theme->settings->allowblockregionscollapse)) {
+        if ($firstblockinregion[$region] || empty($PAGE->theme->settings->allowblockregionscollapse)) {
             $context->firstblockclass = 'show';
             $firstblockinregion[$region] = false;
         }

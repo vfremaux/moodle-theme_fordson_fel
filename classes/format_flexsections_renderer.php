@@ -329,7 +329,7 @@ class theme_fordson_fel_format_flexsections_renderer extends format_flexsections
         if ($template->sectionnum && ($title = $this->section_title($template->sectionnum, $course, true))) {
             if (!$PAGE->user_is_editing()) {
                 $sectionnameid = 'sectioname-'.$section->id.'-section-'.$section->section;
-                $title = '<span id="'.$sectionnameid.'" class="sectioname '.$handleclass.'">'.$title.'</span>';
+                $title = '<span id="'.$sectionnameid.'" aria-hidden="true" class="sectioname '.$handleclass.'">'.$title.'</span>';
             }
             $template->hastitle = true;
             if (is_object($collapsedcontrol)) {

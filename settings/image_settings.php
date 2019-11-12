@@ -53,6 +53,14 @@ $setting = new admin_setting_configstoredfile($name, $title, $description, 'head
 $setting->set_updatedcallback('theme_reset_all_caches');
 $page->add($setting);
 
+// Alternate site name.
+$name = 'theme_fordson_fel/sitealternatename';
+$title = get_string('sitealternatename', 'theme_fordson_fel');
+$description = get_string('sitealternatename_desc', 'theme_fordson_fel');
+$default = '';
+$setting = new admin_setting_configtext($name, $title, $description, $default);
+$page->add($setting);
+
 // Default header image.
 $name = 'theme_fordson_fel/headerdefaultimage';
 $title = get_string('headerdefaultimage', 'theme_fordson_fel');

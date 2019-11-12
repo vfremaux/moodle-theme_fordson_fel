@@ -28,6 +28,12 @@
     </div>
     {{/hasfhsdrawer}}
 
+    <!-- homelink_for_mobiles -->
+    <div class="coursecontrols nav-item for-mobile">
+        <a id="mobile-home" class="btn fhs-tooltip" data-tooltip="tooltip" href="/my"><i class="fa fa-home" aria-hidden="true"></i></a>
+    </div>
+    <!-- /homelink_for_mobiles -->
+
     <!-- logo -->
     <a href="{{{ config.wwwroot }}}" class="navbar-brand {{# output.should_display_navbar_logo }}has-logo{{/ output.should_display_navbar_logo }}
         {{^ output.should_display_navbar_logo }}
@@ -40,15 +46,11 @@
             </span>
         {{/ output.should_display_navbar_logo }}
         <span class="site-name d-none d-md-inline">{{{ sitename }}}</span>
-        <span class="sitename alternate-name" aria-hidden="true">{{#str}}sitealternatename, theme_fordson_fel{{/str}}</span>
+        {{#sitealternatename}}
+        <span class="sitename alternate-name not-for-mobile" aria-hidden="true">{{sitealternatename}}</span>
+        {{/sitealternatename}}
     </a>
     <!-- /logo -->
-
-    <!-- homelink_for_mobiles -->
-    <div class="coursecontrols nav-item for-mobile">
-        <a id="mobile-home" class="btn fhs-tooltip" data-tooltip="tooltip" href="/my"><i class="fa fa-home" aria-hidden="true"></i></a>
-    </div>
-    <!-- /homelink_for_mobiles -->
 
     <!-- fordson_fel/course_controls -->
     <div class="coursecontrols nav-item d-flex">

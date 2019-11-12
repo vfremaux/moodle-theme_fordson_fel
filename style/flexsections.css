@@ -60,15 +60,19 @@ li.section.expanded > div.section-caption > .sectionname > .flexcontrol > .overl
     font-family: 'FontAwesome';
 }
 
+/*
 li.section .sectionname > span.flexcontrol {
     position: relative;
     left: -36px;
 }
+*/
 
 .flexsection-handle::before {
     font-family: "FontAwesome";
     font-size: 0.9em;
+    font-style: normal;
     color: white;
+    padding-right: 15px;
 }
 
 .sectionname[aria-expanded="true"] .flexsection-handle::before {

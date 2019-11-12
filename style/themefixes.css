@@ -136,7 +136,7 @@ img.activityicon {
     margin-bottom: 10px;
 }
 
-/* logsin image tuning */
+/* login image tuning */
 .customloginimage {
     width: 100%;
     background-position: top;
@@ -152,11 +152,11 @@ img.activityicon {
 }
 
 .dashtitle > p {
-    display:none;
+    display: none;
 }
 
 .staffmember img {
-    display:none;
+    display: none;
 }
 
 .studentdashboard .list-group-item {
@@ -169,7 +169,13 @@ img.activityicon {
 .studentdashboard .fa-question-circle::before,
 .studentdashboard .fa-trophy::before,
 .teacherdashboard i.dashicon {
-    display:none;
+    display: none;
+}
+
+footer {
+    position:fixed;
+    bottom:0;
+    width:100%;
 }
 
 

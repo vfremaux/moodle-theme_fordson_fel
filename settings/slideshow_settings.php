@@ -27,7 +27,6 @@ defined('MOODLE_INTERNAL') || die();
 
 $page = new admin_settingpage('theme_fordson_fel_slideshow', get_string('slideshowsettings', 'theme_fordson_fel'));
 
-
 // Show hide user enrollment toggle.
 $name = 'theme_fordson_fel/showslideshow';
 $title = get_string('showslideshow', 'theme_fordson_fel');

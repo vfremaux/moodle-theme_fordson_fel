@@ -33,6 +33,14 @@ body:not(.is-tablet) .for-tablet {
     margin-right: 0 !important;
 }
 
+.is-mobile .edit-btn.editingbutton {
+    display: none;
+}
+
+.is-mobile h3.sectionname {
+    font-size: 125%;
+}
+
 @media all and (min-width: 480px) {
     .is-mobile #page,
     .mobiletheme #page {

@@ -120,6 +120,8 @@ $string['rawscsspre_desc'] = 'In this field you can provide initialising SCSS co
     Most of the time you will use this setting to define variables.';
 
 // Image Settings.
+$string['sitealternatename'] = 'Site alternate name';
+$string['sitealternatename_desc'] = 'Allows overriding the displayed site name';
 $string['imagesettings'] = 'Custom image settings';
 $string['headerdefaultimage'] = 'Default header image';
 $string['headerdefaultimage_desc'] = 'Default image for course headers and non-course pages';
