@@ -24,20 +24,20 @@
  */
 defined('MOODLE_INTERNAL') || die();
 
-$page = new admin_settingpage('theme_fordson_fel_variants', get_string('variant_settings', 'theme_fordson_fel'));
+$page = new admin_settingpage($themename.'_variants', get_string('variant_settings', 'theme_fordson_fel'));
 
-    $key = 'theme_fordson_fel_variantsheading';
-    $label = get_string('variantsheadingsub', 'theme_fordson_fel');
-    $desc = format_text(get_string('variantsheading_desc', 'theme_fordson_fel'), FORMAT_MARKDOWN);
-    $headersetting = new admin_setting_heading($key, $label, $desc);
-    $page->add($headersetting);
+$name = $themename.'_variantsheading';
+$title = get_string('variantsheadingsub', 'theme_fordson_fel');
+$description = format_text(get_string('variantsheading_desc', 'theme_fordson_fel'), FORMAT_MARKDOWN);
+$headersetting = new admin_setting_heading($key, $title, $description);
+$page->add($headersetting);
 
-    // Theme variant tag.
-    $name = 'theme_fordson_fel/themetitle';
-    $title = get_string('themetitle', 'theme_fordson_fel');
-    $description = get_string('themetitledesc', 'theme_fordson_fel');
-    $setting = new admin_setting_configtext($name, $title, $description, '');
-    $page->add($setting);
+// Theme variant tag.
+$name = $themename.'/themetitle';
+$title = get_string('themetitle', 'theme_fordson_fel');
+$description = get_string('themetitledesc', 'theme_fordson_fel');
+$setting = new admin_setting_configtext($name, $title, $description, '');
+$page->add($setting);
 
 // Must add the page after definiting all the settings!
 $settings->add($page);

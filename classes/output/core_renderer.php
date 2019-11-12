@@ -1788,7 +1788,7 @@ class core_renderer extends \theme_boost\output\core_renderer {
         $siteadmintitle = get_string('siteadminquicklink', 'theme_fordson_fel');
         $siteadminurl = new moodle_url('/admin/search.php');
 
-        $hasadminlink = is_siteadmin() || has_capability('moodle/site:config', \context_system::instance());
+        $hasadminlink = has_capability('moodle/site:configview', $context);
 
         $course = $this->page->course;
 

@@ -26,10 +26,10 @@
 defined('MOODLE_INTERNAL') || die();
 require_once($CFG->dirroot.'/theme/fordson_fel/classes/admin_setting_configradio.class.php');
 
-$page = new admin_settingpage('theme_fordson_fel_breadcrumbsettings', get_string('breadcrumbsettings', 'theme_fordson_fel'));
+$page = new admin_settingpage($themename.'_breadcrumbsettings', get_string('breadcrumbsettings', 'theme_fordson_fel'));
 
 // Choose breadcrumbstyle.
-$name = 'theme_fordson_fel/breadcrumbstyle';
+$name = $themename.'/breadcrumbstyle';
 $heading = get_string('breadcrumbstyle', 'theme_fordson_fel');
 $description = get_string('breadcrumbstyle_desc', 'theme_fordson_fel');
 $default = 1;
@@ -52,14 +52,14 @@ $setting = new fordson_fel_admin_setting_configradio($name, $heading, $descripti
 $setting->set_updatedcallback('theme_reset_all_caches');
 $page->add($setting);
 
-$name = 'theme_fordson_fel/breadcrumbskiprootnode';
+$name = $themename.'/breadcrumbskiprootnode';
 $heading = get_string('breadcrumbskiprootnode', 'theme_fordson_fel');
 $description = get_string('breadcrumbskiprootnode_desc', 'theme_fordson_fel');
 $default = 0;
 $setting = new admin_setting_configcheckbox($name, $heading, $description, $default);
 $page->add($setting);
 
-$name = 'theme_fordson_fel/breadcrumbmaskfirstcat';
+$name = $themename.'/breadcrumbmaskfirstcat';
 $heading = get_string('breadcrumbmaskfirstcat', 'theme_fordson_fel');
 $description = get_string('breadcrumbmaskfirstcat_desc', 'theme_fordson_fel');
 $default = 0;
@@ -67,7 +67,7 @@ $setting = new admin_setting_configcheckbox($name, $heading, $description, $defa
 $page->add($setting);
 
 if (is_dir($CFG->dirroot.'/local/my')) {
-    $name = 'theme_fordson_fel/breadcrumbmaskcatsforstudents';
+    $name = $themename.'/breadcrumbmaskcatsforstudents';
     $heading = get_string('breadcrumbmaskcatsforstudents', 'theme_fordson_fel');
     $description = get_string('breadcrumbmaskcatsforstudents_desc', 'theme_fordson_fel');
     $default = 0;
@@ -75,7 +75,7 @@ if (is_dir($CFG->dirroot.'/local/my')) {
     $page->add($setting);
 }
 
-$name = 'theme_fordson_fel/breadcrumbkeeplastcatonly';
+$name = $themename.'/breadcrumbkeeplastcatonly';
 $heading = get_string('breadcrumbkeeplastcatonly', 'theme_fordson_fel');
 $description = get_string('breadcrumbkeeplastcatonly_desc', 'theme_fordson_fel');
 $default = 0;
