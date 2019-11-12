@@ -147,6 +147,7 @@ function theme_fordson_fel_pluginfile($course, $cm, $context, $filearea, $args, 
  * @param stdclass $CFG
  * @return string
  */
+ /*
 function theme_fordson_fel_get_setting($setting, $format = false) {
     global $CFG;
     require_once($CFG->dirroot . '/lib/weblib.php');
@@ -166,3 +167,4 @@ function theme_fordson_fel_get_setting($setting, $format = false) {
         return format_string($theme->settings->$setting);
     }
 }
+*/

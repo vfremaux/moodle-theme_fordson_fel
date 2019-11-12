@@ -99,7 +99,7 @@ $templatecontext = [
 theme_fordson_fel_process_footer_texts($templatecontext);
 
 $PAGE->requires->jquery();
-$PAGE->requires->js('/theme/fordson_fel/javascript/scrolltotop.js');
+$PAGE->requires->js_call_amd('theme_fordson_fel/pagescroll', 'init');
 $PAGE->requires->js('/theme/fordson_fel/javascript/blockslider.js');
 $PAGE->requires->js('/theme/fordson_fel/javascript/cardimg.js');
 if ($PAGE->theme->settings->preset != 'Spectrum-Achromatic') {

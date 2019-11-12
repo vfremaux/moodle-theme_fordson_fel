@@ -57,7 +57,7 @@ define(['jquery', 'core/log'], function($, log) {
             }, 700);
         },
 
-        scrolltobottom: function (e) {
+        backtotop: function (e) {
             e.preventDefault();
             $('html,body').animate({
                 scrollTop: 0

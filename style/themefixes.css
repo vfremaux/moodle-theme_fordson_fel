@@ -136,7 +136,7 @@ img.activityicon {
     margin-bottom: 10px;
 }
 
-/* logsin image tuning */
+/* login image tuning */
 .customloginimage {
     width: 100%;
     background-position: top;
@@ -172,10 +172,12 @@ img.activityicon {
     display: none;
 }
 
+/*
 footer {
     position:fixed;
     bottom:0;
     width:100%;
 }
+*/
 
 
