@@ -29,7 +29,7 @@ define(['jquery', 'core/log'], function($, log) {
         init: function() {
             setTimeout( function() {
                 $('#custom_menu_1').attr('style', '');
-            }, 500);
+            }, 800);
             log.debug("AMD custommenu init");
         }
 
