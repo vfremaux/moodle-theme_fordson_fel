@@ -34,6 +34,7 @@ define(['jquery', 'core/config', 'core/log'], function($, config, log) {
 
             // Attach togglestate handler to all flexsections in page.
             $('.flexcontrol').on('click', this.togglestate);
+            $('.section-caption').on('keydown', this.togglekeyreceiver);
 
             // Attach global processings.
             $('.flexsection-global-control').on('click', this.processglobal);
@@ -171,7 +172,7 @@ define(['jquery', 'core/config', 'core/log'], function($, config, log) {
                     $('.section-content').addClass('collpased');
                     $('.section-content').removeClass('expanded');
                     $('.section-title').attr('aria-expanded', 'false');
-                    $('.flexcontrol > img').attr('src', $('.flexcontrol > img').attr('src').replace('expanded', 'collapsed'));
+                    // $('.flexcontrol > img').attr('src', $('.flexcontrol > img').attr('src').replace('expanded', 'collapsed'));
                     break;
 
                 case 'expandall':
@@ -180,10 +181,10 @@ define(['jquery', 'core/config', 'core/log'], function($, config, log) {
                     $('.section-content').addClass('expanded');
                     $('.section-content').removeClass('collapsed');
                     $('.section-title').attr('aria-expanded', 'true');
-                    $('.flexcontrol > img').attr('src',$('.flexcontrol > img').attr('src').replace('collapsed', 'expanded'));
+                    // $('.flexcontrol > img').attr('src',$('.flexcontrol > img').attr('src').replace('collapsed', 'expanded'));
                     break;
 
-                case 'reset':
+                case 'map':
                     $('.section').removeClass('collapsed');
                     $('.section').addClass('expanded');
                     $('.section-content').removeClass('expanded');
@@ -197,6 +198,20 @@ define(['jquery', 'core/config', 'core/log'], function($, config, log) {
 
             // Update positions server side.
             $.get(url);
+        },
+
+        togglekeyreceiver: function(e) {
+            e.stopPropagation();
+            e.preventDefault();
+            var that = $(this);
+            // Catch [enter] and [space]
+            if (e.keyCode == 13 || e.keyCode == 32) {
+                var sectionli = that.closest('li');
+                var sectionid = sectionli.attr('id').replace('section-', '');
+                var flexcontrol = that.find('.section-title-' + sectionid + ' > .flexcontrol');
+                var toggleproxy = $.proxy(flexsection_control.togglestate, flexcontrol);
+                toggleproxy();
+            }
         }
     };
 

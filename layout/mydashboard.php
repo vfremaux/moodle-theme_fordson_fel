@@ -24,6 +24,8 @@
 
 defined('MOODLE_INTERNAL') || die();
 
+require_once($CFG->dirroot.'/theme/fordson_fel/lib/mobile_detect_lib.php');
+
 user_preference_allow_ajax_update('drawer-open-nav', PARAM_ALPHA);
 require_once($CFG->libdir . '/behat/lib.php');
 
@@ -34,6 +36,14 @@ if (isloggedin() && $hasfhsdrawer && isset($PAGE->theme->settings->shownavclosed
     $navdraweropen = false;
 }
 $extraclasses = [];
+
+if (is_mobile()) {
+    $extraclasses[] = 'is-mobile';
+}
+if (is_tablet()) {
+    $extraclasses[] = 'is-tablet';
+}
+
 if ($navdraweropen) {
     $extraclasses[] = 'drawer-open-left';
 }
@@ -99,7 +109,7 @@ $templatecontext = [
 theme_fordson_fel_process_footer_texts($templatecontext);
 
 $PAGE->requires->jquery();
-$PAGE->requires->js('/theme/fordson_fel/javascript/scrolltotop.js');
+$PAGE->requires->js_call_amd('theme_fordson_fel/pagescroll', 'init');
 $PAGE->requires->js('/theme/fordson_fel/javascript/blockslider.js');
 $PAGE->requires->js('/theme/fordson_fel/javascript/cardimg.js');
 if ($PAGE->theme->settings->preset != 'Spectrum-Achromatic') {

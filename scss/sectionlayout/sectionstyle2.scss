@@ -50,7 +50,7 @@
 h3.sectionname {
     color: $card-bg;
     padding: $spacer;
-    background-color: $primary;
+    background-color: $brandprimary;
 }
 
 h3.sectionname a {
@@ -236,12 +236,12 @@ span.instancename {
     }
 
     h3.sectionname {
-        color: $primary;
+        color: $brandprimary;
         padding: $spacer;
         background-color: $perception-base;
     }
     h3.sectionname a {
-        color: $primary;
+        color: $brandprimary;
     }
     #page-course-view-topics .course-content .section-summary {
         border: 0;

@@ -47,7 +47,7 @@
         {{/ output.should_display_navbar_logo }}
         <span class="site-name d-none d-md-inline">{{{ sitename }}}</span>
         {{#sitealternatename}}
-        <span class="sitename alternate-name not-for-mobile" aria-hidden="true">{{sitealternatename}}</span>
+        <span class="sitename alternate-name not-for-mobile">{{sitealternatename}}</span>
         {{/sitealternatename}}
     </a>
     <!-- /logo -->
@@ -59,7 +59,7 @@
     </div>
     <!-- /fordson_fel/course_controls -->
 
-    <ul class="navbar-nav d-none d-md-flex">
+    <ul class="navbar-nav d-none d-md-flex not-for-mobile">
         {{^custommenupullright}}
         <!-- navbar_fordson_fel:custom_menu -->
         <li>
@@ -75,7 +75,7 @@
 
         {{#custommenupullright}}
         <!-- navbar_fordson_fel:custom_menu -->
-        <li>
+        <li class="not-for-mobile d-none">
         {{{ output.fordson_fel_custom_menu }}}
         {{{ output.custom_menu }}}
         <!-- navbar_fordson_fel:page_heading_menu -->
@@ -94,7 +94,7 @@
         <!-- /navbar_fordson_fel:lang -->
 
         <!-- navbar_fordson:search -->
-        <div class="d-none d-lg-block">
+        <div class="d-none d-lg-block not-for-mobile">
         {{{ output.search_box }}}
         </div>
 

@@ -107,7 +107,13 @@ class core_renderer extends \theme_boost\output\core_renderer {
     }
 
     public function context_header($headerinfo = null, $headinglevel = 1) {
-        return '';
+        global $COURSE;
+
+        if ($COURSE->id == SITEID) {
+            return '';
+        }
+
+        return parent::context_header($headerinfo, $headinglevel);
     }
 
     /**
@@ -737,7 +743,7 @@ class core_renderer extends \theme_boost\output\core_renderer {
         if ($menunode->has_children()) {
             // If the child has menus render it as a sub menu
             $submenucount++;
-            $content = html_writer::start_tag('li');
+            $content = html_writer::start_tag('li', ['tabindex' => 0]);
             if ($menunode->get_url() !== null) {
                 $url = $menunode->get_url();
                 if ($url != '') {
@@ -761,15 +767,15 @@ class core_renderer extends \theme_boost\output\core_renderer {
             $url = str_replace('%USERID%', $USER->id, $url);
             $url = str_replace('%WWWROOT%', $CFG->wwwroot, $url);
 
-            $attrs = array('class'=>'yui3-menu-label', 'title' => format_string($menunode->get_title()));
+            $attrs = array('class' => 'yui3-menu-label', 'title' => format_string($menunode->get_title()));
             if (!preg_match('#^'.$CFG->wwwroot.'#', $url)) {
                 $attrs['target'] ='_blank';
             }
 
             $content .= html_writer::link($url, format_string($menunode->get_text()), $attrs);
             $attrs = array(
-                'id'=>'cm_submenu_'.$submenucount,
-                'class'=>'yui3-menu custom_menu_submenu custom_menu_submenu'.$level
+                'id' => 'cm_submenu_'.$submenucount,
+                'class' => 'yui3-menu custom_menu_submenu custom_menu_submenu'.$level
             );
             $content .= html_writer::start_tag('div', $attrs);
             $content .= html_writer::start_tag('div', array('class'=>'yui3-menu-content'));
@@ -790,7 +796,7 @@ class core_renderer extends \theme_boost\output\core_renderer {
                 // This is a divider.
                 $content = html_writer::start_tag('li', array('class' => 'yui3-menuitem divider'));
             } else {
-                $content = html_writer::start_tag('li', array('class' => 'yui3-menuitem'));
+                $content = html_writer::start_tag('li', array('class' => 'yui3-menuitem', 'tabindex' => 0));
                 if ($menunode->get_url() !== null) {
                     $url = $menunode->get_url();
                     if ($url != '') {
@@ -815,8 +821,8 @@ class core_renderer extends \theme_boost\output\core_renderer {
                 $url = str_replace('%WWWROOT%', $CFG->wwwroot, $url);
 
                 $linktext = format_string($menunode->get_text());
-                $attrs = array('class' => 'yui3-menuitem-content', 'title' => format_string($menunode->get_title()));
-                $attrs['tabindex'] = 0;
+                $attrs = array('class' => 'yui3-menuitem-content');
+                // $attrs = array('class' => 'yui3-menuitem-content', 'title' => format_string($menunode->get_title()));
                 if (!preg_match('#^'.$CFG->wwwroot.'#', $url)) {
                     $attrs['target'] = '_blank';
                     $attrs['aria-label'] = $linktext.' '.get_string('newwindow', 'theme_fordson_fel');
@@ -2631,6 +2637,38 @@ class core_renderer extends \theme_boost\output\core_renderer {
         return $setting != '' ? $setting : '';
     }
 
+    /**
+     * This clones the standard renderer of heading_with_help().
+     * Traps the 
+     */
+    public function heading_with_help($text, $helpidentifier, $component = 'moodle', $icon = '', $iconalt = '', $level = 2, $classnames = null) {
+        global $CFG, $OUTPUT;
+
+        // Check if special documentation link is needed.
+        if (file_exists($CFG->dirroot.'/local/vflibs/vfdoclib.php')) {
+            include_once($CFG->dirroot.'/local/vflibs/vfdoclib.php');
+
+            if (empty($helpidentifier)) {
+                return parent::heading($text, $level);
+            }
+
+            $helpstring = get_string($helpidentifier, $component);
+
+            $docurl = local_vflibs_make_doc_url($component);
+
+            if ($docurl) {
+                // If we found a special documentation url.
+                $html = '';
+                $icon = $OUTPUT->pix_icon('help', $helpstring);
+                $text = $text.' <a href="'.$docurl.'" target="_blank">'.$icon.'</a>';
+                $html = $OUTPUT->heading($text, $level);
+                return $html;
+            }
+        }
+
+        return parent::heading_with_help($text, $helpidentifier, $component, $icon, $iconalt, $level, $classnames);
+    }
+
     public function pagefont() {
         $theme = theme_config::load('fordson_fel');
         $setting = $theme->settings->pagefont;
@@ -2705,18 +2743,26 @@ class core_renderer extends \theme_boost\output\core_renderer {
             $context->modname = @$bc->modname;
         }
         $context->cancollapse = ($COURSE->format != 'page') &&
-                $bc->collapsible &&
                         !empty($PAGE->theme->settings->allowblockregionscollapse);
         $context->hascontrols = !empty($bc->controls);
         if ($context->hascontrols) {
             $context->controls = $this->block_controls($bc->controls, $id);
         }
 
-        $context->firstblockclass = '';
+        // $context->iscollapsible = $bc->collapsible;
 
-        if ($firstblockinregion[$region] || empty($PAGE->theme->settings->allowblockregionscollapse)) {
-            $context->firstblockclass = 'show';
-            $firstblockinregion[$region] = false;
+        if ($PAGE->theme->settings->allowblockregionscollapse == 0) {
+            $context->hidden = false;
+        } else if ($PAGE->theme->settings->allowblockregionscollapse == 1) {
+            if ($firstblockinregion[$region]) {
+                $context->firstblockclass = 'show';
+                $firstblockinregion[$region] = false;
+                $context->hidden = false;
+            } else {
+                $context->hidden = true;
+            }
+        } else {
+            $context->hidden = true;
         }
 
         return $this->render_from_template('theme_fordson_fel/block', $context);
@@ -2732,11 +2778,10 @@ class core_renderer extends \theme_boost\output\core_renderer {
      * @return string HTML for the skip links.
      */
     public function render_skip_links($links) {
-        $context = [ 'links' => []];
+        $context = ['links' => []];
 
         foreach ($links as $url => $text) {
-            $context['links'][] = [ 'url' => $url, 'text' => $text];
-            break;
+            $context['links'][] = ['url' => $url, 'text' => $text];
         }
 
         return $this->render_from_template('core/skip_links', $context);

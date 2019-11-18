@@ -25,10 +25,10 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$page = new admin_settingpage('theme_fordson_fel_slideshow', get_string('slideshowsettings', 'theme_fordson_fel'));
+$page = new admin_settingpage($themename.'_slideshow', get_string('slideshowsettings', 'theme_fordson_fel'));
 
 // Show hide user enrollment toggle.
-$name = 'theme_fordson_fel/showslideshow';
+$name = $themename.'/showslideshow';
 $title = get_string('showslideshow', 'theme_fordson_fel');
 $description = get_string('showslideshow_desc', 'theme_fordson_fel');
 $default = 0;
@@ -37,7 +37,7 @@ $setting->set_updatedcallback('theme_reset_all_caches');
 $page->add($setting);
 
 // Header size setting.
-$name = 'theme_fordson_fel/slideshowheight';
+$name = $themename.'/slideshowheight';
 $title = get_string('slideshowheight', 'theme_fordson_fel');
 $description = get_string('slideshowheight_desc', 'theme_fordson_fel');
 $default = '250px';
@@ -66,14 +66,14 @@ $setting->set_updatedcallback('theme_reset_all_caches');
 $page->add($setting);
 
 // This is the descriptor for slide
-$name = 'theme_fordson_fel/slide1info';
+$name = $themename.'/slide1info';
 $heading = get_string('slide1info', 'theme_fordson_fel');
 $information = get_string('slide1infodesc', 'theme_fordson_fel');
 $setting = new admin_setting_heading($name, $heading, $information);
 $page->add($setting);
 
 // Slide title
-$name = 'theme_fordson_fel/slide1title';
+$name = $themename.'/slide1title';
 $title = get_string('slidetitle', 'theme_fordson_fel');
 $description = get_string('slidetitle_desc', 'theme_fordson_fel');
 $default = '';
@@ -82,7 +82,7 @@ $setting->set_updatedcallback('theme_reset_all_caches');
 $page->add($setting);
 
 //Slide Description
-$name = 'theme_fordson_fel/slide1content';
+$name = $themename.'/slide1content';
 $title = get_string('slidecontent', 'theme_fordson_fel');
 $description = get_string('slidecontent_desc', 'theme_fordson_fel');
 $default = '';
@@ -91,7 +91,7 @@ $setting->set_updatedcallback('theme_reset_all_caches');
 $page->add($setting);
 
 // logo image.
-$name = 'theme_fordson_fel/slide1image';
+$name = $themename.'/slide1image';
 $title = get_string('slideimage', 'theme_fordson_fel');
 $description = get_string('slideimage_desc', 'theme_fordson_fel');
 $setting = new admin_setting_configstoredfile($name, $title, $description, 'slide1image');
@@ -99,14 +99,14 @@ $setting->set_updatedcallback('theme_reset_all_caches');
 $page->add($setting);
 
 // This is the descriptor for slide
-$name = 'theme_fordson_fel/slide2info';
+$name = $themename.'/slide2info';
 $heading = get_string('slide2info', 'theme_fordson_fel');
 $information = get_string('slide2infodesc', 'theme_fordson_fel');
 $setting = new admin_setting_heading($name, $heading, $information);
 $page->add($setting);
 
 // Slide title
-$name = 'theme_fordson_fel/slide2title';
+$name = $themename.'/slide2title';
 $title = get_string('slidetitle', 'theme_fordson_fel');
 $description = get_string('slidetitle_desc', 'theme_fordson_fel');
 $default = '';
@@ -115,7 +115,7 @@ $setting->set_updatedcallback('theme_reset_all_caches');
 $page->add($setting);
 
 //Slide Description
-$name = 'theme_fordson_fel/slide2content';
+$name = $themename.'/slide2content';
 $title = get_string('slidecontent', 'theme_fordson_fel');
 $description = get_string('slidecontent_desc', 'theme_fordson_fel');
 $default = '';
@@ -124,7 +124,7 @@ $setting->set_updatedcallback('theme_reset_all_caches');
 $page->add($setting);
 
 // logo image.
-$name = 'theme_fordson_fel/slide2image';
+$name = $themename.'/slide2image';
 $title = get_string('slideimage', 'theme_fordson_fel');
 $description = get_string('slideimage_desc', 'theme_fordson_fel');
 $setting = new admin_setting_configstoredfile($name, $title, $description, 'slide2image');
@@ -132,13 +132,13 @@ $setting->set_updatedcallback('theme_reset_all_caches');
 $page->add($setting);
 
 // This is the descriptor for slide
-$name = 'theme_fordson_fel/slide3info';
+$name = $themename.'/slide3info';
 $heading = get_string('slide3info', 'theme_fordson_fel');
 $information = get_string('slide3infodesc', 'theme_fordson_fel');
 $setting = new admin_setting_heading($name, $heading, $information);
 $page->add($setting);
 // Slide title
-$name = 'theme_fordson_fel/slide3title';
+$name = $themename.'/slide3title';
 $title = get_string('slidetitle', 'theme_fordson_fel');
 $description = get_string('slidetitle_desc', 'theme_fordson_fel');
 $default = '';
@@ -147,7 +147,7 @@ $setting->set_updatedcallback('theme_reset_all_caches');
 $page->add($setting);
 
 //Slide Description
-$name = 'theme_fordson_fel/slide3content';
+$name = $themename.'/slide3content';
 $title = get_string('slidecontent', 'theme_fordson_fel');
 $description = get_string('slidecontent_desc', 'theme_fordson_fel');
 $default = '';
@@ -156,7 +156,7 @@ $setting->set_updatedcallback('theme_reset_all_caches');
 $page->add($setting);
 
 // logo image.
-$name = 'theme_fordson_fel/slide3image';
+$name = $themename.'/slide3image';
 $title = get_string('slideimage', 'theme_fordson_fel');
 $description = get_string('slideimage_desc', 'theme_fordson_fel');
 $setting = new admin_setting_configstoredfile($name, $title, $description, 'slide3image');

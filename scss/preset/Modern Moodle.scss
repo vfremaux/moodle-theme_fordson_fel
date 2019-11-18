@@ -26,7 +26,7 @@ $green:   #5cb85c !default;
 $teal:    #20c997 !default;
 $cyan:    #5bc0de !default;
 
-$primary:       #447198 !default;
+$brandprimary:       #447198 !default;
 $secondary:     $gray-800 !default;
 $success:       $teal !default;
 $info:          $cyan !default;
@@ -62,15 +62,15 @@ $breadcrumb-margin-bottom:          0 !default;
 $breadcrumb-divider: "/" !default;
 $breadcrumb-divider-rtl: "/" !default;
 
-$breadcrumb-bg: $primary !default;
-$breadcrumb-bg-hover: darken($primary, 15%) !default;
+$breadcrumb-bg: $brandprimary !default;
+$breadcrumb-bg-hover: darken($brandprimary, 15%) !default;
 $breadcrumb-text-color: #ffffff !default;
 
 // Alerts
 $alert-border-width:                0 !default;
 
 $theme-colors: (
-    primary: $primary,
+    primary: $brandprimary,
     secondary: $gray-200,
     success: $success,
     info: $info,
@@ -124,7 +124,7 @@ div#learningcontent {
     position: relative;
     background-color: $white;
     border: 0 !important;
-    /* border-top: 1rem solid $primary !important; */
+    /* border-top: 1rem solid $brandprimary !important; */
     box-shadow: 1px 1px 12px #555;
 }
 
@@ -169,7 +169,7 @@ div#learningcontent {
 }
 
 .progress_bar_completed {
-    background-color: $primary;
+    background-color: $brandprimary;
     text-align: right;
 }
 

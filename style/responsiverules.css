@@ -17,6 +17,16 @@
     nav .btn {
         height: 40px;
     }
+
+    #go-to-bottom,
+    #back-to-top {
+        border-radius: 20px;
+        width: 25px;
+        height: 25px;
+        padding: 3px;
+        font-size: 11px;
+        right: 10px;
+    }
 }
 
 /* courses */

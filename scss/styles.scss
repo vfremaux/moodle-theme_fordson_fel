@@ -1,5 +1,5 @@
 /**
-* fordson_fel CUSTOMIZATIONS FOR NEW ELEMENTS
+* Styles.scss : fordson_fel CUSTOMIZATIONS FOR NEW ELEMENTS
 **/
 
 /**
@@ -74,7 +74,8 @@ body#page-login-index, body#page-login-signup{
 }
 
 .fpsignup {
-    background-color: $fploginform;
+    background-color: $fploginform-bg;
+    color: $fploginform-fg;
     padding: $spacer;
     box-shadow: 0px 1px 1px 1px rgba(0, 0, 0, 0.3);
     border: 1px solid $card-bg;
@@ -132,7 +133,7 @@ div#fordson_fellogin {
 
 .row.loginicons {
     padding: 2rem 0;
-    color: $primary;
+    color: $brandprimary;
 }
 
 .featuretext {
@@ -300,7 +301,6 @@ ul.footercontact {
 }
 
 #page-footer {
-    position: relative;
     background-color: $footer-bg;
 }
 
@@ -310,7 +310,7 @@ ul.footercontact {
 
 #page-footer .socials_wrapper .socials a{
     text-decoration: none !important;
-    color: $primary;
+    color: $brandprimary;
 }
 
 /* Slideshow */
@@ -322,7 +322,7 @@ ul.footercontact {
 }
 
 .carousel-caption.d-none.d-md-block {
-    background: rgba(0, 0, 0, 0.7);
+    background: rgba(0, 0, 0, 0.3);
 }
 
 .carousel-caption {
@@ -979,8 +979,9 @@ ul.teacherscourseview {
     }
   }
 }
+
 span.userbutton {
-    color: $navbar-fhs-color;
+    color: $topnavbar-fg;
 }
 
 
@@ -993,8 +994,8 @@ span.userbutton {
 }
 
 .studentdash .btn, .teacherdash .btn, .enrollcodes .btn, .siteadminlink .btn {
-    background-color: $primary;
-    border-color: $primary;
+    background-color: $brandprimary;
+    border-color: $brandprimary;
     color: $white;
 }
 
@@ -1067,7 +1068,7 @@ width: $activityiconsize;
 }
 
 .progress_bar_completed {
-    background-color: $primary;
+    background-color: $brandprimary;
     text-align: right;
 }
 
@@ -1129,7 +1130,7 @@ div#page.container-fluid {
 
 @if $gutterwidth == 0rem {
     .row {
-        margin-right: $gutterwidth; 
+        margin-right: $gutterwidth;
         margin-left: $gutterwidth;
     }
     .col-12 {
@@ -1139,7 +1140,6 @@ div#page.container-fluid {
     #page-wrapper {
         padding-bottom: $gutterwidth;
     }
-    
 }
 
 @media screen and (max-width: 576px) {
@@ -1375,9 +1375,32 @@ h3.sectionname {
     width: 90%;
 }
 
-.custom_menu_submenu {
+.usermenu,
+.usermenu .dropdown-menu,
+.custom-menu,
+.custom_menu_submenu,
+.navbar .popover-region-container {
     background-color: $topnavbar-bg;
-    color: $topnavbar-fg;
+}
+
+.usermenu a,
+.custom-menu a,
+.custom_menu_submenu a,
+.navbar .nav-item .nav-link {
+    color: $topnavbar-fg !important;
+}
+
+.usermenu .dropdown-menu a:hover,
+.custom_menu_submenu li:hover,
+.usermenu .dropdown-menu a:focus,
+.custom_menu_submenu li:focus {
+    background-color: $topnavbar-bg-hover !important;
+}
+
+/* overides the boost yui3 styles. */
+.custom_menu_submenu a:hover,
+.custom_menu_submenu a:focus {
+    background-color: transparent !important;
 }
 
 .lang-menu-label {

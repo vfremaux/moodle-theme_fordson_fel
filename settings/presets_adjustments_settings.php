@@ -25,17 +25,17 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$page = new admin_settingpage('theme_fordson_fel_presetadjustment', get_string('presetadjustmentsettings', 'theme_fordson_fel'));
+$page = new admin_settingpage($themename.'_presetadjustment', get_string('presetadjustmentsettings', 'theme_fordson_fel'));
 
 // Content Info
-$name = 'theme_fordson_fel/generalcontentinfo';
+$name = $themename.'/generalcontentinfo';
 $heading = get_string('generalcontentinfo', 'theme_fordson_fel');
 $information = get_string('generalcontentinfodesc', 'theme_fordson_fel');
 $setting = new admin_setting_heading($name, $heading, $information);
 $page->add($setting);
 
 // Frontpage show login form
-$name = 'theme_fordson_fel/showloginform';
+$name = $themename.'/showloginform';
 $title = get_string('showloginform', 'theme_fordson_fel');
 $description = get_string('showloginform_desc', 'theme_fordson_fel');
 $default = 1;
@@ -44,7 +44,7 @@ $setting->set_updatedcallback('theme_reset_all_caches');
 $page->add($setting);
 
 // Frontpage show enroll form and other site homepage options on MyDashboard.
-$name = 'theme_fordson_fel/enhancedmydashboard';
+$name = $themename.'/enhancedmydashboard';
 $title = get_string('enhancedmydashboard', 'theme_fordson_fel');
 $description = get_string('enhancedmydashboard_desc', 'theme_fordson_fel');
 $default = 1;
@@ -53,7 +53,7 @@ $setting->set_updatedcallback('theme_reset_all_caches');
 $page->add($setting);
 
 // Frontpage My Courses Sort by Lastaccess.
-$name = 'theme_fordson_fel/frontpagemycoursessorting';
+$name = $themename.'/frontpagemycoursessorting';
 $title = get_string('frontpagemycoursessorting', 'theme_fordson_fel');
 $description = get_string('frontpagemycoursessorting_desc', 'theme_fordson_fel');
 $default = 1;
@@ -62,7 +62,7 @@ $setting->set_updatedcallback('theme_reset_all_caches');
 $page->add($setting);
 
 // Frontpage show additional block regions
-$name = 'theme_fordson_fel/showblockregions';
+$name = $themename.'/showblockregions';
 $title = get_string('showblockregions', 'theme_fordson_fel');
 $description = get_string('showblockregions_desc', 'theme_fordson_fel');
 $default = 1;
@@ -71,7 +71,7 @@ $setting->set_updatedcallback('theme_reset_all_caches');
 $page->add($setting);
 
 // Content spacing
-$name = 'theme_fordson_fel/learningcontentpadding';
+$name = $themename.'/learningcontentpadding';
 $title = get_string('learningcontentpadding', 'theme_fordson_fel');
 $description = get_string('learningcontentpadding_desc', 'theme_fordson_fel');
 $default = '125px';
@@ -107,7 +107,7 @@ $setting->set_updatedcallback('theme_reset_all_caches');
 $page->add($setting);
 
 // Header size setting.
-$name = 'theme_fordson_fel/headerimagepadding';
+$name = $themename.'/headerimagepadding';
 $title = get_string('headerimagepadding', 'theme_fordson_fel');
 $description = get_string('headerimagepadding_desc', 'theme_fordson_fel');
 $default = '200px';
@@ -155,7 +155,7 @@ $setting->set_updatedcallback('theme_reset_all_caches');
 $page->add($setting);
 
 // gutter width
-$name = 'theme_fordson_fel/gutterwidth';
+$name = $themename.'/gutterwidth';
 $title = get_string('gutterwidth', 'theme_fordson_fel');
 $description = get_string('gutterwidth_desc', 'theme_fordson_fel');
 $default = '4rem';
@@ -184,7 +184,7 @@ $setting->set_updatedcallback('theme_reset_all_caches');
 $page->add($setting);
 
 // Block and Content widths
-$name = 'theme_fordson_fel/blockwidthfordson_fel';
+$name = $themename.'/blockwidthfordson_fel';
 $title = get_string('blockwidthfordson_fel', 'theme_fordson_fel');
 $description = get_string('blockwidthfordson_fel_desc', 'theme_fordson_fel');
 $default = '280px';
@@ -209,7 +209,7 @@ $setting->set_updatedcallback('theme_reset_all_caches');
 $page->add($setting);
 
 // Courses height
-$name = 'theme_fordson_fel/activityiconsize';
+$name = $themename.'/activityiconsize';
 $title = get_string('activityiconsize', 'theme_fordson_fel');
 $description = get_string('activityiconsize_desc', 'theme_fordson_fel');
 $default = '32px';
@@ -231,14 +231,14 @@ $setting->set_updatedcallback('theme_reset_all_caches');
 $page->add($setting);
 
 // This is the descriptor for icon One
-$name = 'theme_fordson_fel/coursetileinfo';
+$name = $themename.'/coursetileinfo';
 $heading = get_string('coursetileinfo', 'theme_fordson_fel');
 $information = get_string('coursetileinfodesc', 'theme_fordson_fel');
 $setting = new admin_setting_heading($name, $heading, $information);
 $page->add($setting);
 
 // trim title setting.
-$name = 'theme_fordson_fel/trimtitle';
+$name = $themename.'/trimtitle';
 $title = get_string('trimtitle', 'theme_fordson_fel');
 $description = get_string('trimtitle_desc', 'theme_fordson_fel');
 $default = '256';
@@ -267,7 +267,7 @@ $setting->set_updatedcallback('theme_reset_all_caches');
 $page->add($setting);
 
 // Frontpage Available Courses enhancement
-$name = 'theme_fordson_fel/titletooltip';
+$name = $themename.'/titletooltip';
 $title = get_string('titletooltip', 'theme_fordson_fel');
 $description = get_string('titletooltip_desc', 'theme_fordson_fel');
 $default = 0;
@@ -276,7 +276,7 @@ $setting->set_updatedcallback('theme_reset_all_caches');
 $page->add($setting);
 
 // trim title setting.
-$name = 'theme_fordson_fel/trimsummary';
+$name = $themename.'/trimsummary';
 $title = get_string('trimsummary', 'theme_fordson_fel');
 $description = get_string('trimsummary_desc', 'theme_fordson_fel');
 $default = '300';
@@ -301,7 +301,7 @@ $setting->set_updatedcallback('theme_reset_all_caches');
 $page->add($setting);
 
 // Courses height
-$name = 'theme_fordson_fel/courseboxheight';
+$name = $themename.'/courseboxheight';
 $title = get_string('courseboxheight', 'theme_fordson_fel');
 $description = get_string('courseboxheight_desc', 'theme_fordson_fel');
 $default = '250px';
@@ -321,7 +321,7 @@ $setting->set_updatedcallback('theme_reset_all_caches');
 $page->add($setting);
 
 // category icons on or off
-$name = 'theme_fordson_fel/enablecategoryicon';
+$name = $themename.'/enablecategoryicon';
 $title = get_string('enablecategoryicon', 'theme_fordson_fel');
 $description = get_string('enablecategoryicon_desc', 'theme_fordson_fel');
 $default = 0;
@@ -330,7 +330,7 @@ $setting->set_updatedcallback('theme_reset_all_caches');
 $page->add($setting);
 
 //course category Icon
-$name = 'theme_fordson_fel/catsicon';
+$name = $themename.'/catsicon';
 $title = get_string('catsicon','theme_fordson_fel');
 $description = get_string('catsicon_desc', 'theme_fordson_fel');
 $default = 'folder';

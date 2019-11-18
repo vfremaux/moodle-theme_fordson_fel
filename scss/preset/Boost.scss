@@ -23,7 +23,7 @@ $green:   #5cb85c !default;
 $teal:    #20c997 !default;
 $cyan:    #5bc0de !default;
 
-$primary:       $blue !default;
+$brandprimary:       $blue !default;
 $secondary:     $gray-800 !default;
 $success:       $green !default;
 $info:          $cyan !default;
@@ -61,7 +61,7 @@ $alert-border-width:                0 !default;
 $card-group-margin: .25rem;
 
 $theme-colors: (
-    primary: $primary,
+    primary: $brandprimary,
     secondary: $gray-200,
     success: $success,
     info: $info,

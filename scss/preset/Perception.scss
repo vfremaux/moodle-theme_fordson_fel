@@ -25,7 +25,7 @@ $green:   #7fd80a !default;
 $teal:    #60e8b5 !default;
 $cyan:    #5bc0de !default;
 
-$primary:       #1e2429 !default;
+$brandprimary:       #1e2429 !default;
 $secondary:     $gray-300 !default;
 $success:       $green !default;
 $info:          $cyan !default;
@@ -78,8 +78,8 @@ $breadcrumb-margin-bottom:          0 !default;
 $breadcrumb-divider: "/" !default;
 $breadcrumb-divider-rtl: "/" !default;
 
-$breadcrumb-bg: $primary !default;
-$breadcrumb-bg-hover: darken($primary, 15%) !default;
+$breadcrumb-bg: $brandprimary !default;
+$breadcrumb-bg-hover: darken($brandprimary, 15%) !default;
 $breadcrumb-text-color: #ffffff !default;
 
 // Progress bars
@@ -129,7 +129,7 @@ $dropdown-link-active-bg:           $gray-400 !default;
 $alert-border-width:                0 !default;
 
 $theme-colors: (
-    primary: $primary,
+    primary: $brandprimary,
     secondary: $secondary,
     success: $success,
     info: $info,

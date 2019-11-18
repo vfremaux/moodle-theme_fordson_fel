@@ -102,11 +102,8 @@ if (is_dir($CFG->dirroot.'/local/technicalsignals')) {
 }
 
 $PAGE->requires->jquery();
-if (isset($PAGE->theme->settings->showbacktotop) && $PAGE->theme->settings->showbacktotop == 1) {
-    $PAGE->requires->js('/theme/fordson_fel/javascript/scrolltotop.js');
-    $PAGE->requires->js('/theme/fordson_fel/javascript/scrolltobottom.js');
-    $PAGE->requires->js('/theme/fordson_fel/javascript/scrollspy.js');
-}
+$PAGE->requires->js_call_amd('theme_fordson_fel/pagescroll', 'init');
+$PAGE->requires->js('/theme/fordson_fel/javascript/scrollspy.js');
 $PAGE->requires->js('/theme/fordson_fel/javascript/tooltipfix.js');
 $PAGE->requires->js('/theme/fordson_fel/javascript/blockslider.js');
 

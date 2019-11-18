@@ -24,34 +24,34 @@
  */
 defined('MOODLE_INTERNAL') || die();
 
-$page = new admin_settingpage('theme_fordson_fel_javascript', get_string('js_settings', 'theme_fordson_fel'));
+$page = new admin_settingpage($themename.'_javascript', get_string('js_settings', 'theme_fordson_fel'));
 
-$key = 'theme_fordson_fel_jsheading';
-$label = get_string('jsheadingsub', 'theme_fordson_fel');
-$desc = format_text(get_string('jsheading_desc', 'theme_fordson_fel'), FORMAT_MARKDOWN);
-$headersetting = new admin_setting_heading($key, $label, $desc);
+$name = $themename.'_jsheading';
+$title = get_string('jsheadingsub', 'theme_fordson_fel');
+$description = format_text(get_string('jsheading_desc', 'theme_fordson_fel'), FORMAT_MARKDOWN);
+$headersetting = new admin_setting_heading($name, $title, $description);
 $page->add($headersetting);
 
-$name = 'theme_fordson_fel/additionaljs';
+$name = $themename.'/additionaljs';
 $title = get_string('additionaljs', 'theme_fordson_fel');
 $description = get_string('additionaljs_desc', 'theme_fordson_fel');
-$setting = new admin_setting_configstoredfile($name, $title, $description, 'additionaljs', 0, 
-    ['maxfiles' => -1, 'accepted_types' => ['.js']]);
+$options = ['maxfiles' => -1, 'accepted_types' => ['.js']];
+$setting = new admin_setting_configstoredfile($name, $title, $description, 'additionaljs', 0, $options);
 $page->add($setting);
 
-$name = 'theme_fordson_fel/pagetyperestrictions';
+$name = $themename.'/pagetyperestrictions';
 $title = get_string('pagetyperestrictions', 'theme_fordson_fel');
 $description = get_string('pagetyperestrictions_desc', 'theme_fordson_fel');
 $setting = new admin_setting_configtext($name, $title, $description, '', PARAM_TEXT, 80);
 $page->add($setting);
 
-$key = 'theme_fordson_fel_jsextraheading';
-$label = get_string('jsextrabehaviourheadingsub', 'theme_fordson_fel');
-$desc = '';
-$headersetting = new admin_setting_heading($key, $label, $desc);
+$name = $themename.'_jsextraheading';
+$title = get_string('jsextrabehaviourheadingsub', 'theme_fordson_fel');
+$description = '';
+$headersetting = new admin_setting_heading($name, $title, $description);
 $page->add($headersetting);
 
-$name = 'theme_fordson_fel/allowblockregionscollapse';
+$name = $themename.'/allowblockregionscollapse';
 $title = get_string('allowblockregionscollapse', 'theme_fordson_fel');
 $description = get_string('allowblockregionscollapse_desc', 'theme_fordson_fel');
 $default = 0;
@@ -62,7 +62,6 @@ $choices = [
 ];
 $setting = new admin_setting_configselect($name, $title, $description, $default, $choices);
 $page->add($setting);
-
 
 // Must add the page after definition all the settings!
 $settings->add($page);

@@ -63,7 +63,7 @@ function theme_fordson_fel_get_main_scss_content($theme) {
     }
     if (!$presetisset) {
         $filename .= '.scss';
-        if ($filename && ($presetfile = $fs->get_file($context->id, 'theme_fordson_fel', 'preset', 0, '/', $filename))) {
+        if ($filename && ($presetfile = $fs->get_file($context->id, 'theme_'.$theme->name, 'preset', 0, '/', $filename))) {
             $scss .= $presetfile->get_content();
         }
         else {
@@ -156,18 +156,31 @@ function theme_fordson_fel_get_pre_scss($theme) {
 
     $configurable = [
     // Config key => variableName,
-    'brandprimary' => ['primary'],
+    'brandprimary' => ['brandprimary'],
+    'brandsecondary' => ['brandsecondary'],
     'brandsuccess' => ['success'],
     'brandinfo' => ['info'],
     'brandwarning' => ['warning'],
     'branddanger' => ['danger'],
+
+    'topnavbarbg' => ['topnavbar-bg'],
+    'topnavbarfg' => ['topnavbar-fg'],
+    'topnavbarbghov' => ['topnavbar-bg-hover'],
+    'topnavbarteacherbg' => ['teachernavbarcolor'],
+
     'bodybackground' => ['body-bg'],
+
     'breadcrumbbkg' => ['breadcrumb-bg'],
     'breadcrumbfg' => ['breadcrumb-fg'],
+
     'cardbkg' => ['card-bg'],
+
     'drawerbkg' => ['drawer-bg'],
     'footerbkg' => ['footer-bg'],
-    'fploginform' => ['fploginform'],
+
+    'fploginformbg' => ['fploginform-bg'],
+    'fploginformfg' => ['fploginform-fg'],
+
     'headerimagepadding' => ['headerimagepadding'],
     'markettextbg' => ['markettextbg'],
     'iconwidth' => ['fpicon-width'],
@@ -177,15 +190,13 @@ function theme_fordson_fel_get_pre_scss($theme) {
     'slideshowheight' => ['slideshowheight'],
     'activityiconsize' => ['activityiconsize'],
     'gutterwidth' => ['gutterwidth'],
-    'topnavbarbg' => ['topnavbar-bg'],
-    'topnavbarfg' => ['topnavbar-fg'],
-    'topnavbarteacherbg' => ['teachernavbarcolor'],
     ];
 
     // Add settings variables.
     foreach ($configurable as $configkey => $targets) {
         $value = $theme->settings->{$configkey};
         if (empty($value)) {
+            // $value = 'undefined';
             continue;
         }
         array_map(function ($target) use (&$prescss, $value) {

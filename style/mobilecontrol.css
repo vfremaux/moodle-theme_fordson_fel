@@ -21,7 +21,7 @@ body:not(.is-tablet) .for-tablet {
 .is-mobile #learningcontent,
 .mobiletheme #learningcontent {
     width: 100% !important;
-    margin-top: 20px !important;
+    margin-top: 20px;
 }
 
 .is-mobile #page,

@@ -25,10 +25,10 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$page = new admin_settingpage('theme_fordson_fel_images', get_string('imagesettings', 'theme_fordson_fel'));
+$page = new admin_settingpage($themename.'_images', get_string('imagesettings', 'theme_fordson_fel'));
 
 // Show hide user enrollment toggle.
-$name = 'theme_fordson_fel/showcourseheaderimage';
+$name = $themename.'/showcourseheaderimage';
 $title = get_string('showcourseheaderimage', 'theme_fordson_fel');
 $description = get_string('showcourseheaderimage_desc', 'theme_fordson_fel');
 $default = 1;
@@ -37,7 +37,7 @@ $setting->set_updatedcallback('theme_reset_all_caches');
 $page->add($setting);
 
 // Favicon upload.
-$name = 'theme_fordson_fel/favicon';
+$name = $themename.'/favicon';
 $title = get_string ( 'favicon', 'theme_fordson_fel' );
 $description = get_string ( 'favicon_desc', 'theme_fordson_fel' );
 $setting = new admin_setting_configstoredfile( $name, $title, $description, 'favicon', 0,
@@ -46,7 +46,7 @@ $setting->set_updatedcallback ( 'theme_reset_all_caches' );
 $page->add($setting);
 
 // logo image.
-$name = 'theme_fordson_fel/headerlogo';
+$name = $themename.'/headerlogo';
 $title = get_string('headerlogo', 'theme_fordson_fel');
 $description = get_string('headerlogo_desc', 'theme_fordson_fel');
 $setting = new admin_setting_configstoredfile($name, $title, $description, 'headerlogo');
@@ -54,7 +54,7 @@ $setting->set_updatedcallback('theme_reset_all_caches');
 $page->add($setting);
 
 // Alternate site name.
-$name = 'theme_fordson_fel/sitealternatename';
+$name = $themename.'/sitealternatename';
 $title = get_string('sitealternatename', 'theme_fordson_fel');
 $description = get_string('sitealternatename_desc', 'theme_fordson_fel');
 $default = '';
@@ -62,7 +62,7 @@ $setting = new admin_setting_configtext($name, $title, $description, $default);
 $page->add($setting);
 
 // Default header image.
-$name = 'theme_fordson_fel/headerdefaultimage';
+$name = $themename.'/headerdefaultimage';
 $title = get_string('headerdefaultimage', 'theme_fordson_fel');
 $description = get_string('headerdefaultimage_desc', 'theme_fordson_fel');
 $setting = new admin_setting_configstoredfile($name, $title, $description, 'headerdefaultimage');
@@ -70,7 +70,7 @@ $setting->set_updatedcallback('theme_reset_all_caches');
 $page->add($setting);
 
 // Default background image.
-$name = 'theme_fordson_fel/backgroundimage';
+$name = $themename.'/backgroundimage';
 $title = get_string('backgroundimage', 'theme_fordson_fel');
 $description = get_string('backgroundimage_desc', 'theme_fordson_fel');
 $setting = new admin_setting_configstoredfile($name, $title, $description, 'backgroundimage');
@@ -78,11 +78,11 @@ $setting->set_updatedcallback('theme_reset_all_caches');
 $page->add($setting);
 
 // Default login page image.
-$name = 'theme_fordson_fel/loginimage';
+$name = $themename.'/loginimage';
 $title = get_string('loginimage', 'theme_fordson_fel');
 $description = get_string('loginimage_desc', 'theme_fordson_fel');
-$setting = new admin_setting_configstoredfile($name, $title, $description, 'loginimage', 0, 
-    ['maxfiles' => 20, 'accepted_types' => ['.jpg', '.gif', '.svg', '.png']]);
+$options = ['maxfiles' => 20, 'accepted_types' => ['.jpg', '.gif', '.svg', '.png']];
+$setting = new admin_setting_configstoredfile($name, $title, $description, 'loginimage', 0, $options);
 $setting->set_updatedcallback('theme_reset_all_caches');
 $page->add($setting);
 

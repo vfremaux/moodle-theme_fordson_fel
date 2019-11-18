@@ -25,25 +25,28 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$page = new admin_settingpage('theme_fordson_fel_presets', get_string('presets_settings', 'theme_fordson_fel'));
+$page = new admin_settingpage($themename.'_presets', get_string('presets_settings', 'theme_fordson_fel'));
 
 // modchooser settings tab.
-$page = new admin_settingpage('theme_fordson_fel_modchooser', get_string('modchoosersettingspage', 'theme_fordson_fel'));
+$page = new admin_settingpage($themename.'_modchooser', get_string('modchoosersettingspage', 'theme_fordson_fel'));
 
 // Custom Menu label
-$name = 'theme_fordson_fel/modchoosercustomlabel';
+$name = $themename.'/modchoosercustomlabel';
 $title = get_string('modchoosercustomlabel', 'theme_fordson_fel');
 $description = get_string('modchoosercustomlabel_desc', 'theme_fordson_fel');
 $setting = new admin_setting_configtext($name, $title, $description, $default);
 $setting->set_updatedcallback('theme_reset_all_caches');
 $page->add($setting);
 
-$setting = new admin_setting_configtextarea('theme_fordson_fel/commonlyused', get_string('commonlyused', 'theme_fordson_fel'), get_string('commonlyuseddesc', 'theme_fordson_fel'), '', PARAM_RAW);
+$name = $themename.'/commonlyused';
+$title = get_string('commonlyused', 'theme_fordson_fel');
+$description = get_string('commonlyuseddesc', 'theme_fordson_fel');
+$setting = new admin_setting_configtextarea($name, $title, $description, '', PARAM_RAW);
 $setting->set_updatedcallback('theme_reset_all_caches');
 $page->add($setting);
 
 // show only custom activities/resource
-$name = 'theme_fordson_fel/showonlycustomactivities';
+$name = $themename.'/showonlycustomactivities';
 $title = get_string('showonlycustomactivities', 'theme_fordson_fel');
 $description = get_string('showonlycustomactivities_desc', 'theme_fordson_fel');
 $default = 0;
@@ -52,7 +55,7 @@ $setting->set_updatedcallback('theme_reset_all_caches');
 $page->add($setting);
 
 // show only custom activities/resource
-$name = 'theme_fordson_fel/showalltomanager';
+$name = $themename.'/showalltomanager';
 $title = get_string('showalltomanager', 'theme_fordson_fel');
 $description = get_string('showalltomanager_desc', 'theme_fordson_fel');
 $default = 1;

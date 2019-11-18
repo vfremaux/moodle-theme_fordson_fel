@@ -31,7 +31,7 @@ $green:   #5cb85c !default;
 $teal:    #20c997 !default;
 $cyan:    #5bc0de !default;
 
-$primary:       $blue !default;
+$brandprimary:       $blue !default;
 $secondary:     $gray-800 !default;
 $success:       $green !default;
 $info:          $cyan !default;
@@ -64,7 +64,7 @@ $breadcrumb-padding-y:              .25rem !default;
 $breadcrumb-padding-x:              0 !default;
 $breadcrumb-item-padding:           .5rem !default;
 $breadcrumb-margin-bottom:          0 !default;
-$breadcrumb-bg:                     $primary !default;
+$breadcrumb-bg:                     $brandprimary !default;
 $breadcrumb-divider: "/" !default;
 $breadcrumb-divider-rtl: "/" !default;
 
@@ -72,7 +72,7 @@ $breadcrumb-divider-rtl: "/" !default;
 $alert-border-width:                0 !default;
 
 $theme-colors: (
-    primary: $primary,
+    primary: $brandprimary,
     secondary: $gray-200,
     success: $success,
     info: $info,
@@ -143,7 +143,7 @@ body {
 }
 
 a#blocksliderbutton {
-    background-color: $primary;
+    background-color: $brandprimary;
 }
 
 div#learningcontent {
@@ -202,7 +202,7 @@ div#blockslider {
 }
 
 .progress_bar_completed {
-    background-color: $primary;
+    background-color: $brandprimary;
     text-align: right;
 }
 

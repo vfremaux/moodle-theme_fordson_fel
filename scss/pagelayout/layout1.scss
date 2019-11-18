@@ -75,7 +75,7 @@ div#learningcontent {
 
 @if $perceptionpreset == 1 {
 	// Special breadcrumbs for this layout
-	$breadcrumb-bg: $primary;
+	$breadcrumb-bg: $brandprimary;
 	$breadcrumb-bg-hover: $perception-base;
 	$breadcrumb-text-color: $white;
 
@@ -159,7 +159,7 @@ div#learningcontent {
 	    //border-top: 7px solid $white;
 	    //border-radius: $border-radius $border-radius 0 0;
 	    background-color: rgba($headerbackgroundcolor, 0.95);
-	    box-shadow: inset 0px -8px 10px -5px rgba($primary, 0.3);
+	    box-shadow: inset 0px -8px 10px -5px rgba($brandprimary, 0.3);
 	}
 
 	[data-region="drawer-toggle"] .btn {
@@ -331,7 +331,7 @@ div#learningcontent {
 	        background-color:transparent;
 	    }
 	    li.breadcrumb-item a, li.breadcrumb-item {
-	    	color: $primary;
+	    	color: $brandprimary;
 	    }
 	}
 }
