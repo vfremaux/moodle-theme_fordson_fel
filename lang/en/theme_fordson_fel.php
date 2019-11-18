@@ -623,7 +623,7 @@ $string['allowblockregionscollapse_desc'] = 'Some regions can use an accordion c
 // Flexsection extras.
 $string['collapseall'] = 'Close all';
 $string['expandall'] = 'Open all';
-$string['reset'] = 'Reset';
+$string['map'] = 'Course map';
 $string['flexinitialstate'] = 'Flex initial state';
 $string['flexinitialstate_desc'] = 'Set the initial state of section tree when first arriving to course without any user preferences.';
 $string['flexcollapsed'] = 'Closed';

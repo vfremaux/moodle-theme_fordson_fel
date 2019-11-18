@@ -201,8 +201,6 @@ define(['jquery', 'core/config', 'core/log'], function($, config, log) {
         },
 
         togglekeyreceiver: function(e) {
-            e.stopPropagation();
-            e.preventDefault();
             var that = $(this);
             // Catch [enter] and [space]
             if (e.keyCode == 13 || e.keyCode == 32) {
