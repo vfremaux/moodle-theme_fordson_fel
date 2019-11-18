@@ -206,9 +206,9 @@ define(['jquery', 'core/config', 'core/log'], function($, config, log) {
             if (e.keyCode == 13 || e.keyCode == 32) {
                 var sectionli = that.closest('li');
                 var sectionid = sectionli.attr('id').replace('section-', '');
-                var flexcontrol = that.find('.section-title-' + sectionid + ' > .flexcontrol');
+                var flexcontrol = that.find('#section-title-' + sectionid + ' > .flexcontrol');
                 var toggleproxy = $.proxy(flexsection_control.togglestate, flexcontrol);
-                toggleproxy();
+                toggleproxy(e);
             }
         }
     };
