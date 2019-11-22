@@ -28,9 +28,12 @@ define(['jquery', 'core/config', 'core/log'], function($, config, log) {
      * @param {String} selector The selector for the page region containing the actions panel.
      */
     var flexsection_control = {
+
+        courseid: 0,
+
         init: function(attribs) {
 
-            M.course.id = attribs;
+            this.courseid = attribs;
 
             // Attach togglestate handler to all flexsections in page.
             $('.flexcontrol').on('click', this.togglestate);
@@ -46,7 +49,7 @@ define(['jquery', 'core/config', 'core/log'], function($, config, log) {
         // Init_editing will NOT take control of section name.
         init_editing: function(attribs) {
 
-            M.course.id = attribs;
+            this.courseid = attribs;
 
             // Expand everything.
             $('.section.sub > .content > .section-content').css('display', 'block');
@@ -162,7 +165,7 @@ define(['jquery', 'core/config', 'core/log'], function($, config, log) {
             var what = matchs[1];
 
             var url = config.wwwroot + '/theme/fordson_fel/sections/ajax/register.php?';
-            url += 'id=' + M.course.id;
+            url += 'id=' + flexsection_control.courseid;
             url += '&what=' + what;
 
             switch (what) {
