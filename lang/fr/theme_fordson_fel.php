@@ -383,8 +383,6 @@ $string['pagelayout3'] = 'Contenu centré, la boîte du titre chevauche l\'image
 $string['pagelayout4'] = 'Contenu centré, image en arrière plan sur toute la page';
 $string['pagelayout5'] = 'Disposition Boost par défaut, image en arrière plan de la boîte de titre';
 $string['pagelayout_desc'] = 'Sélectionnez une disposition. <a href="https://goo.gl/fMXzSo" target="_new">Documentation du thème Fordson 3.5</a>';
-$string['pagefont'] = 'Sélecteur de la police de la page';
-$string['pagefont_desc'] = 'Choisissez une police pour le texte de la page';
 $string['pinterest'] = 'URL Pinterest';
 $string['pinterestdesc'] = 'Saisir l\'URL de votre page Pinterest (i.e. http://pinterest.com/).';
 $string['pluginname'] = 'Fordson FEL';
@@ -673,3 +671,16 @@ $string['sectionsstyleimages_desc'] = '<p>Ajouter des images appelables dans les
 /* Menu adds */
 $string['custommenupullright'] = 'Pousser le menu personnalisé à droite';
 $string['custommenupullright_desc'] = '';
+
+// Font settings
+$string['fontsettings'] = 'Polices de caractères';
+$string['usecustomfonts'] = 'Polices personnalisées';
+$string['usecustomfonts_desc'] = 'Utiliser les polices personnalisées';
+$string['generalbodyfont'] = 'Police personnalisé du body';
+$string['generalbodyfont_desc'] = '';
+$string['generalaltfont'] = 'Police personnalisée alternative';
+$string['generalaltfont_desc'] = 'Si défini avec au moins un fichier, s\'applique au éléments explicitement stylés par le style alt-font.';
+$string['generalaltccsselector'] = 'Sélecteur CSS de police alternative';
+$string['generalaltccsselector_desc'] = 'Si exprimée, la police alternative sera appliquée à tous les éléments correspondants au selecteur CSS';
+$string['titlefont'] = 'Police personnalisée pour les titres';
+$string['titlefont_desc'] = 'Si défini avec au moins un fichier, s\'applique aux titres H<n>.';

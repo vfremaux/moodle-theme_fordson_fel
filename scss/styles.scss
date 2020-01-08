@@ -3,6 +3,50 @@
 **/
 
 /**
+* Custom fonts
+**/
+
+@if $usecustomfonts == 1 {
+
+    @if $generalbodyfont {
+        @font-face {
+            font-family: 'mainfont';
+            src: $generalbodyfont;
+        }
+
+        body {
+            font-family: 'mainfont' !important;
+        }
+    }
+
+    @if $generalaltfont {
+        @font-face {
+            font-family: 'altfont';
+            src: $generalaltfont;
+        }
+
+        .alt-font {
+            font-family: 'altfont' !important;
+        }
+
+        #{$altfontselector} {
+            font-family: 'altfont' !important;
+        }
+    }
+
+    @if $titlefont {
+        @font-face {
+            font-family: 'titlefont';
+            src: $titlefont;
+        }
+
+        h1,h2,h3,h4 {
+            font-family: 'titlefont' !important;
+        }
+    }
+}
+
+/**
 * Layout Header
 **/
 
@@ -856,6 +900,10 @@ ul.teacherscourseview {
     padding-top: .5rem;
 }
 
+.dashtitle h3 {
+    background-color: $brandprimary;
+}
+
 .jumpmenu {
     display: inline-block;
 }
@@ -1453,4 +1501,17 @@ h3.sectionname {
 .lang-menu-submenu > div > ul {
     padding: 0;
     margin: 0;
+}
+
+#page-user-profile .node_category h3 {
+     background-color: $brandprimary;
+     color: #ffffff;
+     padding: 1rem;
+}
+
+/* adminsettings */
+#adminsettings h3 {
+    border-bottom: 2px solid $brandprimary;
+    color: $brandprimary;
+    background-color: #f4f4f4;
 }

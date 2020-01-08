@@ -131,8 +131,13 @@ function theme_fordson_fel_get_main_scss_content($theme) {
         $scss .= file_get_contents($CFG->dirroot . '/theme/fordson_fel/scss/marketingstyle/marketingstyle4.scss');
     }
 
-    $scss .= file_get_contents($CFG->dirroot . '/theme/fordson_fel/scss/stylebreadcrumb.scss');
     $scss .= file_get_contents($CFG->dirroot . '/theme/fordson_fel/scss/styles.scss');
+
+    $scss .= file_get_contents($CFG->dirroot . '/theme/fordson_fel/scss/stylebreadcrumb.scss');
+    $scss .= file_get_contents($CFG->dirroot . '/theme/fordson_fel/scss/navbar.scss');
+    $scss .= file_get_contents($CFG->dirroot . '/theme/fordson_fel/scss/tabs.scss');
+    $scss .= file_get_contents($CFG->dirroot . '/theme/fordson_fel/scss/quiz.scss');
+    $scss .= file_get_contents($CFG->dirroot . '/theme/fordson_fel/scss/responsive.scss');
 
     // Add variant local sheet.
     if (preg_match('/\d{2}$/', $theme->name)) {
@@ -190,6 +195,9 @@ function theme_fordson_fel_get_pre_scss($theme) {
     'slideshowheight' => ['slideshowheight'],
     'activityiconsize' => ['activityiconsize'],
     'gutterwidth' => ['gutterwidth'],
+
+    'usecustomfonts' => ['usecustomfonts'],
+    'generalaltccsselector' => ['altfontselector'],
     ];
 
     // Add settings variables.
@@ -203,6 +211,22 @@ function theme_fordson_fel_get_pre_scss($theme) {
             $prescss .= '$' . $target . ': ' . $value . ";\n";
         }
         , (array)$targets);
+    }
+
+    // Load the fonts urls
+    $generalbodyfonturl = $theme->setting_file_url('generalbodyfont', 'generalbodyfont');
+    if (!empty($generalbodyfonturl)) {
+        $prescss .= '$generalbodyfont: url("'.$generalbodyfonturl."\");\n";
+    }
+
+    $generalaltfonturl = $theme->setting_file_url('generalaltfont', 'generalaltfont');
+    if (!empty($generalaltfonturl)) {
+        $prescss .= '$generalaltfont: url("'.$generalaltfonturl."\");\n";
+    }
+
+    $titlefonturl = $theme->setting_file_url('titlefont', 'titlefont');
+    if (!empty($titlefonturl)) {
+        $prescss .= '$titlefont: url("'.$titlefonturl."\");\n";
     }
 
     // Prepend pre-scss.

@@ -25,6 +25,7 @@
 defined('MOODLE_INTERNAL') || die();
 
 require_once($CFG->dirroot.'/theme/fordson_fel/lib/mobile_detect_lib.php');
+require_once($CFG->dirroot.'/theme/fordson_fel/lib.php');
 
 if (is_dir($CFG->dirroot.'/local/technicalsignals')) {
     require_once($CFG->dirroot.'/local/technicalsignals/lib.php');
@@ -37,12 +38,6 @@ if (@$PAGE->theme->settings->breadcrumbstyle == '1') {
 user_preference_allow_ajax_update('drawer-open-nav', PARAM_ALPHA);
 require_once($CFG->libdir . '/behat/lib.php');
 
-$hasfhsdrawer = isset($PAGE->theme->settings->shownavdrawer) && $PAGE->theme->settings->shownavdrawer == 1;
-if (isloggedin() && $hasfhsdrawer && isset($PAGE->theme->settings->shownavclosed) && $PAGE->theme->settings->shownavclosed == 0) {
-    $navdraweropen = (get_user_preferences('drawer-open-nav', 'true') == 'true');
-} else {
-    $navdraweropen = false;
-}
 $extraclasses = [];
 
 if (is_mobile()) {
@@ -52,14 +47,13 @@ if (is_tablet()) {
     $extraclasses[] = 'is-tablet';
 }
 
-if ($navdraweropen) {
-    $extraclasses[] = 'drawer-open-left';
-}
-
+list($hasfhsdrawer, $navdraweropen, $hasspdrawer, $navspdraweropen) = theme_fordson_fel_resolve_drawers($extraclasses, false, is_mobile());
 $bodyattributes = $OUTPUT->body_attributes($extraclasses);
+
 $hasblocks = false;
 $haspostblocks = false;
 $hasfpblockregion = false;
+$checkpostblocks = false;
 
 $footnote = $OUTPUT->footnote();
 $pagedoclink = $OUTPUT->page_doc_link();
@@ -77,9 +71,11 @@ $templatecontext = [
     'bodyattributes' => $bodyattributes,
     'navdraweropen' => $navdraweropen,
     'hasfhsdrawer' => $hasfhsdrawer,
+    'hasspdrawer' => $checkpostblocks || $PAGE->user_is_editing(),
+    'navspdraweropen' => $navspdraweropen && ($checkpostblocks || $PAGE->user_is_editing()),
     'regionmainsettingsmenu' => $regionmainsettingsmenu,
     'hasregionmainsettingsmenu' => !empty($regionmainsettingsmenu),
-    'hasfootnote' => !empty($footnote) && (preg_match('/[a-z]/', strip_tags($footnote))),
+    'hasfootnote' => !empty($footnote) && (preg_match('/[A-Za-z0-9]/', preg_replace('/<.*?>/', '', $footnote))),
     'footnote' => $footnote,
     'custommenupullright' => $PAGE->theme->settings->custommenupullright,
     'hascoursefooter' => !empty($coursefooter) && (preg_match('/[a-z]/', strip_tags($coursefooter))),

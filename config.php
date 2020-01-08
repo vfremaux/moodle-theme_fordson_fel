@@ -40,7 +40,7 @@ $THEME->parents = ['boost'];
  * to generate dynamically from the scss presets and settings and is not
  * used by Moodle's default editor (Atto).
  */
-$THEME->sheets = ['customlabels', 'styledbreadcrumb', 'yuioverride', 'modthumb', 'flexsections', 'themefixes', 'responsiverules', 'mobilecontrol'];
+$THEME->sheets = ['customlabels', 'styledbreadcrumb', 'yuioverride', 'modthumb', 'flexsections', 'themefixes', 'responsiverules', 'mobilecontrol', 'edgefixes'];
 $THEME->editor_sheets = [''];
 
 // Toggle display of blocks

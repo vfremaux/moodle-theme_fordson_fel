@@ -68,7 +68,8 @@ $bootstrap-sass-asset-helper: false !default;
     }
 }
 
-div#learningcontent {
+div#learningcontent,
+div#page-content {
     position: relative;
     margin-top: $learningcontentpadding;
     margin-bottom: $gutterwidth;

@@ -35,7 +35,8 @@ $bootstrap-sass-asset-helper: false !default;
  * Use this space to customise variables, create mixins and override SCSS.
  */
 
-div#learningcontent {
+div#learningcontent,
+div#page-content {
     position: relative;
     background-color: transparent;
     top: 0;

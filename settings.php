@@ -54,6 +54,7 @@ if ($ADMIN->fulltree) {
     require($CFG->dirroot.'/theme/fordson_fel/settings/footer_settings.php');
     require($CFG->dirroot.'/theme/fordson_fel/settings/image_settings.php');
     require($CFG->dirroot.'/theme/fordson_fel/settings/colours_settings.php');
+    require($CFG->dirroot.'/theme/fordson_fel/settings/font_settings.php');
     require($CFG->dirroot.'/theme/fordson_fel/settings/markettiles_settings.php');
     require($CFG->dirroot.'/theme/fordson_fel/settings/slideshow_settings.php');
     // OCJ HILLBROOK MOD

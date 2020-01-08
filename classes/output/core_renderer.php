@@ -91,9 +91,16 @@ class core_renderer extends \theme_boost\output\core_renderer {
 
         if ($PAGE->pagetype == 'my-index') {
             if (is_dir($CFG->dirroot.'/local/my')) {
-                include_once($CFG->dirroot.'/local/my/lib.php');
-                list($view, $isstudent, $isteacher, $iscoursemanager, $isadmin) = local_my_resolve_view();
-                $header->contextheader .= '<div class="page-context-header"><div class="page-header-headings"><h1>'.get_string($view.'pagetitle', 'local_my').'</h1></dir></dir>';
+                if (is_dir($CFG->dirroot.'/local/my/classes/modules')) {
+                    include_once($CFG->dirroot.'/local/my/classes/modules/module.class.php');
+                    list($view, $isstudent, $isteacher, $iscoursemanager, $isadmin) = \local_my\module\module::resolve_view();
+                    $header->contextheader .= '<div class="page-context-header"><div class="page-header-headings"><h1>'.get_string($view.'pagetitle', 'local_my').'</h1></dir></dir>';
+                } else {
+                    // Compat with previous version of local_my.
+                    include_once($CFG->dirroot.'/local/my/lib.php');
+                    list($view, $isstudent, $isteacher, $iscoursemanager, $isadmin) = local_my_resolve_view();
+                    $header->contextheader .= '<div class="page-context-header"><div class="page-header-headings"><h1>'.get_string($view.'pagetitle', 'local_my').'</h1></dir></dir>';
+                }
             }
         }
 
@@ -2456,7 +2463,7 @@ class core_renderer extends \theme_boost\output\core_renderer {
         $output = $this->container_end_all(true);
 
         $footer = parent::footer();
-        list($footerpart, $endhtml) = explode('</footer>', $footer);
+        @list($footerpart, $endhtml) = explode('</footer>', $footer);
 
         $perfreport = '';
         if ($PAGE->pagelayout != 'embedded') {
@@ -2667,12 +2674,6 @@ class core_renderer extends \theme_boost\output\core_renderer {
         }
 
         return parent::heading_with_help($text, $helpidentifier, $component, $icon, $iconalt, $level, $classnames);
-    }
-
-    public function pagefont() {
-        $theme = theme_config::load('fordson_fel');
-        $setting = $theme->settings->pagefont;
-        return $setting != '' ? $setting : '';
     }
 
     /**

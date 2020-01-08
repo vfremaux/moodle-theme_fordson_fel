@@ -179,6 +179,14 @@ function theme_fordson_fel_process_footer_texts(&$templatecontext) {
         $templatecontext[$tz] = str_replace('{{brandwebsite}}', @$PAGE->theme->settings->brandwebsite, $templatecontext[$tz]);
         $templatecontext[$tz] = str_replace('{{brandphone}}', @$PAGE->theme->settings->brandphone, $templatecontext[$tz]);
         $templatecontext[$tz] = str_replace('{{brandemail}}', @$PAGE->theme->settings->brandemail, $templatecontext[$tz]);
+        if (\tool_usertours\manager::get_current_tour()) {
+            $link = \html_writer::link('', get_string('resettouronpage', 'tool_usertours'), [
+                    'data-action'   => 'tool_usertours/resetpagetour',
+                ]);
+            $templatecontext[$tz] = str_replace('{{resettourlink}}', $link, $templatecontext[$tz]);
+        } else {
+            $templatecontext[$tz] = str_replace('{{resettourlink}}', '', $templatecontext[$tz]);
+        }
     }
 
 }

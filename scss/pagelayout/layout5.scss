@@ -80,7 +80,8 @@ div#page-navbar {
     background-color: darken($brandprimary, 10%);
 }
 
-div#learningcontent {
+div#learningcontent,
+div#page-content {
     position: relative;
     background-color: transparent;
 }

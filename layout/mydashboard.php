@@ -25,16 +25,11 @@
 defined('MOODLE_INTERNAL') || die();
 
 require_once($CFG->dirroot.'/theme/fordson_fel/lib/mobile_detect_lib.php');
+require_once($CFG->dirroot.'/theme/fordson_fel/lib.php');
 
 user_preference_allow_ajax_update('drawer-open-nav', PARAM_ALPHA);
 require_once($CFG->libdir . '/behat/lib.php');
 
-$hasfhsdrawer = isset($PAGE->theme->settings->shownavdrawer) && $PAGE->theme->settings->shownavdrawer == 1;
-if (isloggedin() && $hasfhsdrawer && isset($PAGE->theme->settings->shownavclosed) && $PAGE->theme->settings->shownavclosed == 0) {
-    $navdraweropen = (get_user_preferences('drawer-open-nav', 'true') == 'true');
-} else {
-    $navdraweropen = false;
-}
 $extraclasses = [];
 
 if (is_mobile()) {
@@ -44,17 +39,15 @@ if (is_tablet()) {
     $extraclasses[] = 'is-tablet';
 }
 
-if ($navdraweropen) {
-    $extraclasses[] = 'drawer-open-left';
-}
-
 $enrolform = '';
 $plugin = enrol_get_plugin('easy');
 if ($plugin && !isguestuser()) {
     $enrolform = $plugin->get_form();
 }
 
+list($hasfhsdrawer, $navdraweropen, $hasspdrawer, $navspdraweropen) = theme_fordson_fel_resolve_drawers($extraclasses, false);
 $bodyattributes = $OUTPUT->body_attributes($extraclasses);
+
 $headerlogo = $PAGE->theme->setting_file_url('headerlogo', 'headerlogo');
 $blockshtml = $OUTPUT->blocks('side-pre');
 $hasblocks = strpos($blockshtml, 'data-block=') !== false;
@@ -89,11 +82,13 @@ $templatecontext = [
     'bodyattributes' => $bodyattributes,
     'navdraweropen' => $navdraweropen,
     'hasfhsdrawer' => $hasfhsdrawer,
+    'hasspdrawer' => false,
+    'navspdraweropen' => false,
     'headerlogo' => $headerlogo,
     'regionmainsettingsmenu' => $regionmainsettingsmenu,
     'hasregionmainsettingsmenu' => !empty($regionmainsettingsmenu),
     'enrolform' => $enrolform,
-    'hasfootnote' => !empty($footnote) && (preg_match('/[a-z]/', strip_tags($footnote))),
+    'hasfootnote' => !empty($footnote) && (preg_match('/[A-Za-z0-9]/', preg_replace('/<.*?>/', '', $footnote))),
     'footnote' => $footnote,
     'custommenupullright' => $PAGE->theme->settings->custommenupullright,
     'hascoursefooter' => !empty($coursefooter) && (preg_match('/[a-z]/', strip_tags($coursefooter))),

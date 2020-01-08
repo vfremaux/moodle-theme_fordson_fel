@@ -68,3 +68,10 @@ $navbar-fhs-toggler-border-color:   initial !default;
 $navbar-fhs-toggler-icon-bg:        initial !default;
 
 $perceptionfontsize:                1.25rem !default;
+
+/* defaults for font handling */
+$usecustomfonts: 0 !default;
+$generalbodyfont: false !default;
+$generalaltfont: false !default;
+$titlefont: false !default;
+$altfontselector: false !default;

@@ -136,11 +136,22 @@ div#page-content {
     height: $headerimagepadding;
 }
 
-div#learningcontent {
+div#learningcontent,
+div#page-content {
     position: relative;
     margin-top: $learningcontentpadding;
     background-color: $card-bg;
     border: 1px solid $card-bg;
+}
+
+div#learningcontent div#page-content {
+    margin-top: 0;
+    border: none;
+}
+
+#page-login-index div#page-content {
+    /* let page custom image display */
+    background-color: transparent;
 }
 
 #page {

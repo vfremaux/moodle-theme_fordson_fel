@@ -5,6 +5,7 @@
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
 // to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 // copies of the Software, and to permit persons to whom the Software is
 // furnished to do so, subject to the following conditions:
@@ -73,11 +74,26 @@ $bootstrap-sass-asset-helper: false !default;
     }
 }
 
-div#learningcontent {
+div#learningcontent,
+div#page-content {
     position: relative;
     margin-top: $learningcontentpadding;
     background-color: $card-bg;
-    box-shadow: 0px 1px 1px 1px rgba(0, 0, 0, 0.3);
+    box-shadow: 0px -2px 8px 2px rgba(23, 32, 34, 0.6);
+}
+
+div#learningcontent div#page-content {
+    margin-top: 0;
+    border: none;
+    box-shadow: none;
+    margin-right: 0px !important;
+    margin-left: 0px !important;
+}
+
+#page-login-index div#page-content {
+    /* let page custom image display */
+    background-color: transparent;
+    box-shadow: none;
 }
 
 //add space at bottom and background color to match body

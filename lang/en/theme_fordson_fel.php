@@ -58,6 +58,7 @@ $string['courseblockpanelbtnclose'] = 'Close';
 $string['showblockregions'] = 'Show Additional Frontpage Block Regions';
 $string['showblockregions_desc'] = 'Turn on three more block regions on the site frontpage.  These appear just below the icon navigation bar.';
 $string['viewsectionmodules'] = 'View Section Modules';
+$string['section_mods'] = 'View Section Modules';
 $string['privacy:metadata'] = 'The fordson_fel theme does not store any individual user data.';
 $string['blockdisplay'] = 'Block Display Location Options';
 $string['blockdisplay_desc'] = 'Choose how to display blocks on the homepage and course pages. Fordson FEL adds a 3 column collapsible block panel that can be hidden by the user.  Choose the Boost default option to use a single right side column for blocks.  The Boost default option also moves the Add a Block button back to the Nav Drawer on the left of the page.  We also recommend using "Single Column Boost Default" when using any of the Boost page layouts from the settings above.';
@@ -114,12 +115,29 @@ $string['topnavbarbg'] = 'Top Navigation Navbar Default';
 $string['topnavbarbg_desc'] = 'Content background colour for the top navigation bar.';
 $string['topnavbarteacherbg'] = 'Top Navigation Navbar Teacher Role';
 $string['topnavbarteacherbg_desc'] = 'Content background colour for the top navigation bar when a user is a teacher.  This feature must be turned on in Menu Settings. Please see the navbarcolorswitch setting.';
+$string['fploginformbg'] = 'Login form front page background';
+$string['fploginformbg_desc'] = 'Login form front page background';
+$string['fploginformfg'] = 'Login form front page background';
+$string['fploginformfg_desc'] = 'Login form front page background';
 
 $string['rawscss'] = 'Raw SCSS';
 $string['rawscss_desc'] = 'Use this field to provide SCSS code which will be injected at the end of the style sheet.';
 $string['rawscsspre'] = 'Raw initial SCSS';
 $string['rawscsspre_desc'] = 'In this field you can provide initialising SCSS code, it will be injected before everything else.
     Most of the time you will use this setting to define variables.';
+
+// Font settings
+$string['fontsettings'] = 'Font settings';
+$string['usecustomfonts'] = 'Use custom fonts';
+$string['usecustomfonts_desc'] = 'Use custom fonts';
+$string['generalbodyfont'] = 'Custom body default font';
+$string['generalbodyfont_desc'] = 'If defined with at least one file, will apply to body as default';
+$string['generalaltfont'] = 'alternative custom font';
+$string['generalaltfont_desc'] = 'If defined with at least one file, will apply to anything styled with "alt-font" class.';
+$string['generalaltccsselector'] = 'CSS selector for alt font application';
+$string['generalaltccsselector_desc'] = 'If not empty, all DOM nodes matching the selector will be applied the alternate font.';
+$string['titlefont'] = 'Custom font for titles';
+$string['titlefont_desc'] = 'If set with at lest one file, will use this font file for H<n> titles';
 
 // Image Settings.
 $string['sitealternatename'] = 'Site alternate name';
@@ -623,7 +641,7 @@ $string['allowblockregionscollapse_desc'] = 'Some regions can use an accordion c
 // Flexsection extras.
 $string['collapseall'] = 'Close all';
 $string['expandall'] = 'Open all';
-$string['map'] = 'Course map';
+$string['reset'] = 'Map';
 $string['flexinitialstate'] = 'Flex initial state';
 $string['flexinitialstate_desc'] = 'Set the initial state of section tree when first arriving to course without any user preferences.';
 $string['flexcollapsed'] = 'Closed';

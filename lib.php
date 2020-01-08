@@ -54,3 +54,64 @@ function theme_fordson_fel_page_init() {
     $PAGE->requires->jquery();
     $PAGE->requires->js_call_amd('local_advancedperfs/perfs_panel', 'init');
 }
+
+function theme_fordson_fel_resolve_drawers(&$extraclasses, $checkspblocks, $ismobile = false) {
+    global $PAGE;
+
+    $hasfhsdrawer = isset($PAGE->theme->settings->shownavdrawer) && $PAGE->theme->settings->shownavdrawer == 1;
+    if (isloggedin() && $hasfhsdrawer && isset($PAGE->theme->settings->shownavclosed) && $PAGE->theme->settings->shownavclosed == 0) {
+        $navdraweropen = (get_user_preferences('drawer-open-nav', 'true') == 'true');
+    } else {
+        $navdraweropen = false;
+    }
+
+    if ($navdraweropen) {
+        $extraclasses[] = 'drawer-open-left';
+    }
+
+    $isblockmanagepage = preg_match('/^page-blocks-.*-manage$/', $PAGE->pagetype);
+    // $isadminpage = preg_match('/adminsettings/', $PAGE->pagetype);
+    $isadminpage = preg_match('/admin/', $PAGE->pagetype);
+    $isadminpage = $isadminpage || preg_match('/admin/', $PAGE->pagelayout);
+    $isindexsys = preg_match('/indexsys/', $_SERVER['PHP_SELF']);
+    $isdashboard = preg_match('/my-index/', $PAGE->pagetype);
+    $isbaselayout = preg_match('/base/', $PAGE->pagelayout);
+    $ispageformat = preg_match('/format_page/', $PAGE->pagelayout);
+
+    $debug = optional_param('drawerdebug', false, PARAM_BOOL);
+    if ($debug) {
+        echo "
+            <pre>
+            Is block manage page : $isblockmanagepage
+            Is admin page : $isadminpage
+            Is indexsys : $isindexsys
+            Is dashboard : $isdashboard
+            Is base layout : $isbaselayout
+            Is paged formatted : $ispageformat
+            Has some blocks : ".!empty($checkspblocks)."
+            Is editing : ".!empty($PAGE->user_is_editing())."
+            </pre>
+        ";
+    }
+
+    $hasspdrawer = (!empty($checkspblocks) || !empty($PAGE->user_is_editing())) && !$isblockmanagepage && !$isadminpage && !$isindexsys && !$isdashboard && !$isbaselayout && !$ispageformat;
+
+    if (isloggedin()) {
+        $navspdraweropen = (get_user_preferences('spdrawer-open-nav', 'true') == 'true');
+    } else {
+        $navspdraweropen = false;
+    }
+    if ($navspdraweropen && $hasspdrawer) {
+        // Forces body to stretch at right.
+        $extraclasses[] = 'drawer-open-right';
+    }
+
+    // $debug = "isblockmanagepage $isblockmanagepage<br/>";
+    // $debug .= "checkpostblocs $checkpostblocks<br/>";
+    // $debug .= "isediting ".$PAGE->user_is_editing()."<br/>";
+    // $debug .= "hasspdrawer {$hasspdrawer}<br/>";
+    // $debug .= "hasspdraweropen {$hasspdraweropen}<br/>";
+    // echo $debug;
+
+    return [$hasfhsdrawer, $navdraweropen, $hasspdrawer, $navspdraweropen];
+}
