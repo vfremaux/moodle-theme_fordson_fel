@@ -49,7 +49,7 @@ class theme_fordson_fel_format_flexsections_renderer extends format_flexsections
         parent::__construct($page, $target);
         static $initialized = false;
 
-        $this->config = get_config('theme_fordson_fel');
+        $this->config = get_config('theme_'.$PAGE->theme->name);
         $this->availablestyles = $this->parse_styleconfig();
 
         if (!$initialized) {
@@ -70,11 +70,27 @@ class theme_fordson_fel_format_flexsections_renderer extends format_flexsections
      * @param int $sr section to return to (for building links)
      * @param int $level nested level on the page (in case of 0 also displays additional start/end html code)
      */
-    public function display_section($course, $section, $sr, $level = 0) {
-        global $PAGE, $USER, $DB, $CFG;
+    public function display_section($course, $section, $sr, $level = 0, $astemplate = '', $islastsection = false) {
+        global $PAGE, $USER, $DB, $CFG, $OUTPUT;
         static $userstates;
 
+        $sectionnum = @$section->section;
+
+        $template = new \StdClass;
+        $template->ismoving = optional_param('moving', false, PARAM_INT);
+        $template->preinsertsection = '';
+        $template->postinsertsection = '';
+
+        if (is_object($section) && ($sectionnum != $template->ismoving)) {
+            if ($section->section != $template->ismoving) {
+                $template->preinsertsection = $this->display_insert_section_here($course, $section->parent, $section, $sr);
+            }
+        }
+
         if (!isset($userstates)) {
+
+            $userstates = array();
+
             // Fills the cache of user states at first section called.
 
             /*
@@ -83,12 +99,22 @@ class theme_fordson_fel_format_flexsections_renderer extends format_flexsections
              */
             $params = array('userid' => $USER->id, 'name' => 'flexsection_initialized_'.$course->id);
             if (!$DB->record_exists('user_preferences', $params)) {
-                require_once($CFG->dirroot.'/theme/fordson_fel/flexsections/flexlib.php');
+                require_once($CFG->dirroot.'/theme/fordson_fel/sections/sectionslib.php');
 
-                $select = " name LIKE 'flexsection%' AND userid = ? AND value = ? ";
+                $select = " name LIKE 'flexsection\\_%' AND userid = ? AND value = ? ";
                 $DB->delete_records_select('user_preferences', $select, array($USER->id, $course->id));
 
-                $leaves = flexsection_get_leaves($course->id);
+                // One setting for all variants in master theme config.
+                $config = get_config('theme_fordson_fel');
+                $flexinitialstate = (empty($config->flexinitialstate)) ? 'collapsed' : $config->flexinitialstate;
+
+                if ($flexinitialstate == 'reset') {
+                    // Open roots and close all leaves.
+                    $leaves = sections_get_leaves($course->id);
+                } else if ($flexinitialstate == 'collapsed') {
+                    // close everything.
+                    $leaves = $DB->get_records('course_sections', array('course' => $course->id));
+                }
                 if ($leaves) {
                     foreach ($leaves as $leaf) {
                         $hidekey = 'flexsection_'.$leaf->id.'_hidden';
@@ -113,6 +139,7 @@ class theme_fordson_fel_format_flexsections_renderer extends format_flexsections
             $params = array('userid' => $USER->id, 'prefname' => 'flexsection\\_%\\_hidden', 'value' => $course->id);
             $flexprefs = $DB->get_records_select('user_preferences', $select, $params);
             if ($flexprefs) {
+                // Note flexprefs register only hidden (collpased) sections and have NO records for visible sections.
                 foreach ($flexprefs as $prf) {
                     $name = str_replace('flexsection_', '', $prf->name);
                     $name = str_replace('_hidden', '', $name);
@@ -121,30 +148,33 @@ class theme_fordson_fel_format_flexsections_renderer extends format_flexsections
             }
         }
 
-        // Get available section style overrides from config.
-        $availablestyles = $this->parse_styleconfig();
+        // Start building flexsection section template.
 
         $course = course_get_format($course)->get_course();
         $section = course_get_format($course)->get_section($section); // This converts $section from int to object.
         $context = context_course::instance($course->id);
-        $contentvisible = true;
+        $template->iscontentvisible = true;
 
-        $highlight = false;
+        // resolve level to H<n>
+        $template->hlevel = $level + 1;
+        if ($template->hlevel > 6) {
+            $template->hlevel = 6;
+        }
+
         $tosection = $tosection = optional_param('tosection', false, PARAM_INT);
         if ($tosection) {
             // When specifying a 'tosection' argument, we will open the path down to this section.
              if ($section->section == $tosection) {
-                $highlight = 'highlight';
                 // We are the happy candidate.
                 $sectiontoopen = clone($section);
                 while ($sectiontoopen->parent) {
-                    $userstates[$sectiontoopen->id] = FORMAT_FLEXSECTIONS_EXPANDED;
+                    unset($userstates[$sectiontoopen->id]);
                     $hidekey = 'flexsection_'.$sectiontoopen->id.'_hidden';
                     $DB->delete_records('user_preferences', array('userid' => $USER->id, 'name' => $hidekey));
                     $sectiontoopen = course_get_format($course)->get_section($sectiontoopen->parent);
                 }
                 // Open top level.
-                $userstates[$sectiontoopen->id] = FORMAT_FLEXSECTIONS_EXPANDED;
+                unset($userstates[$sectiontoopen->id]);
                 $hidekey = 'flexsection_'.$sectiontoopen->id.'_hidden';
                 $DB->delete_records('user_preferences', array('userid' => $USER->id, 'name' => $hidekey));
              }
@@ -153,7 +183,7 @@ class theme_fordson_fel_format_flexsections_renderer extends format_flexsections
         if (!$section->uservisible || !course_get_format($course)->is_section_real_available($section)) {
             if ($section->visible && !$section->available && $section->availableinfo) {
                 // Still display section but without content.
-                $contentvisible = false;
+                $template->iscontentvisible = false;
             } else {
                 return '';
             }
@@ -161,46 +191,64 @@ class theme_fordson_fel_format_flexsections_renderer extends format_flexsections
 
         if ($section->section == 0) {
             // General section is always visible.
-            $contentvisible = true;
+            $template->iscontentvisible = true;
         }
 
-        $sectionnum = $section->section;
+        $template->sectionnum = $section->section;
+        $template->sectionid = $section->id;
         $movingsection = course_get_format($course)->is_moving_section();
 
+        $template->istopfirst = false;
         if ($level === 0) {
-            $cancelmovingcontrols = course_get_format($course)->get_edit_controls_cancelmoving();
+            // This is the top section (section 0).
+            $template->istopfirst = true;
 
-            foreach ($cancelmovingcontrols as $control) {
-                echo $this->render($control);
+            if ($template->ismoving) {
+                $template->hascancelmovingcontrols = true;
+                $cancelmovingcontrols = course_get_format($course)->get_edit_controls_cancelmoving();
+
+                // Fix URL with section return
+                $cancelmovingcontrols[0]->url->params(array('section' => $sr));
+                $cancelmovingcontrols[0]->url->remove_params('sectionid');
+
+                $template->cancelmovingcontrols = '';
+                foreach ($cancelmovingcontrols as $control) {
+                    $template->cancelmovingcontrols .= $this->render($control);
+                }
             }
-
-            echo html_writer::start_tag('ul', array('class' => 'flexsections flexsections-level-0'));
-
-            if ($section->section) {
-                $this->display_insert_section_here($course, $section->parent, $section->section, $sr);
-            }
-            $main = 'main';
+            $template->main = 'main';
         } else {
-            $main = 'sub';
+            $template->main = 'sub';
         }
 
-        $children = course_get_format($course)->get_subsections($sectionnum);
-        $isleafclass = (empty($children)) ? 'isleaf' : '';
-
-        echo html_writer::start_tag('li',
-                array('class' => "section $main $isleafclass".
-                    ($movingsection === $sectionnum ? ' ismoving' : '').
-                    (course_get_format($course)->is_section_current($section) ? ' current' : '').
-                    (($section->visible && $contentvisible) ? '' : ' hidden'),
-                    'id' => 'section-'.$sectionnum));
+        $children = course_get_format($course)->get_subsections($template->sectionnum);
+        $template->isleafclass = (empty($children)) ? 'isleaf' : '';
+        $template->ismovingclass = ($movingsection === $template->sectionnum) ? 'ismoving' : '';
+        $template->currentclass = (course_get_format($course)->is_section_current($section)) ? ' current' : '';
+        $template->level = $level;
+        $template->highlight = ($section->section == $tosection) ? 'highlight' : '';
+        $template->hassubs = false;
 
         // Display controls except for expanded/collapsed.
         $controls = course_get_format($course)->get_section_edit_controls($section, $sr);
 
+        // Fix all standard flexsections controls to respect the current section
+
+        foreach ($controls as &$acontrol) {
+            // Fix URL with section return.
+            if (isset($acontrol->url)) {
+                $acontrol->url->params(array('section' => $sr));
+                $acontrol->url->remove_params(array('sectionid'));
+            }
+        }
+
+        // Get available section style overrides from config.
+        $this->availablestyles = $this->parse_styleconfig();
+
         // Theme adds style related additional attribute in format.
         if (!empty($this->availablestyles) && ($section->section > 0) && $PAGE->user_is_editing()) {
             if (has_capability('moodle/course:update', $context)) {
-                $contentclassurl = new moodle_url('/theme/fordson_fel/flexsections/flexsectionclass.php', array('id' => $section->id, 'sr' => $sr));
+                $contentclassurl = new moodle_url('/theme/fordson_fel/sections/sectionclass.php', array('id' => $section->id, 'sr' => $sr));
                 $text = new lang_string('chooseclass', 'theme_'.$PAGE->theme->name);
                 $controls[] = new format_flexsections_edit_control('contentclass', $contentclassurl, $text);
             }
@@ -208,7 +256,7 @@ class theme_fordson_fel_format_flexsections_renderer extends format_flexsections
 
         /*
         // TODO : At the moment, we do not exactly know how to store this in a context that would be
-        // correctly backuped with the ocurse data. So remove it and try to find another way.
+        // correctly backuped with the course data. So remove it and try to find another way.
         // Theme adds activitynames hiding control.
         if (has_capability('moodle/course:update', $context)) {
             if (!empty($section->hideactivitynames)) {
@@ -227,21 +275,38 @@ class theme_fordson_fel_format_flexsections_renderer extends format_flexsections
 
         $collapsedcontrol = null;
         // Override add expand// collapse control for all users.
-        if (@$userstates[$section->id] == FORMAT_FLEXSECTIONS_EXPANDED) {
-            $text = new lang_string('showcollapsed', 'format_flexsections');
-            $class = 'expanded flexcontrol level-'.$level;
-            $src = $this->output->image_url('t/expanded');
+        $hiddenvar = false;
+        $template->ariaexpanded = 'false';
+        if ($level) {
+            if (!array_key_exists($section->id, $userstates)) {
+                $text = new lang_string('showcollapsed', 'format_flexsections');
+                $handleclass = 'expanded flexcontrol level-'.$level;
+                $src = $this->output->image_url('t/expanded');
+                $template->collapsedclass = 'expanded';
+                $template->ariaexpanded = 'true';
+                $template->contentcollapsedclass = 'expanded';
+                $hiddenvar = true;
+            } else {
+                $text = new lang_string('showexpanded', 'format_flexsections');
+                $handleclass = 'collapsed flexcontrol level-'.$level;
+                $src = $this->output->image_url('t/collapsed');
+                $template->collapsedclass = 'collapsed';
+                $template->ariaexpanded = 'false';
+                $template->contentcollapsedclass = 'collapsed';
+            }
+            /*
+            $attrs = array('src' => $src,
+                           'title' => $text,
+                           'aria-hidden' => 'true');
+           */
+            // $collapsedcontrolicon = '<span class="overlay"></span>'.html_writer::tag('img', '', $attrs);
+            $collapsedcontrolicon = '<i class="flexsection-handle"></i>';
+            $attrs = array('class' => $handleclass,
+                           'id' => 'control-'.$section->id.'-section-'.$section->section);
+            $collapsedcontrol = html_writer::tag('div', $collapsedcontrolicon, $attrs);
         } else {
-            $text = new lang_string('showexpanded', 'format_flexsections');
-            $class = 'collapsed flexcontrol level-'.$level;
-            $src = $this->output->image_url('t/collapsed');
+            $handleclass = 'flexcontrol level-'.$level;
         }
-        $attrs = array('src' => $src,
-                       'class' => $class,
-                       'title' => $text,
-                       'id' => 'control-'.$section->id.'-section-'.$section->section);
-        $collapsedcontrol = html_writer::tag('img', '', $attrs);
-        $hiddenvar = @$userstates[$section->id];
 
         $controlsstr = '';
         foreach ($controls as $idxcontrol => $control) {
@@ -254,101 +319,137 @@ class theme_fordson_fel_format_flexsections_renderer extends format_flexsections
         }
 
         if (!empty($controlsstr)) {
-            echo html_writer::tag('div', $controlsstr, array('class' => 'controls'));
+            $template->controls = $controlsstr;
+            $template->hascontrols = true;
         }
 
-        $hideactivityclass = '';
-        if (!empty($section->hideactivitynames)) {
-            $hideactivityclass = ' hide-activity-names';
-        }
-
-        // Display section content.
-        echo html_writer::start_tag('div', array('class' => 'content '.$highlight.$hideactivityclass));
+        $template->hideactivityclass = (!empty($section->hideactivitynames)) ? ' hide-activity-names' : '';
 
         // Display section name and expanded/collapsed control.
-        if ($sectionnum && ($title = $this->section_title($sectionnum, $course, true))) {
+        $template->hastitle = false;
+        if ($template->sectionnum && ($title = $this->section_title($template->sectionnum, $course, true))) {
+            if (!$PAGE->user_is_editing()) {
+                $sectionnameid = 'sectioname-'.$section->id.'-section-'.$section->section;
+                $title = '<span id="'.$sectionnameid.'" aria-hidden="true" class="sectioname '.$handleclass.'">'.$title.'</span>';
+            }
+            $template->hastitle = true;
             if (is_object($collapsedcontrol)) {
-                $title = $this->render($collapsedcontrol). $title;
+                $template->title = $this->render($collapsedcontrol).$title;
             } else {
-                $title = $collapsedcontrol.$title;
+                $template->title = $collapsedcontrol.$title;
             }
 
-            $attrs = array('class' => 'sectionname');
+            $attrs = [];
 
             // Check section style overrides.
             if ($this->availablestyles) {
                 $this->add_custom_style($attrs, $section);
+                $template->customclasses = @$attrs['class'];
+                $template->customstyle = @$attrs['style'];
             }
-
-            echo html_writer::tag('h3', $title, $attrs);
         }
 
         // Display section availability.
-        echo $this->section_availability_message($section,
-            has_capability('moodle/course:viewhiddensections', $context));
-
-        // Display section description (if needed).
-        if ($contentvisible && ($summary = $this->format_summary_text($section))) {
-            echo html_writer::tag('div', $summary, array('class' => 'summary'));
-        } else {
-            echo html_writer::tag('div', '', array('class' => 'summary nosummary'));
-        }
+        $template->sectionavailability = $this->section_availability($section);
 
         // Display section contents (activities and subsections).
-        if ($contentvisible) {
+        if ($template->iscontentvisible) {
+
+            $template->summary = $this->format_summary_text($section);
 
             // Display resources and activities.
-            $attrs = array('class' => 'section-content');
+            $template->contentstyle = 'display:block;visibility:visible';
             if ($hiddenvar) {
-                $attrs['style'] = 'display:none';
+                $template->contentstyle = 'display:none;visibility:hidden';
             }
-            echo html_writer::start_tag('div', $attrs);
-            echo $this->courserenderer->course_section_cm_list($course, $section, $sr);
+
+            $template->coursemodulelist = $this->courserenderer->course_section_cm_list($course, $section, $sr);
 
             if ($PAGE->user_is_editing()) {
+                $template->isediting = true;
                 // a little hack to allow use drag&drop for moving activities if the section is empty
-                if (empty(get_fast_modinfo($course)->sections[$sectionnum])) {
-                    echo "<ul class=\"section img-text\">\n</ul>\n";
-                }
-                echo $this->courserenderer->course_section_add_cm_control($course, $sectionnum, $sr);
+                $template->emptysection = empty(get_fast_modinfo($course)->sections[$template->sectionnum]);
+                $template->coursemodulecontrols = $this->courserenderer->course_section_add_cm_control($course, $template->sectionnum, $sr);
             }
-            echo html_writer::end_tag('div');
 
             // Display subsections.
             if (!empty($children) || $movingsection) {
 
-                if ($level == 0) {
+                if ($template->istopfirst) {
                     // Display collapse/expand/init buttons.
-                    echo $this->globalcontrols();
+                    $template->globalcontrols = $this->globalcontrols();
                 }
 
-                $attrs = array('class' => 'flexsections flexsections-level-'.($level+1));
+                $template->nextlevel = $level + 1;
                 if ($hiddenvar && $section->section) {
-                    $attrs['style'] = 'display:none';
+                    $template->contentnotmovingstyle = 'display:none';
                 }
 
-                echo html_writer::start_tag('ul', $attrs);
-
-                foreach ($children as $num) {
-                    $this->display_insert_section_here($course, $section, $num, $sr);
-                    $this->display_section($course, $num, $sr, $level+1);
+                $isfirst = true;
+                if (!empty($children)) {
+                    $childcount = count($children);
+                    $i = 0;
+                    foreach ($children as $num) {
+                        $i++;
+                        if ($i >= $childcount) {
+                            $islast = true;
+                        } else {
+                            $islast = false;
+                        }
+                        $childtpl = $this->display_section($course, $num, $sr, $level + 1, 'astemplate', $islast);
+                        if (empty($childtpl)) {
+                            continue;
+                        }
+                        $template->subs[] = $childtpl;
+                    }
                 }
-                $this->display_insert_section_here($course, $section, null, $sr);
-                echo html_writer::end_tag('ul'); // .flexsections
+                if (!empty($template->subs)) {
+                    $template->hassubs = true;
+                } else {
+                    $template->hassubs = false;
+                    if ($template->ismoving) {
+                        // This is when moving.
+                        if ($section->section != $template->ismoving) {
+                            $template->emptyinsertsection = $this->display_insert_section_here($course, $section->section, null, $sr);
+                        }
+                    }
+                }
             }
-            if ($addsectioncontrol = course_get_format($course)->get_add_section_control($sectionnum)) {
-                echo $this->render($addsectioncontrol);
+            if ($addsectioncontrol = course_get_format($course)->get_add_section_control($template->sectionnum)) {
+                $addsectioncontrol->url->params(array('section' => $sr));
+                $template->addsectioncontrol = $this->render($addsectioncontrol);
             }
-
         }
-        echo html_writer::end_tag('div'); // .content
-        echo html_writer::end_tag('li'); // .section
-        if ($level === 0) {
-            if (!$section->section) {
-                // This is when moving.
-                $this->display_insert_section_here($course, $section->parent, null, $sr);
+        $template->islastchild = false;
+        if ($template->ismoving && $islastsection) {
+            // This is when moving.
+            $template->islastchild = true;
+            if ($level !== 0) {
+                // if ($section->section + 1 != $template->ismoving) {
+                    $template->postinsertsection = $this->display_insert_section_here($course, $section->parent, null, $sr);
+                // }
             }
-            echo html_writer::end_tag('ul'); // .flexsections
+        }
+
+        if ($astemplate == 'astemplate') {
+            // Used for sub templates;
+            return $template;
+        }
+
+        echo $OUTPUT->render_from_template('theme_fordson_fel/flexsections_layout', $template);
+    }
+
+    /**
+     * Displays the target div for moving section (in 'moving' mode only)
+     *
+     * @param int|stdClass $courseorid current course
+     * @param int|section_info $parent new parent section
+     * @param null|int|section_info $before number of section before which we want to insert (or null if in the end)
+     */
+    protected function display_insert_section_here($courseorid, $parent, $before = null, $sr = null) {
+        if ($control = course_get_format($courseorid)->get_edit_control_movehere($parent, $before, $sr)) {
+            $control->url->params(array('section' => $sr));
+            return $this->render($control);
         }
     }
 
@@ -357,6 +458,8 @@ class theme_fordson_fel_format_flexsections_renderer extends format_flexsections
 
         $availableconfigs = $this->availablestyles['configs'];
         $styleoverride = $DB->get_field('course_format_options', 'value', array('sectionid' => $section->id, 'name' => 'styleoverride'));
+        $attrs['style'] = '';
+        $attrs['class'] = '';
         if ($styleoverride) {
             if (array_key_exists($styleoverride, $availableconfigs)) {
                 $styletoapply = $availableconfigs[$styleoverride];
@@ -388,8 +491,8 @@ class theme_fordson_fel_format_flexsections_renderer extends format_flexsections
 
         $params = array('type' => 'button',
                         'class' => 'btn flexsection-global-control',
-                        'id' => 'flexsections-control-reset',
-                        'value' => get_string('reset', 'theme_fordson_fel'));
+                        'id' => 'flexsections-control-map',
+                        'value' => get_string('map', 'theme_fordson_fel'));
         $str .= html_writer::tag('input', '', $params);
 
         return $str;
@@ -425,8 +528,8 @@ class theme_fordson_fel_format_flexsections_renderer extends format_flexsections
      * stylerule can be a class name, or a {<cssrulelist>} real css fragment.
      */
     public function parse_styleconfig() {
-        if (!empty($this->config->flexsectionsstyles)) {
-            $rules = explode("\n", $this->config->flexsectionsstyles);
+        if (!empty($this->config->sectionsstyles)) {
+            $rules = explode("\n", $this->config->sectionsstyles);
             foreach ($rules as $r) {
                 if (preg_match('/^(#|\\/)/', $r)) {
                     // Ignore commented line.
@@ -445,6 +548,64 @@ class theme_fordson_fel_format_flexsections_renderer extends format_flexsections
         }
 
         return array('configs' => array(), 'labels' => array());
+    }
+
+    /**
+     * Displays availability information for the section (hidden, not available unles, etc.)
+     * @see course/format/renderer.php format_section_renderer_base
+     * @param section_info $section
+     * @return string
+     */
+    public function section_availability($section) {
+        $context = context_course::instance($section->course);
+        $canviewhidden = has_capability('moodle/course:viewhiddensections', $context);
+        return html_writer::div($this->section_availability_message($section, $canviewhidden), 'section_availability');
+    }
+
+    /**
+     * If section is not visible, display the message about that ('Not available
+     * until...', that sort of thing). Otherwise, returns blank.
+     *
+     * For users with the ability to view hidden sections, it shows the
+     * information even though you can view the section and also may include
+     * slightly fuller information (so that teachers can tell when sections
+     * are going to be unavailable etc). This logic is the same as for
+     * activities.
+     *
+     * @param section_info $section The course_section entry from DB
+     * @param bool $canviewhidden True if user can view hidden sections
+     * @return string HTML to output
+     */
+    protected function section_availability_message($section, $canviewhidden) {
+        global $CFG;
+        $o = '';
+        if (!$section->visible) {
+            if ($canviewhidden) {
+                $o .= $this->courserenderer->availability_info(get_string('hiddenfromstudents'), 'ishidden');
+            } else {
+                // We are here because of the setting "Hidden sections are shown in collapsed form".
+                // Student can not see the section contents but can see its name.
+                $o .= $this->courserenderer->availability_info(get_string('notavailable'), 'ishidden');
+            }
+        } else if (!$section->uservisible) {
+            if ($section->availableinfo) {
+                // Note: We only get to this function if availableinfo is non-empty,
+                // so there is definitely something to print.
+                $formattedinfo = \core_availability\info::format_info(
+                        $section->availableinfo, $section->course);
+                $o .= $this->courserenderer->availability_info($formattedinfo, 'isrestricted');
+            }
+        } else if ($canviewhidden && !empty($CFG->enableavailability)) {
+            // Check if there is an availability restriction.
+            $ci = new \core_availability\info_section($section);
+            $fullinfo = $ci->get_full_information();
+            if ($fullinfo) {
+                $formattedinfo = \core_availability\info::format_info(
+                        $fullinfo, $section->course);
+                $o .= $this->courserenderer->availability_info($formattedinfo, 'isrestricted isfullinfo');
+            }
+        }
+        return $o;
     }
 
 }

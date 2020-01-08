@@ -63,12 +63,13 @@ function theme_fordson_fel_get_main_scss_content($theme) {
     }
     if (!$presetisset) {
         $filename .= '.scss';
-        if ($filename && ($presetfile = $fs->get_file($context->id, 'theme_fordson_fel', 'preset', 0, '/', $filename))) {
+        if ($filename && ($presetfile = $fs->get_file($context->id, 'theme_'.$theme->name, 'preset', 0, '/', $filename))) {
             $scss .= $presetfile->get_content();
         }
         else {
             // Safety fallback - maybe new installs etc.
-            $scss .= file_get_contents($CFG->dirroot . '/theme/fordson_fel/scss/preset/Modern Moodle.scss');
+            // Nothing presetted.
+            $scss .= file_get_contents($CFG->dirroot . '/theme/fordson_fel/scss/preset/Default.scss');
         }
     }
 
@@ -92,6 +93,9 @@ function theme_fordson_fel_get_main_scss_content($theme) {
     }
 
     // Section Style
+    if ($theme->settings->sectionlayout == 1) {
+        $scss .= file_get_contents($CFG->dirroot . '/theme/fordson_fel/scss/sectionlayout/sectionstyle1.scss');
+    }
     if ($theme->settings->sectionlayout == 2) {
         $scss .= file_get_contents($CFG->dirroot . '/theme/fordson_fel/scss/sectionlayout/sectionstyle2.scss');
     }
@@ -114,7 +118,26 @@ function theme_fordson_fel_get_main_scss_content($theme) {
         $scss .= file_get_contents($CFG->dirroot . '/theme/fordson_fel/scss/sectionlayout/sectionstyle8.scss');
     }
 
+    if ($theme->settings->marketingstyle == 1) {
+        $scss .= file_get_contents($CFG->dirroot . '/theme/fordson_fel/scss/marketingstyle/marketingstyle1.scss');
+    }
+    if ($theme->settings->marketingstyle == 2) {
+        $scss .= file_get_contents($CFG->dirroot . '/theme/fordson_fel/scss/marketingstyle/marketingstyle2.scss');
+    }
+    if ($theme->settings->marketingstyle == 3) {
+        $scss .= file_get_contents($CFG->dirroot . '/theme/fordson_fel/scss/marketingstyle/marketingstyle3.scss');
+    }
+    if ($theme->settings->marketingstyle == 4) {
+        $scss .= file_get_contents($CFG->dirroot . '/theme/fordson_fel/scss/marketingstyle/marketingstyle4.scss');
+    }
+
     $scss .= file_get_contents($CFG->dirroot . '/theme/fordson_fel/scss/styles.scss');
+
+    $scss .= file_get_contents($CFG->dirroot . '/theme/fordson_fel/scss/stylebreadcrumb.scss');
+    $scss .= file_get_contents($CFG->dirroot . '/theme/fordson_fel/scss/navbar.scss');
+    $scss .= file_get_contents($CFG->dirroot . '/theme/fordson_fel/scss/tabs.scss');
+    $scss .= file_get_contents($CFG->dirroot . '/theme/fordson_fel/scss/quiz.scss');
+    $scss .= file_get_contents($CFG->dirroot . '/theme/fordson_fel/scss/responsive.scss');
 
     // Add variant local sheet.
     if (preg_match('/\d{2}$/', $theme->name)) {
@@ -138,16 +161,31 @@ function theme_fordson_fel_get_pre_scss($theme) {
 
     $configurable = [
     // Config key => variableName,
-    'brandprimary' => ['primary'],
+    'brandprimary' => ['brandprimary'],
+    'brandsecondary' => ['brandsecondary'],
     'brandsuccess' => ['success'],
     'brandinfo' => ['info'],
     'brandwarning' => ['warning'],
     'branddanger' => ['danger'],
+
+    'topnavbarbg' => ['topnavbar-bg'],
+    'topnavbarfg' => ['topnavbar-fg'],
+    'topnavbarbghov' => ['topnavbar-bg-hover'],
+    'topnavbarteacherbg' => ['teachernavbarcolor'],
+
     'bodybackground' => ['body-bg'],
+
     'breadcrumbbkg' => ['breadcrumb-bg'],
+    'breadcrumbfg' => ['breadcrumb-fg'],
+
     'cardbkg' => ['card-bg'],
+
     'drawerbkg' => ['drawer-bg'],
-    'fploginform' => ['fploginform'],
+    'footerbkg' => ['footer-bg'],
+
+    'fploginformbg' => ['fploginform-bg'],
+    'fploginformfg' => ['fploginform-fg'],
+
     'headerimagepadding' => ['headerimagepadding'],
     'markettextbg' => ['markettextbg'],
     'iconwidth' => ['fpicon-width'],
@@ -157,18 +195,38 @@ function theme_fordson_fel_get_pre_scss($theme) {
     'slideshowheight' => ['slideshowheight'],
     'activityiconsize' => ['activityiconsize'],
     'gutterwidth' => ['gutterwidth'],
+
+    'usecustomfonts' => ['usecustomfonts'],
+    'generalaltccsselector' => ['altfontselector'],
     ];
 
     // Add settings variables.
     foreach ($configurable as $configkey => $targets) {
         $value = $theme->settings->{$configkey};
         if (empty($value)) {
+            // $value = 'undefined';
             continue;
         }
         array_map(function ($target) use (&$prescss, $value) {
             $prescss .= '$' . $target . ': ' . $value . ";\n";
         }
         , (array)$targets);
+    }
+
+    // Load the fonts urls
+    $generalbodyfonturl = $theme->setting_file_url('generalbodyfont', 'generalbodyfont');
+    if (!empty($generalbodyfonturl)) {
+        $prescss .= '$generalbodyfont: url("'.$generalbodyfonturl."\");\n";
+    }
+
+    $generalaltfonturl = $theme->setting_file_url('generalaltfont', 'generalaltfont');
+    if (!empty($generalaltfonturl)) {
+        $prescss .= '$generalaltfont: url("'.$generalaltfonturl."\");\n";
+    }
+
+    $titlefonturl = $theme->setting_file_url('titlefont', 'titlefont');
+    if (!empty($titlefonturl)) {
+        $prescss .= '$titlefont: url("'.$titlefonturl."\");\n";
     }
 
     // Prepend pre-scss.
@@ -264,6 +322,27 @@ function theme_fordson_fel_get_pre_scss($theme) {
         $prescss .= '.marketing6image {background-image: url("' . $marketing6image . '"); background-size:cover; background-position:center;}';
     }
 
+    // Set the image.
+    $marketing7image = $theme->setting_file_url('marketing7image', 'marketing7image');
+    if (isset($marketing7image)) {
+        // Add a fade in transition to avoid the flicker on course headers ***.
+        $prescss .= '.marketing7image {background-image: url("' . $marketing7image . '"); background-size:cover; background-position:center;}';
+    }
+
+    // Set the image.
+    $marketing8image = $theme->setting_file_url('marketing8image', 'marketing8image');
+    if (isset($marketing8image)) {
+        // Add a fade in transition to avoid the flicker on course headers ***.
+        $prescss .= '.marketing8image {background-image: url("' . $marketing8image . '"); background-size:cover; background-position:center;}';
+    }
+
+    // Set the image.
+    $marketing9image = $theme->setting_file_url('marketing9image', 'marketing9image');
+    if (isset($marketing9image)) {
+        // Add a fade in transition to avoid the flicker on course headers ***.
+        $prescss .= '.marketing9image {background-image: url("' . $marketing9image . '"); background-size:cover; background-position:center;}';
+    }
+
     return $prescss;
 }
 
@@ -273,13 +352,18 @@ function theme_fordson_fel_get_pre_scss($theme) {
  * @param theme_config $theme The theme config object.
  * @return string
  */
+
+/* Removed to fix double import of extra SCSS at bottom of color page
+
 function theme_fordson_fel_get_extra_scss($theme) {
     // Adapted from Boost to allow other changes or settings if required.
-    $extrascss = '';
+    
     if (!empty($theme->settings->scss)) {
         $extrascss .= $theme->settings->scss;
+    } else {
+        $extrascss = '';
     }
 
     return $extrascss;
-}
+}*/
 

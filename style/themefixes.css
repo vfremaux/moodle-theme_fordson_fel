@@ -4,6 +4,10 @@ body {
     height: initial  !important;
 }
 
+.filemanager-container {
+    position: relative;
+}
+
 /* ======= USER PREFERENCES ======== */
 
 /* titre des notification largeur des colonnes corrigé */
@@ -38,6 +42,15 @@ body {
     padding: 5px;
 }
 
+.purgecaches a {
+    color: #444 !important;
+}
+
+.tool_dataprivacy,
+.performanceinfo.pageinfo {
+    margin-left:2rem;
+}
+
 .navbar-nav .icon.shadow {
     -webkit-filter: grayscale(100%); /* Safari 6.0 - 9.0 */
     filter: grayscale(100%);
@@ -52,13 +65,8 @@ body {
     background-position: 100% 50%;
 }
 
-.format-page .headerbkg {
-    box-shadow: none;
-}
-
-.format-page div#learningcontent {
-    margin-top: 115px;
-    box-shadow: 0 1px 1px 1px rgba(0,0,0,.3);
+[region="blocks-region"] h2 {
+    font-size: 1.3rem;
 }
 
 .format-page #page-region-top {
@@ -75,4 +83,122 @@ a.block-pagetracker.current {
 .slick-dots {
     width: 100%;
     margin-bottom: 20px !important;
+}
+
+span.site-name.d-none.d-md-inline {
+    display:none!important;
+}
+
+[data-tooltip]::before {
+    opacity: 0;
+}
+
+#blockslider {
+    display: none;
+}
+
+#blocksliderbutton {
+    display: none;
+}
+
+.nav-link {
+    margin-left: 5px;
+}
+
+#page-course-view-grid .section-navigation.navigationtitle {
+    text-align: center;
+}
+
+.felement.fgroup input[type="radio"] {
+    margin-right:10px;
+    margin-left:20px;
+}
+
+#custom_menu_1 > div > ul > li > a {
+    cursor: pointer;
+}
+
+#menu_lang > div > ul > li > a {
+    cursor: pointer;
+    background: none;
+    border: none;
+}
+
+#page-mod-quiz-attempt .prompt {
+    background-color: #e6e6e6;
+    max-width: 30%;
+    -webkit-border-radius: 8px;
+    padding: .3rem .5rem;
+}
+
+#page-mod-quiz-attempt #region-main {
+    border:none;
+}
+
+img.activityicon {
+    margin-right: 20px;
+    margin-bottom: 10px;
+}
+
+/* login image tuning */
+.customloginimage {
+    width: 100%;
+    background-position: top;
+}
+
+/* login form vertical gutter */
+#page-login-index #region-main {
+    top: 2em;
+}
+
+/* Dashboard panels fixes */
+.dashtitle h3 {
+    color:#fff;
+    border: 1px solid #ccc;
+    padding: .3rem;
+    font-size: 1.3rem;
+}
+
+.dashtitle > p {
+    display: none;
+}
+
+.staffmember img {
+    display: none;
+}
+
+.studentdashboard .list-group-item {
+    padding: .2rem .5rem;
+}
+
+.studentdashboard .fa-map::before,
+.studentdashboard .fa-check-square-o::before,
+.studentdashboard .fa-users::before,
+.studentdashboard .fa-question-circle::before,
+.studentdashboard .fa-trophy::before,
+.teacherdashboard i.dashicon {
+    display: none;
+}
+
+footer {
+    /* position:fixed; */
+    bottom:0;
+    width:100%;
+    z-index: 1000;
+}
+
+.card-text.content.calendarwrapper {
+    margin-top: 30px;
+}
+
+#page-course-view_topics .course-content .section-summary {
+    border: none;
+}
+
+.course-content .single-section .section-navigation {
+    border-top: none;
+}
+
+.section li.activity {
+    border-bottom: none;
 }

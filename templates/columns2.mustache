@@ -59,6 +59,8 @@
 
     {{{ output.standard_top_of_body_html }}}
 
+    {{{blocksdebuginfo}}}
+
     {{>theme_fordson_fel/navbar}}
 
     {{#output.headerbkglocation}}
@@ -70,7 +72,9 @@
         <div id="learningcontent">
 
             {{{ output.teacherdash }}}
+            <!-- O(full_header) -->
             {{{ output.full_header }}}
+            <!-- /O(full_header) -->
             {{>theme_fordson_fel/blockspanelslider}}
 
             <div id="page-content" class="row">
@@ -86,6 +90,14 @@
                                 {{#hasregionmainsettingsmenu}}
                                     <div class="region_main_settings_menu_proxy"></div>
                                 {{/hasregionmainsettingsmenu}}
+                                {{#output.display_ilearn_secure_alert}}
+                                    <div class="ilearnsecurebrowser text-center">
+                                        <div class="ilearnsecurealert bg-danger text-white text-center d-inline-block">
+                                            <p>{{#str}} ilearnsecurebrowser , theme_fordson_fel{{/str}}</p>
+                                        </div>
+                                    </div>
+                                {{/output.display_ilearn_secure_alert}}
+                                {{{ output.customcoursedashboardimage }}}
                                 {{{ output.course_content_header }}}
                                 {{{ output.main_content }}}
                                 {{{ output.course_content_footer }}}
@@ -99,18 +111,25 @@
                     {{/hasblocks}}
                 </div>
             </div>
-            {{{ output.activity_navigation }}}
         </div>
     </div>
+
+    {{{ output.standard_after_main_region_html }}}
+
     {{#hasfhsdrawer}}
     <!-- boost:nav-drawer -->
     {{> theme_boost/nav-drawer }}
     <!-- /boost:nav-drawer -->
     {{/hasfhsdrawer}}
+
+    {{#hasactivitynav}}
+        {{{ output.activity_navigation }}}
+    {{/hasactivitynav}}
+
 </div>
 
-<a href="#pagebottom" id="go-to-bottom" class="btn btn-primary btn-lg show" role="button" title="{{#str}}gotobottom, theme_fordson_fel{{/str}}"><i class="fa fa-chevron-circle-down" aria-hidden="true"></i></a>
-<a href="#" id="back-to-top" class="btn btn-primary btn-lg" role="button" title="{{#str}}backtotop, theme_fordson_fel{{/str}}"><i class="fa fa-chevron-circle-up" aria-hidden="true"></i></a>
+<a href="#pagebottom" id="go-to-bottom" class="btn btn-primary btn-lg show" role="button" title="{{#str}}gotobottom, theme_fordson_fel{{/str}}"><i class="fa fa-arrow-down" aria-hidden="true"></i></a>
+<a href="#" id="back-to-top" class="btn btn-primary btn-lg" role="button" title="{{#str}}backtotop, theme_fordson_fel{{/str}}"><i class="fa fa-arrow-up" aria-hidden="true"></i></a>
 
 {{> theme_fordson_fel/footer }}
 

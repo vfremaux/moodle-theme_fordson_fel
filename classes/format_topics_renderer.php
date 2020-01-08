@@ -26,6 +26,17 @@ require_once($CFG->dirroot . '/course/format/topics/renderer.php');
 
 class theme_fordson_fel_format_topics_renderer extends format_topics_renderer {
 
+    public $availablestyles;
+
+    public function __construct(moodle_page $page, $target) {
+        global $PAGE, $COURSE;
+
+        parent::__construct($page, $target);
+
+        $this->config = get_config('theme_'.$PAGE->theme->name);
+        $this->availablestyles = $this->parse_styleconfig();
+    }
+
     /**
      * Generate a summary of a section for display on the 'coruse index page'
      *
@@ -35,26 +46,66 @@ class theme_fordson_fel_format_topics_renderer extends format_topics_renderer {
      * @return string HTML to output.
      */
     protected function section_summary($section, $course, $mods) {
+    	global $PAGE;
         $classattr = 'section main section-summary clearfix';
         $linkclasses = '';
+
+        $total = 0;
+        $complete = 0;
+        $completioninfo = new completion_info($course);
+        $cancomplete = isloggedin() && !isguestuser();
+        $modinfo = get_fast_modinfo($course);
+        
+        $sectionmods = array();
+        $completioninfo = new completion_info($course);
+        if (!empty($modinfo->sections[$section->section])) {
+            foreach ($modinfo->sections[$section->section] as $cmid) {
+                
+                $thismod = $modinfo->cms[$cmid];
+
+                if ($thismod->modname == 'label') {
+                    // Labels are special (not interesting for students)!
+                    continue;
+                }
+
+                if ($thismod->uservisible) {
+                    if (isset($sectionmods[$thismod->modname])) {
+                        $sectionmods[$thismod->modname]['name'] = $thismod->modplural;
+                        $sectionmods[$thismod->modname]['count']++;
+                    }
+                    else {
+                        $sectionmods[$thismod->modname]['name'] = $thismod->modfullname;
+                        $sectionmods[$thismod->modname]['count'] = 1;
+                    }
+                    if ($cancomplete && $completioninfo->is_enabled($thismod) != COMPLETION_TRACKING_NONE) {
+                        $total++;
+                        $completiondata = $completioninfo->get_data($thismod, true);
+                        if ($completiondata->completionstate == COMPLETION_COMPLETE || $completiondata->completionstate == COMPLETION_COMPLETE_PASS) {
+                            $complete++;
+                        }
+                    }
+                }
+            }
+        }
 
         // If section is hidden then display grey section link.
         if (!$section->visible) {
             $classattr .= ' hidden';
             $linkclasses .= ' dimmed_text';
-        }
-        else if (course_get_format($course)->is_section_current($section)) {
+        } else if (course_get_format($course)->is_section_current($section)) {
             $classattr .= ' current';
         }
 
         $title = get_section_name($course, $section);
         $o = '';
-        $o .= html_writer::start_tag('li', array(
+        $attrs = [
             'id' => 'section-' . $section->section,
             'class' => $classattr,
             'role' => 'region',
             'aria-label' => $title
-        ));
+        ];
+
+        $o .= html_writer::start_tag('li', $attrs);
 
         $o .= html_writer::tag('div', '', array(
             'class' => 'left side'
@@ -65,7 +116,26 @@ class theme_fordson_fel_format_topics_renderer extends format_topics_renderer {
         $o .= html_writer::start_tag('div', array(
             'class' => 'content'
         ));
+        if ($total > 0) {
+            $completion = new stdClass;
+            $completion->complete = $complete;
+            $completion->total = $total;
+            $percenttext = get_string('coursecompletion', 'completion');
+            $percent = 0;
 
+            if ($complete > 0) {
+                $percent = (int)(($complete / $total) * 100);
+            }
+
+            $o .= "<div class='progress fordsonsinglepage'>";
+            $o .= "<div class='progress-bar progress-bar-info' role='progressbar' aria-valuenow='{$percent}' ";
+            $o .= " aria-valuemin='0' aria-valuemax='100' style='width: {$percent}%;'>";
+            $o .= "<div class='fhsprogresstest'>";
+            $o .= "<span class='sr-only'>$percenttext</span>";
+            $o .= "</div>";
+            $o .= "</div>";
+            $o .= "</div>";
+        }
         if ($section->uservisible) {
             $title = html_writer::tag('a', $title, array(
                 'href' => course_get_url($course, $section->section) ,
@@ -73,10 +143,25 @@ class theme_fordson_fel_format_topics_renderer extends format_topics_renderer {
             ));
         }
         // Add .sectionname so that fontawesome icon can be applied to this page too.
-        $o .= $this->output->heading($title, 3, 'section-title sectionname');
+        // Check section style overrides.
+        if ($this->availablestyles) {
+            $attrs = $this->get_custom_style($section);
+        }
+        $htmlattrs['class'] = 'section-title sectionname';
+        if (!empty($attrs['class'])) {
+            // Add custom style classes.
+            $htmlattrs['class'] .= ' '.$attrs['class'];
+        }
+        if (!empty($attrs['style'])) {
+            // Add custom style rules.
+            $htmlattrs['style'] = $attrs['style'];
+        }
+        $o .= html_writer::tag('h3', $title, $htmlattrs);
+
         $o .= html_writer::start_tag('div', array(
             'class' => 'summarytext'
         ));
+
         $o .= $this->format_summary_text($section);
         $o .= $this->section_activity_summary($section, $course, null);
         $o .= html_writer::end_tag('div');
@@ -86,6 +171,89 @@ class theme_fordson_fel_format_topics_renderer extends format_topics_renderer {
 
         $o .= html_writer::end_tag('div'); // Content.
         $o .= html_writer::end_tag('li');
+
+        return $o;
+    }
+
+    /**
+     * Generate the display of the header part of a section before
+     * course modules are included
+     *
+     * @param stdClass $section The course_section entry from DB
+     * @param stdClass $course The course entry from DB
+     * @param bool $onsectionpage true if being printed on a single-section page
+     * @param int $sectionreturn The section to return to after an action
+     * @return string HTML to output.
+     */
+    protected function section_header($section, $course, $onsectionpage, $sectionreturn=null) {
+        global $PAGE;
+
+        // Check section style overrides.
+        $attrs = array();
+        if ($this->availablestyles) {
+            $attrs = $this->get_custom_style($section);
+        }
+
+        $o = '';
+        $currenttext = '';
+        $sectionstyle = '';
+
+        if ($section->section != 0) {
+            // Only in the non-general sections.
+            if (!$section->visible) {
+                $sectionstyle = ' hidden';
+            }
+            if (course_get_format($course)->is_section_current($section)) {
+                $sectionstyle = ' current';
+            }
+        }
+
+        $htmlattrs = array('id' => 'section-'.$section->section,
+            'class' => 'section main clearfix'.$sectionstyle, 'role'=>'region',
+            'aria-label'=> get_section_name($course, $section));
+
+        $o.= html_writer::start_tag('li', $htmlattrs);
+
+        // Create a span that contains the section title to be used to create the keyboard section move menu.
+        $o .= html_writer::tag('span', get_section_name($course, $section), array('class' => 'hidden sectionname'));
+
+        $leftcontent = $this->section_left_content($section, $course, $onsectionpage);
+        $o.= html_writer::tag('div', $leftcontent, array('class' => 'left side'));
+
+        $rightcontent = $this->section_right_content($section, $course, $onsectionpage);
+        $o.= html_writer::tag('div', $rightcontent, array('class' => 'right side'));
+        $o.= html_writer::start_tag('div', array('class' => 'content'));
+
+        // When not on a section page, we display the section titles except the general section if null
+        $hasnamenotsecpg = (!$onsectionpage && ($section->section != 0 || !is_null($section->name)));
+
+        // When on a section page, we only display the general section title, if title is not the default one
+        $hasnamesecpg = ($onsectionpage && ($section->section == 0 && !is_null($section->name)));
+
+        $classes = ' accesshide';
+        if ($hasnamenotsecpg || $hasnamesecpg) {
+            $classes = '';
+        }
+        $sectionname = html_writer::tag('span', $this->section_title($section, $course));
+        if (!empty($attrs['class'])) {
+            $classes .= ' '.$attrs['class'];
+        }
+        $htmlattrs = array('class' => 'sectionname '.$classes);
+        if (!empty($attrs['style'])) {
+            $htmlattrs['style'] = $attrs['style'];
+        }
+        $o.= html_writer::tag('h3', $sectionname, $htmlattrs);
+
+        $o .= $this->section_availability($section);
+
+        $o .= html_writer::start_tag('div', array('class' => 'summary'));
+        if ($section->uservisible || $section->visible) {
+            // Show summary if section is available or has availability restriction information.
+            // Do not show summary if section is hidden but we still display it because of course setting
+            // "Hidden sections are shown in collapsed form".
+            $o .= $this->format_summary_text($section);
+        }
+        $o .= html_writer::end_tag('div');
 
         return $o;
     }
@@ -145,37 +313,16 @@ class theme_fordson_fel_format_topics_renderer extends format_topics_renderer {
         }
 
         $output = '';
-
-        // Output section activities summary
-        $output = html_writer::start_tag('div', array(
-            'class' => 'section-summary-activities'
-        ));
-
         // Output Link to Topic modules.
         // $title = get_section_name($course, $section);
         $linktitle = get_string('viewsectionmodules', 'theme_fordson_fel');
-        $output .= html_writer::start_tag('div', array('class' => 'section-go-link'));
-        $output .= html_writer::link(new moodle_url('/course/view.php', array('id' => $PAGE->course->id, 'section' => $section->section)) , $linktitle);
-        $output .= html_writer::end_tag('div');
+        $output = html_writer::link(new moodle_url('/course/view.php', array('id' => $PAGE->course->id, 'section' => $section->section)) , $linktitle, array('class' => 'section-go-link btn btn-secondary'));
 
-        // Special thanks to Willian Mono for the topic progress bar code.
-        if ($total > 0) {
-            $completion = new stdClass;
-            $completion->complete = $complete;
-            $completion->total = $total;
+        // Output section activities summary
+        $output .= html_writer::start_tag('div', array(
+            'class' => 'section-summary-activities'
+        ));
 
-            $percent = 0;
-            if ($complete > 0) {
-                $percent = (int)(($complete / $total) * 100);
-            }
-            $output .= "<div class='progress'>";
-            $output .= "<div class='progress-bar progress-bar-info' role='progressbar' aria-valuenow='{$percent}' ";
-            $output .= " aria-valuemin='0' aria-valuemax='100' style='width: {$percent}%;'>";
-            $output .= "{$percent}%";
-            $output .= "</div>";
-            $output .= "</div>";
-        }
-        // End Willian Mono.
         $output .= html_writer::tag('span', get_string('section_mods', 'theme_fordson_fel') , array(
             'class' => 'activity-count'
         ));
@@ -198,9 +345,94 @@ class theme_fordson_fel_format_topics_renderer extends format_topics_renderer {
             ));
         }
 
+        // End Willian Mono.
+
         $output .= html_writer::end_tag('div');
 
         return $output;
+    }
+
+    protected function section_edit_control_items($course, $section, $onsectionpage = false) {
+        global $PAGE;
+
+        $sectionreturn = $onsectionpage ? $section->section : null;
+
+        $controls = parent::section_edit_control_items($course, $section, $onsectionpage);
+        $context = context_course::instance($course->id);
+
+        // Get available section style overrides from config.
+        $availablestyles = $this->parse_styleconfig();
+
+        // Theme adds style related additional attribute in format.
+        if (!empty($this->availablestyles) && ($section->section > 0) && $PAGE->user_is_editing()) {
+            if (has_capability('moodle/course:update', $context)) {
+                $contentclassurl = new moodle_url('/theme/fordson_fel/sections/sectionclass.php', array('id' => $section->id, 'sr' => $sectionreturn));
+                $text = new lang_string('chooseclass', 'theme_'.$PAGE->theme->name);
+
+                $controls['changesection'] = array(
+                    'url'   => $contentclassurl,
+                    'icon' => 'i/colourpicker',
+                    'name' => $text,
+                    'pixattr' => array('class' => '', 'alt' => $text),
+                    'attr' => array('class' => 'icon changesection', 'title' => $text));
+                // $controls[] = new format_flexsections_edit_control('contentclass', $contentclassurl, $text);
+            }
+        }
+
+        return $controls;
+    }
+
+    public function get_custom_style(&$section) {
+        global $DB;
+
+        $attrs = array();
+        $availableconfigs = $this->availablestyles['configs'];
+        $styleoverride = $DB->get_field('course_format_options', 'value', array('sectionid' => $section->id, 'name' => 'styleoverride'));
+        if ($styleoverride) {
+            if (array_key_exists($styleoverride, $availableconfigs)) {
+                $styletoapply = $availableconfigs[$styleoverride];
+                if (preg_match('/^\\{(.*)\\}/', $styletoapply, $matches)) {
+                    // If is a real style rule, apply as style attrribute.
+                    $attrs['style'] = $matches[1];
+                } else {
+                    $attrs['class'] = @$attrs['class'].' '.$styletoapply;
+                }
+            }
+        }
+
+        return $attrs;
+    }
+
+    /**
+     * Parses the theme configuration flexsectionstyles setting and
+     * extracts usable style information for section headings.
+     *
+     * admitted syntax are : 
+     * <stylename>:<stylelabel>:<stylerule>
+     * 
+     * stylerule can be a class name, or a {<cssrulelist>} real css fragment.
+     */
+    public function parse_styleconfig() {
+        if (!empty($this->config->sectionsstyles)) {
+            $rules = explode("\n", $this->config->sectionsstyles);
+            foreach ($rules as $r) {
+                if (preg_match('/^(#|\\/)/', $r)) {
+                    // Ignore commented line.
+                    continue;
+                }
+                if (preg_match('/^[\\s]*$/', $r)) {
+                    // Ignore empty or only space lines.
+                    continue;
+                }
+                if (preg_match('/^(.*?):(.*?):(.*)$/', $r, $matches)) {
+                    $styleconfigs[$matches[1]] = $matches[3];
+                    $stylelabels[$matches[1]] = $matches[2];
+                }
+            }
+            return array('configs' => $styleconfigs, 'labels' => $stylelabels);
+        }
+
+        return array('configs' => array(), 'labels' => array());
     }
 
 }

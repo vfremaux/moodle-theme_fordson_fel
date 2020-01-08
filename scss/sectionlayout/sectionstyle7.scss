@@ -43,6 +43,12 @@
     padding: 1rem;
 }
 
+.course-content #section-0 ul.section {
+    border:0;
+    padding:0;
+    margin:0;
+}
+
 .course-content ul.topics li.section,
 .course-content ul.weeks li.section {
     margin-top: 2rem;
@@ -86,7 +92,7 @@ div#coursecontrols {
     background-color: $activityhover;
 }
 
-img.activityicon {
+.course-content img.activityicon {
     height: $activityiconsize;
     width: $activityiconsize;
     vertical-align: middle !important;
@@ -96,8 +102,7 @@ img.activityicon {
     border-left: $brand-primary 8px solid;
 }
 
-.m-t-2.m-b-1 {
-    background-color: darken($body-bg, 10%);
+.course-content .single-section .section-navigation {
     padding: 1rem;
     border-radius: 3px;
     margin: 0!important;
@@ -105,12 +110,54 @@ img.activityicon {
     border-radius: 0;
 }
 
-.course-content .single-section .section-navigation {
-    padding: 1rem;
-    border-radius: 3px;
-    margin: 0!important;
-    border-top: 7px solid rgba(0,0,0,.2);
-    border-radius: 0;
+.course-content .section-summary {
+    border: 1px solid $gray-300;
+}
+
+.course-content ul li.section.main:last-child {
+    border-bottom: 1px solid $gray-300;
+}
+
+@if $spectrumpreset == 1 {
+    .course-content .section-summary {
+        border: 0; 
+    }
+    .section-go-link.btn.btn-secondary {
+        display: block;
+        margin-top: 2rem;
+    }
+    .course-content .section-summary .section-title {
+        margin: 0;
+    }
+    .course-content .section-summary .summarytext {
+        margin: 0;
+        padding: 1rem;
+        border: 1px solid $gray-200;
+    }
+    .course-content ul.topics li.section, .course-content ul.weeks li.section {
+        padding-top: 0;
+    }
+    .section-summary-activities {
+        width: 85%;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    .course-content ul li.section.main {
+        border-bottom: 0;
+    }
+    .course-content .single-section .section-navigation {
+        padding: 1rem;
+        border-radius: 3px;
+        margin: 0!important;
+        border-top: 0;
+        border-radius: 0;
+    }
+}
+
+@if $perceptionpreset == 1 {
+    .course-content ul.topics li.section .content, .course-content ul.weeks li.section .content {
+        margin: 0 3rem;
+    }
 }
 
 @media screen and (max-width: 576px) {

@@ -15,7 +15,12 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 defined('MOODLE_INTERNAL') || die();
-require_once($CFG->dirroot.'/local/technicalsignals/lib.php');
+
+require_once($CFG->dirroot.'/theme/fordson_fel/lib/mobile_detect_lib.php');
+
+if (is_dir($CFG->dirroot.'/local/technicalsignals')) {
+    require_once($CFG->dirroot.'/local/technicalsignals/lib.php');
+}
 
 /**
  * A login page layout for the boost theme.
@@ -25,7 +30,16 @@ require_once($CFG->dirroot.'/local/technicalsignals/lib.php');
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-$bodyattributes = $OUTPUT->body_attributes();
+$extraclasses = [];
+
+if (is_mobile()) {
+    $extraclasses[] = 'is-mobile';
+}
+if (is_tablet()) {
+    $extraclasses[] = 'is-tablet';
+}
+
+$bodyattributes = $OUTPUT->body_attributes($extraclasses);
 
 $footnote = $OUTPUT->footnote();
 $pagedoclink = $OUTPUT->page_doc_link();
@@ -35,8 +49,9 @@ $templatecontext = [
     'sitename' => format_string($SITE->shortname, true, ['context' => context_course::instance(SITEID), "escape" => false]),
     'output' => $OUTPUT,
     'bodyattributes' => $bodyattributes,
-    'hasfootenote' => !empty($footnote) && (preg_match('/[a-z]/', strip_tags($footnote))),
+    'hasfootnote' => !empty($footnote) && (preg_match('/[a-z]/', strip_tags($footnote))),
     'footnote' => $footnote,
+    'custommenupullright' => $PAGE->theme->settings->custommenupullright,
     'hascoursefooter' => !empty($coursefooter) && (preg_match('/[a-z]/', strip_tags($coursefooter))),
     'coursefooter' => $coursefooter,
     'hasdoclink' => !empty($pagedoclink) && (preg_match('/[a-z]/', strip_tags($pagedoclink))),
@@ -49,7 +64,13 @@ $templatecontext = [
     'midfooter' => @$PAGE->theme->settings->midfooter,
     'rightfooter' => @$PAGE->theme->settings->rightfooter,
     'showlangmenu' => @$CFG->langmenu,
-    'technicalsignals' => local_print_administrator_message()
+    'sitealternatename' => @$PAGE->theme->settings->sitealternatename
 ];
+
+theme_fordson_fel_process_footer_texts($templatecontext);
+
+if (is_dir($CFG->dirroot.'/local/technicalsignals')) {
+    $templatecontext['technicalsignals'] = local_print_administrator_message();
+}
 
 echo $OUTPUT->render_from_template('theme_fordson_fel/login', $templatecontext);

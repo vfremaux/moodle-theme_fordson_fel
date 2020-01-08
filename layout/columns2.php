@@ -24,20 +24,29 @@
 
 defined('MOODLE_INTERNAL') || die();
 
+require_once($CFG->dirroot.'/theme/fordson_fel/lib/mobile_detect_lib.php');
+require_once($CFG->dirroot.'/theme/fordson_fel/lib.php');
+
+if (is_dir($CFG->dirroot.'/local/technicalsignals')) {
+    require_once($CFG->dirroot.'/local/technicalsignals/lib.php');
+}
+
+if (@$PAGE->theme->settings->breadcrumbstyle == '1') {
+    $PAGE->requires->js_call_amd('theme_fordson_fel/jBreadCrumb', 'init');
+}
+
 user_preference_allow_ajax_update('drawer-open-nav', PARAM_ALPHA);
 require_once($CFG->libdir . '/behat/lib.php');
 
-$hasfhsdrawer = isset($PAGE->theme->settings->shownavdrawer) && $PAGE->theme->settings->shownavdrawer == 1;
-if (isloggedin() && $hasfhsdrawer && isset($PAGE->theme->settings->shownavclosed) && $PAGE->theme->settings->shownavclosed == 0) {
-    $navdraweropen = (get_user_preferences('drawer-open-nav', 'true') == 'true');
-} else {
-    $navdraweropen = false;
-}
 $extraclasses = [];
-if ($navdraweropen) {
-    $extraclasses[] = 'drawer-open-left';
+
+if (is_mobile()) {
+    $extraclasses[] = 'is-mobile';
 }
-$bodyattributes = $OUTPUT->body_attributes($extraclasses);
+if (is_tablet()) {
+    $extraclasses[] = 'is-tablet';
+}
+
 $blockshtml = $OUTPUT->blocks('side-pre');
 $hasblocks = strpos($blockshtml, 'data-block=') !== false;
 
@@ -45,6 +54,9 @@ $blockshtmla = $OUTPUT->blocks('fp-a');
 $blockshtmlb = $OUTPUT->blocks('fp-b');
 $blockshtmlc = $OUTPUT->blocks('fp-c');
 $hasfpblockregion = isset($PAGE->theme->settings->showblockregions) !== false;
+
+list($hasfhsdrawer, $navdraweropen, $hasspdrawer, $navspdraweropen) = theme_fordson_fel_resolve_drawers($extraclasses, false, is_mobile());
+$bodyattributes = $OUTPUT->body_attributes($extraclasses);
 
 $regionmainsettingsmenu = $OUTPUT->region_main_settings_menu();
 $footnote = $OUTPUT->footnote();
@@ -65,8 +77,9 @@ $templatecontext = [
     'hasfhsdrawer' => $hasfhsdrawer,
     'regionmainsettingsmenu' => $regionmainsettingsmenu,
     'hasregionmainsettingsmenu' => !empty($regionmainsettingsmenu),
-    'hasfootenote' => !empty($footnote) && (preg_match('/[a-z]/', strip_tags($footnote))),
+    'hasfootnote' => !empty($footnote) && (preg_match('/[A-Za-z0-9]/', preg_replace('/<.*?>/', '', $footnote))),
     'footnote' => $footnote,
+    'custommenupullright' => $PAGE->theme->settings->custommenupullright,
     'hascoursefooter' => !empty($coursefooter) && (preg_match('/[a-z]/', strip_tags($coursefooter))),
     'coursefooter' => $coursefooter,
     'hasdoclink' => !empty($pagedoclink) && (preg_match('/[a-z]/', strip_tags($pagedoclink))),
@@ -77,12 +90,21 @@ $templatecontext = [
     'midfooter' => @$PAGE->theme->settings->midfooter,
     'rightfooter' => @$PAGE->theme->settings->rightfooter,
     'showlangmenu' => @$CFG->langmenu,
-    'technicalsignals' => local_print_administrator_message()
+    'sitealternatename' => @$PAGE->theme->settings->sitealternatename
 ];
 
+if (function_exists('debug_blocks')) {
+    $templatecontext['blocksdebuginfo'] = debug_blocks();
+}
+
+theme_fordson_fel_process_footer_texts($templatecontext);
+
+if (is_dir($CFG->dirroot.'/local/technicalsignals')) {
+    $templatecontext['technicalsignals'] = local_print_administrator_message();
+}
+
 $PAGE->requires->jquery();
-$PAGE->requires->js('/theme/fordson_fel/javascript/scrolltotop.js');
-$PAGE->requires->js('/theme/fordson_fel/javascript/scrolltobottom.js');
+$PAGE->requires->js_call_amd('theme_fordson_fel/pagescroll', 'init');
 $PAGE->requires->js('/theme/fordson_fel/javascript/scrollspy.js');
 $PAGE->requires->js('/theme/fordson_fel/javascript/tooltipfix.js');
 $PAGE->requires->js('/theme/fordson_fel/javascript/blockslider.js');

@@ -42,6 +42,7 @@ require_once($CFG->libdir.'/weblib.php');
 
 function theme_fordson_fel_get_course_activities() {
     global $CFG, $PAGE, $OUTPUT;
+
     // A copy of block_activity_modules.
     $course = $PAGE->course;
     $content = new stdClass();
@@ -74,7 +75,7 @@ function theme_fordson_fel_get_course_activities() {
     return $modfullnames;
 }
 
-function theme_fordson_fel_strip_html_tags( $text ) {
+function theme_fordson_fel_strip_html_tags($text) {
     $text = preg_replace(
         array(
             // Remove invisible content.
@@ -131,12 +132,13 @@ function theme_fordson_fel_course_trim_char($str, $n = 500, $endchar = '&#8230;'
 }
 
 function theme_fordson_fel_get_random_filearea_url($filearea) {
+    global $PAGE;
 
     // Process args to randomize on all images in this filearea.
     $fs = get_file_storage();
 
     $syscontext = context_system::instance();
-    $component = 'theme_fordson_fel';
+    $component = 'theme_'.$PAGE->theme->name;
 
     if ($loginimages = $fs->get_area_files($syscontext->id, $component, $filearea, 0, "itemid, filepath, filename", false)) { // Ignore dirs.
         shuffle($loginimages);
@@ -148,3 +150,43 @@ function theme_fordson_fel_get_random_filearea_url($filearea) {
     return false;
 }
 
+/**
+ * We check we are in a course module or not.
+ */
+function fordson_fel_page_location_incourse_themeconfig() {
+    GLOBAL $PAGE;
+
+    $course = $PAGE->cm;
+
+    if ($course) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+/**
+ * Inject some settings in text zones
+ */
+function theme_fordson_fel_process_footer_texts(&$templatecontext) {
+    global $PAGE, $OUTPUT;
+
+    $textzones = ['footnote', 'leftfooter', 'midfooter', 'rightfooter'];
+
+    foreach ($textzones as $tz) {
+        $templatecontext[$tz] = str_replace('{{socialicons}}', $OUTPUT->social_icons(), $templatecontext[$tz]);
+        $templatecontext[$tz] = str_replace('{{brandorganization}}', @$PAGE->theme->settings->brandorganization, $templatecontext[$tz]);
+        $templatecontext[$tz] = str_replace('{{brandwebsite}}', @$PAGE->theme->settings->brandwebsite, $templatecontext[$tz]);
+        $templatecontext[$tz] = str_replace('{{brandphone}}', @$PAGE->theme->settings->brandphone, $templatecontext[$tz]);
+        $templatecontext[$tz] = str_replace('{{brandemail}}', @$PAGE->theme->settings->brandemail, $templatecontext[$tz]);
+        if (\tool_usertours\manager::get_current_tour()) {
+            $link = \html_writer::link('', get_string('resettouronpage', 'tool_usertours'), [
+                    'data-action'   => 'tool_usertours/resetpagetour',
+                ]);
+            $templatecontext[$tz] = str_replace('{{resettourlink}}', $link, $templatecontext[$tz]);
+        } else {
+            $templatecontext[$tz] = str_replace('{{resettourlink}}', '', $templatecontext[$tz]);
+        }
+    }
+
+}

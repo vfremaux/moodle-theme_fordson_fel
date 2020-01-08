@@ -47,7 +47,10 @@ $PAGE->set_heading(get_string('copytheme', 'theme_fordson_fel'));
 require_once($CFG->dirroot.'/theme/fordson_fel/themecopy_form.php');
 
 $variantpaths = glob($CFG->dirroot.'/theme/fordson_fel*');
-$variants['fordson'] = get_string('pluginname', 'theme_fordson').' Origin';
+if (is_dir($CFG->dirroot.'/theme/fordson')) {
+    // Most of the settings of community fordson should be compatible, if installed.
+    $variants['fordson'] = get_string('pluginname', 'theme_fordson').' Origin';
+}
 foreach ($variantpaths as $path) {
     $path = basename($path);
     $variants[$path] = get_string('pluginname', 'theme_'.$path);
@@ -96,7 +99,7 @@ if ($data = $mform->get_data()) {
 
         if (!empty($files)) {
             foreach ($files as $f) {
-                if ($f->filename = '' || $f->filename = '.') {
+                if ($f->filename == '' || $f->filename == '.') {
                     // This is a directory.
                     continue;
                 }
@@ -119,6 +122,8 @@ if ($data = $mform->get_data()) {
 
     echo $OUTPUT->header();
     echo $OUTPUT->notification(get_string('themecopied', 'theme_fordson_fel'), 'notifysuccess');
+
+    $returnurl = new moodle_url('/admin/settings.php', ['section' => 'themesetting'.$data->themeto]);
     echo $OUTPUT->continue_button($returnurl);
     echo $OUTPUT->footer();
     die;

@@ -33,10 +33,10 @@
  */
 
 //Styling
-
-.course-content li.current .content ul.section {
-    border-top: 25px solid $dpsaccentcolor;
+.course-content ul.topics li.section.current .content, .course-content ul.weeks li.section.current .content {
+        border-top: 25px solid $dpsaccentcolor;
 }
+
 .course-content .content ul.section {
     background-color: $gray-100;
 }
@@ -136,24 +136,27 @@ a.add-sections {
     background-color: $activityhover;
 }
 
-img.activityicon {
+.course-content img.activityicon {
     height: $activityiconsize;
     width: $activityiconsize;
     vertical-align: middle !important;
 }
 
-span.actions .icon {
-    width: 30px;
-    height: 30px;
-}
+@if $spectrumpreset == 1 {
+    .course-content .section-summary {
+        border: 0; 
+    }
+    .section-go-link.btn.btn-secondary {
+        display: block;
+        margin-top: 2rem;
+    }
+    .section-summary-activities {
+        width: 85%;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    .course-content ul.topics li.section.current .content, .course-content ul.weeks li.section.current .content {
+        border-top: 25px solid $spectrum-base;
+    }
 
-.m-t-2.m-b-1 {
-    background-color: $body-bg;
-    padding: 1rem;
-    border-radius: 3px;
-}
-
-.path-course-view .actions img.icon {
-    width: $activityiconsize;
-    height: $activityiconsize;
 }

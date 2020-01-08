@@ -39,19 +39,25 @@ defined('MOODLE_INTERNAL') || die();
 if ($ADMIN->fulltree) {
     // Note new tabs layout for admin settings pages.
     $settings = new theme_boost_admin_settingspage_tabs('themesettingfordson_fel', get_string('configtitle', 'theme_fordson_fel'));
+    $themename = 'theme_fordson_fel';
 
-    require('settings/variants_settings.php');
-    require('settings/presets_settings.php');
-    require('settings/presets_adjustments_settings.php');
-    require('settings/menu_settings.php');
-    require('settings/content_settings.php');
-    require('settings/fpicons_settings.php');
-    require('settings/footer_settings.php');
-    require('settings/image_settings.php');
-    require('settings/colours_settings.php');
-    require('settings/markettiles_settings.php');
-    require('settings/slideshow_settings.php');
+    if (is_dir($CFG->dirroot.'/theme/fordson_fel01')) {
+        require($CFG->dirroot.'/theme/fordson_fel/settings/variants_settings.php');
+    }
+    require($CFG->dirroot.'/theme/fordson_fel/settings/presets_settings.php');
+    require($CFG->dirroot.'/theme/fordson_fel/settings/presets_adjustments_settings.php');
+    require($CFG->dirroot.'/theme/fordson_fel/settings/javascript_settings.php');
+    require($CFG->dirroot.'/theme/fordson_fel/settings/menu_settings.php');
+    require($CFG->dirroot.'/theme/fordson_fel/settings/breadcrumb_settings.php');
+    require($CFG->dirroot.'/theme/fordson_fel/settings/content_settings.php');
+    require($CFG->dirroot.'/theme/fordson_fel/settings/fpicons_settings.php');
+    require($CFG->dirroot.'/theme/fordson_fel/settings/footer_settings.php');
+    require($CFG->dirroot.'/theme/fordson_fel/settings/image_settings.php');
+    require($CFG->dirroot.'/theme/fordson_fel/settings/colours_settings.php');
+    require($CFG->dirroot.'/theme/fordson_fel/settings/font_settings.php');
+    require($CFG->dirroot.'/theme/fordson_fel/settings/markettiles_settings.php');
+    require($CFG->dirroot.'/theme/fordson_fel/settings/slideshow_settings.php');
     // OCJ HILLBROOK MOD
-    require('settings/modchooser_settings.php');
-    require('settings/customlogin_settings.php');
+    require($CFG->dirroot.'/theme/fordson_fel/settings/modchooser_settings.php');
+    require($CFG->dirroot.'/theme/fordson_fel/settings/customlogin_settings.php');
 }

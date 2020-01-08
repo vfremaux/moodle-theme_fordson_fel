@@ -26,19 +26,19 @@
 defined('MOODLE_INTERNAL') || die();
 
 // Icon Navigation);
-$page = new admin_settingpage('theme_fordson_fel_iconnavheading', get_string('iconnavheading', 'theme_fordson_fel'));
+$page = new admin_settingpage($themename.'_iconnavheading', get_string('iconnavheading', 'theme_fordson_fel'));
 
 // This is the descriptor for icon One
-$name = 'theme_fordson_fel/iconwidthinfo';
-$heading = get_string('iconwidthinfo', 'theme_fordson_fel');
-$information = get_string('iconwidthinfodesc', 'theme_fordson_fel');
-$setting = new admin_setting_heading($name, $heading, $information);
+$name = $themename.'/iconwidthinfo';
+$title = get_string('iconwidthinfo', 'theme_fordson_fel');
+$description = get_string('iconwidthinfodesc', 'theme_fordson_fel');
+$setting = new admin_setting_heading($name, $title, $description);
 $page->add($setting);
 
 // Icon width setting.
-$name = 'theme_fordson_fel/iconwidth';
+$name = $themename.'/iconwidth';
 $title = get_string('iconwidth', 'theme_fordson_fel');
-$description = get_string('iconwidth_desc', 'theme_fordson_fel');;
+$description = get_string('iconwidth_desc', 'theme_fordson_fel');
 $default = '100px';
 $choices = array(
     '75px' => '75px',
@@ -61,14 +61,14 @@ $setting->set_updatedcallback('theme_reset_all_caches');
 $page->add($setting);
 
 // This is the descriptor for teacher create a course
-$name = 'theme_fordson_fel/createinfo';
-$heading = get_string('createinfo', 'theme_fordson_fel');
-$information = get_string('createinfodesc', 'theme_fordson_fel');
-$setting = new admin_setting_heading($name, $heading, $information);
+$name = $themename.'/createinfo';
+$title = get_string('createinfo', 'theme_fordson_fel');
+$description = get_string('createinfodesc', 'theme_fordson_fel');
+$setting = new admin_setting_heading($name, $title, $description);
 $page->add($setting);
 
 // Creator Icon
-$name = 'theme_fordson_fel/createicon';
+$name = $themename.'/createicon';
 $title = get_string('navicon', 'theme_fordson_fel');
 $description = get_string('navicondesc', 'theme_fordson_fel');
 $default = 'edit';
@@ -76,7 +76,7 @@ $setting = new admin_setting_configtext($name, $title, $description, $default);
 $setting->set_updatedcallback('theme_reset_all_caches');
 $page->add($setting);
 
-$name = 'theme_fordson_fel/createbuttontext';
+$name = $themename.'/createbuttontext';
 $title = get_string('naviconbuttontext', 'theme_fordson_fel');
 $description = get_string('naviconbuttontextdesc', 'theme_fordson_fel');
 $default = get_string('naviconbuttoncreatetextdefault', 'theme_fordson_fel');
@@ -84,7 +84,7 @@ $setting = new admin_setting_configtext($name, $title, $description, $default);
 $setting->set_updatedcallback('theme_reset_all_caches');
 $page->add($setting);
 
-$name = 'theme_fordson_fel/createbuttonurl';
+$name = $themename.'/createbuttonurl';
 $title = get_string('naviconbuttonurl', 'theme_fordson_fel');
 $description = get_string('naviconbuttonurldesc', 'theme_fordson_fel');
 $default =  $CFG->wwwroot.'/course/edit.php?category=1';
@@ -93,14 +93,14 @@ $setting->set_updatedcallback('theme_reset_all_caches');
 $page->add($setting);
 
 // This is the descriptor for teacher create a course
-$name = 'theme_fordson_fel/sliderinfo';
-$heading = get_string('sliderinfo', 'theme_fordson_fel');
-$information = get_string('sliderinfodesc', 'theme_fordson_fel');
-$setting = new admin_setting_heading($name, $heading, $information);
+$name = $themename.'/sliderinfo';
+$title = get_string('sliderinfo', 'theme_fordson_fel');
+$description = get_string('sliderinfodesc', 'theme_fordson_fel');
+$setting = new admin_setting_heading($name, $title, $description);
 $page->add($setting);
 
 // Creator Icon
-$name = 'theme_fordson_fel/slideicon';
+$name = $themename.'/slideicon';
 $title = get_string('navicon', 'theme_fordson_fel');
 $description = get_string('naviconslidedesc', 'theme_fordson_fel');
 $default = '';
@@ -108,7 +108,7 @@ $setting = new admin_setting_configtext($name, $title, $description, $default);
 $setting->set_updatedcallback('theme_reset_all_caches');
 $page->add($setting);
 
-$name = 'theme_fordson_fel/slideiconbuttontext';
+$name = $themename.'/slideiconbuttontext';
 $title = get_string('naviconbuttontext', 'theme_fordson_fel');
 $description = get_string('naviconbuttontextdesc', 'theme_fordson_fel');
 $default = '';
@@ -117,7 +117,7 @@ $setting->set_updatedcallback('theme_reset_all_caches');
 $page->add($setting);
 
 // Slide Textbox.
-$name = 'theme_fordson_fel/slidetextbox';
+$name = $themename.'/slidetextbox';
 $title = get_string('slidetextbox', 'theme_fordson_fel');
 $description = get_string('slidetextbox_desc', 'theme_fordson_fel');
 $default = '';
@@ -126,14 +126,14 @@ $setting->set_updatedcallback('theme_reset_all_caches');
 $page->add($setting);
 
 // This is the descriptor for icon One
-$name = 'theme_fordson_fel/navicon1info';
-$heading = get_string('navicon1', 'theme_fordson_fel');
-$information = get_string('navicondesc', 'theme_fordson_fel');
-$setting = new admin_setting_heading($name, $heading, $information);
+$name = $themename.'/navicon1info';
+$title = get_string('navicon1', 'theme_fordson_fel');
+$description = get_string('navicondesc', 'theme_fordson_fel');
+$setting = new admin_setting_heading($name, $title, $description);
 $page->add($setting);
 
 // icon One
-$name = 'theme_fordson_fel/nav1icon';
+$name = $themename.'/nav1icon';
 $title = get_string('navicon', 'theme_fordson_fel');
 $description = get_string('navicondesc', 'theme_fordson_fel');
 $default = 'home';
@@ -141,7 +141,7 @@ $setting = new admin_setting_configtext($name, $title, $description, $default);
 $setting->set_updatedcallback('theme_reset_all_caches');
 $page->add($setting);
 
-$name = 'theme_fordson_fel/nav1buttontext';
+$name = $themename.'/nav1buttontext';
 $title = get_string('naviconbuttontext', 'theme_fordson_fel');
 $description = get_string('naviconbuttontextdesc', 'theme_fordson_fel');
 $default = get_string('naviconbutton1textdefault', 'theme_fordson_fel');
@@ -149,7 +149,7 @@ $setting = new admin_setting_configtext($name, $title, $description, $default);
 $setting->set_updatedcallback('theme_reset_all_caches');
 $page->add($setting);
 
-$name = 'theme_fordson_fel/nav1buttonurl';
+$name = $themename.'/nav1buttonurl';
 $title = get_string('naviconbuttonurl', 'theme_fordson_fel');
 $description = get_string('naviconbuttonurldesc', 'theme_fordson_fel');
 $default =  $CFG->wwwroot.'/my/';
@@ -158,13 +158,13 @@ $setting->set_updatedcallback('theme_reset_all_caches');
 $page->add($setting);
 
 // This is the descriptor for icon One
-$name = 'theme_fordson_fel/navicon2info';
-$heading = get_string('navicon2', 'theme_fordson_fel');
-$information = get_string('navicondesc', 'theme_fordson_fel');
-$setting = new admin_setting_heading($name, $heading, $information);
+$name = $themename.'/navicon2info';
+$title = get_string('navicon2', 'theme_fordson_fel');
+$description = get_string('navicondesc', 'theme_fordson_fel');
+$setting = new admin_setting_heading($name, $title, $description);
 $page->add($setting);
 
-$name = 'theme_fordson_fel/nav2icon';
+$name = $themename.'/nav2icon';
 $title = get_string('navicon', 'theme_fordson_fel');
 $description = get_string('navicondesc', 'theme_fordson_fel');
 $default = 'calendar';
@@ -172,7 +172,7 @@ $setting = new admin_setting_configtext($name, $title, $description, $default);
 $setting->set_updatedcallback('theme_reset_all_caches');
 $page->add($setting);
 
-$name = 'theme_fordson_fel/nav2buttontext';
+$name = $themename.'/nav2buttontext';
 $title = get_string('naviconbuttontext', 'theme_fordson_fel');
 $description = get_string('naviconbuttontextdesc', 'theme_fordson_fel');
 $default = get_string('naviconbutton2textdefault', 'theme_fordson_fel');
@@ -180,7 +180,7 @@ $setting = new admin_setting_configtext($name, $title, $description, $default);
 $setting->set_updatedcallback('theme_reset_all_caches');
 $page->add($setting);
 
-$name = 'theme_fordson_fel/nav2buttonurl';
+$name = $themename.'/nav2buttonurl';
 $title = get_string('naviconbuttonurl', 'theme_fordson_fel');
 $description = get_string('naviconbuttonurldesc', 'theme_fordson_fel');
 $default =  $CFG->wwwroot.'/calendar/view.php?view=month';
@@ -189,13 +189,13 @@ $setting->set_updatedcallback('theme_reset_all_caches');
 $page->add($setting);
 
 // This is the descriptor for icon three
-$name = 'theme_fordson_fel/navicon3info';
-$heading = get_string('navicon3', 'theme_fordson_fel');
-$information = get_string('navicondesc', 'theme_fordson_fel');
-$setting = new admin_setting_heading($name, $heading, $information);
+$name = $themename.'/navicon3info';
+$title = get_string('navicon3', 'theme_fordson_fel');
+$description = get_string('navicondesc', 'theme_fordson_fel');
+$setting = new admin_setting_heading($name, $title, $description);
 $page->add($setting);
 
-$name = 'theme_fordson_fel/nav3icon';
+$name = $themename.'/nav3icon';
 $title = get_string('navicon', 'theme_fordson_fel');
 $description = get_string('navicondesc', 'theme_fordson_fel');
 $default = 'bookmark';
@@ -203,7 +203,7 @@ $setting = new admin_setting_configtext($name, $title, $description, $default);
 $setting->set_updatedcallback('theme_reset_all_caches');
 $page->add($setting);
 
-$name = 'theme_fordson_fel/nav3buttontext';
+$name = $themename.'/nav3buttontext';
 $title = get_string('naviconbuttontext', 'theme_fordson_fel');
 $description = get_string('naviconbuttontextdesc', 'theme_fordson_fel');
 $default = get_string('naviconbutton3textdefault', 'theme_fordson_fel');
@@ -211,7 +211,7 @@ $setting = new admin_setting_configtext($name, $title, $description, $default);
 $setting->set_updatedcallback('theme_reset_all_caches');
 $page->add($setting);
 
-$name = 'theme_fordson_fel/nav3buttonurl';
+$name = $themename.'/nav3buttonurl';
 $title = get_string('naviconbuttonurl', 'theme_fordson_fel');
 $description = get_string('naviconbuttonurldesc', 'theme_fordson_fel');
 $default =  $CFG->wwwroot.'/badges/mybadges.php';
@@ -220,13 +220,13 @@ $setting->set_updatedcallback('theme_reset_all_caches');
 $page->add($setting);
 
 // This is the descriptor for icon four
-$name = 'theme_fordson_fel/navicon4info';
-$heading = get_string('navicon4', 'theme_fordson_fel');
-$information = get_string('navicondesc', 'theme_fordson_fel');
-$setting = new admin_setting_heading($name, $heading, $information);
+$name = $themename.'/navicon4info';
+$title = get_string('navicon4', 'theme_fordson_fel');
+$description = get_string('navicondesc', 'theme_fordson_fel');
+$setting = new admin_setting_heading($name, $title, $description);
 $page->add($setting);
 
-$name = 'theme_fordson_fel/nav4icon';
+$name = $themename.'/nav4icon';
 $title = get_string('navicon', 'theme_fordson_fel');
 $description = get_string('navicondesc', 'theme_fordson_fel');
 $default = 'book';
@@ -234,7 +234,7 @@ $setting = new admin_setting_configtext($name, $title, $description, $default);
 $setting->set_updatedcallback('theme_reset_all_caches');
 $page->add($setting);
 
-$name = 'theme_fordson_fel/nav4buttontext';
+$name = $themename.'/nav4buttontext';
 $title = get_string('naviconbuttontext', 'theme_fordson_fel');
 $description = get_string('naviconbuttontextdesc', 'theme_fordson_fel');
 $default = get_string('naviconbutton4textdefault', 'theme_fordson_fel');
@@ -242,7 +242,7 @@ $setting = new admin_setting_configtext($name, $title, $description, $default);
 $setting->set_updatedcallback('theme_reset_all_caches');
 $page->add($setting);
 
-$name = 'theme_fordson_fel/nav4buttonurl';
+$name = $themename.'/nav4buttonurl';
 $title = get_string('naviconbuttonurl', 'theme_fordson_fel');
 $description = get_string('naviconbuttonurldesc', 'theme_fordson_fel');
 $default =  $CFG->wwwroot.'/course/';
@@ -251,13 +251,13 @@ $setting->set_updatedcallback('theme_reset_all_caches');
 $page->add($setting);
 
 // This is the descriptor for icon four
-$name = 'theme_fordson_fel/navicon5info';
-$heading = get_string('navicon5', 'theme_fordson_fel');
-$information = get_string('navicondesc', 'theme_fordson_fel');
-$setting = new admin_setting_heading($name, $heading, $information);
+$name = $themename.'/navicon5info';
+$title = get_string('navicon5', 'theme_fordson_fel');
+$description = get_string('navicondesc', 'theme_fordson_fel');
+$setting = new admin_setting_heading($name, $title, $description);
 $page->add($setting);
 
-$name = 'theme_fordson_fel/nav5icon';
+$name = $themename.'/nav5icon';
 $title = get_string('navicon', 'theme_fordson_fel');
 $description = get_string('navicondesc', 'theme_fordson_fel');
 $default = '';
@@ -265,7 +265,7 @@ $setting = new admin_setting_configtext($name, $title, $description, $default);
 $setting->set_updatedcallback('theme_reset_all_caches');
 $page->add($setting);
 
-$name = 'theme_fordson_fel/nav5buttontext';
+$name = $themename.'/nav5buttontext';
 $title = get_string('naviconbuttontext', 'theme_fordson_fel');
 $description = get_string('naviconbuttontextdesc', 'theme_fordson_fel');
 $default = '';
@@ -273,7 +273,7 @@ $setting = new admin_setting_configtext($name, $title, $description, $default);
 $setting->set_updatedcallback('theme_reset_all_caches');
 $page->add($setting);
 
-$name = 'theme_fordson_fel/nav5buttonurl';
+$name = $themename.'/nav5buttonurl';
 $title = get_string('naviconbuttonurl', 'theme_fordson_fel');
 $description = get_string('naviconbuttonurldesc', 'theme_fordson_fel');
 $default = '';
@@ -282,13 +282,13 @@ $setting->set_updatedcallback('theme_reset_all_caches');
 $page->add($setting);
 
 // This is the descriptor for icon six
-$name = 'theme_fordson_fel/navicon6info';
-$heading = get_string('navicon6', 'theme_fordson_fel');
-$information = get_string('navicondesc', 'theme_fordson_fel');
-$setting = new admin_setting_heading($name, $heading, $information);
+$name = $themename.'/navicon6info';
+$title = get_string('navicon6', 'theme_fordson_fel');
+$description = get_string('navicondesc', 'theme_fordson_fel');
+$setting = new admin_setting_heading($name, $title, $description);
 $page->add($setting);
 
-$name = 'theme_fordson_fel/nav6icon';
+$name = $themename.'/nav6icon';
 $title = get_string('navicon', 'theme_fordson_fel');
 $description = get_string('navicondesc', 'theme_fordson_fel');
 $default = '';
@@ -296,7 +296,7 @@ $setting = new admin_setting_configtext($name, $title, $description, $default);
 $setting->set_updatedcallback('theme_reset_all_caches');
 $page->add($setting);
 
-$name = 'theme_fordson_fel/nav6buttontext';
+$name = $themename.'/nav6buttontext';
 $title = get_string('naviconbuttontext', 'theme_fordson_fel');
 $description = get_string('naviconbuttontextdesc', 'theme_fordson_fel');
 $default = '';
@@ -304,7 +304,7 @@ $setting = new admin_setting_configtext($name, $title, $description, $default);
 $setting->set_updatedcallback('theme_reset_all_caches');
 $page->add($setting);
 
-$name = 'theme_fordson_fel/nav6buttonurl';
+$name = $themename.'/nav6buttonurl';
 $title = get_string('naviconbuttonurl', 'theme_fordson_fel');
 $description = get_string('naviconbuttonurldesc', 'theme_fordson_fel');
 $default = '';
@@ -313,13 +313,13 @@ $setting->set_updatedcallback('theme_reset_all_caches');
 $page->add($setting);
 
 // This is the descriptor for icon seven
-$name = 'theme_fordson_fel/navicon7info';
-$heading = get_string('navicon7', 'theme_fordson_fel');
-$information = get_string('navicondesc', 'theme_fordson_fel');
-$setting = new admin_setting_heading($name, $heading, $information);
+$name = $themename.'/navicon7info';
+$title = get_string('navicon7', 'theme_fordson_fel');
+$description = get_string('navicondesc', 'theme_fordson_fel');
+$setting = new admin_setting_heading($name, $title, $description);
 $page->add($setting);
 
-$name = 'theme_fordson_fel/nav7icon';
+$name = $themename.'/nav7icon';
 $title = get_string('navicon', 'theme_fordson_fel');
 $description = get_string('navicondesc', 'theme_fordson_fel');
 $default = '';
@@ -327,7 +327,7 @@ $setting = new admin_setting_configtext($name, $title, $description, $default);
 $setting->set_updatedcallback('theme_reset_all_caches');
 $page->add($setting);
 
-$name = 'theme_fordson_fel/nav7buttontext';
+$name = $themename.'/nav7buttontext';
 $title = get_string('naviconbuttontext', 'theme_fordson_fel');
 $description = get_string('naviconbuttontextdesc', 'theme_fordson_fel');
 $default = '';
@@ -335,7 +335,7 @@ $setting = new admin_setting_configtext($name, $title, $description, $default);
 $setting->set_updatedcallback('theme_reset_all_caches');
 $page->add($setting);
 
-$name = 'theme_fordson_fel/nav7buttonurl';
+$name = $themename.'/nav7buttonurl';
 $title = get_string('naviconbuttonurl', 'theme_fordson_fel');
 $description = get_string('naviconbuttonurldesc', 'theme_fordson_fel');
 $default = '';
@@ -344,13 +344,13 @@ $setting->set_updatedcallback('theme_reset_all_caches');
 $page->add($setting);
 
 // This is the descriptor for icon eight
-$name = 'theme_fordson_fel/navicon8info';
-$heading = get_string('navicon8', 'theme_fordson_fel');
-$information = get_string('navicondesc', 'theme_fordson_fel');
-$setting = new admin_setting_heading($name, $heading, $information);
+$name = $themename.'/navicon8info';
+$title = get_string('navicon8', 'theme_fordson_fel');
+$description = get_string('navicondesc', 'theme_fordson_fel');
+$setting = new admin_setting_heading($name, $title, $description);
 $page->add($setting);
 
-$name = 'theme_fordson_fel/nav8icon';
+$name = $themename.'/nav8icon';
 $title = get_string('navicon', 'theme_fordson_fel');
 $description = get_string('navicondesc', 'theme_fordson_fel');
 $default = '';
@@ -358,7 +358,7 @@ $setting = new admin_setting_configtext($name, $title, $description, $default);
 $setting->set_updatedcallback('theme_reset_all_caches');
 $page->add($setting);
 
-$name = 'theme_fordson_fel/nav8buttontext';
+$name = $themename.'/nav8buttontext';
 $title = get_string('naviconbuttontext', 'theme_fordson_fel');
 $description = get_string('naviconbuttontextdesc', 'theme_fordson_fel');
 $default = '';
@@ -366,7 +366,7 @@ $setting = new admin_setting_configtext($name, $title, $description, $default);
 $setting->set_updatedcallback('theme_reset_all_caches');
 $page->add($setting);
 
-$name = 'theme_fordson_fel/nav8buttonurl';
+$name = $themename.'/nav8buttonurl';
 $title = get_string('naviconbuttonurl', 'theme_fordson_fel');
 $description = get_string('naviconbuttonurldesc', 'theme_fordson_fel');
 $default = '';

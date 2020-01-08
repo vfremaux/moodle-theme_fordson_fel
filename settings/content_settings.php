@@ -25,16 +25,17 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$page = new admin_settingpage('theme_fordson_fel_content', get_string('contentsettings', 'theme_fordson_fel'));
-// Content Info
-$name = 'theme_fordson_fel/textcontentinfo';
-$heading = get_string('textcontentinfo', 'theme_fordson_fel');
-$information = get_string('textcontentinfodesc', 'theme_fordson_fel');
-$setting = new admin_setting_heading($name, $heading, $information);
+$page = new admin_settingpage($themename.'_content', get_string('contentsettings', 'theme_fordson_fel'));
+
+// Content Info.
+$name = $themename.'/textcontentinfo';
+$title = get_string('textcontentinfo', 'theme_fordson_fel');
+$description = get_string('textcontentinfodesc', 'theme_fordson_fel');
+$setting = new admin_setting_heading($name, $title, $description);
 $page->add($setting);
 
 // Frontpage Textbox.
-$name = 'theme_fordson_fel/fptextbox';
+$name = $themename.'/fptextbox';
 $title = get_string('fptextbox', 'theme_fordson_fel');
 $description = get_string('fptextbox_desc', 'theme_fordson_fel');
 $default = '';
@@ -43,7 +44,7 @@ $setting->set_updatedcallback('theme_reset_all_caches');
 $page->add($setting);
 
 // Frontpage Textbox Logged Out.
-$name = 'theme_fordson_fel/fptextboxlogout';
+$name = $themename.'/fptextboxlogout';
 $title = get_string('fptextboxlogout', 'theme_fordson_fel');
 $description = get_string('fptextboxlogout_desc', 'theme_fordson_fel');
 $default = '';
@@ -52,12 +53,33 @@ $setting->set_updatedcallback('theme_reset_all_caches');
 $page->add($setting);
 
 // Alert setting.
-$name = 'theme_fordson_fel/alertbox';
+$name = $themename.'/alertbox';
 $title = get_string('alert', 'theme_fordson_fel');
 $description = get_string('alert_desc', 'theme_fordson_fel');
 $default = '';
 $setting = new admin_setting_confightmleditor($name, $title, $description, $default);
 $setting->set_updatedcallback('theme_reset_all_caches');
+$page->add($setting);
+
+// Signal new items.
+$name = $themename.'/signalitemsnewerthan';
+$title = get_string('signalitemsnewerthan', 'theme_fordson_fel');
+$description = get_string('signalitemsnewerthan_desc', 'theme_fordson_fel');
+$default = 0;
+$setting = new admin_setting_configtext($name, $title, $description, $default);
+$page->add($setting);
+
+// Signal new items.
+$name = $themename.'/flexinitialstate';
+$title = get_string('flexinitialstate', 'theme_fordson_fel');
+$description = get_string('flexinitialstate_desc', 'theme_fordson_fel');
+$default = 'collapsed';
+$options = array(
+    'collapsed' => get_string('flexcollapsed', 'theme_fordson_fel'),
+    'expanded' => get_string('flexexpanded', 'theme_fordson_fel'),
+    'reset' => get_string('flexreset', 'theme_fordson_fel')
+);
+$setting = new admin_setting_configselect($name, $title, $description, $default, $options);
 $page->add($setting);
 
 // Must add the page after definiting all the settings!
