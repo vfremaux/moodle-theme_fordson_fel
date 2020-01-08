@@ -47,7 +47,7 @@
         {{/ output.should_display_navbar_logo }}
         <span class="site-name d-none d-md-inline">{{{ sitename }}}</span>
         {{#sitealternatename}}
-        <span class="sitename alternate-name not-for-mobile" aria-hidden="true">{{sitealternatename}}</span>
+        <span class="sitename alternate-name not-for-mobile">{{sitealternatename}}</span>
         {{/sitealternatename}}
     </a>
     <!-- /logo -->
@@ -62,7 +62,7 @@
     <ul class="navbar-nav d-none d-md-flex not-for-mobile">
         {{^custommenupullright}}
         <!-- navbar_fordson_fel:custom_menu -->
-        <li>
+        <li class="not-pulled-right">
         {{{ output.fordson_fel_custom_menu }}}
         {{{ output.custom_menu }}}
         <!-- navbar_fordson_fel:page_heading_menu -->
@@ -75,32 +75,33 @@
 
         {{#custommenupullright}}
         <!-- navbar_fordson_fel:custom_menu -->
-        <li class="not-for-mobile">
         {{{ output.fordson_fel_custom_menu }}}
-        {{{ output.custom_menu }}}
-        <!-- navbar_fordson_fel:page_heading_menu -->
-        {{{ output.page_heading_menu }}}
+
+        <li class="not-for-mobile pulled-right">
+            {{{ output.custom_menu }}}
+            <!-- navbar_fordson_fel:page_heading_menu -->
+            {{{ output.page_heading_menu }}}
         </li>
         {{/custommenupullright}}
 
         <!-- navbar_fordson:lang -->
         {{#showlangmenu}}
         <li>
-        <div class="d-none d-lg-block">
-        {{{ output.lang_menu }}}
-        </div>
+            <div class="d-none d-lg-block">
+            {{{ output.lang_menu }}}
+            </div>
         </li>
         {{/showlangmenu}}
         <!-- /navbar_fordson_fel:lang -->
 
         <!-- navbar_fordson:search -->
-        <div class="d-none d-lg-block not-for-mobile">
-        {{{ output.search_box }}}
-        </div>
+        <li class="d-none d-lg-block not-for-mobile">
+            {{{ output.search_box }}}
+        </li>
 
         <!-- navbar_fordson:plugin_output -->
         <li class="nav-item">
-        {{{ output.navbar_plugin_output }}}
+            {{{ output.navbar_plugin_output }}}
         </li>
         <!-- navbar_fordson:user_menu -->
         <li class="nav-item d-flex align-items-center">

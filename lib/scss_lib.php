@@ -63,7 +63,7 @@ function theme_fordson_fel_get_main_scss_content($theme) {
     }
     if (!$presetisset) {
         $filename .= '.scss';
-        if ($filename && ($presetfile = $fs->get_file($context->id, 'theme_fordson_fel', 'preset', 0, '/', $filename))) {
+        if ($filename && ($presetfile = $fs->get_file($context->id, 'theme_'.$theme->name, 'preset', 0, '/', $filename))) {
             $scss .= $presetfile->get_content();
         }
         else {
@@ -131,8 +131,13 @@ function theme_fordson_fel_get_main_scss_content($theme) {
         $scss .= file_get_contents($CFG->dirroot . '/theme/fordson_fel/scss/marketingstyle/marketingstyle4.scss');
     }
 
-    $scss .= file_get_contents($CFG->dirroot . '/theme/fordson_fel/scss/stylebreadcrumb.scss');
     $scss .= file_get_contents($CFG->dirroot . '/theme/fordson_fel/scss/styles.scss');
+
+    $scss .= file_get_contents($CFG->dirroot . '/theme/fordson_fel/scss/stylebreadcrumb.scss');
+    $scss .= file_get_contents($CFG->dirroot . '/theme/fordson_fel/scss/navbar.scss');
+    $scss .= file_get_contents($CFG->dirroot . '/theme/fordson_fel/scss/tabs.scss');
+    $scss .= file_get_contents($CFG->dirroot . '/theme/fordson_fel/scss/quiz.scss');
+    $scss .= file_get_contents($CFG->dirroot . '/theme/fordson_fel/scss/responsive.scss');
 
     // Add variant local sheet.
     if (preg_match('/\d{2}$/', $theme->name)) {
@@ -156,18 +161,31 @@ function theme_fordson_fel_get_pre_scss($theme) {
 
     $configurable = [
     // Config key => variableName,
-    'brandprimary' => ['primary'],
+    'brandprimary' => ['brandprimary'],
+    'brandsecondary' => ['brandsecondary'],
     'brandsuccess' => ['success'],
     'brandinfo' => ['info'],
     'brandwarning' => ['warning'],
     'branddanger' => ['danger'],
+
+    'topnavbarbg' => ['topnavbar-bg'],
+    'topnavbarfg' => ['topnavbar-fg'],
+    'topnavbarbghov' => ['topnavbar-bg-hover'],
+    'topnavbarteacherbg' => ['teachernavbarcolor'],
+
     'bodybackground' => ['body-bg'],
+
     'breadcrumbbkg' => ['breadcrumb-bg'],
     'breadcrumbfg' => ['breadcrumb-fg'],
+
     'cardbkg' => ['card-bg'],
+
     'drawerbkg' => ['drawer-bg'],
     'footerbkg' => ['footer-bg'],
-    'fploginform' => ['fploginform'],
+
+    'fploginformbg' => ['fploginform-bg'],
+    'fploginformfg' => ['fploginform-fg'],
+
     'headerimagepadding' => ['headerimagepadding'],
     'markettextbg' => ['markettextbg'],
     'iconwidth' => ['fpicon-width'],
@@ -177,21 +195,38 @@ function theme_fordson_fel_get_pre_scss($theme) {
     'slideshowheight' => ['slideshowheight'],
     'activityiconsize' => ['activityiconsize'],
     'gutterwidth' => ['gutterwidth'],
-    'topnavbarbg' => ['topnavbar-bg'],
-    'topnavbarfg' => ['topnavbar-fg'],
-    'topnavbarteacherbg' => ['teachernavbarcolor'],
+
+    'usecustomfonts' => ['usecustomfonts'],
+    'generalaltccsselector' => ['altfontselector'],
     ];
 
     // Add settings variables.
     foreach ($configurable as $configkey => $targets) {
         $value = $theme->settings->{$configkey};
         if (empty($value)) {
+            // $value = 'undefined';
             continue;
         }
         array_map(function ($target) use (&$prescss, $value) {
             $prescss .= '$' . $target . ': ' . $value . ";\n";
         }
         , (array)$targets);
+    }
+
+    // Load the fonts urls
+    $generalbodyfonturl = $theme->setting_file_url('generalbodyfont', 'generalbodyfont');
+    if (!empty($generalbodyfonturl)) {
+        $prescss .= '$generalbodyfont: url("'.$generalbodyfonturl."\");\n";
+    }
+
+    $generalaltfonturl = $theme->setting_file_url('generalaltfont', 'generalaltfont');
+    if (!empty($generalaltfonturl)) {
+        $prescss .= '$generalaltfont: url("'.$generalaltfonturl."\");\n";
+    }
+
+    $titlefonturl = $theme->setting_file_url('titlefont', 'titlefont');
+    if (!empty($titlefonturl)) {
+        $prescss .= '$titlefont: url("'.$titlefonturl."\");\n";
     }
 
     // Prepend pre-scss.

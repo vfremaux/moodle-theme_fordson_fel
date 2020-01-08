@@ -195,6 +195,7 @@ class theme_fordson_fel_format_flexsections_renderer extends format_flexsections
         }
 
         $template->sectionnum = $section->section;
+        $template->sectionid = $section->id;
         $movingsection = course_get_format($course)->is_moving_section();
 
         $template->istopfirst = false;
@@ -490,8 +491,8 @@ class theme_fordson_fel_format_flexsections_renderer extends format_flexsections
 
         $params = array('type' => 'button',
                         'class' => 'btn flexsection-global-control',
-                        'id' => 'flexsections-control-reset',
-                        'value' => get_string('reset', 'theme_fordson_fel'));
+                        'id' => 'flexsections-control-map',
+                        'value' => get_string('map', 'theme_fordson_fel'));
         $str .= html_writer::tag('input', '', $params);
 
         return $str;

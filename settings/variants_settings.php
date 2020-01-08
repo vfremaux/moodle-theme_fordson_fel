@@ -29,7 +29,7 @@ $page = new admin_settingpage($themename.'_variants', get_string('variant_settin
 $name = $themename.'_variantsheading';
 $title = get_string('variantsheadingsub', 'theme_fordson_fel');
 $description = format_text(get_string('variantsheading_desc', 'theme_fordson_fel'), FORMAT_MARKDOWN);
-$headersetting = new admin_setting_heading($key, $title, $description);
+$headersetting = new admin_setting_heading($name, $title, $description);
 $page->add($headersetting);
 
 // Theme variant tag.

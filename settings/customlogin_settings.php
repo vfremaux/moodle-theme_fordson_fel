@@ -53,10 +53,20 @@ $setting->set_updatedcallback('theme_reset_all_caches');
 $page->add($setting);
 
 // Login form color.
-$name = $themename.'/fploginform';
-$title = get_string('fploginform', 'theme_fordson_fel');
-$description = get_string('fploginform_desc', 'theme_fordson_fel');
-$setting = new admin_setting_configcolourpicker($name, $title, $description, '');
+$name = $themename.'/fploginformbg';
+$title = get_string('fploginformbg', 'theme_fordson_fel');
+$description = get_string('fploginformbg_desc', 'theme_fordson_fel');
+$default = '#ffffff';
+$setting = new admin_setting_configcolourpicker($name, $title, $description, $default);
+$setting->set_updatedcallback('theme_reset_all_caches');
+$page->add($setting);
+
+// Login form color.
+$name = $themename.'/fploginformfg';
+$title = get_string('fploginformfg', 'theme_fordson_fel');
+$description = get_string('fploginformfg_desc', 'theme_fordson_fel');
+$default = '#000000';
+$setting = new admin_setting_configcolourpicker($name, $title, $description, $default);
 $setting->set_updatedcallback('theme_reset_all_caches');
 $page->add($setting);
 

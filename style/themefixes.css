@@ -4,6 +4,10 @@ body {
     height: initial  !important;
 }
 
+.filemanager-container {
+    position: relative;
+}
+
 /* ======= USER PREFERENCES ======== */
 
 /* titre des notification largeur des colonnes corrigé */
@@ -142,10 +146,14 @@ img.activityicon {
     background-position: top;
 }
 
+/* login form vertical gutter */
+#page-login-index #region-main {
+    top: 2em;
+}
+
 /* Dashboard panels fixes */
 .dashtitle h3 {
     color:#fff;
-    background-color: #ccc;
     border: 1px solid #ccc;
     padding: .3rem;
     font-size: 1.3rem;
@@ -172,12 +180,25 @@ img.activityicon {
     display: none;
 }
 
-/*
 footer {
-    position:fixed;
+    /* position:fixed; */
     bottom:0;
     width:100%;
+    z-index: 1000;
 }
-*/
 
+.card-text.content.calendarwrapper {
+    margin-top: 30px;
+}
 
+#page-course-view_topics .course-content .section-summary {
+    border: none;
+}
+
+.course-content .single-section .section-navigation {
+    border-top: none;
+}
+
+.section li.activity {
+    border-bottom: none;
+}

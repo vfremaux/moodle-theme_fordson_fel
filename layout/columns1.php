@@ -62,7 +62,7 @@ $templatecontext = [
     'bodyattributes' => $bodyattributes,
     'regionmainsettingsmenu' => $regionmainsettingsmenu,
     'hasregionmainsettingsmenu' => !empty($regionmainsettingsmenu),
-    'hasfootnote' => !empty($footnote) && (preg_match('/[a-z]/', strip_tags($footnote))),
+    'hasfootnote' => !empty($footnote) && (preg_match('/[A-Za-z0-9]/', preg_replace('/<.*?>/', '', $footnote))),
     'custommenupullright' => $PAGE->theme->settings->custommenupullright,
     'footnote' => $footnote,
     'hascoursefooter' => !empty($coursefooter) && (preg_match('/[a-z]/', strip_tags($coursefooter))),
@@ -85,8 +85,7 @@ if (is_dir($CFG->dirroot.'/local/technicalsignals')) {
 }
 
 $PAGE->requires->jquery();
-$PAGE->requires->js('/theme/fordson_fel/javascript/scrolltotop.js');
-$PAGE->requires->js('/theme/fordson_fel/javascript/scrolltobottom.js');
+$PAGE->requires->js_call_amd('theme_fordson_fel/pagescroll', 'init');
 $PAGE->requires->js('/theme/fordson_fel/javascript/scrollspy.js');
 $PAGE->requires->js('/theme/fordson_fel/javascript/tooltipfix.js');
 

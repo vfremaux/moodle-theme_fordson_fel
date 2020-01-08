@@ -25,6 +25,7 @@
 defined('MOODLE_INTERNAL') || die();
 
 require_once($CFG->dirroot.'/theme/fordson_fel/lib/mobile_detect_lib.php');
+require_once($CFG->dirroot.'/theme/fordson_fel/lib.php');
 
 if (is_dir($CFG->dirroot.'/local/technicalsignals')) {
     require_once($CFG->dirroot.'/local/technicalsignals/lib.php');
@@ -37,12 +38,6 @@ if (@$PAGE->theme->settings->breadcrumbstyle == '1') {
 user_preference_allow_ajax_update('drawer-open-nav', PARAM_ALPHA);
 require_once($CFG->libdir . '/behat/lib.php');
 
-$hasfhsdrawer = !empty($PAGE->theme->settings->shownavdrawer);
-if (isloggedin() && $hasfhsdrawer && isset($PAGE->theme->settings->shownavclosed) && $PAGE->theme->settings->shownavclosed == 0) {
-    $navdraweropen = (get_user_preferences('drawer-open-nav', 'true') == 'true');
-} else {
-    $navdraweropen = false;
-}
 $extraclasses = [];
 
 if (is_mobile()) {
@@ -52,21 +47,6 @@ if (is_tablet()) {
     $extraclasses[] = 'is-tablet';
 }
 
-if ($navdraweropen) {
-    $extraclasses[] = 'drawer-open-left';
-}
-
-$hasspdrawer = !empty($PAGE->theme->settings->shownavspdrawer);
-if (isloggedin() && $hasspdrawer && isset($PAGE->theme->settings->showspclosed) && $PAGE->theme->settings->showspclosed == 0) {
-    $navspdraweropen = (get_user_preferences('spdrawer-open-nav', 'true') == 'true');
-} else {
-    $navspdraweropen = false;
-}
-if ($navspdraweropen) {
-    $extraclasses[] = 'spdrawer-open-right';
-}
-
-$bodyattributes = $OUTPUT->body_attributes($extraclasses);
 $blockshtml = $OUTPUT->blocks('side-pre');
 $postblockshtml = $OUTPUT->blocks('side-post');
 
@@ -83,6 +63,9 @@ $checkblockc = strpos($blockshtmlc, 'data-block=') !== false;
 $checkpostblocks = strpos($blockshtmlpost, 'data-block=') !== false;
 
 $hasblocks = strpos($blockshtml, 'data-block=') !== false;
+
+list($hasfhsdrawer, $navdraweropen, $hasspdrawer, $navspdraweropen) = theme_fordson_fel_resolve_drawers($extraclasses, $checkpostblocks, is_mobile());
+$bodyattributes = $OUTPUT->body_attributes($extraclasses);
 
 $footnote = $OUTPUT->footnote();
 $pagedoclink = $OUTPUT->page_doc_link();
@@ -130,8 +113,7 @@ if (is_dir($CFG->dirroot.'/local/technicalsignals')) {
 }
 
 $PAGE->requires->jquery();
-$PAGE->requires->js('/theme/fordson_fel/javascript/scrolltotop.js');
-$PAGE->requires->js('/theme/fordson_fel/javascript/scrolltobottom.js');
+$PAGE->requires->js_call_amd('theme_fordson_fel/pagescroll', 'init');
 $PAGE->requires->js('/theme/fordson_fel/javascript/scrollspy.js');
 $PAGE->requires->js('/theme/fordson_fel/javascript/tooltipfix.js');
 $PAGE->requires->js('/theme/fordson_fel/javascript/blockslider.js');

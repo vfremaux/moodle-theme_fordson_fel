@@ -32,14 +32,14 @@ $description = format_text(get_string('jsheading_desc', 'theme_fordson_fel'), FO
 $headersetting = new admin_setting_heading($name, $title, $description);
 $page->add($headersetting);
 
-$name = $themaname.'/additionaljs';
+$name = $themename.'/additionaljs';
 $title = get_string('additionaljs', 'theme_fordson_fel');
 $description = get_string('additionaljs_desc', 'theme_fordson_fel');
 $options = ['maxfiles' => -1, 'accepted_types' => ['.js']];
 $setting = new admin_setting_configstoredfile($name, $title, $description, 'additionaljs', 0, $options);
 $page->add($setting);
 
-$name = $themaname.'/pagetyperestrictions';
+$name = $themename.'/pagetyperestrictions';
 $title = get_string('pagetyperestrictions', 'theme_fordson_fel');
 $description = get_string('pagetyperestrictions_desc', 'theme_fordson_fel');
 $setting = new admin_setting_configtext($name, $title, $description, '', PARAM_TEXT, 80);
@@ -51,7 +51,7 @@ $description = '';
 $headersetting = new admin_setting_heading($name, $title, $description);
 $page->add($headersetting);
 
-$name = $themaname.'/allowblockregionscollapse';
+$name = $themename.'/allowblockregionscollapse';
 $title = get_string('allowblockregionscollapse', 'theme_fordson_fel');
 $description = get_string('allowblockregionscollapse_desc', 'theme_fordson_fel');
 $default = 0;

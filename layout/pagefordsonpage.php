@@ -41,9 +41,11 @@ if (is_tablet()) {
     $extraclasses[] = 'is-tablet';
 }
 
+list($hasfhsdrawer, $navdraweropen, $hasspdrawer, $navspdraweropen) = theme_fordson_fel_resolve_drawers($extraclasses, $checkpostblocks, is_mobile());
 $bodyattributes = $OUTPUT->body_attributes($extraclasses);
 $hasblocks = false;
 $haspostblocks = false;
+$checkpostblocks = false;
 
 $footnote = $OUTPUT->footnote();
 $pagedoclink = $OUTPUT->page_doc_link();
@@ -54,6 +56,10 @@ $templatecontext = [
     'output' => $OUTPUT,
     'showbacktotop' => isset($PAGE->theme->settings->showbacktotop) && $PAGE->theme->settings->showbacktotop == 1,
     'bodyattributes' => $bodyattributes,
+    'navdraweropen' => $navdraweropen,
+    'hasfhsdrawer' => $hasfhsdrawer,
+    'hasspdrawer' => $checkpostblocks || $PAGE->user_is_editing(),
+    'navspdraweropen' => $navspdraweropen && ($checkpostblocks || $PAGE->user_is_editing()),
     'hasfootnote' => !empty($footnote) && (preg_match('/[a-z]/', strip_tags($footnote))),
     'footnote' => $footnote,
     'custommenupullright' => $PAGE->theme->settings->custommenupullright,
@@ -77,11 +83,8 @@ if (is_dir($CFG->dirroot.'/local/technicalsignals')) {
 }
 
 $PAGE->requires->jquery();
-if (isset($PAGE->theme->settings->showbacktotop) && $PAGE->theme->settings->showbacktotop == 1) {
-    $PAGE->requires->js('/theme/fordson_fel/javascript/scrolltotop.js');
-    $PAGE->requires->js('/theme/fordson_fel/javascript/scrolltobottom.js');
-    $PAGE->requires->js('/theme/fordson_fel/javascript/scrollspy.js');
-}
+$PAGE->requires->js_call_amd('theme_fordson_fel/pagescroll', 'init');
+$PAGE->requires->js('/theme/fordson_fel/javascript/scrollspy.js');
 
 echo $OUTPUT->render_from_template('theme_fordson_fel/pagefordsonpage_fel', $templatecontext);
 

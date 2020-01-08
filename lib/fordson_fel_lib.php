@@ -132,12 +132,13 @@ function theme_fordson_fel_course_trim_char($str, $n = 500, $endchar = '&#8230;'
 }
 
 function theme_fordson_fel_get_random_filearea_url($filearea) {
+    global $PAGE;
 
     // Process args to randomize on all images in this filearea.
     $fs = get_file_storage();
 
     $syscontext = context_system::instance();
-    $component = 'theme_fordson_fel';
+    $component = 'theme_'.$PAGE->theme->name;
 
     if ($loginimages = $fs->get_area_files($syscontext->id, $component, $filearea, 0, "itemid, filepath, filename", false)) { // Ignore dirs.
         shuffle($loginimages);
@@ -178,6 +179,14 @@ function theme_fordson_fel_process_footer_texts(&$templatecontext) {
         $templatecontext[$tz] = str_replace('{{brandwebsite}}', @$PAGE->theme->settings->brandwebsite, $templatecontext[$tz]);
         $templatecontext[$tz] = str_replace('{{brandphone}}', @$PAGE->theme->settings->brandphone, $templatecontext[$tz]);
         $templatecontext[$tz] = str_replace('{{brandemail}}', @$PAGE->theme->settings->brandemail, $templatecontext[$tz]);
+        if (\tool_usertours\manager::get_current_tour()) {
+            $link = \html_writer::link('', get_string('resettouronpage', 'tool_usertours'), [
+                    'data-action'   => 'tool_usertours/resetpagetour',
+                ]);
+            $templatecontext[$tz] = str_replace('{{resettourlink}}', $link, $templatecontext[$tz]);
+        } else {
+            $templatecontext[$tz] = str_replace('{{resettourlink}}', '', $templatecontext[$tz]);
+        }
     }
 
 }

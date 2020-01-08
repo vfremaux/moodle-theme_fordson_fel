@@ -43,6 +43,14 @@ $page->add(new admin_setting_heading($themename.'_colours', get_string('colours_
     $setting->set_updatedcallback('theme_reset_all_caches');
     $page->add($setting);
 
+    // Variable $brandsecondary.
+    $name = $themename.'/brandsecondary';
+    $title = get_string('brandsecondary', 'theme_fordson_fel');
+    $description = get_string('brandsecondary_desc', 'theme_fordson_fel');
+    $setting = new admin_setting_configcolourpicker($name, $title, $description, '');
+    $setting->set_updatedcallback('theme_reset_all_caches');
+    $page->add($setting);
+
     // Variable $brandsuccess.
     $name = $themename.'/brandsuccess';
     $title = get_string('brandsuccess', 'theme_fordson_fel');
@@ -71,7 +79,8 @@ $page->add(new admin_setting_heading($themename.'_colours', get_string('colours_
     $name = $themename.'/brandinfo';
     $title = get_string('brandinfo', 'theme_fordson_fel');
     $description = get_string('brandinfo_desc', 'theme_fordson_fel');
-    $setting = new admin_setting_configcolourpicker($name, $title, $description, '');
+    $default = '';
+    $setting = new admin_setting_configcolourpicker($name, $title, $description, $default);
     $setting->set_updatedcallback('theme_reset_all_caches');
     $page->add($setting);
 
@@ -83,19 +92,30 @@ $page->add(new admin_setting_heading($themename.'_colours', get_string('colours_
     $setting->set_updatedcallback('theme_reset_all_caches');
     $page->add($setting);
 
-    // Top navbar background setting.
+    // Top navbar background setting. @Variable topnavbar-bg.
     $name = $themename.'/topnavbarbg';
     $title = get_string('topnavbarbg', 'theme_fordson_fel');
     $description = get_string('topnavbarbg_desc', 'theme_fordson_fel');
-    $setting = new admin_setting_configcolourpicker($name, $title, $description, '');
+    $default = '#ffffff';
+    $setting = new admin_setting_configcolourpicker($name, $title, $description, $default);
     $setting->set_updatedcallback('theme_reset_all_caches');
     $page->add($setting);
 
-    // Top navbar background setting.
+    // Top navbar foreground setting. @Variable topnavbar-fg.
     $name = $themename.'/topnavbarfg';
     $title = get_string('topnavbarfg', 'theme_fordson_fel');
     $description = get_string('topnavbarfg_desc', 'theme_fordson_fel');
-    $setting = new admin_setting_configcolourpicker($name, $title, $description, '');
+    $default = '#000000';
+    $setting = new admin_setting_configcolourpicker($name, $title, $description, $default);
+    $setting->set_updatedcallback('theme_reset_all_caches');
+    $page->add($setting);
+
+    // Top navbar background setting. @Variable topnavbar-hover.
+    $name = $themename.'/topnavbarbghov';
+    $title = get_string('topnavbarbghov', 'theme_fordson_fel');
+    $description = get_string('topnavbarbghov_desc', 'theme_fordson_fel');
+    $default = '#f0f0f0';
+    $setting = new admin_setting_configcolourpicker($name, $title, $description, $default);
     $setting->set_updatedcallback('theme_reset_all_caches');
     $page->add($setting);
 

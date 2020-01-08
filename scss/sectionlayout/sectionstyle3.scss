@@ -77,7 +77,7 @@ h3.sectionname {
     padding: $spacer;
     background-color: $dark;
     display: inline-block;
-    border-right: 1rem solid $primary;
+    border-right: 1rem solid $brandprimary;
     margin-bottom: 0 !important;
 }
 
@@ -244,7 +244,7 @@ span.instancename {
         padding: $spacer;
         background-color: $perception-base;
         display: inline-block;
-        border-right: 1rem solid $primary;
+        border-right: 1rem solid $brandprimary;
         margin-bottom: 0 !important;
     }
 

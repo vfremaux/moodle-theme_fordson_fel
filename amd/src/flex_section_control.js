@@ -28,12 +28,16 @@ define(['jquery', 'core/config', 'core/log'], function($, config, log) {
      * @param {String} selector The selector for the page region containing the actions panel.
      */
     var flexsection_control = {
+
+        courseid: 0,
+
         init: function(attribs) {
 
-            M.course.id = attribs;
+            this.courseid = attribs;
 
             // Attach togglestate handler to all flexsections in page.
             $('.flexcontrol').on('click', this.togglestate);
+            $('.section-caption').on('keydown', this.togglekeyreceiver);
 
             // Attach global processings.
             $('.flexsection-global-control').on('click', this.processglobal);
@@ -45,7 +49,7 @@ define(['jquery', 'core/config', 'core/log'], function($, config, log) {
         // Init_editing will NOT take control of section name.
         init_editing: function(attribs) {
 
-            M.course.id = attribs;
+            this.courseid = attribs;
 
             // Expand everything.
             $('.section.sub > .content > .section-content').css('display', 'block');
@@ -161,7 +165,7 @@ define(['jquery', 'core/config', 'core/log'], function($, config, log) {
             var what = matchs[1];
 
             var url = config.wwwroot + '/theme/fordson_fel/sections/ajax/register.php?';
-            url += 'id=' + M.course.id;
+            url += 'id=' + flexsection_control.courseid;
             url += '&what=' + what;
 
             switch (what) {
@@ -171,7 +175,7 @@ define(['jquery', 'core/config', 'core/log'], function($, config, log) {
                     $('.section-content').addClass('collpased');
                     $('.section-content').removeClass('expanded');
                     $('.section-title').attr('aria-expanded', 'false');
-                    $('.flexcontrol > img').attr('src', $('.flexcontrol > img').attr('src').replace('expanded', 'collapsed'));
+                    // $('.flexcontrol > img').attr('src', $('.flexcontrol > img').attr('src').replace('expanded', 'collapsed'));
                     break;
 
                 case 'expandall':
@@ -180,10 +184,10 @@ define(['jquery', 'core/config', 'core/log'], function($, config, log) {
                     $('.section-content').addClass('expanded');
                     $('.section-content').removeClass('collapsed');
                     $('.section-title').attr('aria-expanded', 'true');
-                    $('.flexcontrol > img').attr('src',$('.flexcontrol > img').attr('src').replace('collapsed', 'expanded'));
+                    // $('.flexcontrol > img').attr('src',$('.flexcontrol > img').attr('src').replace('collapsed', 'expanded'));
                     break;
 
-                case 'reset':
+                case 'map':
                     $('.section').removeClass('collapsed');
                     $('.section').addClass('expanded');
                     $('.section-content').removeClass('expanded');
@@ -197,6 +201,18 @@ define(['jquery', 'core/config', 'core/log'], function($, config, log) {
 
             // Update positions server side.
             $.get(url);
+        },
+
+        togglekeyreceiver: function(e) {
+            var that = $(this);
+            // Catch [enter] and [space]
+            if (e.keyCode == 13 || e.keyCode == 32) {
+                var sectionli = that.closest('li');
+                var sectionid = sectionli.attr('id').replace('section-', '');
+                var flexcontrol = that.find('#section-title-' + sectionid + ' > div.flexcontrol');
+                var toggleproxy = $.proxy(flexsection_control.togglestate, flexcontrol);
+                toggleproxy(e);
+            }
         }
     };
 

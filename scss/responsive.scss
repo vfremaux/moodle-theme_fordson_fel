@@ -1,0 +1,52 @@
+
+
+@media screen and (max-width: 480px) {
+
+    .breadcrumb {
+        background-color: initial;
+    }
+
+    nav[role="navigation"] ol.breadcrumb.style1 li {
+         color: initial;
+         background-color: initial;
+         border-color: initial;
+         border-style: initial;
+    }
+
+    nav[role="navigation"] ol.breadcrumb.style1 li a {
+        color: $brandprimary !important;
+    }
+
+    nav[role="navigation"] ol.breadcrumb.style1 li span {
+        color: $brandprimary !important;
+    }
+
+    nav[role="navigation"] ol.breadcrumb.style1 li a::before {
+        color: $brandprimary !important;
+    }
+
+    nav[role="navigation"] ol.breadcrumb.style1 li::after,
+    nav[role="navigation"] ol.breadcrumb.style1 li::before {
+        content: " ";
+         border-top: 8px solid transparent;
+         border-bottom: 8px solid transparent;
+         margin-top: -6px;
+    }
+
+    ol li:first-of-type .noaction {
+        display: none;
+    }
+
+    nav[role="navigation"] ol.breadcrumb.style1 li:first-of-type {
+        display: none;
+    }
+
+    nav[role="navigation"] ol.breadcrumb.style1 li:nth-of-type(2) {
+        display: none;
+    }
+
+    /* mask menu "my courses" */
+    nav[role="navigation"] ol.breadcrumb.style1 li:first-of-type a::before {
+         color: $brandprimary;
+    }
+}

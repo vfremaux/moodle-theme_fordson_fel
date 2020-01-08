@@ -23,6 +23,7 @@
  */
 
 namespace theme_fordson_fel\output\core;
+
 defined('MOODLE_INTERNAL') || die();
 
 use \stdClass;
@@ -41,7 +42,9 @@ use \image_url;
 use \single_select;
 use \core_text;
 
-require_once($CFG->dirroot . '/course/renderer.php');
+require_once($CFG->dirroot.'/course/renderer.php');
+require_once($CFG->dirroot.'/theme/fordson_fel/lib/filesettings_lib.php');
+
 global $PAGE;
 /**
  * Course renderer class.
@@ -478,32 +481,24 @@ if ($PAGE->theme->settings->coursetilestyle < 10) {
         }
 
         public function view_available_courses($chelper, $id, $courses = null, $totalcount = null) {
-            global $PAGE, $USER, $DB, $OUTPUT;
+            global $CFG, $USER, $DB, $OUTPUT;
 
+            include_once($CFG->dirroot.'/local/my/classes/modules/module.class.php');
+            include_once($CFG->dirroot.'/local/my/classes/modules/courses_grid.class.php');
             $config = get_config('local_my');
-
-            $myrenderer = $PAGE->get_renderer('local_my');
 
             $template = new StdClass;
             $options = array();
             $options['withcats'] = $config->printcategories;
-            $options['gaugewidth'] = 60;
-            $options['gaugeheight'] = 15;
+            $options['gaugewidth'] = 20;
+            $options['gaugeheight'] = 20;
             $options['gaugetype'] = $config->progressgaugetype;
 
-            $catcourses = [];
-            foreach ($courses as $cid => $c) {
-                $template->hascourses = true;
-                $course = $DB->get_record('course', array('id' => $cid));
-                $params = array('userid' => $USER->id, 'courseid' => $c->id);
-                $course->lastaccess = $DB->get_field('user_lastaccess', 'timeaccess', $params);
-                $coursetpl = $myrenderer->coursebox($course);
-                $template->coursegridelms[] = $coursetpl;
-                $catcourses[$cid] = $course;
-            }
-            $template->simplecourses = local_my_print_courses('mycourses', $catcourses, $options);
-            return $OUTPUT->render_from_template('local_my/my_courses_grid', $template);
-            // return $myrenderer->courses_slider(array_keys($courses));
+            // Reuse a module with an external course list feeding.
+            $m = new \local_my\module\courses_grid_module();
+            $m->set_courses($courses);
+            $m->set_options($options);
+            return $m->render('asgrid');
         }
 
         public function view_available_courses_deprecated($id = 0, $courses = null, $totalcount = null) {
@@ -569,24 +564,24 @@ if ($PAGE->theme->settings->coursetilestyle < 10) {
                             $hasprogress = false;
                         }
 
-				        // Course completion Progress bar
-				        if ($course->enablecompletion == 1 && isloggedin() && $systemcontext == 'page-site-index') {
-				        	$completiontext = get_string('coursecompletion', 'completion');
-				        	$compbar = "<div class='progress'>";
-				            $compbar .= "<div class='progress-bar progress-bar-info barfill' role='progressbar' aria-valuenow='{$comppercent}' ";
-				            $compbar .= " aria-valuemin='0' aria-valuemax='100' style='width: {$comppercent}%;'>";
-				            $compbar .= "{$comppercent}%";
-				            $compbar .= "</div>";
-				            $compbar .= "</div>";
-				            $progressbar = $compbar;
-				        } else {	
-				        	$progressbar = '';
-				        	$completiontext = '';
-				        }
-	                    if ($course instanceof stdClass) {
-	                        //require_once ($CFG->libdir . '/coursecatlib.php');
-	                        $course = new core_course_list_element($course);
-	                    }
+                        // Course completion Progress bar
+                        if ($course->enablecompletion == 1 && isloggedin() && $systemcontext == 'page-site-index') {
+                            $completiontext = get_string('coursecompletion', 'completion');
+                            $compbar = "<div class='progress'>";
+                            $compbar .= "<div class='progress-bar progress-bar-info barfill' role='progressbar' aria-valuenow='{$comppercent}' ";
+                            $compbar .= " aria-valuemin='0' aria-valuemax='100' style='width: {$comppercent}%;'>";
+                            $compbar .= "{$comppercent}%";
+                            $compbar .= "</div>";
+                            $compbar .= "</div>";
+                            $progressbar = $compbar;
+                        } else {
+                            $progressbar = '';
+                            $completiontext = '';
+                        }
+                        if ($course instanceof stdClass) {
+                            //require_once ($CFG->libdir . '/coursecatlib.php');
+                            $course = new core_course_list_element($course);
+                        }
                         // print enrolmenticons
                         $pixcontent = '';
                         if ($icons = enrol_get_course_info_icons($course)) {
@@ -625,15 +620,15 @@ if ($PAGE->theme->settings->coursetilestyle < 10) {
                                 $imgurl = $noimgurl;
                             }
                         }
-                        
+
                         $customfieldcontent = '';
 
                         // Display custom fields.
-				        if ($course->has_custom_fields()) {
-				            $handler = \core_course\customfield\course_handler::create();
-				            $customfields = $handler->display_custom_fields_data($course->get_custom_fields());
-				            $customfieldcontent = \html_writer::tag('div', $customfields, ['class' => 'customfields-container']);
-				        }
+                        if ($course->has_custom_fields()) {
+                            $handler = \core_course\customfield\course_handler::create();
+                            $customfields = $handler->display_custom_fields_data($course->get_custom_fields());
+                            $customfieldcontent = \html_writer::tag('div', $customfields, ['class' => 'customfields-container']);
+                        }
                         
 
                         if ($PAGE->theme->settings->coursetilestyle == 1) {
@@ -988,51 +983,51 @@ if ($PAGE->theme->settings->coursetilestyle < 10) {
                             ));
                             $rowcontent .= '
                                 <div class="col-md-6">
-                            	<h4><a href="' . $courseurl . '">' . $trimtitle . '</a></h4>';
+                                <h4><a href="' . $courseurl . '">' . $trimtitle . '</a></h4>';
                             if ($systemcontext !== 'page-site-index') {
-                            	$rowcontent .= '<div class="course-summary">
-	                                    ' . $summary . '
-	                            </div>';
+                                $rowcontent .= '<div class="course-summary">
+                                        ' . $summary . '
+                                </div>';
                             }
-	                        $rowcontent .= '</div>';
-		                        if ($systemcontext !== 'page-site-index') {
-		                            $rowcontent .= ' 
-		                            	<div class="col-md-6 row">
-			                            	<div class="col-md-6">
-			                                  ' . $catcontent . '
-			                                  ' . $customfieldcontent . '
-			                                </div>
-			                                <div class="col-md-6">';
-			                        if ($course->has_course_contacts()) {
-		                                $rowcontent .= html_writer::start_tag('ul', array(
-		                                    'class' => 'teacherscourseview'
-		                                ));
-		                                foreach ($course->get_course_contacts() as $userid => $coursecontact) {
-		                                    $name = $coursecontact['rolename'] . ': ' . $coursecontact['username'];
-		                                    $rowcontent .= html_writer::tag('li', $name);
-		                                }
-		                                $rowcontent .= html_writer::end_tag('ul');
-		                            }
-			                                  
-			                        $rowcontent .= '
-			                        	</div>
-		                                </div>';
-	                            }
-	                        if ($systemcontext == 'page-site-index' && $course->enablecompletion == 1) {
-	                        	
-	                            $rowcontent .= '
-	                            	<div class="col-md-6 row">
-		                            	<div class="col-md-4 text-right">
-		                                  ' . $completiontext  . '
-		                                </div>
-		                                <div class="col-md-8">
-		                                  '. $progressbar . '
-		                                </div>
-	                                </div>';
-	                        }
+                            $rowcontent .= '</div>';
+                                if ($systemcontext !== 'page-site-index') {
+                                    $rowcontent .= ' 
+                                        <div class="col-md-6 row">
+                                            <div class="col-md-6">
+                                              ' . $catcontent . '
+                                              ' . $customfieldcontent . '
+                                            </div>
+                                            <div class="col-md-6">';
+                                    if ($course->has_course_contacts()) {
+                                        $rowcontent .= html_writer::start_tag('ul', array(
+                                            'class' => 'teacherscourseview'
+                                        ));
+                                        foreach ($course->get_course_contacts() as $userid => $coursecontact) {
+                                            $name = $coursecontact['rolename'] . ': ' . $coursecontact['username'];
+                                            $rowcontent .= html_writer::tag('li', $name);
+                                        }
+                                        $rowcontent .= html_writer::end_tag('ul');
+                                    }
+                                              
+                                    $rowcontent .= '
+                                        </div>
+                                        </div>';
+                                }
+                            if ($systemcontext == 'page-site-index' && $course->enablecompletion == 1) {
+                                
+                                $rowcontent .= '
+                                    <div class="col-md-6 row">
+                                        <div class="col-md-4 text-right">
+                                          ' . $completiontext  . '
+                                        </div>
+                                        <div class="col-md-8">
+                                          '. $progressbar . '
+                                        </div>
+                                    </div>';
+                            }
                             $rowcontent .= '
                             
-	                        </div>';
+                            </div>';
                         }
                         
                     }

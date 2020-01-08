@@ -25,10 +25,6 @@
         <div id="course-footer">{{{output.course_footer}}}</div>
         {{/hascoursefooter}}
 
-        {{#hasfootnote}}
-        <div class="footnote">{{{footnote}}}</div>
-        {{/hasfootnote}}
-
         {{#hasfooterelements}}
         <div class="container">
             <div class="row">
@@ -44,6 +40,10 @@
             </div>
         </div>
         {{/hasfooterelements}}
+
+        {{#hasfootnote}}
+        <div class="footnote">{{{footnote}}}</div>
+        {{/hasfootnote}}
 
         {{#hasdoclink}}
         <div class="doclink">

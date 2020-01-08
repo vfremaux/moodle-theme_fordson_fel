@@ -315,7 +315,7 @@ class theme_fordson_fel_format_topics_renderer extends format_topics_renderer {
         $output = '';
         // Output Link to Topic modules.
         // $title = get_section_name($course, $section);
-        $linktitle = get_string('viewsectionmodules', 'theme_fordson');
+        $linktitle = get_string('viewsectionmodules', 'theme_fordson_fel');
         $output = html_writer::link(new moodle_url('/course/view.php', array('id' => $PAGE->course->id, 'section' => $section->section)) , $linktitle, array('class' => 'section-go-link btn btn-secondary'));
 
         // Output section activities summary
@@ -323,7 +323,7 @@ class theme_fordson_fel_format_topics_renderer extends format_topics_renderer {
             'class' => 'section-summary-activities'
         ));
 
-        $output .= html_writer::tag('span', get_string('section_mods', 'theme_fordson') , array(
+        $output .= html_writer::tag('span', get_string('section_mods', 'theme_fordson_fel') , array(
             'class' => 'activity-count'
         ));
         foreach ($sectionmods as $mod) {

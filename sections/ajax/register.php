@@ -19,7 +19,7 @@ require_once($CFG->dirroot.'/theme/fordson_fel/sections/sectionslib.php');
 
 $action = optional_param('what', '', PARAM_TEXT);
 
-if (in_array($action, array('collapseall', 'reset', 'expandall'))) {
+if (in_array($action, array('collapseall', 'map', 'expandall'))) {
     $courseid = required_param('id', PARAM_INT);
 
     if (!$course = $DB->get_record('course', array('id' => $courseid))) {
@@ -29,12 +29,12 @@ if (in_array($action, array('collapseall', 'reset', 'expandall'))) {
     require_login($course);
 }
 
-if ($action == 'reset') {
+if ($action == 'map') {
     // Removes all preceding preferences for the user and initializes expanding branches only.
     $select = ' name LIKE ? AND userid = ? AND value = ?';
     $DB->delete_records_select('user_preferences', $select, array('flexsection\\_%', $USER->id, $course->id));
 
-    $leaves = flexsection_get_leaves($course->id);
+    $leaves = sections_get_leaves($course->id);
     if ($leaves) {
         foreach ($leaves as $leaf) {
             $hidekey = 'flexsection_'.$leaf->id.'_hidden';
