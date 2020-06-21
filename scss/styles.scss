@@ -1515,3 +1515,19 @@ h3.sectionname {
     color: $brandprimary;
     background-color: #f4f4f4;
 }
+
+/* nav tabs */
+
+.nav-tabs {
+    border-bottom: 1px solid $brandprimary;
+}
+
+.nav-tabs .nav-link:hover, .nav-tabs .nav-link:focus {
+    border-color: $brandprimary $brandprimary $brandprimary;
+}
+
+.nav-tabs .nav-link.active, .nav-tabs .nav-item.show .nav-link {
+    background-color: $brandprimary;
+    border-color: $brandprimary $brandprimary $brandprimary;
+    color: #ffffff;
+}

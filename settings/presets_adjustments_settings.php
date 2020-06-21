@@ -27,14 +27,14 @@ defined('MOODLE_INTERNAL') || die();
 
 $page = new admin_settingpage($themename.'_presetadjustment', get_string('presetadjustmentsettings', 'theme_fordson_fel'));
 
-// Content Info
+// Content Info.
 $name = $themename.'/generalcontentinfo';
 $heading = get_string('generalcontentinfo', 'theme_fordson_fel');
 $information = get_string('generalcontentinfodesc', 'theme_fordson_fel');
 $setting = new admin_setting_heading($name, $heading, $information);
 $page->add($setting);
 
-// Frontpage show login form
+// Frontpage show login form.
 $name = $themename.'/showloginform';
 $title = get_string('showloginform', 'theme_fordson_fel');
 $description = get_string('showloginform_desc', 'theme_fordson_fel');
@@ -61,7 +61,7 @@ $setting = new admin_setting_configcheckbox($name, $title, $description, $defaul
 $setting->set_updatedcallback('theme_reset_all_caches');
 $page->add($setting);
 
-// Frontpage show additional block regions
+// Frontpage show additional block regions.
 $name = $themename.'/showblockregions';
 $title = get_string('showblockregions', 'theme_fordson_fel');
 $description = get_string('showblockregions_desc', 'theme_fordson_fel');
@@ -70,7 +70,7 @@ $setting = new admin_setting_configcheckbox($name, $title, $description, $defaul
 $setting->set_updatedcallback('theme_reset_all_caches');
 $page->add($setting);
 
-// Content spacing
+// Content spacing.
 $name = $themename.'/learningcontentpadding';
 $title = get_string('learningcontentpadding', 'theme_fordson_fel');
 $description = get_string('learningcontentpadding_desc', 'theme_fordson_fel');

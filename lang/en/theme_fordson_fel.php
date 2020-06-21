@@ -27,6 +27,8 @@ defined('MOODLE_INTERNAL') || die();
 
 // Theme strings.
 $string['choosereadme'] = 'Fordson fel adds to the community Fordson theme valuable functional additions such as variant capabiity, side bloc panel and contextual custom menus.';
+$string['activitycustomiconwidth'] = 'Custom activity thumb width';
+$string['activitycustomiconwidth_desc'] = 'Fixes the width of extra activity customized thumbs';
 $string['configtitle'] = 'Fordson FEL';
 $string['pluginname'] = 'Fordson FEL';
 $string['region-side-pre'] = 'Right';
@@ -37,6 +39,8 @@ $string['advancedsettings'] = 'Advanced settings';
 $string['iconnavheading'] = 'Icon Navigation';
 $string['presetadjustmentsettings'] = 'Preset Adjustments';
 $string['customloginheading'] = 'Custom Login Page';
+$string['customlabelskin'] = 'Base skin for customlabels';
+$string['customlabelskin_desc'] = 'Theme override of the general customlabel base skin';
 $string['iconnavheadingsub'] = 'Create Buttons with Icons for use on the homepage.  Links can go anywhere.';
 $string['section_mods'] = 'Modules:';
 $string['nomycourses'] = 'You are not enrolled in any courses.';
@@ -174,6 +178,8 @@ $string['slidecontent'] = 'Slide Description';
 $string['slidecontent_desc'] = 'Add a description for this slide.';
 $string['slideimage'] = 'Slide Image';
 $string['slideimage_desc'] = 'Add a background image for this slide.';
+$string['showpasswordbutton'] = 'Password "show" button';
+$string['showpasswordbutton_desc'] = 'Adds an "eye" button to allow showing password in clear mode.';
 
 // Footer.
 $string['footerheading'] = 'Footer';
@@ -642,6 +648,7 @@ $string['allowblockregionscollapse_desc'] = 'Some regions can use an accordion c
 $string['collapseall'] = 'Close all';
 $string['expandall'] = 'Open all';
 $string['reset'] = 'Map';
+$string['map'] = 'Map';
 $string['flexinitialstate'] = 'Flex initial state';
 $string['flexinitialstate_desc'] = 'Set the initial state of section tree when first arriving to course without any user preferences.';
 $string['flexcollapsed'] = 'Closed';

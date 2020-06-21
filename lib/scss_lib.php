@@ -138,6 +138,7 @@ function theme_fordson_fel_get_main_scss_content($theme) {
     $scss .= file_get_contents($CFG->dirroot . '/theme/fordson_fel/scss/tabs.scss');
     $scss .= file_get_contents($CFG->dirroot . '/theme/fordson_fel/scss/quiz.scss');
     $scss .= file_get_contents($CFG->dirroot . '/theme/fordson_fel/scss/responsive.scss');
+    $scss .= file_get_contents($CFG->dirroot . '/theme/fordson_fel/scss/modthumb.scss');
 
     // Add variant local sheet.
     if (preg_match('/\d{2}$/', $theme->name)) {
@@ -194,6 +195,7 @@ function theme_fordson_fel_get_pre_scss($theme) {
     'blockwidthfordson_fel' => ['blockwidthfordson_fel'],
     'slideshowheight' => ['slideshowheight'],
     'activityiconsize' => ['activityiconsize'],
+    'activitycustomiconwidth' => ['activitycustomiconwidth'],
     'gutterwidth' => ['gutterwidth'],
 
     'usecustomfonts' => ['usecustomfonts'],

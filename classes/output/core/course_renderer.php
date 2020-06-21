@@ -30,8 +30,6 @@ use \stdClass;
 use \moodle_url;
 use \lang_string;
 use \coursecat_helper;
-use \core_course_category;
-use \core_course_list_element;
 use \context_course;
 use \context_system;
 use \pix_url;
@@ -44,6 +42,7 @@ use \core_text;
 
 require_once($CFG->dirroot.'/course/renderer.php');
 require_once($CFG->dirroot.'/theme/fordson_fel/lib/filesettings_lib.php');
+require_once($CFG->dirroot.'/theme/fordson_fel/compatlib.php');
 
 global $PAGE;
 /**
@@ -53,7 +52,6 @@ global $PAGE;
  * @copyright  2016 Frédéric Massart - FMCorz.net
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
 
 if ($PAGE->theme->settings->coursetilestyle < 10) {
     class course_renderer extends \theme_boost\output\core\course_renderer {
@@ -77,8 +75,8 @@ if ($PAGE->theme->settings->coursetilestyle < 10) {
             $chelper->set_attributes(array(
                 'class' => 'frontpage-course-list-all'
             ));
-            $courses = \core_course_category::get($id)->get_courses($chelper->get_courses_display_options());
-            $totalcount = \core_course_category::get($id)->get_courses_count($chelper->get_courses_display_options());
+            $courses = theme_fordson_fel_get_category($id)->get_courses($chelper->get_courses_display_options());
+            $totalcount = theme_fordson_fel_get_category($id)->get_courses_count($chelper->get_courses_display_options());
 
             $rcourseids = array_keys($courses);
             $acourseids = array_chunk($rcourseids, 3);
@@ -120,7 +118,7 @@ if ($PAGE->theme->settings->coursetilestyle < 10) {
                         ));
 
                         if ($course instanceof stdClass) {
-                            $course = new \core_course_list_element($course);
+                            $course = theme_fordson_fel_course_in_list($course);
                         }
 
                         // Load from config if usea a img from course summary file if not exist a img then a default one ore use a fa-icon.
@@ -280,24 +278,22 @@ if ($PAGE->theme->settings->coursetilestyle < 10) {
 
                             if ($PAGE->theme->settings->titletooltip) {
                                 $tooltiptext = 'data-tooltip="tooltip" data-placement= "top" title="' . $course->fullname . '"';
-                            }
-                            else {
+                            } else {
                                 $tooltiptext = '';
                             }
 
                             $rowcontent .= '
                                     <a ' . $tooltiptext . ' href="' . $courseurl . '">
-                                    <div class="courseimagecontainer">
-                                    <div class="course-image-view" style="background-image: url(' . $imgurl . ');background-repeat: no-repeat;background-size:cover; background-position:center;">
-                                    </div>
-                                    <div class="course-overlay">
-                                    <i class="fa fa-arrow-circle-right" aria-hidden="true"></i>
-                                    </div>
-                                    
-                                    </div>
-                                    <div class="course-title">
-                                    <h4>' . $trimtitle . '</h4>
-                                    </div>
+                                        <div class="courseimagecontainer">
+                                            <div class="course-image-view" style="background-image: url(' . $imgurl . ');background-repeat: no-repeat;background-size:cover; background-position:center;">
+                                            </div>
+                                            <div class="course-overlay">
+                                            <i class="fa fa-arrow-circle-right" aria-hidden="true"></i>
+                                            </div>
+                                        </div>
+                                        <div class="course-title">
+                                            <h4>' . $trimtitle . '</h4>
+                                        </div>
                                     </a>
                                     <div class="course-summary">
                                     ' . $summary . '
@@ -501,546 +497,6 @@ if ($PAGE->theme->settings->coursetilestyle < 10) {
             return $m->render('asgrid');
         }
 
-        public function view_available_courses_deprecated($id = 0, $courses = null, $totalcount = null) {
-
-            /* available courses */
-            global $CFG, $OUTPUT, $PAGE;
-
-            $rcourseids = array_keys($courses);
-            $acourseids = array_chunk($rcourseids, 4);
-
-            if ($id != 0) {
-                $newcourse = get_string('availablecourses');
-            }
-            else {
-                $newcourse = null;
-            }
-
-            $header = '
-                <div id="category-course-list">
-                    <div class="courses category-course-list-all">
-                    
-                    <div class="class-list">
-                        <h4>' . $newcourse . '</h4>
-                    </div>';
-
-            $content = '';
-
-            $footer = '<hr>
-                   </div>
-                </div>';
-
-            if (count($rcourseids) > 0) {
-                foreach ($acourseids as $courseids) {
-                    $content .= '<div class="container-fluid"> <div class="row">';
-                    $rowcontent = '';
-
-                    foreach ($courseids as $courseid) {
-                        $course = get_course($courseid);
-
-                        $trimtitlevalue = $PAGE->theme->settings->trimtitle;
-                        $trimsummaryvalue = $PAGE->theme->settings->trimsummary;
-
-                        $summary = theme_fordson_fel_strip_html_tags($course->summary);
-                        $summary = theme_fordson_fel_course_trim_char($summary, $trimsummaryvalue);
-
-                        $trimtitle = theme_fordson_fel_course_trim_char($course->fullname, $trimtitlevalue);
-
-                        $noimgurl = $OUTPUT->image_url('noimg', 'theme');
-
-                        $courseurl = new moodle_url('/course/view.php', array(
-                            'id' => $courseid
-                        ));
-
-                        
-                        $systemcontext = $PAGE->bodyid;
-                        // Course completion Progress bar
-                        if (\core_completion\progress::get_course_progress_percentage($course) && isloggedin() && $systemcontext == 'page-site-index') {
-                            $comppc = \core_completion\progress::get_course_progress_percentage($course);
-                            $comppercent = number_format($comppc, 0);
-                            $hasprogress = true;
-                        }else {
-                            $comppercent = 0;
-                            $hasprogress = false;
-                        }
-
-                        // Course completion Progress bar
-                        if ($course->enablecompletion == 1 && isloggedin() && $systemcontext == 'page-site-index') {
-                            $completiontext = get_string('coursecompletion', 'completion');
-                            $compbar = "<div class='progress'>";
-                            $compbar .= "<div class='progress-bar progress-bar-info barfill' role='progressbar' aria-valuenow='{$comppercent}' ";
-                            $compbar .= " aria-valuemin='0' aria-valuemax='100' style='width: {$comppercent}%;'>";
-                            $compbar .= "{$comppercent}%";
-                            $compbar .= "</div>";
-                            $compbar .= "</div>";
-                            $progressbar = $compbar;
-                        } else {
-                            $progressbar = '';
-                            $completiontext = '';
-                        }
-                        if ($course instanceof stdClass) {
-                            //require_once ($CFG->libdir . '/coursecatlib.php');
-                            $course = new core_course_list_element($course);
-                        }
-                        // print enrolmenticons
-                        $pixcontent = '';
-                        if ($icons = enrol_get_course_info_icons($course)) {
-                            $pixcontent .= html_writer::start_tag('div', array('class' => 'enrolmenticons'));
-                            foreach ($icons as $pix_icon) {
-                                $pixcontent .= $this->render($pix_icon);
-                            }
-                            $pixcontent .= html_writer::end_tag('div'); // .enrolmenticons
-                        }
-                        // display course category if necessary (for example in search results)
-                        //require_once($CFG->libdir. '/coursecatlib.php');
-                        if ($cat = core_course_category::get($course->category, IGNORE_MISSING)) {
-                            $catcontent = html_writer::start_tag('div', array('class' => 'coursecat'));
-                            $catcontent .= get_string('category').': '.
-                                    html_writer::link(new moodle_url('/course/index.php', array('categoryid' => $cat->id)),
-                                            $cat->get_formatted_name(), array('class' => $cat->visible ? '' : 'dimmed'));
-                            $catcontent .= $pixcontent;
-                            $catcontent .= html_writer::end_tag('div'); // .coursecat
-                            
-                        }
-
-                        // Load from config if usea a img from course summary file if not exist a img then a default one ore use a fa-icon.
-                        $imgurl = '';
-                        $context = context_course::instance($course->id);
-
-                        foreach ($course->get_course_overviewfiles() as $file) {
-                            $isimage = $file->is_valid_image();
-                            $imgurl = file_encode_url("$CFG->wwwroot/pluginfile.php", '/' . $file->get_contextid() . '/' . $file->get_component() . '/' . $file->get_filearea() . $file->get_filepath() . $file->get_filename() , !$isimage);
-                            if (!$isimage) {
-                                $imgurl = $noimgurl;
-                            }
-                        }
-                        if (empty($imgurl)) {
-                            $imgurl = $PAGE->theme->setting_file_url('headerdefaultimage', 'headerdefaultimage', true);
-                            if (!$imgurl) {
-                                $imgurl = $noimgurl;
-                            }
-                        }
-
-                        $customfieldcontent = '';
-
-                        // Display custom fields.
-                        if ($course->has_custom_fields()) {
-                            $handler = \core_course\customfield\course_handler::create();
-                            $customfields = $handler->display_custom_fields_data($course->get_custom_fields());
-                            $customfieldcontent = \html_writer::tag('div', $customfields, ['class' => 'customfields-container']);
-                        }
-                        
-
-                        if ($PAGE->theme->settings->coursetilestyle == 1) {
-                            $rowcontent .= '
-                        <div class="col-md-4">';
-                            $rowcontent .= html_writer::start_tag('div', array(
-                                'class' => $course->visible ? 'coursevisible' : 'coursedimmed1'
-                            ));
-                            $rowcontent .= '
-                            <div class="class-box">
-                                ';
-
-                            if ($PAGE->theme->settings->titletooltip) {
-                                $tooltiptext = 'data-tooltip="tooltip" data-placement= "top" title="' . format_string($course->fullname) . '"';
-                            } else {
-                                $tooltiptext = '';
-                            }
-
-                            $rowcontent .= '
-                                    <a ' . $tooltiptext . ' href="' . $courseurl . '">
-                                    <div class="courseimagecontainer">
-                                    <div class="course-image-view" style="background-image: url(' . $imgurl . ');background-repeat: no-repeat;background-size:cover; background-position:center;">
-                                    </div>
-                                    <div class="course-overlay">
-                                    <i class="fa fa-arrow-circle-right" aria-hidden="true"></i>
-                                    </div>
-                                    
-                                    </div>
-                                    <div class="course-title">
-                                    <h4>' . $trimtitle . '</h4>
-                                    </div>
-                                    </a>
-                                    <div class="course-summary">
-                                    ' . $catcontent . '
-                                    ' . $customfieldcontent . '
-                                    ';
-                            if ($course->has_course_contacts()) {
-                                $rowcontent .= html_writer::start_tag('ul', array(
-                                    'class' => 'teacherscourseview'
-                                ));
-                                foreach ($course->get_course_contacts() as $userid => $coursecontact) {
-                                    $name = $coursecontact['rolename'] . ': ' . $coursecontact['username'];
-                                    $rowcontent .= html_writer::tag('li', $name);
-                                }
-                                $rowcontent .= html_writer::end_tag('ul');
-                            }
-                            $rowcontent .= '
-
-                                    </div>
-                                </div>
-                        </div>
-                        </div>';
-                        }
-                        if ($PAGE->theme->settings->coursetilestyle == 2) {
-                            // display course contacts. See core_course_list_element::get_course_contacts().
-                            $enrollbutton = get_string('enrollcoursecard', 'theme_fordson_fel');
-                            $rowcontent .= '
-                    <div class="col-md-4">
-                        ';
-                            $rowcontent .= '
-                    <div class="tilecontainer">
-                            <figure class="coursestyle2">
-                                <div class="class-box-courseview" style="background-image: url(' . $imgurl . ');background-repeat: no-repeat;background-size:cover; background-position:center;">
-                                ';
-                            if ($PAGE->theme->settings->titletooltip) {
-                                $tooltiptext = 'data-toggle="tooltip" data-placement= "top" title="' . format_string($course->fullname) . '"';
-                            } else {
-                                $tooltiptext = '';
-                            }
-                            $rowcontent .= html_writer::start_tag('div', array(
-                                'class' => $course->visible ? 'coursevisible' : 'coursedimmed2'
-                            ));
-                            $rowcontent .= '
-                                <figcaption>
-                                    <h3>' . $trimtitle . '</h3>
-                                    <div class="course-card">
-                                    ' . $catcontent . '
-                                    ' . $customfieldcontent . '
-                                    <button type="button" class="btn btn-primary btn-sm coursestyle2btn">' . $enrollbutton . '   <i class="fa fa-arrow-circle-right" aria-hidden="true"></i></button>
-                                    ';
-                            if ($course->has_course_contacts()) {
-                                $rowcontent .= html_writer::start_tag('ul', array(
-                                    'class' => 'teacherscourseview'
-                                ));
-                                foreach ($course->get_course_contacts() as $userid => $coursecontact) {
-                                    $name = $coursecontact['rolename'] . ': ' . $coursecontact['username'];
-                                    $rowcontent .= html_writer::tag('li', $name);
-                                }
-                                $rowcontent .= html_writer::end_tag('ul');
-                            }
-                            $rowcontent .= '
-                                </div>
-
-                                </figcaption>
-                                    <a ' . $tooltiptext . ' href="' . $courseurl . '" class="coursestyle2url"></a>
-                                </div>
-                            </figure>
-                    </div>
-                    </div>
-                        ';
-                        }
-                        if ($PAGE->theme->settings->coursetilestyle == 3) {
-                            if ($PAGE->theme->settings->titletooltip) {
-                                $tooltiptext = 'data-toggle="tooltip" data-placement= "top" title="' . format_string($course->fullname) . '"';
-                            } else {
-                                $tooltiptext = '';
-                            }
-                            $rowcontent .= '
-                            <div class="col-md-4">
-                            <div class="tilecontainer">
-                                <div class="class-box-fp-style3" style="background-image: url(' . $imgurl . ');background-repeat: no-repeat;background-size:cover; background-position:center;">
-                                    ';
-                            $rowcontent .= html_writer::start_tag('div', array(
-                                'class' => $course->visible ? 'coursevisible' : 'coursedimmed3'
-                            ));
-                            $rowcontent .= '
-                                    <div class="course-title">
-                                    <a ' . $tooltiptext . ' href="' . $courseurl . '"><h4>' . $trimtitle . '</h4></a>
-                                    ' . $catcontent . '
-                                    ' . $customfieldcontent . '
-                                    <div class="completiontextposition">' . $completiontext . '</div>
-                                    </div>
-                                    '. $progressbar . '
-                                    
-                                    </div>
-                                    
-                                </div>
-                               </div> 
-
-                        </div>';
-                        }
-                        if ($PAGE->theme->settings->coursetilestyle == 4) {
-                            $rowcontent .= '
-                        <div class="col-md-4">';
-                            $rowcontent .= html_writer::start_tag('div', array(
-                                'class' => $course->visible ? 'coursevisible' : 'coursedimmed4'
-                            ));
-                            $rowcontent .= '
-                            <div class="class-box4">
-                                ';
-                            if ($PAGE->theme->settings->titletooltip) {
-                                $tooltiptext = 'data-toggle="tooltip" data-placement= "top" title="' . format_string($course->fullname) . '"';
-                            } else {
-                                $tooltiptext = '';
-                            }
-                            $rowcontent .= '
-                                    <a ' . $tooltiptext . ' href="' . $courseurl . '">
-                                    <div class="courseimagecontainer">
-                                    <div class="course-image-view" style="background-image: url(' . $imgurl . ');background-repeat: no-repeat;background-size:cover; background-position:center;">
-                                    </div>
-                                    <div class="course-overlay">
-                                    <i class="fa fa-arrow-circle-right" aria-hidden="true"></i>
-                                    </div>
-                                    
-                                    </div>
-                                    <div class="course-title4">
-                                    <h4>' . $trimtitle . '</h4>
-                                    </div>
-                                    </a>
-                                    <div class="course-summary4">
-                                    ' . $catcontent . '
-                                    ' . $customfieldcontent . '
-                                    ' . $summary . '
-                                    ';
-                            if ($course->has_course_contacts()) {
-                                $rowcontent .= html_writer::start_tag('ul', array(
-                                    'class' => 'teacherscourseview'
-                                ));
-                                foreach ($course->get_course_contacts() as $userid => $coursecontact) {
-                                    $name = $coursecontact['rolename'] . ': ' . $coursecontact['username'];
-                                    $rowcontent .= html_writer::tag('li', $name);
-                                }
-                                $rowcontent .= html_writer::end_tag('ul');
-                            }
-                            $rowcontent .= '
-                                    </div>
-                                </div>
-                        </div>
-                        </div>';
-                        }
-                        if ($PAGE->theme->settings->coursetilestyle == 5) {
-                            $rowcontent .= html_writer::start_tag('div', array(
-                                'class' => $course->visible ? 'col-12 d-flex flex-sm-row flex-column class-fullbox hoverhighlight coursevisible' : 'col-12 d-flex flex-sm-row flex-column class-fullbox hoverhighlight coursedimmed1'
-                            ));
-                            if ($PAGE->theme->settings->titletooltip) {
-                                $tooltiptext = 'data-toggle="tooltip" data-placement= "top" title="' . format_string($course->fullname) . '"';
-                            } else {
-                                $tooltiptext = '';
-                            }
-                            $rowcontent .= '
-                            <div class="col-md-2">
-                                <a ' . $tooltiptext . ' href="' . $courseurl . '">
-                                   <img src="' . $imgurl . '" class="img-fluid" alt="Responsive image" width="200px">
-                                </a>
-                            </div>';
-                            $rowcontent .= '
-                            <div class="col-md-4">';
-                            $rowcontent .= '
-                                <a ' . $tooltiptext . ' href="' . $courseurl . '">
-                                    <div class="course-title-fullbox">
-                                        <h4>' . $trimtitle . '</h4>
-                                </a>
-                                </div>';
-                            if ($course->has_course_contacts()) {
-                                $rowcontent .= html_writer::start_tag('ul', array(
-                                    'class' => 'teacherscourseview'
-                                ));
-                                foreach ($course->get_course_contacts() as $userid => $coursecontact) {
-                                    $name = $coursecontact['rolename'] . ': ' . $coursecontact['username'];
-                                    $rowcontent .= html_writer::tag('li', $name);
-                                }
-                                $rowcontent .= html_writer::end_tag('ul');
-                            }
-                            $rowcontent .= '</div>';
-                            $rowcontent .= '<div class="col-md-6">
-                                    <div class="course-summary">
-                                    ' . $catcontent . '
-                                    ' . $customfieldcontent . '
-                                    ' . $summary . '
-                                    </div> 
-                                    </div> ';
-                            $rowcontent .= html_writer::end_tag('div');
-                        }
-                        if ($PAGE->theme->settings->coursetilestyle == 6) {
-                            if ($PAGE->theme->settings->titletooltip) {
-                                $tooltiptext = 'data-toggle="tooltip" data-placement= "top" title="' . format_string($course->fullname) . '"';
-                            } else {
-                                $tooltiptext = '';
-                            }
-                            $rowcontent .= '
-                        <div class="col-md-12">
-                            <div class="class-fullbox" style="background-image: url(' . $imgurl . ');background-repeat: no-repeat;background-size:cover; background-position:center;">
-                                <div class="fullbox">
-                                ';
-                            $rowcontent .= html_writer::start_tag('div', array(
-                                'class' => $course->visible ? 'coursevisible' : 'coursedimmed3'
-                            ));
-                            $rowcontent .= '
-                                <div class="course-info-inner"> 
-                                    <div class="course-title-fullboxbkg">
-                                        <h4><a href="' . $courseurl . '">' . $trimtitle . '</a></h4>
-                                        ' . $catcontent . '
-                                        ' . $customfieldcontent . '
-                                    </div>
-                                </div>
-                                ';
-                            $rowcontent .= '<div class="d-flex flex-sm-row flex-column coursedata">';
-                            if ($course->has_course_contacts()) {
-                                $rowcontent .= '<div class="col-md-6">';
-                                $rowcontent .= html_writer::start_tag('ul', array(
-                                    'class' => 'teacherscourseview'
-                                ));
-                                foreach ($course->get_course_contacts() as $userid => $coursecontact) {
-                                    $name = $coursecontact['rolename'] . ': ' . $coursecontact['username'];
-                                    $rowcontent .= html_writer::tag('li', $name);
-                                }
-                                $rowcontent .= html_writer::end_tag('ul');
-                                $rowcontent .= '</div>';
-                            }
-                            $rowcontent .= '<div class="col-md-6">
-                                    <div class="course-summary">
-                                    ' . $summary . '
-                                    </div> 
-                                    </div> </div></div>';
-                            $rowcontent .= '
-                                        </div>
-                                    
-                                </div>
-                        </div>';
-                        }
-                        if ($PAGE->theme->settings->coursetilestyle == 7) {
-                            if ($PAGE->theme->settings->titletooltip) {
-                                $tooltiptext = 'data-toggle="tooltip" data-placement= "top" title="' . format_string($course->fullname) . '"';
-                            } else {
-                                $tooltiptext = '';
-                            }
-                            $rowcontent .= '
-                        <div class="col-md-12">
-                            <div class="class-fullbox7" style="background-image: url(' . $imgurl . ');background-repeat: no-repeat;background-size:cover; background-position:center; background-color: rgba(0,0,0,0.3);
-    background-blend-mode: overlay;">
-                            <div class="fullbox7">
-                                ';
-                            $rowcontent .= '<div class="course-info-inner">';
-                            $rowcontent .= html_writer::start_tag('div', array(
-                                'class' => $course->visible ? 'coursevisible course-title-fullboxbkg7 d-flex flex-sm-row flex-column' : 'course-title-fullboxbkg coursedimmed3 d-flex flex-sm-row flex-column'
-                            ));
-                            $rowcontent .= '<div class="col-md-6">
-                                    <h4><a href="' . $courseurl . '">' . $trimtitle . '</a></h4>
-                                    ' . $catcontent . '
-                                    ' . $customfieldcontent . '
-                                    </div>';
-                            if ($course->has_course_contacts()) {
-                                $rowcontent .= '<div class="col-md-6">';
-                                $rowcontent .= html_writer::start_tag('ul', array(
-                                    'class' => 'teacherscourseview'
-                                ));
-                                foreach ($course->get_course_contacts() as $userid => $coursecontact) {
-                                    $name = $coursecontact['rolename'] . ': ' . $coursecontact['username'];
-                                    $rowcontent .= html_writer::tag('li', $name);
-                                }
-                                $rowcontent .= html_writer::end_tag('ul');
-                                $rowcontent .= '</div>';
-                            }
-                            $rowcontent .= '</div>
-                                     </div>
-                                    
-                                    </div>
-                                </div>
-                        </div>';
-                        }
-                        if ($PAGE->theme->settings->coursetilestyle == 8) {
-
-                            if ($PAGE->theme->settings->titletooltip) {
-                                $tooltiptext = 'data-toggle="tooltip" data-placement= "top" title="' . format_string($course->fullname) . '"';
-                            } else {
-                                $tooltiptext = '';
-                            }
-                            $rowcontent .= '
-                                <div class="col-lg-6">
-                                <div class="tilecontainer">';
-                            $rowcontent .= html_writer::start_tag('div', array(
-                                'class' => $course->visible ? 'coursevisible' : 'coursedimmed3'
-                            ));
-                            $rowcontent .= '<div class="class-box-fp-2col" style="background-image: url(' . $imgurl . ');background-repeat: no-repeat;background-size:cover; background-position:center;">
-                                <a ' . $tooltiptext . ' href="' . $courseurl . '" class="coursestyle3url">';
-                            $rowcontent .= '
-                                    <div class="course-title-2col">
-                                    
-                                    <h4><a href="' . $courseurl . '">' . $trimtitle . '</a></h4>
-                                    ' . $catcontent . '
-                                    ' . $customfieldcontent . '
-                                    </div>
-                                    <div class="course-summary-2col">
-                                    ' . $summary . '
-                                    </div>
-                                    </div>
-                                    </a>
-                                </div>
-                               </div> 
-                        </div>';
-                        }
-                        if ($PAGE->theme->settings->coursetilestyle == 9) {
-                            if ($PAGE->theme->settings->titletooltip) {
-                                $tooltiptext = 'data-toggle="tooltip" data-placement= "top" title="' . format_string($course->fullname) . '"';
-                            }
-                            else {
-                                $tooltiptext = '';
-                            }
-                            
-                            $rowcontent .= html_writer::start_tag('div', array(
-                                'class' => $course->visible ? 'coursevisible col-md-12 d-flex flex-sm-row flex-column coursestyle9row' : 'coursedimmed9 col-md-12 d-flex flex-sm-row flex-column coursestyle9row'
-                            ));
-                            $rowcontent .= '
-                                <div class="col-md-6">
-                                <h4><a href="' . $courseurl . '">' . $trimtitle . '</a></h4>';
-                            if ($systemcontext !== 'page-site-index') {
-                                $rowcontent .= '<div class="course-summary">
-                                        ' . $summary . '
-                                </div>';
-                            }
-                            $rowcontent .= '</div>';
-                                if ($systemcontext !== 'page-site-index') {
-                                    $rowcontent .= ' 
-                                        <div class="col-md-6 row">
-                                            <div class="col-md-6">
-                                              ' . $catcontent . '
-                                              ' . $customfieldcontent . '
-                                            </div>
-                                            <div class="col-md-6">';
-                                    if ($course->has_course_contacts()) {
-                                        $rowcontent .= html_writer::start_tag('ul', array(
-                                            'class' => 'teacherscourseview'
-                                        ));
-                                        foreach ($course->get_course_contacts() as $userid => $coursecontact) {
-                                            $name = $coursecontact['rolename'] . ': ' . $coursecontact['username'];
-                                            $rowcontent .= html_writer::tag('li', $name);
-                                        }
-                                        $rowcontent .= html_writer::end_tag('ul');
-                                    }
-                                              
-                                    $rowcontent .= '
-                                        </div>
-                                        </div>';
-                                }
-                            if ($systemcontext == 'page-site-index' && $course->enablecompletion == 1) {
-                                
-                                $rowcontent .= '
-                                    <div class="col-md-6 row">
-                                        <div class="col-md-4 text-right">
-                                          ' . $completiontext  . '
-                                        </div>
-                                        <div class="col-md-8">
-                                          '. $progressbar . '
-                                        </div>
-                                    </div>';
-                            }
-                            $rowcontent .= '
-                            
-                            </div>';
-                        }
-                        
-                    }
-                    $content .= $rowcontent;
-                    $content .= '</div> </div>';
-                }
-            }
-
-            $coursehtml = $header . $content . $footer;
-
-            return $coursehtml;
-        }
-
         /**
          * Returns HTML to display the subcategories and courses in the given category
          *
@@ -1080,7 +536,9 @@ if ($PAGE->theme->settings->coursetilestyle < 10) {
                     $classes[] = 'with_children';
                 }
             }
-            $totalcount = core_course_category::get(0)->get_children_count();
+
+            $totalcount = theme_fordson_fel_get_category(0)->get_children_count();
+
             $content = '';
             if ($this->countcategories == 0 || ($this->countcategories % 3) == 0) {
                 if (($this->countcategories % 3) == 0 && $totalcount != $this->countcategories) {
@@ -1517,9 +975,13 @@ if ($PAGE->theme->settings->coursetilestyle < 10) {
             $groupinglabel = $mod->get_grouping_label($textclasses);
 
             // Display link itself.
-            $cmname = $accesstext.html_writer::tag('span', $instancename . $altname, array('class' => 'instancename'));
-            if (!empty($displayoptions['freshness'])) {
-                $cmname .= ' '.$displayoptions['freshness'];
+            $cmname = '';
+            if (!preg_match('/label$/', $instancename)) {
+                // Avoid labels to display cmname.
+                $cmname = $accesstext.html_writer::tag('span', $instancename . $altname, array('class' => 'instancename'));
+                if (!empty($displayoptions['freshness'])) {
+                    $cmname .= ' '.$displayoptions['freshness'];
+                }
             }
             if ($mod->uservisible) {
                 $cmoutput = html_writer::link($mod->url, $cmname, array('class' => $linkclasses, 'onclick' => $onclick)).$groupinglabel;
@@ -1634,6 +1096,11 @@ if ($PAGE->theme->settings->coursetilestyle < 10) {
                 return '';
             }
 
+            /*
+             * This works only for standard section based course formats. Some formats
+             * may need a local implementation.
+             * @see course/format/page/blocklib.php for format page.
+             */
             $baseurl = '/theme/fordson_fel/mod_thumb.php';
             $editthumbstr = get_string('editmodthumb', 'theme_fordson_fel');
             $actions['thumb'] = new \action_menu_link_primary(
@@ -1644,6 +1111,28 @@ if ($PAGE->theme->settings->coursetilestyle < 10) {
             );
 
             return parent::course_section_cm_edit_actions($actions, $mod, $displayoptions);
+        }
+
+        public function course_section_cm_freshness($mod) {
+            global $DB, $PAGE;
+
+            $config = get_config('theme_'.$PAGE->theme->name);
+            if (empty($config->signalitemsnewerthan)) {
+                return '';
+            }
+
+            // TODO check completion to avoid signal bothering student.
+
+            $timemodified = $DB->get_field($mod->modname, 'timemodified', array('id' => $mod->instance));
+            $now = time();
+            $freshnesssignal = '';
+            if ($now < ($mod->added + $config->signalitemsnewerthan * HOURSECS)) {
+                $freshnesssignal = html_writer::tag('span', get_string('newitem', 'theme_fordson_fel'), array('class' => 'new-item'));
+            } else if ($now < ($timemodified + $config->signalitemsnewerthan * HOURSECS)) {
+                $freshnesssignal = html_writer::tag('span', get_string('updateditem', 'theme_fordson_fel'), array('class' => 'updated-item'));
+            }
+
+            return $freshnesssignal;
         }
         // CHANGE-.
 
@@ -1704,25 +1193,14 @@ if ($PAGE->theme->settings->coursetilestyle < 10) {
             // This div is used to indent the content.
             $output .= html_writer::div('', $indentclasses);
 
-            // Start a wrapper for the actual content to keep the indentation consistent
+            // Start a wrapper for the actual content to keep the indentation consistent.
             $output .= html_writer::start_tag('div');
 
             // CHANGE+ : Add thumbed activities.
             $thumb = $this->course_section_cm_thumb($mod);
 
             // Freshness.
-            $freshnesssignal = '';
-            if (!empty($config->signalitemsnewerthan)) {
-                // TODO check completion to avoid signal bothering student.
-
-                $timemodified = $DB->get_field($mod->modname, 'timemodified', array('id' => $mod->instance));
-                $now = time();
-                if ($now < ($mod->added + $config->signalitemsnewerthan * HOURSECS)) {
-                    $freshnesssignal = html_writer::tag('span', get_string('newitem', 'theme_fordson_fel'), array('class' => 'new-item'));
-                } else if ($now < ($timemodified + $config->signalitemsnewerthan * HOURSECS)) {
-                    $freshnesssignal = html_writer::tag('span', get_string('updateditem', 'theme_fordson_fel'), array('class' => 'updated-item'));
-                }
-            }
+            $freshnesssignal = $this->course_section_cm_freshness($mod);
 
             $displayoptions['freshness'] = $freshnesssignal;
             if ($thumb) {
@@ -1881,6 +1359,84 @@ if ($PAGE->theme->settings->coursetilestyle < 10) {
             }
             $modchooser = new \theme_fordson_fel\output\modchooser($course, $modules);
             return $this->render($modchooser);
+        }
+
+        /**
+         * Based on standard course_renderer::search_courses.
+         * Adds Customlabel coursedata additional search capability.
+         *
+         * @param array $searchcriteria may contain elements: search, blocklist, modulelist, tagid
+         * @return string
+         */
+        public function search_courses($searchcriteria) {
+            global $CFG;
+            $content = '';
+            if (!empty($searchcriteria)) {
+                // print search results
+    
+                $displayoptions = array('sort' => array('displayname' => 1));
+                // take the current page and number of results per page from query
+                $perpage = optional_param('perpage', 0, PARAM_RAW);
+                if ($perpage !== 'all') {
+                    $displayoptions['limit'] = ((int)$perpage <= 0) ? $CFG->coursesperpage : (int)$perpage;
+                    $page = optional_param('page', 0, PARAM_INT);
+                    $displayoptions['offset'] = $displayoptions['limit'] * $page;
+                }
+                // options 'paginationurl' and 'paginationallowall' are only used in method coursecat_courses()
+                $displayoptions['paginationurl'] = new moodle_url('/course/search.php', $searchcriteria);
+                $displayoptions['paginationallowall'] = true; // allow adding link 'View all'
+    
+                $class = 'course-search-result';
+                foreach ($searchcriteria as $key => $value) {
+                    if (!empty($value)) {
+                        $class .= ' course-search-result-'. $key;
+                    }
+                }
+                $chelper = new coursecat_helper();
+                $chelper->set_show_courses(self::COURSECAT_SHOW_COURSES_EXPANDED_WITH_CAT)->
+                        set_courses_display_options($displayoptions)->
+                        set_search_criteria($searchcriteria)->
+                        set_attributes(array('class' => $class));
+    
+                $courses = core_course_category::search_courses($searchcriteria, $chelper->get_courses_display_options());
+                $totalcount = core_course_category::search_courses_count($searchcriteria);
+    
+                if (is_dir($CFG->dirroot.'/mod/customlabel')) {
+                    require_once($CFG->dirroot.'/mod/customlabel/xlib.php');
+                    $morecourses = customlabel_search_courses($searchcriteria);
+                    foreach ($morecourses as $cid => $course) {
+                        if (!in_array($cid, $courses)) {
+                            $courses[$cid] = $courses;
+                        }
+                    }
+                }
+    
+                $courseslist = $this->coursecat_courses($chelper, $courses, $totalcount);
+    
+                if (!$totalcount) {
+                    if (!empty($searchcriteria['search'])) {
+                        $content .= $this->heading(get_string('nocoursesfound', '', $searchcriteria['search']));
+                    } else {
+                        $content .= $this->heading(get_string('novalidcourses'));
+                    }
+                } else {
+                    $content .= $this->heading(get_string('searchresults'). ": $totalcount");
+                    $content .= $courseslist;
+                }
+    
+                if (!empty($searchcriteria['search'])) {
+                    // print search form only if there was a search by search string, otherwise it is confusing
+                    $content .= $this->box_start('generalbox mdl-align');
+                    $content .= $this->course_search_form($searchcriteria['search']);
+                    $content .= $this->box_end();
+                }
+            } else {
+                // just print search form
+                $content .= $this->box_start('generalbox mdl-align');
+                $content .= $this->course_search_form();
+                $content .= $this->box_end();
+            }
+            return $content;
         }
     }
 }

@@ -74,7 +74,8 @@ function theme_fordson_fel_resolve_drawers(&$extraclasses, $checkspblocks, $ismo
     $isadminpage = preg_match('/admin/', $PAGE->pagetype);
     $isadminpage = $isadminpage || preg_match('/admin/', $PAGE->pagelayout);
     $isindexsys = preg_match('/indexsys/', $_SERVER['PHP_SELF']);
-    $isdashboard = preg_match('/my-index/', $PAGE->pagetype);
+    $isdashboard = preg_match('/my-index|site-index/', $PAGE->pagetype);
+    $isdashboard = $isdashboard || preg_match('/dashboard/', $PAGE->pagelayout);
     $isbaselayout = preg_match('/base/', $PAGE->pagelayout);
     $ispageformat = preg_match('/format_page/', $PAGE->pagelayout);
 

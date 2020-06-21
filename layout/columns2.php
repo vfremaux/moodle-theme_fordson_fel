@@ -62,6 +62,10 @@ $regionmainsettingsmenu = $OUTPUT->region_main_settings_menu();
 $footnote = $OUTPUT->footnote();
 $pagedoclink = $OUTPUT->page_doc_link();
 $coursefooter = $OUTPUT->course_footer();
+$sitealternatename = '';
+if (!empty($PAGE->theme->settings->sitealternatename)) {
+    $sitealternatename = $PAGE->theme->settings->sitealternatename;
+}
 
 $templatecontext = [
     'sitename' => format_string($SITE->shortname, true, ['context' => context_course::instance(SITEID) , "escape" => false]) , 
@@ -77,7 +81,7 @@ $templatecontext = [
     'hasfhsdrawer' => $hasfhsdrawer,
     'regionmainsettingsmenu' => $regionmainsettingsmenu,
     'hasregionmainsettingsmenu' => !empty($regionmainsettingsmenu),
-    'hasfootnote' => !empty($footnote) && (preg_match('/[A-Za-z0-9]/', preg_replace('/<.*?>/', '', $footnote))),
+    'hasfootnote' => !empty($footnote) && (preg_match('/[A-Za-z0-9]/', preg_replace('/<\\/?(p|div|span|br)*?>/', '', $footnote))),
     'footnote' => $footnote,
     'custommenupullright' => $PAGE->theme->settings->custommenupullright,
     'hascoursefooter' => !empty($coursefooter) && (preg_match('/[a-z]/', strip_tags($coursefooter))),
@@ -90,14 +94,14 @@ $templatecontext = [
     'midfooter' => @$PAGE->theme->settings->midfooter,
     'rightfooter' => @$PAGE->theme->settings->rightfooter,
     'showlangmenu' => @$CFG->langmenu,
-    'sitealternatename' => @$PAGE->theme->settings->sitealternatename
+    'sitealternatename' => $sitealternatename
 ];
 
 if (function_exists('debug_blocks')) {
     $templatecontext['blocksdebuginfo'] = debug_blocks();
 }
 
-theme_fordson_fel_process_footer_texts($templatecontext);
+theme_fordson_fel_process_texts($templatecontext);
 
 if (is_dir($CFG->dirroot.'/local/technicalsignals')) {
     $templatecontext['technicalsignals'] = local_print_administrator_message();

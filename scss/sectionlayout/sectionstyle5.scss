@@ -33,7 +33,8 @@
  */
 
 //Styling
-.course-content ul.topics li.section.current .content, .course-content ul.weeks li.section.current .content {
+.course-content ul.topics li.section.current > .content,
+.course-content ul.weeks li.section.current > .content {
         border-top: 25px solid $dpsaccentcolor;
 }
 
@@ -53,8 +54,8 @@
     padding: 1rem;
 }
 
-.course-content ul.topics li.section .content, 
-.course-content ul.weeks li.section .content {
+.course-content ul.topics li.section > .content,
+.course-content ul.weeks li.section > .content {
     margin: 0;
     padding: 1rem;
     border-bottom: 20px solid $gray-600;

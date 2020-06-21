@@ -70,6 +70,14 @@ $setting = new admin_setting_configtext($name, $title, $description, $default);
 $page->add($setting);
 
 // Signal new items.
+$name = $themename.'/activitycustomiconwidth';
+$title = get_string('activitycustomiconwidth', 'theme_fordson_fel');
+$description = get_string('activitycustomiconwidth_desc', 'theme_fordson_fel');
+$default = 0;
+$setting = new admin_setting_configtext($name, $title, $description, $default);
+$page->add($setting);
+
+// Initial flex section state.
 $name = $themename.'/flexinitialstate';
 $title = get_string('flexinitialstate', 'theme_fordson_fel');
 $description = get_string('flexinitialstate_desc', 'theme_fordson_fel');

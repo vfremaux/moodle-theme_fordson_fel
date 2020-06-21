@@ -168,10 +168,10 @@ function fordson_fel_page_location_incourse_themeconfig() {
 /**
  * Inject some settings in text zones
  */
-function theme_fordson_fel_process_footer_texts(&$templatecontext) {
-    global $PAGE, $OUTPUT;
+function theme_fordson_fel_process_texts(&$templatecontext) {
+    global $PAGE, $OUTPUT, $SITE, $COURSE;
 
-    $textzones = ['footnote', 'leftfooter', 'midfooter', 'rightfooter'];
+    $textzones = ['footnote', 'leftfooter', 'midfooter', 'rightfooter', 'sitealternatename'];
 
     foreach ($textzones as $tz) {
         $templatecontext[$tz] = str_replace('{{socialicons}}', $OUTPUT->social_icons(), $templatecontext[$tz]);
@@ -179,6 +179,9 @@ function theme_fordson_fel_process_footer_texts(&$templatecontext) {
         $templatecontext[$tz] = str_replace('{{brandwebsite}}', @$PAGE->theme->settings->brandwebsite, $templatecontext[$tz]);
         $templatecontext[$tz] = str_replace('{{brandphone}}', @$PAGE->theme->settings->brandphone, $templatecontext[$tz]);
         $templatecontext[$tz] = str_replace('{{brandemail}}', @$PAGE->theme->settings->brandemail, $templatecontext[$tz]);
+        $templatecontext[$tz] = str_replace('{{SITE}}', @$SITE->fullname, $templatecontext[$tz]);
+        $templatecontext[$tz] = str_replace('{{COURSE}}', @$COURSE->fullname, $templatecontext[$tz]);
+        $templatecontext[$tz] = str_replace('{{COURSEID}}', @$COURSE->id, $templatecontext[$tz]);
         if (\tool_usertours\manager::get_current_tour()) {
             $link = \html_writer::link('', get_string('resettouronpage', 'tool_usertours'), [
                     'data-action'   => 'tool_usertours/resetpagetour',
