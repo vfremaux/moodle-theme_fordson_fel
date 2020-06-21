@@ -347,9 +347,15 @@ class core_renderer extends \theme_boost\output\core_renderer {
 
     public function edit_button_fhs() {
         global $SITE, $PAGE, $USER, $CFG, $COURSE;
+
+        if (is_dir($CFG->dirroot.'/local/sectioncontexts')) {
+            $PAGE->set_other_editing_capability('local/sectioncontexts:caneditsections');
+        }
+
         if (!$PAGE->user_allowed_editing() || $COURSE->id <= 1) {
             return '';
         }
+
         if ($PAGE->pagelayout == 'course' || $PAGE->pagelayout == 'format_page') {
             $url = new moodle_url($PAGE->url);
             $url->param('sesskey', sesskey());
@@ -779,7 +785,9 @@ class core_renderer extends \theme_boost\output\core_renderer {
                 $attrs['target'] ='_blank';
             }
 
-            $content .= html_writer::link($url, format_string($menunode->get_text()), $attrs);
+            $linktext = format_string($menunode->get_text());
+            $linktext = $this->post_process_item_label_icons($linktext);
+            $content .= html_writer::link($url, $linktext, $attrs);
             $attrs = array(
                 'id' => 'cm_submenu_'.$submenucount,
                 'class' => 'yui3-menu custom_menu_submenu custom_menu_submenu'.$level
@@ -828,6 +836,7 @@ class core_renderer extends \theme_boost\output\core_renderer {
                 $url = str_replace('%WWWROOT%', $CFG->wwwroot, $url);
 
                 $linktext = format_string($menunode->get_text());
+                $linktext = $this->post_process_item_label_icons($linktext);
                 $attrs = array('class' => 'yui3-menuitem-content');
                 // $attrs = array('class' => 'yui3-menuitem-content', 'title' => format_string($menunode->get_title()));
                 if (!preg_match('#^'.$CFG->wwwroot.'#', $url)) {
@@ -843,110 +852,43 @@ class core_renderer extends \theme_boost\output\core_renderer {
         }
         // Return the sub menu.
         return $content;
+    }
 
-        /*
-        global $USER, $COURSE, $CFG;
-
-        static $submenucount = 0;
-
-        if ($menunode->has_children()) {
-
-            if ($level == 1) {
-                $class = 'dropdown nav-item';
-                $datatoggle = 'dropdown';
-            } else {
-                $class = 'dropdown-submenu nav-item';
-                $datatoggle = 'dropdown';
-            }
-
-            if ($menunode === $this->language) {
-                $class .= ' langmenu';
-            }
-
-            // If the child has menus render it as a sub menu.
-            $submenucount++;
-            if ($menunode->get_url() !== null) {
-                $url = $menunode->get_url();
-                if ($url != '') {
-                    $url = $this->post_process_url_check_access($url, $xs);
-                    if (!$url) {
-                        return;
-                    }
-                    if ($xs) {
-                        $class .= ' xs-only';
-                    }
+    /*
+     * Process a catchable icon form.
+     * The icon form of an url is:
+     * img:<url><optionaldimension>
+     * :optionaldimension : &d=<height>x<width>
+     */
+    function post_process_item_label_icons($label) {
+        if (preg_match('/^(.*?)img:(.*?)([&\?]d=w[0-9%px]+xh[0-9%px]+)?$/', $label, $matches)) {
+            $textlabel = @$matches[1]; // Textual label part.
+            $imgurl = $matches[2]; // Image URL
+            $sizeext = @$matches[3]; // Size specifications.
+            $sizeattrs = '';
+            if (!empty($sizeext)) {
+                if ($sizeparts = preg_match('/[&\?]d=w([0-9%px]+)xh([0-9%px]+)/', $sizeext, $szmatches)) {
+                    $width = $szmatches[1];
+                    $height = $szmatches[2];
+                    $sizeattrs = ' width="'.$width.'" height="'.$height.'" ';
                 }
-            } else {
-                $url = '#cm_submenu_' . $submenucount;
+            }
+            $textattr = 0;
+            if (!empty($textlabel)) {
+                $textlabel = htmlentities($textlabel, ENT_QUOTES);
+                $textattr = ' alt="'.$textlabel.'" title="'.$textlabel.'"  ';
             }
 
-            // Url context variables replacement if needed in menu.
-            $url = str_replace('%25COURSEID%25', $COURSE->id, $url);
-            $url = str_replace('%25USERID%25', $USER->id, $url);
-            $url = str_replace('%25WWWROOT%25', $CFG->wwwroot, $url);
-            $url = str_replace('%COURSEID%', $COURSE->id, $url);
-            $url = str_replace('%USERID%', $USER->id, $url);
-            $url = str_replace('%WWWROOT%', $CFG->wwwroot, $url);
-
-            $content = html_writer::start_tag('li', array('class' => $class));
-
-            if ($level == 1) {
-                $content .= html_writer::start_tag('a', array('href' => $url, 'class' => 'dropdown-toggle nav-link', 'data-toggle' => $datatoggle, 'title' => $menunode->get_title()));
-            } else {
-                $content .= html_writer::start_tag('a', array('href' => '#', 'class' => 'dropdown-toggle nav-link', 'data-toggle' => $datatoggle, 'title' => $menunode->get_title()));
-            }
-            $content .= format_string($menunode->get_text());
-            $content .= '</a>';
-            $content .= '<ul class="dropdown-menu">';
-            foreach ($menunode->get_children() as $menunode) {
-                $content .= $this->render_custom_menu_item($menunode, 0);
-            }
-            $content .= '</ul>';
-            $content .= html_writer::end_tag('li');
-        } else {
-            // The node doesn't have children so produce a final menuitem.
-            if ($menunode->get_url() !== null) {
-                $url = $menunode->get_url();
-            } else {
-                $url = '#';
-            }
-
-            $url = $this->post_process_url_check_access($url, $xs);
-            if (!$url) {
-                return;
-            }
-
-            // Url context variables replacement if needed in menu
-            $url = str_replace('%25COURSEID%25', $COURSE->id, $url);
-            $url = str_replace('%25USERID%25', $USER->id, $url);
-            $url = str_replace('%25WWWROOT%25', $CFG->wwwroot, $url);
-            $url = str_replace('%COURSEID%', $COURSE->id, $url);
-            $url = str_replace('%USERID%', $USER->id, $url);
-            $url = str_replace('%WWWROOT%', $CFG->wwwroot, $url);
-
-            $class = ($xs) ? 'nav-item xs-only' : 'nav-item';
-
-            // Divert external links to other tabs.
-            $attrs = array('title' => format_string($menunode->get_title()));
-            $attrs['class'] = 'nav-item nav-link';
-            if (!preg_match('#^/#', $url) && // Is NOT relative.
-                    !preg_match('#'.$CFG->wwwroot.'#', $url)) { // Is NOT inside domain.
-                $attrs['target'] = '_blank';
-            }
-
-            $content = '<li class="'.$class.'">';
-            $content .= html_writer::link($url, format_string($menunode->get_text()), $attrs);
-            $content .= '</li>';
+            return '<img src="'.$imgurl.'" '.$sizeattrs.' '.$textattr.'>';
         }
-        return $content;
-        */
+        return $label;
     }
 
     /**
      * removes and process access markers in URL
      */
-    function post_process_url_check_access($url, &$xs) {
-        global $COURSE, $USER, $DB;
+    protected function post_process_url_check_access($url, &$xs) {
+        global $COURSE, $USER, $DB, $PAGE;
 
         $coursecontext = context_course::instance($COURSE->id);
 
@@ -992,6 +934,7 @@ class core_renderer extends \theme_boost\output\core_renderer {
                 } else {
                     $condition = $matches[1];
                     $condition = str_replace('user://', 'user:', $condition); // fix weird url-like preformatting.
+                    $condition = str_replace('theme://', 'theme:', $condition); // fix weird url-like preformatting.
                     $targeturl = $matches[2];
                     if (preg_match('/^user:(.*?)(=|~)(.*)$/', $condition, $matches)) {
                         $fieldname = $matches[1];
@@ -1016,6 +959,14 @@ class core_renderer extends \theme_boost\output\core_renderer {
                         }
 
                         return str_replace('&amp;', '&', $realurl);
+                    } else if (preg_match('/^theme:(.*?)$/', $condition, $matches)) {
+                        // Filter on effective theme name.
+                        $theme = $matches[1];
+                        if ($PAGE->theme->name != $theme) {
+                            return false;
+                        } else {
+                            return str_replace('&amp;', '&', $realurl);
+                        }
                     } else if (preg_match('/(.*)\^$/', $condition, $matches)) {
                         // Exclusive capability check : doanything wont pass.
                         $capability = $matches[1];
@@ -1250,32 +1201,20 @@ class core_renderer extends \theme_boost\output\core_renderer {
         $hasslideicon = (empty($PAGE->theme->settings->slideicon && isloggedin() && !isguestuser())) ? false : $PAGE->theme->settings->slideicon;
         $slideiconbuttonurl = 'data-toggle="collapse" data-target="#collapseExample';
         $slideiconbuttontext = (empty($PAGE->theme->settings->slideiconbuttontext)) ? false : format_string($PAGE->theme->settings->slideiconbuttontext);
-        $hasnav1icon = (empty($PAGE->theme->settings->nav1icon && isloggedin() && !isguestuser())) ? false : $PAGE->theme->settings->nav1icon;
-        $hasnav2icon = (empty($PAGE->theme->settings->nav2icon && isloggedin() && !isguestuser())) ? false : $PAGE->theme->settings->nav2icon;
-        $hasnav3icon = (empty($PAGE->theme->settings->nav3icon && isloggedin() && !isguestuser())) ? false : $PAGE->theme->settings->nav3icon;
-        $hasnav4icon = (empty($PAGE->theme->settings->nav4icon && isloggedin() && !isguestuser())) ? false : $PAGE->theme->settings->nav4icon;
-        $hasnav5icon = (empty($PAGE->theme->settings->nav5icon && isloggedin() && !isguestuser())) ? false : $PAGE->theme->settings->nav5icon;
-        $hasnav6icon = (empty($PAGE->theme->settings->nav6icon && isloggedin() && !isguestuser())) ? false : $PAGE->theme->settings->nav6icon;
-        $hasnav7icon = (empty($PAGE->theme->settings->nav7icon && isloggedin() && !isguestuser())) ? false : $PAGE->theme->settings->nav7icon;
-        $hasnav8icon = (empty($PAGE->theme->settings->nav8icon && isloggedin() && !isguestuser())) ? false : $PAGE->theme->settings->nav8icon;
 
-        $nav1buttonurl = (empty($PAGE->theme->settings->nav1buttonurl)) ? false : $PAGE->theme->settings->nav1buttonurl;
-        $nav2buttonurl = (empty($PAGE->theme->settings->nav2buttonurl)) ? false : $PAGE->theme->settings->nav2buttonurl;
-        $nav3buttonurl = (empty($PAGE->theme->settings->nav3buttonurl)) ? false : $PAGE->theme->settings->nav3buttonurl;
-        $nav4buttonurl = (empty($PAGE->theme->settings->nav4buttonurl)) ? false : $PAGE->theme->settings->nav4buttonurl;
-        $nav5buttonurl = (empty($PAGE->theme->settings->nav5buttonurl)) ? false : $PAGE->theme->settings->nav5buttonurl;
-        $nav6buttonurl = (empty($PAGE->theme->settings->nav6buttonurl)) ? false : $PAGE->theme->settings->nav6buttonurl;
-        $nav7buttonurl = (empty($PAGE->theme->settings->nav7buttonurl)) ? false : $PAGE->theme->settings->nav7buttonurl;
-        $nav8buttonurl = (empty($PAGE->theme->settings->nav8buttonurl)) ? false : $PAGE->theme->settings->nav8buttonurl;
+        for ($i = 1; $i <= 8; $i++) {
 
-        $nav1buttontext = (empty($PAGE->theme->settings->nav1buttontext)) ? false : format_string($PAGE->theme->settings->nav1buttontext);
-        $nav2buttontext = (empty($PAGE->theme->settings->nav2buttontext)) ? false : format_string($PAGE->theme->settings->nav2buttontext);
-        $nav3buttontext = (empty($PAGE->theme->settings->nav3buttontext)) ? false : format_string($PAGE->theme->settings->nav3buttontext);
-        $nav4buttontext = (empty($PAGE->theme->settings->nav4buttontext)) ? false : format_string($PAGE->theme->settings->nav4buttontext);
-        $nav5buttontext = (empty($PAGE->theme->settings->nav5buttontext)) ? false : format_string($PAGE->theme->settings->nav5buttontext);
-        $nav6buttontext = (empty($PAGE->theme->settings->nav6buttontext)) ? false : format_string($PAGE->theme->settings->nav6buttontext);
-        $nav7buttontext = (empty($PAGE->theme->settings->nav7buttontext)) ? false : format_string($PAGE->theme->settings->nav7buttontext);
-        $nav8buttontext = (empty($PAGE->theme->settings->nav8buttontext)) ? false : format_string($PAGE->theme->settings->nav8buttontext);
+            $naviconkey = 'nav'.$i.'icon';
+            $hasnaviconkey = 'hasnav'.$i.'icon';
+            $navbuttonurlkey = 'nav'.$i.'buttonurl';
+            $navbuttonactivekey = 'nav'.$i.'buttonactive';
+            $navbuttontextkey = 'nav'.$i.'buttontext';
+
+            $$hasnaviconkey = (empty($PAGE->theme->settings->$naviconkey && isloggedin() && !isguestuser())) ? false : $PAGE->theme->settings->$naviconkey;
+            $$navbuttonurlkey = (empty($PAGE->theme->settings->$navbuttonurlkey)) ? false : $PAGE->theme->settings->$navbuttonurlkey;
+            $$navbuttonactivekey = (empty($PAGE->theme->settings->$navbuttonurlkey)) ? false : preg_match('#'.preg_quote($PAGE->theme->settings->$navbuttonurlkey).'#', $CFG->wwwroot.me());
+            $$navbuttontextkey = (empty($PAGE->theme->settings->$navbuttontextkey)) ? false : format_string($PAGE->theme->settings->$navbuttontextkey);
+        }
 
         $fptextbox = (empty($PAGE->theme->settings->fptextbox && isloggedin())) ? false : format_text($PAGE->theme->settings->fptextbox, FORMAT_HTML, ['noclean' => true]);
         $fptextboxlogout = (empty($PAGE->theme->settings->fptextboxlogout && !isloggedin())) ? false : format_text($PAGE->theme->settings->fptextboxlogout, FORMAT_HTML, ['noclean' => true]);
@@ -1441,48 +1380,56 @@ class core_renderer extends \theme_boost\output\core_renderer {
                     'hasicon' => $hasnav1icon,
                     'linkicon' => $hasnav1icon,
                     'link' => $nav1buttonurl,
+                    'active' => $nav1buttonactive,
                     'linktext' => $nav1buttontext
                 ),
                 array(
                     'hasicon' => $hasnav2icon,
                     'linkicon' => $hasnav2icon,
                     'link' => $nav2buttonurl,
+                    'active' => $nav2buttonactive,
                     'linktext' => $nav2buttontext
                 ),
                 array(
                     'hasicon' => $hasnav3icon,
                     'linkicon' => $hasnav3icon,
                     'link' => $nav3buttonurl,
+                    'active' => $nav3buttonactive,
                     'linktext' => $nav3buttontext
                 ),
                 array(
                     'hasicon' => $hasnav4icon,
                     'linkicon' => $hasnav4icon,
                     'link' => $nav4buttonurl,
+                    'active' => $nav4buttonactive,
                     'linktext' => $nav4buttontext
                 ),
                 array(
                     'hasicon' => $hasnav5icon,
                     'linkicon' => $hasnav5icon,
                     'link' => $nav5buttonurl,
+                    'active' => $nav5buttonactive,
                     'linktext' => $nav5buttontext
                 ),
                 array(
                     'hasicon' => $hasnav6icon,
                     'linkicon' => $hasnav6icon,
                     'link' => $nav6buttonurl,
+                    'active' => $nav6buttonactive,
                     'linktext' => $nav6buttontext
                 ),
                 array(
                     'hasicon' => $hasnav7icon,
                     'linkicon' => $hasnav7icon,
                     'link' => $nav7buttonurl,
+                    'active' => $nav7buttonactive,
                     'linktext' => $nav7buttontext
                 ),
                 array(
                     'hasicon' => $hasnav8icon,
                     'linkicon' => $hasnav8icon,
                     'link' => $nav8buttonurl,
+                    'active' => $nav8buttonactive,
                     'linktext' => $nav8buttontext
                 ),
             ),
@@ -1951,13 +1898,16 @@ class core_renderer extends \theme_boost\output\core_renderer {
             ));
         }
         if (is_dir($CFG->dirroot.'/report/learningtimecheck')) {
-            $hasltcs = false;
-            if ($DB->count_records('learningtimecheck', array('course' => $COURSE->id))) {
-                $learningtimechecktitle = get_string('pluginname', 'report_learningtimecheck');
-                $learningtimechecklink = new moodle_url('/report/learningtimecheck/index.php', array(
-                    'id' => $PAGE->course->id
-                ));
-                $hasltcs = true;
+            if ($DB->get_field('config_plugins', 'value', ['plugin' => 'mod_learningtimecheck', 'name' => 'version'])) {
+                // Is LTC properly installed ?
+                $hasltcs = false;
+                if ($DB->count_records('learningtimecheck', array('course' => $COURSE->id))) {
+                    $learningtimechecktitle = get_string('pluginname', 'report_learningtimecheck');
+                    $learningtimechecklink = new moodle_url('/report/learningtimecheck/index.php', array(
+                        'id' => $PAGE->course->id
+                    ));
+                    $hasltcs = true;
+                }
             }
         }
         // /FEL ADDS
@@ -2489,7 +2439,7 @@ class core_renderer extends \theme_boost\output\core_renderer {
                 $sectionsection = $DB->get_field('course_sections', 'section', array('id' => $cm->section));
                 $courseurl = new moodle_url('/course/view.php', array('id' => $COURSE->id));
                 $courseurl->set_anchor('section-'.$sectionsection);
-                $button = '<div class="return-button">';
+                $button = '<div class="by-theme-return-button">';
                 $attrs = array('title' => get_string('backtocourse', 'theme_fordson_fel'), 'class' => 'btn btn-default');
                 $button .= html_writer::link($courseurl, get_string('backtocourse', 'theme_fordson_fel'), $attrs);
                 $button .= '</div>';
@@ -2557,6 +2507,9 @@ class core_renderer extends \theme_boost\output\core_renderer {
         $context->cookieshelpiconformatted = $this->help_icon('cookiesenabled');
         $context->errorformatted = $this->error_text($context->error);
         $url = $this->get_logo_url();
+
+        // Additional settings.
+        $context->hasshowtoggle = !empty($PAGE->theme->settings->showpasswordbutton);
 
         // Custom logins.
         $context->logintext_custom = format_text($PAGE->theme->settings->fptextboxlogout);
@@ -2739,6 +2692,7 @@ class core_renderer extends \theme_boost\output\core_renderer {
         $context->content = $bc->content;
         $context->annotation = $bc->annotation;
         $context->footer = $bc->footer;
+        $context->class = $bc->attributes['class'];
         $context->region = $region;
         if ($COURSE->format == 'page' && $context->type == 'page_module') {
             $context->modname = @$bc->modname;
@@ -2786,5 +2740,17 @@ class core_renderer extends \theme_boost\output\core_renderer {
         }
 
         return $this->render_from_template('core/skip_links', $context);
+    }
+
+    /**
+     * Whether we should display the logo in the navbar.
+     *
+     * We will when there are no main logos, and we have compact logo.
+     *
+     * @return bool
+     */
+    public function should_display_navbar_logo() {
+        $logo = $this->get_compact_logo_url();
+        return !empty($logo);
     }
 }

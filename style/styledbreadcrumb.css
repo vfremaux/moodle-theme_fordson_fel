@@ -21,8 +21,13 @@ nav[role="navigation"] ol.breadcrumb.style1 li {
     position:relative;
     display:block;
     line-height:28px;
-    height:28px;
     text-shadow:none;
+}
+
+@media all and (min-width: 480px) {
+    nav[role="navigation"] ol.breadcrumb.style1 li {
+        height: 28px;
+    }
 }
 
 nav[role="navigation"] ol.breadcrumb.style1 li a {
@@ -33,46 +38,6 @@ nav[role="navigation"] ol.breadcrumb.style1 li a {
 nav[role="navigation"] ol.breadcrumb.style1 li .dimmed_text {
     font-style:italic;
 }
-
-/* To add to customisation with breadcrumb background color */
-/*
-nav[role="navigation"] ol.breadcrumb.style1 li::after {
-    border-left-color: $background;
-}
-
-nav[role="navigation"] ol.breadcrumb.style1 li {
-    background-color: $background;
-}
-
-nav[role="navigation"] ol.breadcrumb.style1 li::before {
-    border-left-color: $foreground;
-}
-
-nav[role="navigation"] ol.breadcrumb.style1 li:hover::after {
-    border-left-color: $background;
-}
-
-nav[role="navigation"] ol.breadcrumb.style1 li:hover {
-    background-color: $foreground;
-}
-
-nav[role="navigation"] ol.breadcrumb.style1 li:hover::before {
-    border-left-color: $background;
-}
-
-nav[role="navigation"] ol.breadcrumb.style1 li a:hover {
-    color: $background !important;
-}
-
-nav[role="navigation"] ol.breadcrumb.style1 li a::before {
-    color: $foreground;
-}
-
-nav[role="navigation"] ol.breadcrumb.style1 li:hover a::before {
-    color: $background;
-}
-
-*/
 
 nav[role="navigation"] ol.breadcrumb.style1 li:after,
 nav[role="navigation"] ol.breadcrumb.style1 li:before {
@@ -86,6 +51,15 @@ nav[role="navigation"] ol.breadcrumb.style1 li:before {
     top:50%;
     margin-top:-14px;
     z-index:1;
+}
+
+@media all and (max-width: 480px) {
+    nav[role="navigation"] ol.breadcrumb.style1 li:after,
+    nav[role="navigation"] ol.breadcrumb.style1 li:before {
+        border-top:7px solid transparent;
+        border-bottom:7px solid transparent;
+        margin-top:-7px;
+    }
 }
 
 nav[role="navigation"] ol.breadcrumb.style1 li:first-of-type a:before {
@@ -115,6 +89,13 @@ nav[role="navigation"] ol.breadcrumb.style1 li:hover .dimmed_text {
 .dir-ltr nav[role="navigation"] ol.breadcrumb.style1 .last,
 .dir-ltr nav[role="navigation"] ol.breadcrumb.style1 li:last-of-type {
     padding-left: 40px;
+}
+
+@media all and (max-width: 480px) {
+    .dir-ltr nav[role="navigation"] ol.breadcrumb.style1 .last,
+    .dir-ltr nav[role="navigation"] ol.breadcrumb.style1 li:last-of-type {
+        padding-left: 18px;
+    }
 }
 
 .dir-ltr nav[role="navigation"] ol.breadcrumb.style1 li {

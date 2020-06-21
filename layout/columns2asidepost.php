@@ -93,7 +93,7 @@ $templatecontext = [
     'hasfootnote' => !empty($footnote) && (preg_match('/[a-z]/', strip_tags($footnote))),
     'footnote' => $footnote,
     'custommenupullright' => $PAGE->theme->settings->custommenupullright,
-    'hascoursefooter' => !empty($coursefooter) && (preg_match('/[a-z]/', strip_tags($coursefooter))),
+    'hascoursefooter' => !empty($coursefooter) && (preg_match('/[a-z]/', preg_replace('/<\\/?(p|div|span|br)*?>/', '', $footnote))),
     'coursefooter' => $coursefooter,
     'hasdoclink' => !empty($pagedoclink) && (preg_match('/[a-z]/', strip_tags($pagedoclink))),
     'pagedoclink' => $pagedoclink,
@@ -106,7 +106,7 @@ $templatecontext = [
     'sitealternatename' => @$PAGE->theme->settings->sitealternatename
 ];
 
-theme_fordson_fel_process_footer_texts($templatecontext);
+theme_fordson_fel_process_texts($templatecontext);
 
 if (is_dir($CFG->dirroot.'/local/technicalsignals')) {
     $templatecontext['technicalsignals'] = local_print_administrator_message();

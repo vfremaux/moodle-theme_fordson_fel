@@ -24,7 +24,7 @@ define(['jquery', 'core/log'], function($, log) {
 
     var pagescroll = {
 
-        scrollTrigger: 200,
+        scrollTrigger: 100,
 
         init: function() {
 
@@ -42,10 +42,14 @@ define(['jquery', 'core/log'], function($, log) {
             var scrollTop = $(window).scrollTop();
             if (scrollTop > pagescroll.scrollTrigger) {
                 $('#go-to-bottom').removeClass('show');
+                $('.hide-on-scroll').removeClass('show');
                 $('#back-to-top').addClass('show');
+                $('.show-on-scroll').addClass('show');
             } else {
                 $('#go-to-bottom').addClass('show');
+                $('.hide-on-scroll').addClass('show');
                 $('#back-to-top').removeClass('show');
+                $('.show-on-scroll').removeClass('show');
             }
         },
 

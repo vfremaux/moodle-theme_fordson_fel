@@ -42,10 +42,10 @@
     border-left: 0;
 }
 
-.course-content ul.topics li.section .summary,
-.course-content ul.weeks li.section .summary,
-.course-content ul.topics li.section .content > .availabilityinfo,
-.course-content ul.weeks li.section .content > .availabilityinfo {
+.course-content ul.topics li.section > .summary,
+.course-content ul.weeks li.section > .summary,
+.course-content ul.topics li.section > .content > .availabilityinfo,
+.course-content ul.weeks li.section > .content > .availabilityinfo {
     margin: 0;
     padding: 1rem;
     background-color: $gray-100;
@@ -96,8 +96,8 @@ h3.sectionname a {
     padding-top: 0;
 }
 
-.editing .course-content ul.topics li.section .content,
-.editing .course-content ul.weeks li.section .content {
+.editing .course-content ul.topics li.section > .content,
+.editing .course-content ul.weeks li.section > .content {
     border: 1px dotted $gray-500;
 }
 

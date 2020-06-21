@@ -70,7 +70,7 @@ body {
 }
 
 .format-page #page-region-top {
-    height: 60px;
+    height: 70px;
     margin-bottom: 0px;
 }
 
@@ -191,6 +191,11 @@ footer {
     margin-top: 30px;
 }
 
+/* Overlapping calendar content on editing controls */
+.block_calendar_month .content {
+    margin-top: 30px;
+}
+
 #page-course-view_topics .course-content .section-summary {
     border: none;
 }
@@ -201,4 +206,48 @@ footer {
 
 .section li.activity {
     border-bottom: none;
+}
+
+.by-theme-return-button {
+    margin: 20px auto;
+    text-align: center;
+}
+
+.toggle-password {
+    margin-top: 8px;
+    margin-left:8px;
+}
+
+/* fix the controls on blocs for collapsend blocks */
+.block_with_controls > .card-body .header {
+    min-height: 50px;
+}
+
+/* bottom middle footer*/
+.middle-footer {
+    text-align: center;
+}
+
+/* bottom right footer*/
+.right-footer {
+    text-align: right;
+}
+
+.middle-footer,
+.left-footer,
+.right-footer {
+    padding: 10px;
+}
+
+.unlist li {
+    display: flex;
+}
+
+.hide-on-scroll {
+    opacity: 0;
+    transition: opacity 0.2s ease-out;
+}
+
+.hide-on-scroll.show {
+    opacity: 1;
 }

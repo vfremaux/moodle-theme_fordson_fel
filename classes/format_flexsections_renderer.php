@@ -254,6 +254,18 @@ class theme_fordson_fel_format_flexsections_renderer extends format_flexsections
             }
         }
 
+        // Theme adds per section role assign.
+        if (is_dir($CFG->dirroot.'/local/sectioncontexts')) {
+            if ($PAGE->user_is_editing()) {
+                if (has_capability('local/sectioncontexts:assignrole', $context)) {
+                    $sectioncontext = context_course_section::instance($section->id);
+                    $assignroleurl = new moodle_url('/admin/roles/assign.php', array('contextid' => $sectioncontext->id, 'sesskey' => sesskey()));
+                    $text = new lang_string('assignrole', 'role');
+                    $controls[] = new format_flexsections_edit_control('assignrole', $assignroleurl, $text);
+                }
+            }
+        }
+
         /*
         // TODO : At the moment, we do not exactly know how to store this in a context that would be
         // correctly backuped with the course data. So remove it and try to find another way.

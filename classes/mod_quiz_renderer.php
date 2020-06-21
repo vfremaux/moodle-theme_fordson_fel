@@ -574,7 +574,7 @@ class theme_fordson_fel_mod_quiz_renderer extends mod_quiz_renderer {
         $output .= html_writer::end_tag('div');
 
         // Override quiz_nav_panel_base::render_restart_preview_link()
-        if (!$this->attemptobj->is_own_preview()) {
+        if (is_null($this->attemptobj) || !$this->attemptobj->is_own_preview()) {
             $restartlink = '';
         } else {
             $restarturl = new moodle_url($this->attemptobj->start_attempt_url(), array('forcenew' => true));
@@ -582,7 +582,10 @@ class theme_fordson_fel_mod_quiz_renderer extends mod_quiz_renderer {
         }
 
         // CHANGE+.
-        $panelcontent = $this->countdown_timer($this->attemptobj, time()).$restartlink;
+        $panelcontent = '';
+        if (!is_null($this->attemptobj)) {
+            $panelcontent = $this->countdown_timer($this->attemptobj, time()).$restartlink;
+        }
 
         $output .= html_writer::tag('div', $panelcontent, array('class' => 'othernav'));
 

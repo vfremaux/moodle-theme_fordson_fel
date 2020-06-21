@@ -191,6 +191,36 @@ $page->add(new admin_setting_heading($themename.'_colours', get_string('colours_
     $setting->set_updatedcallback('theme_reset_all_caches');
     $page->add($setting);
 
+    if (is_dir($CFG->dirroot.'/mod/customlabel')) {
+        $name = $themename.'/customlabelskin';
+        $title = get_string('customlabelskin', 'theme_fordson_fel');
+        $description = get_string('customlabelskin_desc', 'theme_fordson_fel');
+        $skinoptions = [
+            '' => get_string('plugindefault', 'customlabel'),
+            'default' => get_string('defaultstyle', 'customlabel'),
+            'flatstyle' => get_string('flatstyle', 'customlabel'),
+            'colored' => get_string('coloredstyle', 'customlabel'),
+            'flatstyle colored' => get_string('flatcoloredstyle', 'customlabel')
+        ];
+
+        $namedskins = glob($CFG->dirroot.'/mod/customlabel/pix/skins/*');
+        if (!empty($namedskins)) {
+            foreach ($namedskins as $skinpath) {
+                $skinname = basename($skinpath);
+                if ($skinname == '.' || $skinname == '..') {
+                    continue;
+                }
+                if (!is_dir($skinpath)) {
+                    continue;
+                }
+                $skinoptions[$skinname] = $skinname;
+            }
+        }
+
+        $setting = new admin_setting_configselect($name, $title, $description, '', $skinoptions);
+        $page->add($setting);
+    }
+
     // Raw SCSS to include after the content.
     $name = $themename.'/scss';
     $title = get_string('rawscss', 'theme_fordson_fel');

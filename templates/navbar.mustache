@@ -21,7 +21,7 @@
 <div style="width:100%;display:block;position:fixed;top:50px;z-index:100000" id="technicalsignals">
 {{{technicalsignals}}}
 </div>
-<nav class="fixed-top navbar navbar-light navbar-expand moodle-has-zindex">
+<nav class="fixed-top navbar navbar-expand moodle-has-zindex">
     {{#hasfhsdrawer}}
     <div data-region="drawer-toggle" class="d-inline-block mr-3">
         <button aria-expanded="{{#navdraweropen}}true{{/navdraweropen}}{{^navdraweropen}}false{{/navdraweropen}}" aria-controls="nav-drawer" type="button" class="btn nav-link float-sm-left mr-1 btn-secondary" data-action="toggle-drawer" data-side="left" data-preference="drawer-open-nav">{{#pix}}i/menubars{{/pix}}<span class="sr-only">{{#str}}sidepanel, core{{/str}}</span></button>
@@ -34,23 +34,27 @@
     </div>
     <!-- /homelink_for_mobiles -->
 
-    <!-- logo -->
-    <a href="{{{ config.wwwroot }}}" class="navbar-brand {{# output.should_display_navbar_logo }}has-logo{{/ output.should_display_navbar_logo }}
-        {{^ output.should_display_navbar_logo }}
-            d-none d-sm-inline
-        {{/ output.should_display_navbar_logo }}
-            ">
-        {{# output.should_display_navbar_logo }}
-            <span class="logo d-none d-sm-inline">
-                <img src="{{output.get_compact_logo_url}}" alt="Logo {{sitename}}">
-            </span>
-        {{/ output.should_display_navbar_logo }}
-        <span class="site-name d-none d-md-inline">{{{ sitename }}}</span>
+    {{^ output.should_display_navbar_logo }}
+    <!-- sitename : not display on very small devices -->
+    <a href="{{{ config.wwwroot }}}" class="navbar-brand d-xs-inline d-sm-inline not-for-mobile">
+        {{^sitealternatename}}
+        <span class="site-name">{{{ sitename }}}</span>
+        {{/sitealternatename}}
         {{#sitealternatename}}
-        <span class="sitename alternate-name not-for-mobile">{{sitealternatename}}</span>
+        <span class="site-name alternate-name">{{sitealternatename}}</span>
         {{/sitealternatename}}
     </a>
+    <!-- /sitename -->
+    {{/ output.should_display_navbar_logo }}
+    {{# output.should_display_navbar_logo }}
+    <!-- logo -->
+    <a href="{{{ config.wwwroot }}}" class="navbar-brand has-logo">
+        <span class="logo d-none d-sm-inline">
+            <img src="{{output.get_compact_logo_url}}" alt="Logo {{sitename}}">
+        </span>
     <!-- /logo -->
+    </a>
+    {{/ output.should_display_navbar_logo }}
 
     <!-- fordson_fel/course_controls -->
     <div class="coursecontrols nav-item d-flex">

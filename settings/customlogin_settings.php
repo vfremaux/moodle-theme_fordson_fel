@@ -35,6 +35,14 @@ $description = get_string('customlogininfo_desc', 'theme_fordson_fel');
 $setting = new admin_setting_heading($name, $title, $description);
 $page->add($setting);
 
+// Show password button.
+$name = $themename.'/showpasswordbutton';
+$title = get_string('showpasswordbutton', 'theme_fordson_fel');
+$description = get_string('showpasswordbutton_desc', 'theme_fordson_fel');
+$default = 0;
+$setting = new admin_setting_configcheckbox($name, $title, $description, $default);
+$page->add($setting);
+
 // Show custom login form.
 $name = $themename.'/showcustomlogin';
 $title = get_string('showcustomlogin', 'theme_fordson_fel');

@@ -49,12 +49,12 @@ $templatecontext = [
     'sitename' => format_string($SITE->shortname, true, ['context' => context_course::instance(SITEID), "escape" => false]),
     'output' => $OUTPUT,
     'bodyattributes' => $bodyattributes,
-    'hasfootnote' => !empty($footnote) && (preg_match('/[a-z]/', strip_tags($footnote))),
+    'hasfootnote' => !empty($footnote) && (preg_match('/[a-zA-Z0-9]/', preg_replace('/<\\/?(p|div|span|br)*?>/', '', $footnote))),
     'footnote' => $footnote,
     'custommenupullright' => $PAGE->theme->settings->custommenupullright,
     'hascoursefooter' => !empty($coursefooter) && (preg_match('/[a-z]/', strip_tags($coursefooter))),
     'coursefooter' => $coursefooter,
-    'hasdoclink' => !empty($pagedoclink) && (preg_match('/[a-z]/', strip_tags($pagedoclink))),
+    'hasdoclink' => !empty($pagedoclink) && (preg_match('/[a-zA-Z0-9]/', strip_tags($pagedoclink))),
     'pagedoclink' => $pagedoclink,
     'hascustomlogin' => $PAGE->theme->settings->showcustomlogin == 1,
     'hascustomlogincontent' => !empty($OUTPUT->customlogin()),
@@ -67,7 +67,7 @@ $templatecontext = [
     'sitealternatename' => @$PAGE->theme->settings->sitealternatename
 ];
 
-theme_fordson_fel_process_footer_texts($templatecontext);
+theme_fordson_fel_process_texts($templatecontext);
 
 if (is_dir($CFG->dirroot.'/local/technicalsignals')) {
     $templatecontext['technicalsignals'] = local_print_administrator_message();

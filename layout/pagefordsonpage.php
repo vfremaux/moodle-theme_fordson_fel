@@ -42,7 +42,9 @@ if (is_tablet()) {
 }
 
 list($hasfhsdrawer, $navdraweropen, $hasspdrawer, $navspdraweropen) = theme_fordson_fel_resolve_drawers($extraclasses, $checkpostblocks, is_mobile());
+
 $bodyattributes = $OUTPUT->body_attributes($extraclasses);
+
 $hasblocks = false;
 $haspostblocks = false;
 $checkpostblocks = false;
@@ -60,12 +62,12 @@ $templatecontext = [
     'hasfhsdrawer' => $hasfhsdrawer,
     'hasspdrawer' => $checkpostblocks || $PAGE->user_is_editing(),
     'navspdraweropen' => $navspdraweropen && ($checkpostblocks || $PAGE->user_is_editing()),
-    'hasfootnote' => !empty($footnote) && (preg_match('/[a-z]/', strip_tags($footnote))),
+    'hasfootnote' => !empty($footnote) && (preg_match('/[a-z]/', preg_replace('/<\\/?(p|div|span|br)*?>/', '', $footnote))),
     'footnote' => $footnote,
     'custommenupullright' => $PAGE->theme->settings->custommenupullright,
-    'hascoursefooter' => !empty($coursefooter) && (preg_match('/[a-z]/', strip_tags($coursefooter))),
+    'hascoursefooter' => !empty($coursefooter) && (preg_match('/[a-zA-Z0-9]/', strip_tags($coursefooter))),
     'coursefooter' => $coursefooter,
-    'hasdoclink' => !empty($pagedoclink) && (preg_match('/[a-z]/', strip_tags($pagedoclink))),
+    'hasdoclink' => !empty($pagedoclink) && (preg_match('/[a-zA-Z0-9]/', strip_tags($pagedoclink))),
     'pagedoclink' => $pagedoclink,
     'hascustomlogin' => @$PAGE->theme->settings->showcustomlogin == 1,
     'hasfooterelements' => !empty($PAGE->theme->settings->leftfooter) || !empty($PAGE->theme->settings->midfooter) || !empty($PAGE->theme->settings->rightfooter),
@@ -76,7 +78,7 @@ $templatecontext = [
     'sitealternatename' => @$PAGE->theme->settings->sitealternatename
 ];
 
-theme_fordson_fel_process_footer_texts($templatecontext);
+theme_fordson_fel_process_texts($templatecontext);
 
 if (is_dir($CFG->dirroot.'/local/technicalsignals')) {
     $templatecontext['technicalsignals'] = local_print_administrator_message();

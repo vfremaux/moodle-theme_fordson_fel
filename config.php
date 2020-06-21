@@ -40,14 +40,15 @@ $THEME->parents = ['boost'];
  * to generate dynamically from the scss presets and settings and is not
  * used by Moodle's default editor (Atto).
  */
-$THEME->sheets = ['customlabels', 'styledbreadcrumb', 'yuioverride', 'modthumb', 'flexsections', 'themefixes', 'responsiverules', 'mobilecontrol', 'edgefixes'];
+$THEME->sheets = ['styledbreadcrumb', 'yuioverride', 'modthumb', 'flexsections', 'themefixes', 'responsiverules', 'mobilecontrol', 'edgefixes'];
 $THEME->editor_sheets = [''];
 
 // Toggle display of blocks
 $THEME->layouts = [
     'base' => [
         'file' => 'columns2.php',
-        'regions' => array(),
+        'regions' => ['side-pre'],
+        'defaultregion' => 'side-pre',
     ],
 
     // Standard layout with blocks, this is recommended for most pages with general information.
