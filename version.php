@@ -26,13 +26,13 @@
 defined('MOODLE_INTERNAL') || die();
 
 $plugin->version   = 2019111010;
-$plugin->release  = 'Moodle 3.6 fordson_fel v3.6 release 6 Build(2019111010)';
+$plugin->release  = 'Moodle 3.8 Fordson_fel v3.8 release 6';
 $plugin->maturity  = MATURITY_STABLE;
-$plugin->requires  = 2018112800;
+$plugin->requires  = 2019111200;
 $plugin->component = 'theme_fordson_fel';
 $plugin->dependencies = array(
-    'theme_boost'  => 2018051400,
+    'theme_boost'  => 2019052000,
 );
 
 // Non moodle attributes.
-$plugin->codeincrement = '3.6.0006';
+$plugin->codeincrement = '3.8.0006';

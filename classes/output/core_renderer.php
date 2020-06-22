@@ -40,8 +40,9 @@ use \theme_config;
 
 defined('MOODLE_INTERNAL') || die;
 
-require_once($CFG->dirroot . "/course/renderer.php");
-require_once($CFG->dirroot . "/course/format/lib.php");
+require_once($CFG->dirroot."/course/renderer.php");
+require_once($CFG->dirroot."/course/format/lib.php");
+require_once($CFG->dirroot."/theme/fordson_fel/compatlib.php");
 
 /**
  * Renderers to align Moodle's HTML with that expected by Bootstrap
