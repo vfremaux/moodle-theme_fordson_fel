@@ -47,7 +47,7 @@ class sectionclass_form extends moodleform {
         }
         $mform->addGroup($group, 'applytogroup', get_string('applyto', 'theme_fordson_fel'), array(' '), false);
 
-        $attrs = array('value' => 'none',
+        $attrs = array('data-value' => 'none',
                        'name' => 'overridestyle_default');
         if (empty($this->_customdata['current'])) {
             $attrs['class'] = 'btn apply-section-style currentchoice';
@@ -65,7 +65,7 @@ class sectionclass_form extends moodleform {
                 $btncurrentclass = ($name == $this->_customdata['current']) ? 'btn currentchoice' : 'btn';
                 $currentclass = ($name == $this->_customdata['current']) ? 'currentchoice' : '';
 
-                $attrs = array('value' => $name,
+                $attrs = array('data-value' => $name,
                                'name' => 'overridestyle_'.$name);
                 if (empty($this->_customdata['current'])) {
                     $attrs['class'] = 'btn apply-section-style currentchoice';
