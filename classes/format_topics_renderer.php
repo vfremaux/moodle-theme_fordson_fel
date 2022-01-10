@@ -375,7 +375,11 @@ class theme_fordson_fel_format_topics_renderer extends format_topics_renderer {
         // Theme adds style related additional attribute in format.
         if (!empty($this->availablestyles) && ($section->section > 0) && $PAGE->user_is_editing()) {
             if (has_capability('moodle/course:update', $context) || $caneditsection) {
-                $contentclassurl = new moodle_url('/theme/fordson_fel/sections/sectionclass.php', array('id' => $section->id, 'sr' => $sectionreturn));
+                $params = array('id' => $section->id);
+                if (!empty($sectionreturn)) {
+                    $params['sr'] = $sectionreturn;
+                }
+                $contentclassurl = new moodle_url('/theme/fordson_fel/sections/sectionclass.php', $params);
                 $text = new lang_string('chooseclass', 'theme_'.$PAGE->theme->name);
 
                 $controls['changesection'] = array(
@@ -384,7 +388,6 @@ class theme_fordson_fel_format_topics_renderer extends format_topics_renderer {
                     'name' => $text,
                     'pixattr' => array('class' => '', 'alt' => $text),
                     'attr' => array('class' => 'icon changesection', 'title' => $text));
-                // $controls[] = new format_flexsections_edit_control('contentclass', $contentclassurl, $text);
             }
 
             if (is_dir($CFG->dirroot.'/local/sectioncontexts')) {
@@ -400,7 +403,6 @@ class theme_fordson_fel_format_topics_renderer extends format_topics_renderer {
                             'name' => $text,
                             'pixattr' => array('class' => '', 'alt' => $text),
                             'attr' => array('class' => 'icon assignrole', 'title' => $text));
-                        // $controls[] = new format_flexsections_edit_control('assignrole', $assignroleurl, $text);
                     }
                 }
             }

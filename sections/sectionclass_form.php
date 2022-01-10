@@ -67,7 +67,7 @@ class sectionclass_form extends moodleform {
 
                 $attrs = array('data-value' => $name,
                                'name' => 'overridestyle_'.$name);
-                if (empty($this->_customdata['current'])) {
+                if (!empty($this->_customdata['current']) && ($this->_customdata['current'] == $name)) {
                     $attrs['class'] = 'btn apply-section-style currentchoice';
                 } else {
                     $attrs['class'] = 'btn apply-section-style';

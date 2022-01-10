@@ -67,7 +67,7 @@ $styleoverride = $DB->get_field('course_format_options', 'value', $params);
 $mform = new sectionclass_form($url, array('styles' => $availablestyles, 'current' => $styleoverride, 'course' => $course));
 
 if ($mform->is_cancelled()) {
-    $courseurl = new moodle_url('/course/view.php', array('id' => $course->id, 'section' => $sr), 'section-'.$section->section);
+    $courseurl = new moodle_url('/course/view.php', array('id' => $course->id, 'section' => $sr), 'section-'.$section-section);
     redirect($courseurl);
 }
 
@@ -118,7 +118,11 @@ if ($data = $mform->get_data()) {
         }
     }
 
-    $courseurl = new moodle_url('/course/view.php', array('id' => $course->id, 'section' => $sr), 'section-'.$section->section);
+    $params = array('id' => $course->id);
+    if (!empty($sr)) {
+        $params['section'] = $sr;
+    }
+    $courseurl = new moodle_url('/course/view.php', $params, 'section-'.$section->section);
     redirect($courseurl);
 }
 
