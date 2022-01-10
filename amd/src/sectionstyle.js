@@ -36,7 +36,7 @@ define(['jquery', 'core/log'], function($, log) {
             log.debug("Form is : " + this.form.name);
             log.debug("Setting value : " + that.val());
             this.form.overridestyle.value = that.val();
-            this.form.submit();
+            // this.form.submit();
         }
     };
 
