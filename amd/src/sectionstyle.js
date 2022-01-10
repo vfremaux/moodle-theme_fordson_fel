@@ -38,9 +38,6 @@ define(['jquery', 'core/log'], function($, log) {
 
             var that = $(this);
             this.form.overridestyle.value = that.attr('data-value');
-            log.debug(that.attr('data-value'));
-            log.debug(this.form.overridestyle.value);
-            confirm("confirm application");
             this.form.submit();
         }
     };
