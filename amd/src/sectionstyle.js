@@ -31,7 +31,11 @@ define(['jquery', 'core/log'], function($, log) {
             log.debug("AMD Fordson Fel Section Styles initialized");
         },
 
-        applystyle: function() {
+        applystyle: function(e) {
+
+            e.stopPropagation();
+            e.preventDefault();
+
             var that = $(this);
             log.debug("Form is : " + this.form.name);
             log.debug("Setting value : " + that.val());
