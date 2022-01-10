@@ -27,7 +27,7 @@ define(['jquery', 'core/log'], function($, log) {
     var sectionstylechanger = {
 
         init: function() {
-            $('.apply-section-style').bind('clic', this.applystyle);
+            $('.apply-section-style').bind('click', this.applystyle);
             log.debug("AMD Fordson Fel Section Styles initialized");
         },
 
