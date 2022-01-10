@@ -1,0 +1,227 @@
+
+
+@media all and (max-width: 576px) {
+
+    .container-fluid {
+        width: 100%;
+    }
+
+    li.section {
+        padding: 1rem 0 !important;
+    }
+
+    .navbar {
+        padding: 5px 5px;
+    }
+
+    nav .btn {
+        height: 40px;
+    }
+
+    #go-to-bottom,
+    #back-to-top {
+        border-radius: 20px;
+        width: 25px;
+        height: 25px;
+        padding: 3px;
+        font-size: 11px;
+        right: 10px;
+    }
+
+    /* login */
+    #page-login-index #page {
+        height: 650px;
+    }
+
+    #page-login-index #region-main {
+        top: 50px;
+    }
+
+    /* adjust narrow screen course list in category listing vs local_my widgets */
+    .course_category_tree {
+        padding: 0;
+    }
+
+    .course_category_tree .category > .content {
+        padding-left: 8px;
+    }
+
+    /* section navigation in course */
+    .section-navigation > .mdl-left {
+        display: none;
+    }
+    .section-navigation > .mdl-right {
+        display: none;
+    }
+
+    .course-content .single-section .section-navigation .mdl-left {
+        display: none;
+    }
+    .course-content .single-section .section-navigation .mdl-right {
+        display: none;
+    }
+    .course-content .single-section .section-navigation.mdl-bottom .mdl-left {
+        display: inline;
+    }
+    .course-content .single-section .section-navigation.mdl-bottom .mdl-right {
+        display: inline;
+    }
+    .course-content .single-section .section-navigation.mdl-bottom .mdl-left a {
+        overflow: hidden;
+        display: inline-block;
+        width: 28px;
+        height: 40px;
+    }
+    .course-content .single-section .section-navigation.mdl-bottom .mdl-right a {
+        overflow: hidden;
+        display: inline-block;
+        width: 28px;
+        height: 40px;
+    }
+    .course-content .single-section .section-navigation.mdl-bottom .mdl-left a::before {
+        content: "\f053";
+        font-family: "FontAwesome";
+        font-size: 200%;
+    }
+    .course-content .single-section .section-navigation.mdl-bottom .mdl-right a::before {
+        content: "\f054";
+        font-family: "FontAwesome";
+        font-size: 200%;
+    }
+
+    .single-section #sectionmenu .custom-select {
+        max-width: 180px;
+    }
+}
+
+/* courses */
+
+@media screen and (max-width: 576px) {
+
+    /*contenu presque collé à la navbar*/
+    div#learningcontent {
+        margin-top: 2px;
+    }
+
+    /*diminuer les padding*/
+    #region-main {
+        padding: 0rem;
+    }
+
+
+    /*coller à droite le bouton */
+    #go-to-bottom {
+        right: 5px;
+    }
+
+    /*masquer le footer*/
+    #page-footer {
+        display:none;
+    }
+
+    /*masquer info pour completude*/
+    .path-course-view .completionprogress {
+        display:none;
+    }
+
+    /*oter le padding des activités et textes sans liens*/
+    .section .label .contentwithoutlink, .section .label .activityinstance {
+        padding-right: 0px;
+    }
+
+    #mydashboard {
+        border: 0;
+        padding: 0;
+    }
+
+    /* no header edit buttons on pages in mobile */
+    .coursecontrols .editingbutton,
+    .header-pageheadingbutton .btn.btn-secondary {
+        display: none;
+    }
+}
+
+/* Guided tour */
+
+@media all and (max-width: 576px) {
+    .modal-footer {
+        flex-wrap: wrap;
+        max-width: 480 px;
+        justify-content: center;
+    }
+
+    .modal-footer button {
+        margin-bottom: 10px;
+    }
+
+    .modal-dialog {
+        left: 10px;
+    }
+
+    .mform {
+        padding-left: 10px;
+    }
+
+    .nav-link {
+        padding: 5px;
+    }
+}
+
+/* messaging */
+
+@media all and (max-width: 576px) {
+
+    button[data-action="send-message"] {
+        overflow :hidden;
+        width: 36px;
+        height: 36px;
+        text-align: left;
+    }
+
+    button[data-action="show-contacts"],
+    button[data-action="start-delete-messages"] {
+        overflow: hidden;
+        width: 18px;
+        text-align: left;
+    }
+
+    button[data-action="send-message"]::before {
+        content : "\f1d8";
+        font-family: "FontAwesome";
+        font-size: 1.4em;
+    }
+
+    button[data-action="show-contacts"]::before {
+        content : "\f053";
+        font-family: "FontAwesome";
+        font-size: 20px;
+    }
+
+    button[data-action="start-delete-messages"]::before {
+        content: "\f040";
+        font-family: "FontAwesome";
+        font-size: 20px;
+    }
+}
+
+@media all and (min-width: 1500px) {
+    .container {
+        max-width: 1480px !important;
+    }
+}
+
+@media all and (min-width: 1920px) {
+    .container {
+        max-width: 1800px !important;
+    }
+}
+
+@media (max-width: 576px) {
+    #go-to-bottom, #back-to-top {
+        right: 15px;
+    }
+
+    #page-my-index .card {
+        border:none;
+    }
+}

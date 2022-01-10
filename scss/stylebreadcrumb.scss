@@ -1,0 +1,38 @@
+/* Default breadcrumb style */
+nav[role="navigation"] ol.breadcrumb li a,
+nav[role="navigation"] ol.breadcrumb li a {
+    color: $breadcrumb-fg;
+    background-color: $breadcrumb-bg;
+}
+
+nav[role="navigation"] ol.breadcrumb.style1 li a,
+nav[role="navigation"] ol.breadcrumb.style4 li a {
+    color: $breadcrumb-fg;
+}
+
+nav[role="navigation"] ol.breadcrumb.style1 li::after,
+nav[role="navigation"] ol.breadcrumb.style1 li::after {
+    border-left-color: $breadcrumb-bg;
+}
+
+nav[role="navigation"] ol.breadcrumb.style1 li,
+nav[role="navigation"] ol.breadcrumb.style4 li {
+    color: $breadcrumb-fg;
+    background-color: $breadcrumb-bg;
+    border-color: $breadcrumb-bg;
+}
+
+nav[role="navigation"] ol.breadcrumb.style1 li::before,
+nav[role="navigation"] ol.breadcrumb.style4 li::before {
+    border-left-color: $breadcrumb-fg;
+}
+
+ul.breadcrumb.style1 li.active, .breadcrumb.style1 li:hover,
+ul.breadcrumb.style4 li.active, .breadcrumb.style4 li:hover{
+    background-color: transparent;
+}
+
+ul.breadcrumb.style1 li.active:after, .breadcrumb.style1 li:hover:after,
+ul.breadcrumb.style4 li.active:after, .breadcrumb.style4 li:hover:after {
+    background-color: transparent;
+}

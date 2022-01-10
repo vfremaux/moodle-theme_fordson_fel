@@ -1,0 +1,337 @@
+/* Body height fix */
+
+body {
+    height: initial  !important;
+}
+
+.filemanager-container {
+    position: relative;
+}
+
+.breadcrumb{
+    padding: .25rem 1rem;
+    border-radius: 4px;
+}
+
+#page-login-index .customloginimage {
+    margin-bottom: 0;
+}
+
+#page-course-view-grid .activity {
+    border-bottom: none;
+}
+
+#page-course-view-grid td.custombox-header-thumb.instructions {
+    min-width: 75px;
+}
+
+/* ======= USER PREFERENCES ======== */
+
+/* titre des notification largeur des colonnes corrigé */
+.preferences-container .preference-table tr td:not(:first-child) {
+    width: 250px;
+    text-align: center;
+}
+
+.preferences-container .preference-table .preference-row .preference-state .preference-state-status-container {
+    width: 70px;
+}
+
+/* réduction du container pour éviter ascenseur de droite */
+.container-fluid {
+    width: 98%;
+}
+
+#page-wrapper {
+    height: initial;
+}
+
+/* je vais voir les préférence d'un autre usager, décalage des boutons sur le headerbkg */
+.page-context-header .header-button-group {
+    margin-left: 100px;
+}
+
+.logininfo, .purgecaches {
+    margin-top: 10px;
+    text-align: center;
+}
+
+.purgecaches {
+    border: 1px black dashed;
+    background-color: #FFFF80;
+    border-radius: 5px;
+    padding: 5px;
+}
+
+.purgecaches a {
+    color: #444 !important;
+}
+
+.tool_dataprivacy,
+.performanceinfo.pageinfo {
+    margin-left:2rem;
+}
+
+.navbar {
+    width: 100%;
+}
+
+.navbar-nav .icon.shadow {
+    -webkit-filter: grayscale(100%); /* Safari 6.0 - 9.0 */
+    filter: grayscale(100%);
+    opacity:0.6;
+    -moz-opacity:0.6;
+}
+
+.local-my-fp-coursebox.dimmed .local-my-fp-coursename {
+    background-image: url(/theme/fordson_fel/pix/hidden.png);
+    background-size: 30%;
+    background-repeat: no-repeat;
+    background-position: 100% 50%;
+}
+
+[region="blocks-region"] h2 {
+    font-size: 1.3rem;
+}
+
+.format-page #page-region-top {
+    height: 70px;
+    margin-bottom: 0px;
+}
+
+/* Block page_tracker */
+
+a.block-pagetracker.current {
+    text-decoration: underline;
+}
+
+.slick-dots {
+    width: 100%;
+    margin-bottom: 20px !important;
+}
+
+span.site-name.d-none.d-md-inline {
+    display:none!important;
+}
+
+[data-tooltip]::before {
+    opacity: 0;
+}
+
+#blockslider {
+    display: none;
+}
+
+#blocksliderbutton {
+    display: none;
+}
+
+.nav-link {
+    margin-left: 5px;
+}
+
+nav[role="navigation"] ol.breadcrumb.style1 li {
+   margin-bottom: 0;
+}
+
+#page-course-view-grid .section-navigation.navigationtitle {
+    text-align: center;
+}
+
+.felement.fgroup input[type="radio"] {
+    margin-right: 10px;
+    margin-left: 20px;
+}
+
+#custom_menu_1 > div > ul > li > a {
+    cursor: pointer;
+}
+
+#menu_lang > div > ul > li > a {
+    cursor: pointer;
+    background: none;
+    border: none;
+}
+
+#page-mod-quiz-attempt .prompt {
+    background-color: #e6e6e6;
+    max-width: 30%;
+    -webkit-border-radius: 8px;
+    padding: .3rem .5rem;
+}
+
+#page-mod-quiz-attempt #region-main {
+    border: none;
+}
+
+img.activityicon {
+    margin-right: 20px;
+    margin-bottom: 10px;
+}
+
+/* login image tuning */
+.customloginimage {
+    width: 100%;
+    background-position: top;
+}
+
+/* login form vertical gutter */
+#page-login-index #region-main {
+    top: 2em;
+}
+
+/* Dashboard panels fixes */
+.dashtitle h3 {
+    color: #fff;
+    border: 1px solid #ccc;
+    padding: .3rem;
+    font-size: 1.3rem;
+}
+
+.dashtitle > p {
+    display: none;
+}
+
+.staffmember img {
+    display: none;
+}
+
+.studentdashboard .list-group-item {
+    padding: .2rem .5rem;
+}
+
+.studentdashboard .fa-map::before,
+.studentdashboard .fa-check-square-o::before,
+.studentdashboard .fa-users::before,
+.studentdashboard .fa-question-circle::before,
+.studentdashboard .fa-trophy::before,
+.teacherdashboard i.dashicon {
+    display: none;
+}
+
+footer {
+    /* position:fixed; */
+    bottom: 0;
+    width: 100%;
+    z-index: 1000;
+}
+
+.card-text.content.calendarwrapper {
+    margin-top: 30px;
+}
+
+/* Overlapping calendar content on editing controls */
+.block_calendar_month .content {
+    margin-top: 30px;
+}
+
+#page-course-view_topics .course-content .section-summary {
+    border: none;
+}
+
+.course-content .single-section .section-navigation {
+    border-top: none;
+}
+
+.section li.activity {
+    border-bottom: none;
+}
+
+.by-theme-return-button {
+    margin: 20px auto;
+    text-align: center;
+}
+
+.toggle-password {
+    margin-top: 8px;
+    margin-left: 8px;
+}
+
+/* fix the controls on blocs for collapsend blocks */
+.block_with_controls > .card-body .header {
+    min-height: 50px;
+}
+
+/* bottom middle footer*/
+.middle-footer {
+    text-align: center;
+}
+
+/* bottom right footer*/
+.right-footer {
+    text-align: right;
+}
+
+.middle-footer,
+.left-footer,
+.right-footer {
+    padding: 10px;
+}
+
+.unlist li {
+    display: flex;
+}
+
+.hide-on-scroll {
+    opacity: 0;
+    transition: opacity 0.2s ease-out;
+}
+
+.hide-on-scroll.show {
+    opacity: 1;
+}
+
+#dyslexic-toggle-switch {
+    margin: 5px 20px 2px 10px;
+    padding: 3px 10px;
+    border-radius: 4px;
+}
+
+.pagelayout-embeded #page #page-content,
+.pagelayout-popup #page #page-content {
+    margin-top: 0;
+}
+
+/* search engine in navbar : enlarge it to add the clearmarks link */
+.search-input-wrapper > form {
+    min-width: 155px;
+}
+
+.search-input-wrapper.expanded {
+    width: 172px;
+}
+
+input[type="radio"] {
+	margin-right: 10px;
+}
+
+input[type="checkbox"] {
+    margin-right: 10px;
+}
+
+/* confidentiality on IP in log reports */
+table.reportlog td:last-child,
+table.reportlog th:last-child {
+    display: none;
+}
+
+/* Site indicators */
+
+.site-indicators .chartjs-size-monitor {
+    width: 50%;
+}
+
+.site-indicators.alertmessage {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+#page-course-index-category .generalbox.info {
+    border: none;
+    text-align: center;
+}
+
+#page-course-index-category .course-category-ctls {
+    display: none;
+}
