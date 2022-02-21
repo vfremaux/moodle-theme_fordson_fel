@@ -1,6 +1,6 @@
 
 
-@media screen and (max-width: 480px) {
+@media screen and (max-width: 576px) {
 
     .breadcrumb {
         background-color: initial;
@@ -48,5 +48,29 @@
     /* mask menu "my courses" */
     nav[role="navigation"] ol.breadcrumb.style1 li:first-of-type a::before {
          color: $brandprimary;
+    }
+    
+    #page-region-main .custombox-header-thumb {
+        min-width: 40px;
+        width: 40px;
+    }
+
+    .custombox-content {
+        padding-left: 10px;
+    }
+}
+
+@media screen and (max-width: 355px) {
+
+    .navbar img.userpicture {
+        margin-right: 0;
+    }
+    
+    .navbar .usermenu .dropdown-toggle::after {
+        display: none;
+    }
+    
+    .navbar .popover-region.collapsed {
+        display: none;
     }
 }

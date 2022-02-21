@@ -52,6 +52,15 @@ $setting = new admin_setting_configcheckbox($name, $title, $description, $defaul
 $setting->set_updatedcallback('theme_reset_all_caches');
 $page->add($setting);
 
+// login helpbutton
+$name = $themename.'/loginhelpbutton';
+$title = get_string('loginhelpbutton', 'theme_fordson_fel');
+$description = get_string('loginhelpbutton_desc', 'theme_fordson_fel');
+$default = '';
+$setting = new admin_setting_configtext($name, $title, $description, $default);
+$setting->set_updatedcallback('theme_reset_all_caches');
+$page->add($setting);
+
 // Top image.
 $name = $themename.'/logintopimage';
 $title = get_string('logintopimage', 'theme_fordson_fel');
@@ -61,9 +70,9 @@ $setting->set_updatedcallback('theme_reset_all_caches');
 $page->add($setting);
 
 // Login form color.
-$name = $themename.'/fploginformbg';
-$title = get_string('fploginformbg', 'theme_fordson_fel');
-$description = get_string('fploginformbg_desc', 'theme_fordson_fel');
+$name = $themename.'/fploginformbkg';
+$title = get_string('fploginformbkg', 'theme_fordson_fel');
+$description = get_string('fploginformbkg_desc', 'theme_fordson_fel');
 $default = '#ffffff';
 $setting = new admin_setting_configcolourpicker($name, $title, $description, $default);
 $setting->set_updatedcallback('theme_reset_all_caches');
@@ -81,14 +90,14 @@ $page->add($setting);
 // This is the descriptor for icon One
 $name = $themename.'/loginnavicon1info';
 $title = get_string('loginnavicon1', 'theme_fordson_fel');
-$description = get_string('navicondesc', 'theme_fordson_fel');
+$description = get_string('navicon_desc', 'theme_fordson_fel');
 $setting = new admin_setting_heading($name, $title, $description);
 $page->add($setting);
 
 // icon One
 $name = $themename.'/loginnav1icon';
 $title = get_string('navicon', 'theme_fordson_fel');
-$description = get_string('navicondesc', 'theme_fordson_fel');
+$description = get_string('navicon_desc', 'theme_fordson_fel');
 $default = '';
 $setting = new admin_setting_configtext($name, $title, $description, $default);
 $setting->set_updatedcallback('theme_reset_all_caches');
@@ -96,7 +105,7 @@ $page->add($setting);
 
 $name = $themename.'/loginnav1titletext';
 $title = get_string('loginnavicontitletext', 'theme_fordson_fel');
-$description = get_string('loginnavicontitletextdesc', 'theme_fordson_fel');
+$description = get_string('loginnavicontitletext_desc', 'theme_fordson_fel');
 $default = '';
 $setting = new admin_setting_configtext($name, $title, $description, $default);
 $setting->set_updatedcallback('theme_reset_all_caches');
@@ -104,7 +113,7 @@ $page->add($setting);
 
 $name = $themename.'/loginnav1icontext';
 $title = get_string('loginnavicontext', 'theme_fordson_fel');
-$description = get_string('loginnavicontextdesc', 'theme_fordson_fel');
+$description = get_string('loginnavicontext_desc', 'theme_fordson_fel');
 $default = '';
 $setting = new admin_setting_confightmleditor($name, $title, $description, $default);
 $setting->set_updatedcallback('theme_reset_all_caches');
@@ -113,13 +122,13 @@ $page->add($setting);
 // This is the descriptor for icon One
 $name = $themename.'/loginnavicon2info';
 $title = get_string('loginnavicon2', 'theme_fordson_fel');
-$description = get_string('navicondesc', 'theme_fordson_fel');
+$description = get_string('navicon_desc', 'theme_fordson_fel');
 $setting = new admin_setting_heading($name, $title, $description);
 $page->add($setting);
 
 $name = $themename.'/loginnav2icon';
 $title = get_string('navicon', 'theme_fordson_fel');
-$description = get_string('navicondesc', 'theme_fordson_fel');
+$description = get_string('navicon_desc', 'theme_fordson_fel');
 $default = '';
 $setting = new admin_setting_configtext($name, $title, $description, $default);
 $setting->set_updatedcallback('theme_reset_all_caches');
@@ -127,7 +136,7 @@ $page->add($setting);
 
 $name = $themename.'/loginnav2titletext';
 $title = get_string('loginnavicontitletext', 'theme_fordson_fel');
-$description = get_string('loginnavicontitletextdesc', 'theme_fordson_fel');
+$description = get_string('loginnavicontitletext_desc', 'theme_fordson_fel');
 $default = '';
 $setting = new admin_setting_configtext($name, $title, $description, $default);
 $setting->set_updatedcallback('theme_reset_all_caches');
@@ -135,7 +144,7 @@ $page->add($setting);
 
 $name = $themename.'/loginnav2icontext';
 $title = get_string('loginnavicontext', 'theme_fordson_fel');
-$description = get_string('loginnavicontextdesc', 'theme_fordson_fel');
+$description = get_string('loginnavicontext_desc', 'theme_fordson_fel');
 $default = '';
 $setting = new admin_setting_confightmleditor($name, $title, $description, $default);
 $setting->set_updatedcallback('theme_reset_all_caches');
@@ -144,13 +153,13 @@ $page->add($setting);
 // This is the descriptor for icon three
 $name = $themename.'/loginnavicon3info';
 $title = get_string('loginnavicon3', 'theme_fordson_fel');
-$description = get_string('navicondesc', 'theme_fordson_fel');
+$description = get_string('navicon_desc', 'theme_fordson_fel');
 $setting = new admin_setting_heading($name, $title, $description);
 $page->add($setting);
 
 $name = $themename.'/loginnav3icon';
 $title = get_string('navicon', 'theme_fordson_fel');
-$description = get_string('navicondesc', 'theme_fordson_fel');
+$description = get_string('navicon_desc', 'theme_fordson_fel');
 $default = '';
 $setting = new admin_setting_configtext($name, $title, $description, $default);
 $setting->set_updatedcallback('theme_reset_all_caches');
@@ -158,7 +167,7 @@ $page->add($setting);
 
 $name = $themename.'/loginnav3titletext';
 $title = get_string('loginnavicontitletext', 'theme_fordson_fel');
-$description = get_string('loginnavicontitletextdesc', 'theme_fordson_fel');
+$description = get_string('loginnavicontitletext_desc', 'theme_fordson_fel');
 $default = '';
 $setting = new admin_setting_configtext($name, $title, $description, $default);
 $setting->set_updatedcallback('theme_reset_all_caches');
@@ -166,7 +175,7 @@ $page->add($setting);
 
 $name = $themename.'/loginnav3icontext';
 $title = get_string('loginnavicontext', 'theme_fordson_fel');
-$description = get_string('loginnavicontextdesc', 'theme_fordson_fel');
+$description = get_string('loginnavicontext_desc', 'theme_fordson_fel');
 $default = '';
 $setting = new admin_setting_confightmleditor($name, $title, $description, $default);
 $setting->set_updatedcallback('theme_reset_all_caches');
@@ -175,13 +184,13 @@ $page->add($setting);
 // This is the descriptor for icon four
 $name = $themename.'/loginnavicon4info';
 $title = get_string('loginnavicon4', 'theme_fordson_fel');
-$description = get_string('navicondesc', 'theme_fordson_fel');
+$description = get_string('navicon_desc', 'theme_fordson_fel');
 $setting = new admin_setting_heading($name, $title, $description);
 $page->add($setting);
 
 $name = $themename.'/loginnav4icon';
 $title = get_string('navicon', 'theme_fordson_fel');
-$description = get_string('navicondesc', 'theme_fordson_fel');
+$description = get_string('navicon_desc', 'theme_fordson_fel');
 $default = '';
 $setting = new admin_setting_configtext($name, $title, $description, $default);
 $setting->set_updatedcallback('theme_reset_all_caches');
@@ -189,7 +198,7 @@ $page->add($setting);
 
 $name = $themename.'/loginnav4titletext';
 $title = get_string('loginnavicontitletext', 'theme_fordson_fel');
-$description = get_string('loginnavicontitletextdesc', 'theme_fordson_fel');
+$description = get_string('loginnavicontitletext_desc', 'theme_fordson_fel');
 $default = '';
 $setting = new admin_setting_configtext($name, $title, $description, $default);
 $setting->set_updatedcallback('theme_reset_all_caches');
@@ -197,7 +206,7 @@ $page->add($setting);
 
 $name = $themename.'/loginnav4icontext';
 $title = get_string('loginnavicontext', 'theme_fordson_fel');
-$description = get_string('loginnavicontextdesc', 'theme_fordson_fel');
+$description = get_string('loginnavicontext_desc', 'theme_fordson_fel');
 $default = '';
 $setting = new admin_setting_confightmleditor($name, $title, $description, $default);
 $setting->set_updatedcallback('theme_reset_all_caches');

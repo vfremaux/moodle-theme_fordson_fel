@@ -48,18 +48,26 @@
         "hasregionmainsettingsmenu": false
     }
 }}
-<!-- fordson_fel:columns2 -->
+<!-- fordson_fel/columns1 -->
 <!-- boost:head -->
 {{> theme_boost/head }}
 <!-- boost:head -->
 
 <body {{{ bodyattributes }}}>
 
+<!-- accessibility add-ons -->
+<style>
+{{{dynamiccss}}}
+</style>
+<!-- /accessibility add-ons -->
+
 <div id="page-wrapper">
 
     {{{ output.standard_top_of_body_html }}}
 
+    {{^nonavbar}}
     {{>theme_fordson_fel/navbar}}
+    {{/nonavbar}}
 
     <div id="page">
 
@@ -68,7 +76,7 @@
             {{{ output.teacherdash }}}
             {{>theme_fordson_fel/blockspanelslider}}
             {{{ output.full_header }}}
-            
+
             <div id="page-content" class="row pb-3">
                 <div id="region-main-box" class="col-12">
                     {{#hasregionmainsettingsmenu}}
@@ -112,10 +120,16 @@
 
 </div>
 
+{{^nofooter}}
 {{> theme_fordson_fel/footer }}
+{{/nofooter}}
 
 <a href="#pagebottom" id="go-to-bottom" class="btn btn-primary btn-lg show" role="button" title="{{#str}}gotobottom, theme_fordson_fel{{/str}}"><i class="fa fa-arrow-down" aria-hidden="true"></i></a>
 <a href="#" id="back-to-top" class="btn btn-primary btn-lg" role="button" title="{{#str}}backtotop, theme_fordson_fel{{/str}}"><i class="fa fa-arrow-up" aria-hidden="true"></i></a>
+
+{{#nofooter}}
+{{{ output.standard_end_of_body_html }}}
+{{/nofooter}}
 
 </body>
 </html>
@@ -123,4 +137,4 @@
 require(['theme_boost/loader']);
 require(['jquery','theme_boost/tooltip'], function($){$('[data-tooltip="tooltip"]').tooltip()});
 {{/js}}
-<!-- /fordson_fel:columns2 -->
+<!-- /fordson_fel/columns1 -->

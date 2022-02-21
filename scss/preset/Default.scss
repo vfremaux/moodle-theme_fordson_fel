@@ -1,4 +1,6 @@
-// Bootstrap variables
+/* From Defaults.scss */
+
+/* Bootstrap variables */
 
 $white:    #fff !default;
 $gray-100: #f8f9fa !default;
@@ -27,7 +29,9 @@ $teal:    #20c997 !default;
 $cyan:    #5bc0de !default;
 
 $brandprimary:       #447198 !default;
-$secondary:     $gray-800 !default;
+$brandprimaryalt:    #ffffff !default;
+$brandsecondary:     $gray-800 !default;
+$brandsecondaryalt:     $gray-100 !default;
 $success:       $teal !default;
 $info:          $cyan !default;
 $warning:       $yellow !default;
@@ -35,7 +39,7 @@ $danger:        $red !default;
 $light:         $gray-100 !default;
 $dark:          $gray-800 !default;
 
-// Options
+/* Options */
 $enable-rounded: false !default;
 
 // Body
@@ -45,16 +49,16 @@ $drawer-bg:     rgba(235, 251, 255, 0.8) !default;
 $card-bg:       $white !default;
 $footer-bg:     rgba(14, 62, 70, 0.9) !default;
 
-// Fonts
+/* Fonts */
 $font-size-base: 0.9375rem !default;
 $headings-font-weight:   300 !default;
 
-// Navbar
+/* Navbar */
 $navbar-dark-hover-color:           rgba($white, 1) !default;
 $navbar-light-hover-color:          rgba($black, 1) !default;
 $navbarurl : #fff !default;
 
-// Breadcrumbs
+/* Breadcrumbs */
 $breadcrumb-padding-y:              .25rem !default;
 $breadcrumb-padding-x:              0 !default;
 $breadcrumb-item-padding:           .5rem !default;
@@ -66,12 +70,12 @@ $breadcrumb-bg: $brandprimary !default;
 $breadcrumb-bg-hover: darken($brandprimary, 15%) !default;
 $breadcrumb-text-color: #ffffff !default;
 
-// Alerts
+/* Alerts */
 $alert-border-width:                0 !default;
 
 $theme-colors: (
     primary: $brandprimary,
-    secondary: $gray-200,
+    secondary: $brandsecondary,
     success: $success,
     info: $info,
     warning: $orange,
@@ -81,15 +85,15 @@ $theme-colors: (
 );
 
 
-// Import FontAwesome.
+/* Import FontAwesome. */
 @import "../../boost/scss/fontawesome";
 
-// Import All of Bootstrap
+/* Import All of Bootstrap */
 @import "../../boost/scss/bootstrap";
 
-// Import Core moodle CSS
+/* Import Core moodle CSS */
 @import "../../boost/scss/moodle";
 
 
-// Preset CSS
+/* Preset CSS */
 

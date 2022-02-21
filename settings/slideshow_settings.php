@@ -68,7 +68,7 @@ $page->add($setting);
 // This is the descriptor for slide
 $name = $themename.'/slide1info';
 $heading = get_string('slide1info', 'theme_fordson_fel');
-$information = get_string('slide1infodesc', 'theme_fordson_fel');
+$information = get_string('slide1info_desc', 'theme_fordson_fel');
 $setting = new admin_setting_heading($name, $heading, $information);
 $page->add($setting);
 
@@ -101,7 +101,7 @@ $page->add($setting);
 // This is the descriptor for slide
 $name = $themename.'/slide2info';
 $heading = get_string('slide2info', 'theme_fordson_fel');
-$information = get_string('slide2infodesc', 'theme_fordson_fel');
+$information = get_string('slide2info_desc', 'theme_fordson_fel');
 $setting = new admin_setting_heading($name, $heading, $information);
 $page->add($setting);
 
@@ -134,7 +134,7 @@ $page->add($setting);
 // This is the descriptor for slide
 $name = $themename.'/slide3info';
 $heading = get_string('slide3info', 'theme_fordson_fel');
-$information = get_string('slide3infodesc', 'theme_fordson_fel');
+$information = get_string('slide3info_desc', 'theme_fordson_fel');
 $setting = new admin_setting_heading($name, $heading, $information);
 $page->add($setting);
 // Slide title

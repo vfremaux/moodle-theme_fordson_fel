@@ -29,7 +29,7 @@ $teal:    #20c997 !default;
 $cyan:    #009CDC !default;
 
 $brandprimary:       $purple !default;
-$secondary:     #A991D4 !default;
+$brandsecondary:     #A991D4 !default;
 $success:       $green !default;
 $info:          $cyan !default;
 $warning:       $yellow !default;
@@ -186,7 +186,7 @@ $list-group-disabled-color:         lighten($list-group-bg, 30%);
 // Tables ======================================================================
 
 .table .thead-dark th {
-  background-color: $secondary;
+  background-color: $brandsecondary;
   border-color: $table-border-color;
 }
 

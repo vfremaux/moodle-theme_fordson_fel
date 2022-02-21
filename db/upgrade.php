@@ -25,7 +25,7 @@
  * to perform all the necessary actions to upgrade
  * your older installation to the current version.
  *
- * @package report_trainingsessions
+ * @package theme_fordson_fel
  * @copyright 2010
  * @author Valery Fremaux (valery.fremaux@gmail.com)
  *
@@ -77,6 +77,32 @@ function xmldb_theme_fordson_fel_upgrade($oldversion) {
         $DB->execute($sql);
 
         upgrade_plugin_savepoint(true, 2019030600, 'theme', 'fordson_fel');
+    }
+
+    if ($oldversion < 2022021600) {
+        // Remap old config keys "bg" to "bkg"
+
+        $themeconfig = get_config('theme_fordson_fel');
+        foreach ($themeconfig as $key => $value) {
+            if (preg_match('/bg$/', $key)) {
+                $newkey = preg_replace('/bg$/', 'bkg', $key);
+                set_config($newkey, $themeconfig->$key, 'theme_fordson_fel');
+                set_config($key, null, 'theme_fordson_fel');
+            }
+            if (preg_match('/bghov$/', $key)) {
+                $newkey = preg_replace('/bghov$/', 'bkghov', $key);
+                set_config($newkey, $themeconfig->$key, 'theme_fordson_fel');
+                set_config($key, null, 'theme_fordson_fel');
+            }
+            if (preg_match('/background$/', $key)) {
+                // Essentially bodybackground.
+                $newkey = preg_replace('/background$/', 'bkg', $key);
+                set_config($newkey, $themeconfig->$key, 'theme_fordson_fel');
+                set_config($key, null, 'theme_fordson_fel');
+            }
+        }
+
+        upgrade_plugin_savepoint(true, 2022021600, 'theme', 'fordson_fel');
     }
 
     return true;

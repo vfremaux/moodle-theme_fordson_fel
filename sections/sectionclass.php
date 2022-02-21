@@ -44,7 +44,7 @@ if (!$course = $DB->get_record('course', array('id' => $section->course))) {
 
 $context = context_course::instance($course->id);
 $PAGE->set_context($context);
-$PAGE->requires->js('/theme/fordson_fel/sections/js/changesectionclass.js');
+$PAGE->requires->js_call_amd('theme_fordson_fel/sectionstyle', 'init');
 $PAGE->requires->css('/theme/fordson_fel/sections/styles.css');
 
 require_login($course);
@@ -118,7 +118,11 @@ if ($data = $mform->get_data()) {
         }
     }
 
-    $courseurl = new moodle_url('/course/view.php', array('id' => $course->id, 'section' => $sr), 'section-'.$section->section);
+    $params = array('id' => $course->id);
+    if (!empty($sr)) {
+        $params['section'] = $sr;
+    }
+    $courseurl = new moodle_url('/course/view.php', $params, 'section-'.$section->section);
     redirect($courseurl);
 }
 

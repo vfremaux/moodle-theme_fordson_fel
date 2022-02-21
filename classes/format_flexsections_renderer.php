@@ -490,19 +490,19 @@ class theme_fordson_fel_format_flexsections_renderer extends format_flexsections
         $str = '';
 
         $params = array('type' => 'button',
-                        'class' => 'btn flexsection-global-control',
+                        'class' => 'btn btn-secondary flexsection-global-control',
                         'id' => 'flexsections-control-collapseall',
                         'value' => get_string('collapseall', 'theme_fordson_fel'));
         $str .= html_writer::tag('input', '', $params);
 
         $params = array('type' => 'button',
-                        'class' => 'btn flexsection-global-control',
+                        'class' => 'btn btn-secondary flexsection-global-control',
                         'id' => 'flexsections-control-expandall',
                         'value' => get_string('expandall', 'theme_fordson_fel'));
         $str .= html_writer::tag('input', '', $params);
 
         $params = array('type' => 'button',
-                        'class' => 'btn flexsection-global-control',
+                        'class' => 'btn btn-secondary flexsection-global-control',
                         'id' => 'flexsections-control-map',
                         'value' => get_string('map', 'theme_fordson_fel'));
         $str .= html_writer::tag('input', '', $params);

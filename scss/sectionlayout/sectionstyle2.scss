@@ -48,23 +48,26 @@
 }
 
 h3.sectionname {
-    color: $card-bg;
+    color: $brandprimaryalt;
     padding: $spacer;
     background-color: $brandprimary;
 }
 
 h3.sectionname a {
-    color: $card-bg;
+    background-color: $brandprimary;
+    color: $brandprimaryalt;
 }
 
 .section_action_menu {
-    background-color: $card-bg;
+    background-color: $brandprimary;
+    color: $brandprimaryalt;
     padding: .25rem .5rem;
 }
 
 .course-content ul.topics li.section .content,
 .course-content ul.weeks li.section .content {
-    background-color: $card-bg;
+    background-color: $brandprimary;
+    color: $brandprimaryalt;
     border: 1px solid $gray-300;
     padding-top: 0;
     margin-top: 2rem;
@@ -237,10 +240,12 @@ span.instancename {
 
     h3.sectionname {
         color: $brandprimary;
+        background-color: $brandprimaryalt;
         padding: $spacer;
         background-color: $perception-base;
     }
     h3.sectionname a {
+        background-color: $brandprimaryalt;
         color: $brandprimary;
     }
     #page-course-view-topics .course-content .section-summary {

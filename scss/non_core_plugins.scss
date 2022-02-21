@@ -1,0 +1,201 @@
+
+/* page tracker */
+
+/* couleur de fond page active format page */
+.pagetracker-page.is-current-page a {
+    color: $brandprimaryalt;
+}
+
+.pagetracker-page.is-current-page {
+    background-color: $brandprimary;
+    color: $brandprimaryalt;
+    box-shadow: 0 0 0 0 $brandsecondary;
+}
+
+.pagetracker-page:hover a {
+    color: $brandsecondaryalt;
+    text-decoration: none;
+}
+
+.pagetracker-page:hover {
+    background-color: $brandsecondary;
+    color: $brandsecondaryalt;
+    box-shadow: 0 0 0 0 $brandsecondary;
+}
+
+.pagetracker-name a.is-current-page {
+    color: $brandsecondaryalt;
+    text-decoration: none;
+}
+
+/* customlabels */
+
+.custombox-caption.sectionheading {
+    font-weight: 300;
+    border-bottom: 1px solid $brandprimary;
+}
+
+.custombox-caption.sequenceheading {
+    font-weight: 300;
+    color: $brandprimary;
+}
+
+.custombox-caption.unitheading {
+    border-bottom: 1px solid $brandsecondary;
+    color: $brandsecondary;
+    font-weight: 300;
+}
+
+.custombox-title.courseclassifier,
+.custombox-title.coursedata,
+.custombox-title.authordata {
+    color: $brandprimaryalt;
+    background-color: $brandprimary;
+}
+
+.custombox-param.courseclassifier,
+.custombox-param.coursedata,
+.custombox-param.courseheading,
+.custombox-param.authordata {
+    color: $brandsecondaryalt;
+    background-color: $brandsecondary;
+}
+
+.custombox-heading.courseheading {
+    font-size: 2.2em;
+}
+
+.custombox-collapsedtext-handle h4 {
+    margin-bottom: 0 !important;
+    border: 1px solid $brandprimary !important;
+    border-radius: 8px;
+    padding: 5px !important;
+}
+
+/* local_course_index */
+
+.courseindex-readmorelink {
+    background-color: $brandsecondary;
+    color: $white;
+}
+
+#courseindex-nav {
+    background-color: $brandprimary;
+}
+
+#courseindex-nav .is-current {
+    background-color: $brandsecondary;
+}
+
+#courseindex-courses-panel h2 {
+    background-color: $brandprimary;
+    color: $white;
+    border-radius: 4px;
+    padding-left: 20px;
+}
+
+.category-name:hover{
+    background-color: $blue;
+    border-radius: 4px;
+}
+
+#courseindex-nav a {
+    text-decoration: none;
+}
+
+/* local_my */
+
+td.course-category {
+    background-color: $gray-100;
+    border-radius: 4px;
+    color: $brandprimary;
+}
+
+.local-my-promowrap {
+    background-color: transparent;
+    box-shadow: 0 1px 4px 0 $brandprimary;
+   -moz-box-shadow: 0 1px 4px 0 $brandprimary;
+}
+
+.slick-dots li button {
+    border-radius: 4px;
+    background-color: $brandprimary !important;
+    border: none;
+    color: $brandprimaryalt !important;
+}
+
+a#local-my-cats-collapseall-myauthcourses,
+a#local-my-cats-collapseall-mymanagedcourses,
+a#local-my-cats-collapseall-courseareas,
+a#local-my-cats-collapseall-courseareas2,
+a#local-my-cats-expandall-availablecourses,
+a.local-my-area-ctls  {
+    background-color: $brandsecondary;
+    color: $white !important;
+    margin-bottom: 20px;
+    padding: 3px 10px;
+    border-radius: 4px;
+    box-shadow: 0 0 0 0.2rem rgba(37,53,69,.5);
+}
+
+a#local-my-cats-expandall-myauthcourses,
+a#local-my-cats-expandall-mymanagedcourses,
+a#local-my-cats-expandall-courseareas,
+a#local-my-cats-expandall-courseareas2,
+a#local-my-cats-expandall-availablecourses {
+    background-color: $brandsecondary;
+    color: $white;
+    margin-bottom: 20px;
+    padding: 3px 10px;
+    border-radius: 4px;
+}
+
+/* sharedresources */
+/*onglet actif notice*/
+.path-mod-sharedresource .tabrow0 .here a span {
+    background-color: $brandprimary;
+    color: $brandprimaryalt;
+}
+
+.browser-sub-category-count {
+    background-color: $brandprimary;
+    color: $brandprimaryalt;
+}
+
+.sharedresources-pager a {
+    background-color: $brandprimary;
+    color: $brandprimaryalt;
+    border-radius: 4px;
+    padding-left: 10px;
+    padding-right: 10px;
+    margin-right: 20px;
+    text-decoration: none;
+}
+
+#sharedresources-link-to-search input[type=button],
+#sharedresources-link-to-browser input[type=button] {
+    background-color: $brandprimary;
+    color: $brandprimaryalt;
+}
+
+.quiz-behaviour-progress-bar {
+    background-color: $brandprimary;
+}
+
+#quiz-behaviour-progress-indicator {
+    background-color: #eee;
+}
+
+/* userquiz */
+
+/*=== block userquiz monitor ===*/
+
+.userquiz-monitor-bg {
+    background-color: #eee;
+    color: $brandprimary;
+    border-radius: 4px;
+}
+
+.block_userquiz_monitor h1 {
+    color: $brandprimary;
+}

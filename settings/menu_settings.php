@@ -30,7 +30,7 @@ $page = new admin_settingpage($themename.'_menusettings', get_string('menusettin
 // This is the descriptor for Course Management Panel
 $name = $themename.'/coursemanagementinfo';
 $heading = get_string('coursemanagementinfo', 'theme_fordson_fel');
-$information = get_string('coursemanagementinfodesc', 'theme_fordson_fel');
+$information = get_string('coursemanagementinfo_desc', 'theme_fordson_fel');
 $setting = new admin_setting_heading($name, $heading, $information);
 $page->add($setting);
 
@@ -131,14 +131,14 @@ $page->add($setting);
 // This is the descriptor for course menu
 $name = $themename.'/mycoursesmenuinfo';
 $heading = get_string('mycoursesinfo', 'theme_fordson_fel');
-$information = get_string('mycoursesinfodesc', 'theme_fordson_fel');
+$information = get_string('mycoursesinfo_desc', 'theme_fordson_fel');
 $setting = new admin_setting_heading($name, $heading, $information);
 $page->add($setting);
 
 // Toggle courses display in custommenu.
 $name = $themename.'/displaymycourses';
 $title = get_string('displaymycourses', 'theme_fordson_fel');
-$description = get_string('displaymycoursesdesc', 'theme_fordson_fel');
+$description = get_string('displaymycourses_desc', 'theme_fordson_fel');
 $default = false;
 $setting = new admin_setting_configcheckbox($name, $title, $description, $default, true, false);
 $setting->set_updatedcallback('theme_reset_all_caches');
@@ -147,7 +147,7 @@ $page->add($setting);
 // Toggle courses display in custommenu.
 $name = $themename.'/displaythiscourse';
 $title = get_string('displaythiscourse', 'theme_fordson_fel');
-$description = get_string('displaythiscoursedesc', 'theme_fordson_fel');
+$description = get_string('displaythiscourse_desc', 'theme_fordson_fel');
 $default = false;
 $setting = new admin_setting_configcheckbox($name, $title, $description, $default, true, false);
 $setting->set_updatedcallback('theme_reset_all_caches');
@@ -156,7 +156,7 @@ $page->add($setting);
 // Set terminology for dropdown course list
 $name = $themename.'/mycoursetitle';
 $title = get_string('mycoursetitle','theme_fordson_fel');
-$description = get_string('mycoursetitledesc', 'theme_fordson_fel');
+$description = get_string('mycoursetitle_desc', 'theme_fordson_fel');
 $default = 'course';
 $choices = array(
     'course' => get_string('mycourses', 'theme_fordson_fel'),

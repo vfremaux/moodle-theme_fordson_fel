@@ -15,33 +15,38 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 namespace theme_fordson_fel\output;
 
-use \coding_exception;
-use \html_writer;
-use \renderer_base;
-use \tabobject;
-use \tabtree;
-use \custom_menu_item;
-use \custom_menu;
-use \block_contents;
-use \navigation_node;
-use \action_link;
-use \stdClass;
-use \moodle_url;
-use \preferences_groups;
-use \action_menu;
-use \help_icon;
-use \single_button;
-use \single_select;
-use \paging_bar;
-use \url_select;
-use \context_course;
-use \pix_icon;
-use \theme_config;
+use action_link;
+use action_menu;
+use action_menu_filler;
+use action_menu_link_secondary;
+use block_contents;
+use coding_exception;
+use context_course;
+use context_system;
+use custom_menu;
+use custom_menu_item;
+use help_icon;
+use html_writer;
+use moodle_url;
+use navigation_node;
+use paging_bar;
+use pix_icon;
+use preferences_groups;
+use renderer_base;
+use single_button;
+use single_select;
+use stdClass;
+use tabobject;
+use tabtree;
+use theme_config;
+use url_select;
+use core_text;
 
 defined('MOODLE_INTERNAL') || die;
 
-require_once($CFG->dirroot . "/course/renderer.php");
-require_once($CFG->dirroot . "/course/format/lib.php");
+require_once($CFG->dirroot."/course/renderer.php");
+require_once($CFG->dirroot."/course/format/lib.php");
+require_once($CFG->dirroot."/theme/fordson_fel/compatlib.php");
 
 /**
  * Renderers to align Moodle's HTML with that expected by Bootstrap
@@ -288,9 +293,16 @@ class core_renderer extends \theme_boost\output\core_renderer {
             if ($isimage) {
                 $imageinfo = $file->get_imageinfo();
                 if ($imageinfo['width'] > 750) {
-                    $imageurl = "$CFG->wwwroot/pluginfile.php". '/' . $file->get_contextid();
-                    $imageurl .= '/' . $file->get_component() . '/' . $file->get_filearea();
-                    $imageurl .= $file->get_filepath() . $file->get_filename();
+                    $imageurl = $CFG->wwwroot.'/pluginfile.php/'.$file->get_contextid();
+                    if ($COURSE->format == 'page') {
+                        $component = 'format_page';
+                        $itemid = '';
+                    } else {
+                        $component = 'course';
+                        $itemid = '';
+                    }
+                    $imageurl .= '/'.$component.'/'.$file->get_filearea();
+                    $imageurl .= $itemid.'/'. $file->get_filepath().$file->get_filename();
                     $courseimage = file_encode_url($imageurl , !$isimage);
                     break;
                 }
@@ -370,7 +382,7 @@ class core_renderer extends \theme_boost\output\core_renderer {
                 $title = get_string('editon', 'theme_fordson_fel');
                 $icon = 'fa-edit';
             }
-            return html_writer::tag('a', html_writer::start_tag('i', array(
+            return '<div class="teacherdash nav-item nav-link">'.html_writer::tag('a', html_writer::start_tag('i', array(
                 'class' => $icon . ' fa fa-fw'
             )) . html_writer::end_tag('i'), array(
                 'href' => $url,
@@ -378,8 +390,8 @@ class core_renderer extends \theme_boost\output\core_renderer {
                 'data-tooltip' => "tooltip",
                 'data-placement' => "bottom",
                 'title' => $title,
-            ));
-            return $output;
+            )).'</div>';
+            return '<div class="teacherdash nav-item nav-link">'.$output.'</div>';
         }
     }
 
@@ -996,11 +1008,17 @@ class core_renderer extends \theme_boost\output\core_renderer {
         static $singlejs = false;
 
         $lang = current_language();
+        $sm = get_string_manager();
 
         if (!empty($CFG->langlist)) {
-            $langs = explode(',', $CFG->langlist);
+            $langlist = $sm->get_list_of_languages($lang);
+            $langarr = explode(',', $CFG->langlist);
+            $langs = [];
+            foreach ($langarr as $l) {
+                $langs[$l] = $langlist[$l];
+            }
         } else {
-            $langs = get_string_manager()->get_list_of_translations();
+            $langs = $sm->get_list_of_translations();
         }
 
         $template = new Stdclass;
@@ -1023,7 +1041,8 @@ class core_renderer extends \theme_boost\output\core_renderer {
             $langtpl->langname = $lname;
 
             $currenturl = $ME;
-            $currenturl = preg_replace('/(\&|\?)lang=[a-z]{2}/', '', $currenturl);
+            // consider some langs have a XX_YY form
+            $currenturl = preg_replace('/(\&|\?)lang=[a-z]{2}(_[a-z]{2})?/', '', $currenturl);
 
             if (strpos($currenturl, '?') === false) {
                 $langattr = '?lang='.$l;
@@ -1191,15 +1210,23 @@ class core_renderer extends \theme_boost\output\core_renderer {
     }
 
     public function fp_wonderbox() {
-        global $PAGE;
+        global $PAGE, $CFG;
 
         $context = $this->page->context;
 
         $hascreateicon = (empty($PAGE->theme->settings->createicon && isloggedin() && has_capability('moodle/course:create', $context))) ? false : $PAGE->theme->settings->createicon;
         $createbuttonurl = (empty($PAGE->theme->settings->createbuttonurl)) ? false : $PAGE->theme->settings->createbuttonurl;
+        if (!preg_match('/^https?\\:/', $createbuttonurl)) {
+            // Add wwwroot if relative non http url.
+            $createbuttonurl = $CFG->wwwroot.$createbuttonurl;
+        }
         $createbuttontext = (empty($PAGE->theme->settings->createbuttontext)) ? false : format_string($PAGE->theme->settings->createbuttontext);
         $hasslideicon = (empty($PAGE->theme->settings->slideicon && isloggedin() && !isguestuser())) ? false : $PAGE->theme->settings->slideicon;
         $slideiconbuttonurl = 'data-toggle="collapse" data-target="#collapseExample';
+        if (!preg_match('/^https?\\:/', $slideiconbuttonurl)) {
+            // Add wwwroot if relative non http url.
+            $slideiconbuttonurl = $CFG->wwwroot.$slideiconbuttonurl;
+        }
         $slideiconbuttontext = (empty($PAGE->theme->settings->slideiconbuttontext)) ? false : format_string($PAGE->theme->settings->slideiconbuttontext);
 
         for ($i = 1; $i <= 8; $i++) {
@@ -1212,6 +1239,10 @@ class core_renderer extends \theme_boost\output\core_renderer {
 
             $$hasnaviconkey = (empty($PAGE->theme->settings->$naviconkey && isloggedin() && !isguestuser())) ? false : $PAGE->theme->settings->$naviconkey;
             $$navbuttonurlkey = (empty($PAGE->theme->settings->$navbuttonurlkey)) ? false : $PAGE->theme->settings->$navbuttonurlkey;
+            if (!preg_match('/^https?\\:/', $$navbuttonurlkey)) {
+                // Add wwwroot if relative non http url.
+                $$navbuttonurlkey = $CFG->wwwroot.$$navbuttonurlkey;
+            }
             $$navbuttonactivekey = (empty($PAGE->theme->settings->$navbuttonurlkey)) ? false : preg_match('#'.preg_quote($PAGE->theme->settings->$navbuttonurlkey).'#', $CFG->wwwroot.me());
             $$navbuttontextkey = (empty($PAGE->theme->settings->$navbuttontextkey)) ? false : format_string($PAGE->theme->settings->$navbuttontextkey);
         }
@@ -1297,7 +1328,7 @@ class core_renderer extends \theme_boost\output\core_renderer {
         }*/
 
         $fp_wonderboxcontext = [
-            'logintoken' => \core\session\manager::get_login_token(),
+            'logintoken' => theme_fordson_fel_get_login_token(), // From 36
             'hasfptextbox' => (!empty($PAGE->theme->settings->fptextbox && isloggedin())),
             'fptextbox' => $fptextbox,
             'hasslidetextbox' => (!empty($PAGE->theme->settings->slidetextbox && isloggedin())),
@@ -2381,7 +2412,7 @@ class core_renderer extends \theme_boost\output\core_renderer {
 
         // Add additional javascript requires from the theme settings.
         if (!empty($PAGE->theme->settings->pagetyperestrictions)) {
-            if (!preg_match('\b'.$PAGE->pagetype.'\b', $PAGE->theme->settings->pagetyperestrictions)) {
+            if (!preg_match('\\b'.$PAGE->pagetype.'\\b', $PAGE->theme->settings->pagetyperestrictions)) {
                 return parent::header();
             }
         }
@@ -2408,7 +2439,7 @@ class core_renderer extends \theme_boost\output\core_renderer {
      * @return string HTML fragment
      */
     public function footer() {
-        global $CFG, $PAGE, $COURSE, $OUTPUT, $DB;
+        global $CFG, $PAGE, $COURSE, $OUTPUT, $DB, $SESSION;
 
         $output = $this->container_end_all(true);
 
@@ -2427,7 +2458,7 @@ class core_renderer extends \theme_boost\output\core_renderer {
         // Prepare return to course button.
 
         $returnablemodules = array('resource', 'forum', 'folder', 'page', 'quiz', 'hvp', 'assign',
-        'pdcertificate', 'url', 'questionnaire', 'workshop', 'bigbluebuttonbn');
+        'url', 'questionnaire', 'workshop', 'bigbluebuttonbn');
         $pagetypeexceptions = array('page-mod-quiz-attempt');
 
         $button = '';
@@ -2446,16 +2477,33 @@ class core_renderer extends \theme_boost\output\core_renderer {
             }
         }
 
-        return $button.$output.$footerpart.$perfreport.'</footer>'.$endhtml;
+        $session = '';
+        if ($CFG->debug == DEBUG_DEVELOPER) {
+            if (optional_param('sessionreset', false, PARAM_BOOL)) {
+                unset($SESSION);
+                $SESSION = new StdClass;
+            }
+            if (optional_param('sessiondebug', false, PARAM_BOOL)) {
+                $session = '<pre>'.print_r($SESSION, true).'</pre>';
+            }
+        }
+
+        return $button.$output.$footerpart.$perfreport.$session.'</footer>'.$endhtml;
     }
 
-    public function footnote() {
+    public function footer_element($element) {
         global $PAGE;
 
-        $footnote = '';
-        $footnote = (empty($PAGE->theme->settings->footnote)) ? false : format_text($PAGE->theme->settings->footnote);
+        // Those textes are only under admin control.
+        $options = new StdClass;
+        $options->noclean = true;
+        $options->trusted = true;
 
-        return $footnote;
+        $elementstr = '';
+        $formatted = format_text($PAGE->theme->settings->$element, FORMAT_MOODLE, $options);
+        $elementstr .= (empty($PAGE->theme->settings->$element)) ? '' : $formatted;
+
+        return $elementstr;
     }
 
     public function brandorganization_footer() {
@@ -2521,20 +2569,29 @@ class core_renderer extends \theme_boost\output\core_renderer {
             $url = $url->out(false);
         }
         $context->logourl = $url;
-        $context->logintoken = \core\session\manager::get_login_token();
+        $context->logintoken = theme_fordson_fel_get_login_token();
         $context->sitename = format_string($SITE->fullname, true, ['context' => context_course::instance(SITEID), "escape" => false]);
+
+        theme_fordson_fel_add_login_indicators($context);
 
         return $this->render_from_template('core/loginform', $context);
     }
 
+    /**
+     * Ensure favicon is returned as a moodle url.
+     */
     public function favicon() {
         $favicon = $this->page->theme->setting_file_url('favicon', 'favicon');
 
         if (empty($favicon)) {
-            return $this->page->theme->image_url('favicon', 'theme');
-        } else {
-            return $favicon;
+            $favicon = $this->page->theme->image_url('favicon', 'theme');
         }
+
+        if (is_string($favicon)) {
+            $favicon = new moodle_url($favicon);
+        }
+
+        return $favicon;
     }
 
     public function display_ilearn_secure_alert() {
@@ -2724,6 +2781,32 @@ class core_renderer extends \theme_boost\output\core_renderer {
     }
 
     /**
+     * Render the contents of a block_list. Differs from core version
+     * in that is more scalable if item count raises to high.
+     *
+     * @param array $icons the icon for each item.
+     * @param array $items the content of each item.
+     * @return string HTML
+     */
+    public function list_block_contents($icons, $items) {
+        global $SESSION;
+
+        $row = 0;
+        $lis = array();
+        foreach ($items as $key => $string) {
+            $item = html_writer::start_tag('li', array('class' => 'r' . $row));
+            if (!empty($icons[$key])) { //test if the content has an assigned icon
+                $item .= html_writer::tag('div', $icons[$key], array('class' => 'icon column c0'));
+            }
+            $item .= html_writer::tag('div', $string, array('class' => 'column c1'));
+            $item .= html_writer::end_tag('li');
+            $lis[] = $item;
+            $row = 1 - $row; // Flip even/odd.
+        }
+        return html_writer::tag('ul', implode("\n", $lis), array('class' => 'unlist'));
+    }
+
+    /**
      * Renders the skip links for the page.
      * TODO : avoid the standard skip_links to be produced in local/my page.
      * HOW : call a hook in the local_my plugin if installed. (modularity).
@@ -2752,5 +2835,330 @@ class core_renderer extends \theme_boost\output\core_renderer {
     public function should_display_navbar_logo() {
         $logo = $this->get_compact_logo_url();
         return !empty($logo);
+    }
+
+    public function check_dyslexic_state() {
+        $dyspref = get_user_preferences('dyslexic_helper');
+        $dyslexic = optional_param('dys', $dyspref, PARAM_BOOL);
+
+        if ($dyslexic != $dyspref) {
+            // Change state if required.
+            set_user_preferences(['dyslexic_helper' => $dyslexic]);
+            if ($dyslexic) {
+                set_user_preferences(['highcontrast_helper' => 0]);
+            }
+        }
+    }
+
+    public function get_dyslexic_state() {
+        return get_user_preferences('dyslexic_helper');
+    }
+
+    public function check_highcontrast_state() {
+        $hcpref = get_user_preferences('highcontrast_helper');
+        $hc = optional_param('hc', $hcpref, PARAM_BOOL);
+
+        if ($hc != $hcpref) {
+            // Change state if required.
+            set_user_preferences(['highcontrast_helper' => $hc]);
+            if ($hc) {
+                set_user_preferences(['dyslexic_helper' => 0]);
+            }
+        }
+    }
+
+    public function get_highcontrast_state() {
+        return get_user_preferences('highcontrast_helper');
+    }
+
+    public function get_dyslexic_url() {
+        $dyspref = get_user_preferences('dyslexic_helper');
+        $url = new moodle_url(qualified_me());
+        $url->param('dys', ($dyspref) ? 0 : 1);
+        return $url;
+    }
+
+    public function get_highcontrast_url() {
+        $hcpref = get_user_preferences('highcontrast_helper');
+        $url = new moodle_url(qualified_me());
+        $url->param('hc', ($hcpref) ? 0 : 1);
+        return $url;
+    }
+
+    public function get_dynamic_css($theme) {
+        return theme_fordson_fel_get_dynamic_css($theme);
+    }
+
+    /**
+     * Construct a user menu, returning HTML that can be echoed out by a
+     * layout file.
+     *
+     * @param stdClass $user A user object, usually $USER.
+     * @param bool $withlinks true if a dropdown should be built.
+     * @return string HTML fragment.
+     */
+    public function user_menu($user = null, $withlinks = null) {
+        global $USER, $CFG;
+        require_once($CFG->dirroot . '/user/lib.php');
+
+        if (is_null($user)) {
+            $user = $USER;
+        }
+
+        // Note: this behaviour is intended to match that of core_renderer::login_info,
+        // but should not be considered to be good practice; layout options are
+        // intended to be theme-specific. Please don't copy this snippet anywhere else.
+        if (is_null($withlinks)) {
+            $withlinks = empty($this->page->layout_options['nologinlinks']);
+        }
+
+        // Add a class for when $withlinks is false.
+        $usermenuclasses = 'usermenu';
+        if (!$withlinks) {
+            $usermenuclasses .= ' withoutlinks';
+        }
+
+        $returnstr = "";
+
+        // If during initial install, return the empty return string.
+        if (during_initial_install()) {
+            return $returnstr;
+        }
+
+        $loginpage = $this->is_login_page();
+        $loginurl = get_login_url();
+        // If not logged in, show the typical not-logged-in string.
+        if (!isloggedin()) {
+            $returnstr = get_string('loggedinnot', 'moodle');
+            if (!$loginpage) {
+                $returnstr .= " (<a href=\"$loginurl\">" . get_string('login') . '</a>)';
+            }
+            return html_writer::div(
+                html_writer::span(
+                    $returnstr,
+                    'login'
+                ),
+                $usermenuclasses
+            );
+
+        }
+
+        // If logged in as a guest user, show a string to that effect.
+        if (isguestuser()) {
+            $returnstr = get_string('loggedinasguest');
+            if (!$loginpage && $withlinks) {
+                $returnstr .= " (<a href=\"$loginurl\">".get_string('login').'</a>)';
+            }
+
+            return html_writer::div(
+                html_writer::span(
+                    $returnstr,
+                    'login'
+                ),
+                $usermenuclasses
+            );
+        }
+
+        // Get some navigation opts.
+        $opts = user_get_user_navigation_info($user, $this->page);
+
+        // MNet.
+        $mnet = '';
+        if (!empty($opts->metadata['asmnetuser'])) {
+            $mnet = get_string('comingfrom', 'theme_fordson_fel', strtolower(preg_replace('#[ ]+#', '-', trim($opts->metadata['mnetidprovidername']))));
+            /*
+            $usertextcontents .= html_writer::span(
+                $opts->metadata['mnetidprovidername'],
+                'meta mnet mnet-' . $mnet
+            );
+            */
+        }
+
+        $avatarclasses = "avatars";
+        $avatarcontents = html_writer::span($opts->metadata['useravatar'], 'avatar current');
+
+        $mnetclass = '';
+        if (!empty($mnet)) {
+            $mnetclass = 'username mnet mnet-'.$mnet;
+        }
+        $usertextcontents = html_writer::span($opts->metadata['userfullname'], $mnetclass, ['title' => $mnet]);
+
+        // Other user.
+        if (!empty($opts->metadata['asotheruser'])) {
+            $avatarcontents .= html_writer::span(
+                $opts->metadata['realuseravatar'],
+                'avatar realuser'
+            );
+            $usertextcontents = $opts->metadata['realuserfullname'];
+            $usertextcontents .= html_writer::tag(
+                'span',
+                get_string(
+                    'loggedinas',
+                    'moodle',
+                    html_writer::span(
+                        $opts->metadata['userfullname'],
+                        'value'
+                    )
+                ),
+                array('class' => 'meta viewingas')
+            );
+        }
+
+        // Role.
+        if (!empty($opts->metadata['asotherrole'])) {
+            $role = core_text::strtolower(preg_replace('#[ ]+#', '-', trim($opts->metadata['rolename'])));
+            $usertextcontents .= html_writer::span(
+                $opts->metadata['rolename'],
+                'meta role role-' . $role
+            );
+        }
+
+        // User login failures.
+        if (!empty($opts->metadata['userloginfail'])) {
+            $usertextcontents .= html_writer::span(
+                $opts->metadata['userloginfail'],
+                'meta loginfailures'
+            );
+        }
+
+        $returnstr .= html_writer::span(
+            html_writer::span($usertextcontents, 'usertext mr-1') .
+            html_writer::span($avatarcontents, $avatarclasses),
+            'userbutton'
+        );
+
+        // Create a divider (well, a filler).
+        $divider = new action_menu_filler();
+        $divider->primary = false;
+
+        $am = new action_menu();
+        $am->set_menu_trigger(
+            $returnstr
+        );
+        $am->set_action_label(get_string('usermenu'));
+        $am->set_alignment(action_menu::TR, action_menu::BR);
+        $am->set_nowrap_on_items();
+        if ($withlinks) {
+            $navitemcount = count($opts->navitems);
+            $idx = 0;
+            foreach ($opts->navitems as $key => $value) {
+
+                switch ($value->itemtype) {
+                    case 'divider':
+                        // If the nav item is a divider, add one and skip link processing.
+                        $am->add($divider);
+                        break;
+
+                    case 'invalid':
+                        // Silently skip invalid entries (should we post a notification?).
+                        break;
+
+                    case 'link':
+                        // Process this as a link item.
+                        $pix = null;
+                        if (isset($value->pix) && !empty($value->pix)) {
+                            $pix = new pix_icon($value->pix, '', null, array('class' => 'iconsmall'));
+                        } else if (isset($value->imgsrc) && !empty($value->imgsrc)) {
+                            $value->title = html_writer::img(
+                                $value->imgsrc,
+                                $value->title,
+                                array('class' => 'iconsmall')
+                            ) . $value->title;
+                        }
+
+                        $al = new action_menu_link_secondary(
+                            $value->url,
+                            $pix,
+                            $value->title,
+                            array('class' => 'icon')
+                        );
+                        if (!empty($value->titleidentifier)) {
+                            $al->attributes['data-title'] = $value->titleidentifier;
+                        }
+                        $am->add($al);
+                        break;
+                }
+
+                $idx++;
+
+                // Add dividers after the first item and before the last item.
+                if ($idx == 1 || $idx == $navitemcount - 1) {
+                    $am->add($divider);
+                }
+            }
+        }
+
+        return html_writer::div(
+            $this->render($am),
+            $usermenuclasses
+        );
+    }
+
+    /**
+     * Overrides standard code considering also local_search lucene legacy plugin.
+     *
+     * @param  string $id     The search box wrapper div id, defaults to an autogenerated one.
+     * @return string         HTML with the search form hidden by default.
+     */
+    public function search_box($id = false) {
+        global $CFG, $SESSION;
+
+        $trylegacy = false;
+        if (!is_dir($CFG->dirroot.'/local/search')) {
+            $trylegacy = true;;
+        }
+
+        $localsearchconfig = get_config('local_search');
+
+        // Accessing $CFG directly as using \core_search::is_global_search_enabled would
+        // result in an extra included file for each site, even the ones where global search
+        // is disabled.
+        if (empty($localsearchconfig->enable) || !has_capability('local/search:query', context_system::instance())) {
+            $trylegacy = true;
+        }
+
+        if ($trylegacy) {
+            return parent::search_box($id = false);
+        }
+
+        if ($id == false) {
+            $id = uniqid();
+        } else {
+            // Needs to be cleaned, we use it for the input id.
+            $id = clean_param($id, PARAM_ALPHANUMEXT);
+        }
+
+        $this->page->requires->js_call_amd('core/search-input', 'init', array($id));
+
+        $lastsearch = (!empty($SESSION->lastsearch)) ? $SESSION->lastsearch : '';
+        $searchicon = html_writer::tag('div', $this->pix_icon('a/search', get_string('search', 'search'), 'moodle'),
+            array('role' => 'button', 'tabindex' => 0));
+        $formattrs = array('class' => 'search-input-form', 'action' => $CFG->wwwroot . '/local/search/index.php');
+        $inputattrs = array('type' => 'text', 'name' => 'q', 'placeholder' => get_string('search', 'search'),
+            'size' => 13, 'tabindex' => -1, 'id' => 'id_q_' . $id, 'value' => $lastsearch);
+
+        $contents = html_writer::tag('label', get_string('enteryoursearchquery', 'search'),
+            array('for' => 'id_q_' . $id, 'class' => 'accesshide')) . html_writer::tag('input', '', $inputattrs);
+        if ($this->page->context && $this->page->context->contextlevel !== CONTEXT_SYSTEM) {
+            $contents .= html_writer::empty_tag('input', ['type' => 'hidden',
+                    'name' => 'context', 'value' => $this->page->context->id]);
+        }
+
+        $clearmarks = optional_param('clearsearchmarks', 0, PARAM_BOOL);
+        if ($clearmarks) {
+            unset($SESSION->lastsearch);
+            $me = new moodle_url(qualified_me());
+            redirect($me);
+        }
+
+        if (!empty($SESSION->lastsearch)) {
+            $clearurl = new moodle_url(qualified_me());
+            $attrs = ['role' => 'button', 'tabindex' => 0, 'href' => $clearurl->out().'&clearsearchmarks=1'];
+            $contents .= ' '.html_writer::tag('a', $this->pix_icon('i/hide', get_string('clearmarks', 'local_search'), 'moodle'), $attrs);
+        }
+
+        $searchinput = html_writer::tag('form', $contents, $formattrs);
+
+        return html_writer::tag('div', $searchicon, array('class' => 'search-input-wrapper nav-link', 'id' => $id)).$searchinput;
     }
 }

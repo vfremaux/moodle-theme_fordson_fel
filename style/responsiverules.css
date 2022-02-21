@@ -1,6 +1,6 @@
 
 
-@media all and (max-width: 480px) {
+@media all and (max-width: 576px) {
 
     .container-fluid {
         width: 100%;
@@ -35,6 +35,15 @@
 
     #page-login-index #region-main {
         top: 50px;
+    }
+
+    /* adjust narrow screen course list in category listing vs local_my widgets */
+    .course_category_tree {
+        padding: 0;
+    }
+
+    .course_category_tree .category > .content {
+        padding-left: 8px;
     }
 
     /* section navigation in course */
@@ -87,7 +96,7 @@
 
 /* courses */
 
-@media screen and (max-width: 480px) {
+@media screen and (max-width: 576px) {
 
     /*contenu presque collé à la navbar*/
     div#learningcontent {
@@ -134,7 +143,7 @@
 
 /* Guided tour */
 
-@media all and (max-width: 480px) {
+@media all and (max-width: 576px) {
     .modal-footer {
         flex-wrap: wrap;
         max-width: 480 px;
@@ -160,7 +169,7 @@
 
 /* messaging */
 
-@media all and (max-width: 480px) {
+@media all and (max-width: 576px) {
 
     button[data-action="send-message"] {
         overflow :hidden;
@@ -204,5 +213,15 @@
 @media all and (min-width: 1920px) {
     .container {
         max-width: 1800px !important;
+    }
+}
+
+@media (max-width: 576px) {
+    #go-to-bottom, #back-to-top {
+        right: 15px;
+    }
+
+    #page-my-index .card {
+        border:none;
     }
 }

@@ -35,8 +35,8 @@ $page->add($headersetting);
 // Theme variant tag.
 $name = $themename.'/themetitle';
 $title = get_string('themetitle', 'theme_fordson_fel');
-$description = get_string('themetitledesc', 'theme_fordson_fel');
-$setting = new admin_setting_configtext($name, $title, $description, '');
+$description = get_string('themetitle_desc', 'theme_fordson_fel');
+$setting = new admin_setting_configtext($name, $title, $description, '', PARAM_TEXT, 120);
 $page->add($setting);
 
 // Must add the page after definiting all the settings!

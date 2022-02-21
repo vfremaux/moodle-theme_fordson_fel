@@ -193,3 +193,55 @@ function theme_fordson_fel_process_texts(&$templatecontext) {
     }
 
 }
+
+function theme_fordson_fel_pass_layout_options(&$templatecontext) {
+    global $PAGE;
+
+    $options = $PAGE->layout_options;
+    foreach ($options as $key => $value) {
+        $templatecontext[$key] = $value;
+    }
+}
+
+/**
+ * Sets in template context indicators data from several sources.
+ * At the moment only block_course_notification if installed.
+ */
+function theme_fordson_fel_add_login_indicators(&$templatecontext) {
+    global $CFG;
+
+    $indicators = [];
+
+    // Get indicator providing plugins from cache.
+    
+    $indicatingplugins = [];
+
+    // Faked waiting for complete implementation of a cached discovering function.
+    $iplugin = new StdClass;
+    $iplugin->path = '/blocks/course_notification';
+    $iplugin->name = 'block_course_notification';
+    $indicatingplugins[] = $iplugin;
+
+    // Scan indicator providing plugins and ask them for indicators.
+
+    foreach ($indicatingplugins as $iplugin) {
+        if (is_dir($CFG->dirroot.$iplugin->path)) {
+            require_once($CFG->dirroot.$iplugin->path.'/xlib.php');
+            $func = $iplugin->name.'_get_site_indicators';
+            $notificationindicators = $func();
+            if (is_array($notificationindicators)) {
+                // Aggregate array members to indicators.
+                $indicators += $notificationindicators;
+            } else {
+                // Add the scalar content.
+                $indicators[] = $notificationindicators;
+            }
+        }
+    }
+
+    if (!empty($indicators)) {
+        $templatecontext->hasindicators = true;
+        $indicatorsstr = implode('</div><div class="siteindicator">', $indicators);
+        $templatecontext->indicatorsboxcontent = '<div class="siteindicator">'.$indicatorsstr.'<div>';
+    }
+}

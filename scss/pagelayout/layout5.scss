@@ -76,6 +76,7 @@ div#page-navbar {
 #page-header .btn.btn-secondary {
     background-color: $white;
 }
+
 #page-header .btn.btn-secondary:hover {
     background-color: darken($brandprimary, 10%);
 }
@@ -112,7 +113,7 @@ div#page-content {
 }
 
 #nav-drawer::-webkit-scrollbar-thumb {
-    background-color: darken($brand-primary, 15%);
+    background-color: darken($brandprimary, 15%);
     outline: 1px solid slategrey;
 }
 

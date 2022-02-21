@@ -1,3 +1,79 @@
+.navbar {
+    background-color: $topnavbar-bg;
+    color: $topnavbar-fg;
+}
+
+.navbar a {
+    color: $topnavbar-fg;
+}
+
+// FHS Navbar
+.navbar-fhs {
+    .navbar-brand {
+        color: $navbar-fhs-active-color;
+
+        @include hover-focus {
+            color: $navbar-fhs-active-color;
+        }
+    }
+
+    .navbar-nav {
+        .nav-link {
+             color: $navbar-fhs-color;
+
+             @include hover-focus {
+                 color: $navbar-fhs-hover-color;
+             }
+
+             &.disabled {
+                 color: $navbar-fhs-disabled-color;
+             }
+        }
+
+        .show > .nav-link,
+        .active > .nav-link,
+        .nav-link.show,
+        .nav-link.active {
+            color: $navbar-fhs-active-color;
+        }
+    }
+
+    .navbar-toggler {
+        color: $navbar-fhs-color;
+        border-color: $navbar-fhs-toggler-border-color;
+    }
+
+    .navbar-toggler-icon {
+        background-image: $navbar-fhs-toggler-icon-bg;
+    }
+
+    .navbar-text {
+        color: $navbar-fhs-color;
+
+        a {
+            color: $navbar-fhs-active-color;
+
+            @include hover-focus {
+                color: $navbar-fhs-active-color;
+            }
+        }
+    }
+}
+
+span.userbutton {
+    color: $topnavbar-fg;
+}
+
+.custom_menu_submenu {
+    background-color: $topnavbar-bg;
+    border: 1px solid $topnavbar-fg;
+}
+
+#custom_menu_1 > div > ul > li > a:hover {
+    border: 1px solid $brandsecondary !important;
+    border-radius:4px;
+    cursor:pointer;
+}
 
 .navbar.fixed-top .dropdown .dropdown-menu {
      /* background-color: $brandprimary; */
@@ -31,5 +107,35 @@
 .navbar.fixed-top .dropdown-item.menu-action:hover,
 .navbar.fixed-top .usermenu .icon.fa:focus,
 .navbar.fixed-top .dropdown-item.menu-action:focus {
-    color: $brandprimary !important;
+    background-color: $brandprimaryalt;
+    color: $brandprimary;
+}
+
+.username.mnet::before {
+    font-family: 'FontAwesome';
+    content: '\f090';
+    margin-right: 10px;
+}
+
+div[data-region='spdrawer-toggle'] {
+    margin-left: 20px;
+    margin-right: 5px;
+}
+
+/* search */
+.search-input-wrapper 
+    form {
+        opacity: 1;
+        position: absolute;
+        top: 55px;
+        background-color: #ffffff;
+        border: 1px solid #fefefe;
+        border-radius: 4px;
+        padding: 4px;
+        display: none;
+    }
+
+    form.expanded {
+        display:inline-block;
+    }
 }

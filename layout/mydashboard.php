@@ -69,8 +69,12 @@ if ($checkblocka || $checkblockb || $checkblockc) {
     $hascourseblocks = true;
 }
 
-$footnote = $OUTPUT->footnote();
+$footnote = $OUTPUT->footer_element('footnote');
 $coursefooter = $OUTPUT->course_footer();
+$OUTPUT->check_dyslexic_state();
+$OUTPUT->check_highcontrast_state();
+$dysstate = $OUTPUT->get_dyslexic_state();
+$hcstate = $OUTPUT->get_highcontrast_state();
 
 $regionmainsettingsmenu = $OUTPUT->region_main_settings_menu();
 $templatecontext = [
@@ -98,11 +102,22 @@ $templatecontext = [
     'hascoursefooter' => !empty($coursefooter) && (preg_match('/[a-zA-Z0-9]/', strip_tags($coursefooter))),
     'coursefooter' => $coursefooter,
     'hasfooterelements' => !empty($PAGE->theme->settings->leftfooter) || !empty($PAGE->theme->settings->midfooter) || !empty($PAGE->theme->settings->rightfooter),
-    'leftfooter' => @$PAGE->theme->settings->leftfooter,
-    'midfooter' => @$PAGE->theme->settings->midfooter,
-    'rightfooter' => @$PAGE->theme->settings->rightfooter,
+    'leftfooter' => $OUTPUT->footer_element('leftfooter'),
+    'midfooter' => $OUTPUT->footer_element('midfooter'),
+    'rightfooter' => $OUTPUT->footer_element('rightfooter'),
     'showlangmenu' => @$CFG->langmenu,
-    'sitealternatename' => @$PAGE->theme->settings->sitealternatename
+    'sitealternatename' => @$PAGE->theme->settings->sitealternatename,
+
+    'useaccessibility' => @$PAGE->theme->settings->usedyslexicfont || @$PAGE->theme->settings->usehighcontrastfont,
+    'usedyslexicfont' => @$PAGE->theme->settings->usedyslexicfont,
+    'usehighcontrastfont' => @$PAGE->theme->settings->usehighcontrastfont,
+    'dyslexicurl' => $OUTPUT->get_dyslexic_url(),
+    'highcontrasturl' => $OUTPUT->get_highcontrast_url(),
+    'dyslexicactive' => ($dysstate) ? 'active' : '',
+    'highcontrastactive' => ($hcstate) ? 'active' : '',
+    'dyslexicactiontitle' => ($dysstate) ? get_string('unsetdys', 'theme_fordson_fel') : get_string('setdys', 'theme_fordson_fel'),
+    'highcontrastactiontitle' => ($hcstate) ? get_string('unsethc', 'theme_fordson_fel') : get_string('sethc', 'theme_fordson_fel'),
+    'dynamiccss' => $OUTPUT->get_dynamic_css($PAGE->theme),
 ];
 
 if (is_dir($CFG->dirroot.'/local/technicalsignals')) {

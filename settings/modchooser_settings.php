@@ -40,7 +40,7 @@ $page->add($setting);
 
 $name = $themename.'/commonlyused';
 $title = get_string('commonlyused', 'theme_fordson_fel');
-$description = get_string('commonlyuseddesc', 'theme_fordson_fel');
+$description = get_string('commonlyused_desc', 'theme_fordson_fel');
 $setting = new admin_setting_configtextarea($name, $title, $description, '', PARAM_RAW);
 $setting->set_updatedcallback('theme_reset_all_caches');
 $page->add($setting);

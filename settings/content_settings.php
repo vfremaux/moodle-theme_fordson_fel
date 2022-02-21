@@ -30,7 +30,7 @@ $page = new admin_settingpage($themename.'_content', get_string('contentsettings
 // Content Info.
 $name = $themename.'/textcontentinfo';
 $title = get_string('textcontentinfo', 'theme_fordson_fel');
-$description = get_string('textcontentinfodesc', 'theme_fordson_fel');
+$description = get_string('textcontentinfo_desc', 'theme_fordson_fel');
 $setting = new admin_setting_heading($name, $title, $description);
 $page->add($setting);
 

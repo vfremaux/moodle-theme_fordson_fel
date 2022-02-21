@@ -52,9 +52,10 @@
 }
 
 h3.sectionname {
-    color: $light;
+    height: 3em;
+    color: $brandprimaryalt;
     padding: .5rem 2rem;
-    background-color: $dark;
+    background-color: $brandprimary;
     display: inline-block;
     border-radius: 30px 30px 80px 80px;
     position: relative;
@@ -65,7 +66,8 @@ h3.sectionname {
 }
 
 h3.sectionname a {
-    color: $white;
+    background-color: $brandprimary;
+    color: $brandprimaryalt;
 }
 
 .course-content ul.topics li.section > .content,

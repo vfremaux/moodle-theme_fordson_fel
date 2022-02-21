@@ -1,8 +1,14 @@
-
+/* Default breadcrumb style */
+nav[role="navigation"] ol.breadcrumb li a,
+nav[role="navigation"] ol.breadcrumb li a {
+    color: $breadcrumb-fg;
+    background-color: $breadcrumb-bg;
+}
 
 nav[role="navigation"] ol.breadcrumb.style1 li a,
 nav[role="navigation"] ol.breadcrumb.style4 li a {
     color: $breadcrumb-fg;
+    background-color: $breadcrumb-bg;
 }
 
 nav[role="navigation"] ol.breadcrumb.style1 li::after,
@@ -22,12 +28,89 @@ nav[role="navigation"] ol.breadcrumb.style4 li::before {
     border-left-color: $breadcrumb-fg;
 }
 
-ul.breadcrumb.style1 li.active, .breadcrumb.style1 li:hover,
-ul.breadcrumb.style4 li.active, .breadcrumb.style4 li:hover{
+ul.breadcrumb.style1 li.active,
+.breadcrumb.style1 li:hover,
+ul.breadcrumb.style4 li.active,
+.breadcrumb.style4 li:hover{
+    background-color: $breadcrumb-fg;
+    color: $breadcrumb-bg;
+}
+
+ul.breadcrumb.style1 li.active:after,
+.breadcrumb.style1 li:hover:after,
+ul.breadcrumb.style4 li.active:after,
+.breadcrumb.style4 li:hover:after,
+nav[role="navigation"] ol.breadcrumb.style1 li:hover a,
+nav[role="navigation"] ol.breadcrumb.style4 li:hover a {
+    background-color: $breadcrumb-fg;
+    color: $breadcrumb-bg;
+}
+
+
+// From styles
+#admin-breadcrumbstyle input[type="radio"] {
+    margin-right: 10px;
+}
+
+nav[role="navigation"] ol.breadcrumb.style1 li {
+    color: $breadcrumb-fg;
+    background-color: $breadcrumb-bg;
+    border-color: $breadcrumb-bg;
+    border-width: 1px;
+    border-style: solid;
+}
+
+nav[role="navigation"] ol.breadcrumb.style1 li:before {
+    border-left-color: $breadcrumb-fg;
+}
+
+nav[role="navigation"] ol.breadcrumb.style1 li:after {
+    border-left-color: $breadcrumb-bg;
+}
+
+nav[role="navigation"] ol.breadcrumb.style1 li:first-of-type a:before {
+    color: $breadcrumb-fg;
+    background-color: $breadcrumb-bg;
+}
+
+nav[role="navigation"] ol.breadcrumb.style1 li:hover,
+nav[role="navigation"] ol.breadcrumb.style1 li:focus {
+    color: $breadcrumb-bg;
+    background-color: $breadcrumb-fg;
+}
+
+nav[role="navigation"] ol.breadcrumb.style1 li:hover:before,
+nav[role="navigation"] ol.breadcrumb.style1 li:focus:before {
+    border-left-color: $breadcrumb-bg;
+}
+
+nav[role="navigation"] ol.breadcrumb.style1 li:hover span,
+nav[role="navigation"] ol.breadcrumb.style1 li:focus span {
     background-color: transparent;
 }
 
-ul.breadcrumb.style1 li.active:after, .breadcrumb.style1 li:hover:after,
-ul.breadcrumb.style4 li.active:after, .breadcrumb.style4 li:hover:after {
-    background-color: transparent;
+nav[role="navigation"] ol.breadcrumb.style1 li:hover a,
+nav[role="navigation"] ol.breadcrumb.style1 li:focus a,
+nav[role="navigation"] ol.breadcrumb.style1 li:hover a:before,
+nav[role="navigation"] ol.breadcrumb.style1 li:focus a:before {
+    color: $breadcrumb-bg;
+    background-color: $breadcrumb-fg;
+}
+
+nav[role="navigation"] ol.breadcrumb.style1 li:hover:after {
+    border-left-color: $breadcrumb-fg;
+    background-color: $breadcrumb-bg;
+}
+
+nav[role="navigation"] ol.breadcrumb.style1 li:hover:after a {
+    color: $breadcrumb-bg;
+    background-color: $breadcrumb-fg;
+}
+
+.dir-rtl nav[role="navigation"] ol.breadcrumb.style1 li:after {
+    border-right-color: $breadcrumb-bg;
+}
+
+.dir-rtl nav[role="navigation"] ol.breadcrumb.style1 li:hover:after {
+    border-right-color: $breadcrumb-fg;
 }

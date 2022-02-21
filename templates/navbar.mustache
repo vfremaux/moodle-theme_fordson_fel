@@ -30,7 +30,7 @@
 
     <!-- homelink_for_mobiles -->
     <div class="coursecontrols nav-item for-mobile">
-        <a id="mobile-home" class="btn fhs-tooltip" data-tooltip="tooltip" href="/my"><i class="fa fa-home" aria-hidden="true"></i></a>
+        <a id="mobile-home" class="btn fhs-tooltip" data-tooltip="tooltip" href="/my/index.php"><i class="fa fa-home" aria-hidden="true"></i></a>
     </div>
     <!-- /homelink_for_mobiles -->
 
@@ -107,6 +107,14 @@
         <li class="nav-item">
             {{{ output.navbar_plugin_output }}}
         </li>
+
+        <!-- accessibility -->
+        {{#useaccessibility}}
+        <div id="page-accessibility-switches">
+            {{> theme_fordson_fel/accessibilityswitches }}
+        </div>
+        {{/useaccessibility}}
+
         <!-- navbar_fordson:user_menu -->
         <li class="nav-item d-flex align-items-center">
             {{{ output.user_menu }}}

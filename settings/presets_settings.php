@@ -56,6 +56,15 @@ $setting = new admin_setting_configselect($name, $title, $description, $default,
 $setting->set_updatedcallback('theme_reset_all_caches');
 $page->add($setting);
 
+// Preset order
+$name = $themename.'/presetaslast';
+$title = get_string('presetaslast', 'theme_fordson_fel');
+$description = get_string('presetaslast_desc', 'theme_fordson_fel');
+$default = false;
+$setting = new admin_setting_configcheckbox($name, $title, $description, $default);
+$setting->set_updatedcallback('theme_reset_all_caches');
+$page->add($setting);
+
 // Preset files setting.
 $name = $themename.'/presetfiles';
 $title = get_string('presetfiles', 'theme_fordson_fel');
@@ -67,7 +76,7 @@ $page->add($setting);
 // Layout Info
 $name = $themename.'/layoutinfo';
 $heading = get_string('layoutinfo', 'theme_fordson_fel');
-$information = get_string('layoutinfodesc', 'theme_fordson_fel');
+$information = get_string('layoutinfo_desc', 'theme_fordson_fel');
 $setting = new admin_setting_heading($name, $heading, $information);
 $page->add($setting);
 

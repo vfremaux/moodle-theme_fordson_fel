@@ -41,7 +41,7 @@ if (is_tablet()) {
 
 $bodyattributes = $OUTPUT->body_attributes($extraclasses);
 
-$footnote = $OUTPUT->footnote();
+$footnote = $OUTPUT->footer_element('footnote');
 $pagedoclink = $OUTPUT->page_doc_link();
 $coursefooter = $OUTPUT->course_footer();
 
@@ -60,9 +60,9 @@ $templatecontext = [
     'hascustomlogincontent' => !empty($OUTPUT->customlogin()),
     'custombgimageurl' => theme_fordson_fel_get_random_filearea_url('loginimage'),
     'hasfooterelements' => !empty($PAGE->theme->settings->leftfooter) || !empty($PAGE->theme->settings->midfooter) || !empty($PAGE->theme->settings->rightfooter),
-    'leftfooter' => @$PAGE->theme->settings->leftfooter,
-    'midfooter' => @$PAGE->theme->settings->midfooter,
-    'rightfooter' => @$PAGE->theme->settings->rightfooter,
+    'leftfooter' => $OUTPUT->footer_element('leftfooter'),
+    'midfooter' => $OUTPUT->footer_element('midfooter'),
+    'rightfooter' => $OUTPUT->footer_element('rightfooter'),
     'showlangmenu' => @$CFG->langmenu,
     'sitealternatename' => @$PAGE->theme->settings->sitealternatename
 ];

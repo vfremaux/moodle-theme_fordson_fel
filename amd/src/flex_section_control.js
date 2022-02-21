@@ -16,8 +16,8 @@
 /**
  * Javascript controller for controlling the sections.
  *
- * @module     theme_archaius/flex_section_control
- * @package    theme_archaius
+ * @module     theme_fordson_fel/flex_section_control
+ * @package    theme_fordson_fel
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 define(['jquery', 'core/config', 'core/log'], function($, config, log) {

@@ -63,5 +63,16 @@ $choices = [
 $setting = new admin_setting_configselect($name, $title, $description, $default, $choices);
 $page->add($setting);
 
+$name = $themename.'/flexsectionscollapse';
+$title = get_string('flexsectionscollapse', 'theme_fordson_fel');
+$description = get_string('flexsectionscollapse_desc', 'theme_fordson_fel');
+$default = 0;
+$choices = [
+    0 => get_string('collapsesingle', 'theme_fordson_fel'),
+    1 => get_string('collapseaccordion', 'theme_fordson_fel'),
+];
+$setting = new admin_setting_configselect($name, $title, $description, $default, $choices);
+$page->add($setting);
+
 // Must add the page after definition all the settings!
 $settings->add($page);
