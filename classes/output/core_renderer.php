@@ -3158,7 +3158,8 @@ class core_renderer extends \theme_boost\output\core_renderer {
         }
 
         $searchinput = html_writer::tag('form', $contents, $formattrs);
+        $searchinput = html_writer::tag('div', $searchinput, ['class' => 'search-input-form']);
 
-        return html_writer::tag('div', $searchicon, array('class' => 'search-input-wrapper nav-link', 'id' => $id)).$searchinput;
+        return html_writer::tag('div', $searchicon.$searchinput, ['class' => 'search-input-toggle nav-link', 'id' => $id]);
     }
 }

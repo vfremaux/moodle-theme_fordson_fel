@@ -267,4 +267,5 @@ if (!empty($PAGE) && !$PAGE->state) {
     $PAGE->requires->jquery();
     $PAGE->requires->js_call_amd('local_vflibs/docfix', 'init');
     $PAGE->requires->js_call_amd('theme_fordson_fel/custommenu', 'init');
+    $PAGE->requires->js_call_amd('theme_fordson_fel/searchlink', 'init');
 }
