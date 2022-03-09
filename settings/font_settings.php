@@ -71,5 +71,39 @@ $setting = new admin_setting_configstoredfile( $name, $title, $description, 'tit
 $setting->set_updatedcallback('theme_reset_all_caches');
 $page->add($setting);
 
+// Propose dyslexic alternative.
+$name = $themename.'/usedyslexicfont';
+$title = get_string('usedyslexicfont', 'theme_fordson_fel');
+$description = get_string('usedyslexicfont_desc', 'theme_fordson_fel');
+$default = 1;
+$setting = new admin_setting_configcheckbox($name, $title, $description, $default);
+$page->add($setting);
+
+// Special alt dyslexic font.
+$name = $themename.'/altdyslexicfont';
+$title = get_string ('dyslexicfont', 'theme_fordson_fel');
+$description = get_string ('dyslexicfont_desc', 'theme_fordson_fel');
+$setting = new admin_setting_configstoredfile( $name, $title, $description, 'dyslexicfont', 0,
+    array('maxfiles' => 5, 'accepted_types' => array('ttf', 'woff', 'woff2', 'eot')));
+$setting->set_updatedcallback('theme_reset_all_caches');
+$page->add($setting);
+
+// Use highcontrast alternative.
+$name = $themename.'/usehighcontrastfont';
+$title = get_string('usehighcontrastfont', 'theme_fordson_fel');
+$description = get_string('usehighcontrastfont_desc', 'theme_fordson_fel');
+$default = 1;
+$setting = new admin_setting_configcheckbox($name, $title, $description, $default);
+$page->add($setting);
+
+// Special high contrast font.
+$name = $themename.'/althighcontrastfont';
+$title = get_string ('highcontrastfont', 'theme_fordson_fel');
+$description = get_string ('highcontrastfont_desc', 'theme_fordson_fel');
+$setting = new admin_setting_configstoredfile( $name, $title, $description, 'highconstrastfont', 0,
+    array('maxfiles' => 5, 'accepted_types' => array('ttf', 'woff', 'woff2', 'eot')));
+$setting->set_updatedcallback('theme_reset_all_caches');
+$page->add($setting);
+
 // Must add the page after definiting all the settings!
 $settings->add($page);

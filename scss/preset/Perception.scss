@@ -26,7 +26,7 @@ $teal:    #60e8b5 !default;
 $cyan:    #5bc0de !default;
 
 $brandprimary:       #1e2429 !default;
-$secondary:     $gray-300 !default;
+$brandsecondary:     $gray-300 !default;
 $success:       $green !default;
 $info:          $cyan !default;
 $warning:       $yellow !default;
@@ -130,7 +130,7 @@ $alert-border-width:                0 !default;
 
 $theme-colors: (
     primary: $brandprimary,
-    secondary: $secondary,
+    secondary: $brandsecondary,
     success: $success,
     info: $info,
     warning: $orange,

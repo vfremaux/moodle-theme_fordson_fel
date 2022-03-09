@@ -25,11 +25,11 @@
  */
 defined('MOODLE_INTERNAL') || die();
 
-theme_forsdson_fel_get_category($catid, $chelper) {
+function theme_fordson_fel_get_category($catid, $chelper) {
     return \core_course_category::get($catid);
 }
 
-theme_fordson_fel_course_in_list() {
+function theme_fordson_fel_course_in_list($course) {
     return new \core_course_list_element($course);
 }
 

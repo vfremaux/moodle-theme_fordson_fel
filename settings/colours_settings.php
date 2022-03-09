@@ -43,11 +43,30 @@ $page->add(new admin_setting_heading($themename.'_colours', get_string('colours_
     $setting->set_updatedcallback('theme_reset_all_caches');
     $page->add($setting);
 
+    // Variable $brandprimary.
+    $name = $themename.'/brandprimaryalt';
+    $title = get_string('brandprimaryalt', 'theme_fordson_fel');
+    $description = get_string('brandprimaryalt_desc', 'theme_fordson_fel');
+    $default = '#333333';
+    $setting = new admin_setting_configcolourpicker($name, $title, $description, $default);
+    $setting->set_updatedcallback('theme_reset_all_caches');
+    $page->add($setting);
+
     // Variable $brandsecondary.
     $name = $themename.'/brandsecondary';
     $title = get_string('brandsecondary', 'theme_fordson_fel');
     $description = get_string('brandsecondary_desc', 'theme_fordson_fel');
-    $setting = new admin_setting_configcolourpicker($name, $title, $description, '');
+    $default = '#dddddd';
+    $setting = new admin_setting_configcolourpicker($name, $title, $description, $default);
+    $setting->set_updatedcallback('theme_reset_all_caches');
+    $page->add($setting);
+
+    // Variable $brandsecondaryalt.
+    $name = $themename.'/brandsecondaryalt';
+    $title = get_string('brandsecondaryalt', 'theme_fordson_fel');
+    $description = get_string('brandsecondaryalt_desc', 'theme_fordson_fel');
+    $default = '#ffffff';
+    $setting = new admin_setting_configcolourpicker($name, $title, $description, $default);
     $setting->set_updatedcallback('theme_reset_all_caches');
     $page->add($setting);
 
@@ -55,7 +74,8 @@ $page->add(new admin_setting_heading($themename.'_colours', get_string('colours_
     $name = $themename.'/brandsuccess';
     $title = get_string('brandsuccess', 'theme_fordson_fel');
     $description = get_string('brandsuccess_desc', 'theme_fordson_fel');
-    $setting = new admin_setting_configcolourpicker($name, $title, $description, '');
+    $default = '#a5e600';
+    $setting = new admin_setting_configcolourpicker($name, $title, $description, $default);
     $setting->set_updatedcallback('theme_reset_all_caches');
     $page->add($setting);
 
@@ -63,7 +83,8 @@ $page->add(new admin_setting_heading($themename.'_colours', get_string('colours_
     $name = $themename.'/brandwarning';
     $title = get_string('brandwarning', 'theme_fordson_fel');
     $description = get_string('brandwarning_desc', 'theme_fordson_fel');
-    $setting = new admin_setting_configcolourpicker($name, $title, $description, '');
+    $default = '#d9534f';
+    $setting = new admin_setting_configcolourpicker($name, $title, $description, $default);
     $setting->set_updatedcallback('theme_reset_all_caches');
     $page->add($setting);
 
@@ -71,7 +92,8 @@ $page->add(new admin_setting_heading($themename.'_colours', get_string('colours_
     $name = $themename.'/branddanger';
     $title = get_string('branddanger', 'theme_fordson_fel');
     $description = get_string('branddanger_desc', 'theme_fordson_fel');
-    $setting = new admin_setting_configcolourpicker($name, $title, $description, '');
+    $default = '#F07905';
+    $setting = new admin_setting_configcolourpicker($name, $title, $description, $default);
     $setting->set_updatedcallback('theme_reset_all_caches');
     $page->add($setting);
 
@@ -85,17 +107,17 @@ $page->add(new admin_setting_heading($themename.'_colours', get_string('colours_
     $page->add($setting);
 
     // @bodyBackground setting.
-    $name = $themename.'/bodybackground';
-    $title = get_string('bodybackground', 'theme_fordson_fel');
-    $description = get_string('bodybackground_desc', 'theme_fordson_fel');
+    $name = $themename.'/bodybkg';
+    $title = get_string('bodybkg', 'theme_fordson_fel');
+    $description = get_string('bodybkg_desc', 'theme_fordson_fel');
     $setting = new admin_setting_configcolourpicker($name, $title, $description, '');
     $setting->set_updatedcallback('theme_reset_all_caches');
     $page->add($setting);
 
     // Top navbar background setting. @Variable topnavbar-bg.
-    $name = $themename.'/topnavbarbg';
-    $title = get_string('topnavbarbg', 'theme_fordson_fel');
-    $description = get_string('topnavbarbg_desc', 'theme_fordson_fel');
+    $name = $themename.'/topnavbarbkg';
+    $title = get_string('topnavbarbkg', 'theme_fordson_fel');
+    $description = get_string('topnavbarbkg_desc', 'theme_fordson_fel');
     $default = '#ffffff';
     $setting = new admin_setting_configcolourpicker($name, $title, $description, $default);
     $setting->set_updatedcallback('theme_reset_all_caches');
@@ -111,18 +133,18 @@ $page->add(new admin_setting_heading($themename.'_colours', get_string('colours_
     $page->add($setting);
 
     // Top navbar background setting. @Variable topnavbar-hover.
-    $name = $themename.'/topnavbarbghov';
-    $title = get_string('topnavbarbghov', 'theme_fordson_fel');
-    $description = get_string('topnavbarbghov_desc', 'theme_fordson_fel');
+    $name = $themename.'/topnavbarbkghov';
+    $title = get_string('topnavbarbkghov', 'theme_fordson_fel');
+    $description = get_string('topnavbarbkghov_desc', 'theme_fordson_fel');
     $default = '#f0f0f0';
     $setting = new admin_setting_configcolourpicker($name, $title, $description, $default);
     $setting->set_updatedcallback('theme_reset_all_caches');
     $page->add($setting);
 
     // Top navbar background setting.
-    $name = $themename.'/topnavbarteacherbg';
-    $title = get_string('topnavbarteacherbg', 'theme_fordson_fel');
-    $description = get_string('topnavbarteacherbg_desc', 'theme_fordson_fel');
+    $name = $themename.'/topnavbarteacherbkg';
+    $title = get_string('topnavbarteacherbkg', 'theme_fordson_fel');
+    $description = get_string('topnavbarteacherbkg_desc', 'theme_fordson_fel');
     $setting = new admin_setting_configcolourpicker($name, $title, $description, '');
     $setting->set_updatedcallback('theme_reset_all_caches');
     $page->add($setting);
@@ -144,9 +166,9 @@ $page->add(new admin_setting_heading($themename.'_colours', get_string('colours_
     $page->add($setting);
 
     // Marketing tile text background.
-    $name = $themename.'/markettextbg';
-    $title = get_string('markettextbg', 'theme_fordson_fel');
-    $description = get_string('markettextbg_desc', 'theme_fordson_fel');
+    $name = $themename.'/markettextbkg';
+    $title = get_string('markettextbkg', 'theme_fordson_fel');
+    $description = get_string('markettextbkg_desc', 'theme_fordson_fel');
     $setting = new admin_setting_configcolourpicker($name, $title, $description, '');
     $setting->set_updatedcallback('theme_reset_all_caches');
     $page->add($setting);
@@ -167,11 +189,21 @@ $page->add(new admin_setting_heading($themename.'_colours', get_string('colours_
     $setting->set_updatedcallback('theme_reset_all_caches');
     $page->add($setting);
 
-    // Footer drawer background
+    // Footer background
     $name = $themename.'/footerbkg';
     $title = get_string('footerbkg', 'theme_fordson_fel');
     $description = get_string('footerbkg_desc', 'theme_fordson_fel');
-    $setting = new admin_setting_configcolourpicker($name, $title, $description, '');
+    $default = '#000000';
+    $setting = new admin_setting_configcolourpicker($name, $title, $description, $default);
+    $setting->set_updatedcallback('theme_reset_all_caches');
+    $page->add($setting);
+
+    // Footer background
+    $name = $themename.'/footerfg';
+    $title = get_string('footerfg', 'theme_fordson_fel');
+    $description = get_string('footerfg_desc', 'theme_fordson_fel');
+    $default = '#ffffff';
+    $setting = new admin_setting_configcolourpicker($name, $title, $description, $default);
     $setting->set_updatedcallback('theme_reset_all_caches');
     $page->add($setting);
 

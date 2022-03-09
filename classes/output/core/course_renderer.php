@@ -24,12 +24,17 @@
 
 namespace theme_fordson_fel\output\core;
 
+require_once($CFG->dirroot.'/course/renderer.php');
+require_once($CFG->dirroot.'/theme/fordson_fel/lib/filesettings_lib.php');
+require_once($CFG->dirroot.'/theme/fordson_fel/compatlib.php');
+
 defined('MOODLE_INTERNAL') || die();
 
 use \stdClass;
 use \moodle_url;
 use \lang_string;
 use \coursecat_helper;
+use \core_course_category;
 use \context_course;
 use \context_system;
 use \pix_url;
@@ -40,20 +45,16 @@ use \image_url;
 use \single_select;
 use \core_text;
 
-require_once($CFG->dirroot.'/course/renderer.php');
-require_once($CFG->dirroot.'/theme/fordson_fel/lib/filesettings_lib.php');
-require_once($CFG->dirroot.'/theme/fordson_fel/compatlib.php');
-
 global $PAGE;
 /**
  * Course renderer class.
  *
- * @package    theme_noanme
- * @copyright  2016 Frédéric Massart - FMCorz.net
+ * @package    theme_fordson_fel
+ * @copyright  2018 Valery Fremaux
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-if ($PAGE->theme->settings->coursetilestyle < 10) {
+if (!empty($PAGE->theme->settings->coursetilestyle) && $PAGE->theme->settings->coursetilestyle < 10) {
     class course_renderer extends \theme_boost\output\core\course_renderer {
 
         protected $thumbfiles;
@@ -75,8 +76,8 @@ if ($PAGE->theme->settings->coursetilestyle < 10) {
             $chelper->set_attributes(array(
                 'class' => 'frontpage-course-list-all'
             ));
-            $courses = theme_fordson_fel_get_category($id)->get_courses($chelper->get_courses_display_options());
-            $totalcount = theme_fordson_fel_get_category($id)->get_courses_count($chelper->get_courses_display_options());
+            $courses = theme_fordson_fel_get_category($id, $chelper)->get_courses($chelper->get_courses_display_options());
+            $totalcount = theme_fordson_fel_get_category($id, $chelper)->get_courses_count($chelper->get_courses_display_options());
 
             $rcourseids = array_keys($courses);
             $acourseids = array_chunk($rcourseids, 3);
@@ -354,7 +355,7 @@ if ($PAGE->theme->settings->coursetilestyle < 10) {
                                 }
                                 $rowcontent .= html_writer::end_tag('ul');
                             }
-                            
+
                             $rowcontent .= '</div>';
                             $rowcontent .= '<div class="col-md-6">
                                     <div class="course-summary">
@@ -428,7 +429,7 @@ if ($PAGE->theme->settings->coursetilestyle < 10) {
     background-blend-mode: overlay;">
                                 <div class="fullbox7">
                                 ';
-                            
+
                             $rowcontent .= '<div class="course-info-inner">';
                             $rowcontent .= html_writer::start_tag('div', array(
                                 'class' => $course->visible ? 'coursevisible course-title-fullboxbkg7 d-flex flex-sm-row flex-column' : 'course-title-fullboxbkg coursedimmed3 d-flex flex-sm-row flex-column'
@@ -436,7 +437,7 @@ if ($PAGE->theme->settings->coursetilestyle < 10) {
                             $rowcontent .= '<div class="col-md-6">
                                     <h4><a href="' . $courseurl . '">' . $trimtitle . '</a></h4>
                                     </div>';
-                                    if ($course->has_course_contacts()) {
+                            if ($course->has_course_contacts()) {
                                 $rowcontent .= '<div class="col-md-6">';
                                 $rowcontent .= html_writer::start_tag('ul', array(
                                     'class' => 'teacherscourseview'
@@ -537,7 +538,7 @@ if ($PAGE->theme->settings->coursetilestyle < 10) {
                 }
             }
 
-            $totalcount = theme_fordson_fel_get_category(0)->get_children_count();
+            $totalcount = theme_fordson_fel_get_category(0, $chelper)->get_children_count();
 
             $content = '';
             if ($this->countcategories == 0 || ($this->countcategories % 3) == 0) {
@@ -1373,7 +1374,7 @@ if ($PAGE->theme->settings->coursetilestyle < 10) {
             $content = '';
             if (!empty($searchcriteria)) {
                 // print search results
-    
+
                 $displayoptions = array('sort' => array('displayname' => 1));
                 // take the current page and number of results per page from query
                 $perpage = optional_param('perpage', 0, PARAM_RAW);
@@ -1385,7 +1386,7 @@ if ($PAGE->theme->settings->coursetilestyle < 10) {
                 // options 'paginationurl' and 'paginationallowall' are only used in method coursecat_courses()
                 $displayoptions['paginationurl'] = new moodle_url('/course/search.php', $searchcriteria);
                 $displayoptions['paginationallowall'] = true; // allow adding link 'View all'
-    
+
                 $class = 'course-search-result';
                 foreach ($searchcriteria as $key => $value) {
                     if (!empty($value)) {
@@ -1397,10 +1398,10 @@ if ($PAGE->theme->settings->coursetilestyle < 10) {
                         set_courses_display_options($displayoptions)->
                         set_search_criteria($searchcriteria)->
                         set_attributes(array('class' => $class));
-    
+
                 $courses = core_course_category::search_courses($searchcriteria, $chelper->get_courses_display_options());
                 $totalcount = core_course_category::search_courses_count($searchcriteria);
-    
+
                 if (is_dir($CFG->dirroot.'/mod/customlabel')) {
                     require_once($CFG->dirroot.'/mod/customlabel/xlib.php');
                     $morecourses = customlabel_search_courses($searchcriteria);
@@ -1410,9 +1411,9 @@ if ($PAGE->theme->settings->coursetilestyle < 10) {
                         }
                     }
                 }
-    
+
                 $courseslist = $this->coursecat_courses($chelper, $courses, $totalcount);
-    
+
                 if (!$totalcount) {
                     if (!empty($searchcriteria['search'])) {
                         $content .= $this->heading(get_string('nocoursesfound', '', $searchcriteria['search']));
@@ -1423,7 +1424,7 @@ if ($PAGE->theme->settings->coursetilestyle < 10) {
                     $content .= $this->heading(get_string('searchresults'). ": $totalcount");
                     $content .= $courseslist;
                 }
-    
+
                 if (!empty($searchcriteria['search'])) {
                     // print search form only if there was a search by search string, otherwise it is confusing
                     $content .= $this->box_start('generalbox mdl-align');

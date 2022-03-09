@@ -8,6 +8,23 @@ body {
     position: relative;
 }
 
+.breadcrumb {
+    padding: .25rem 1rem;
+    border-radius: 4px;
+}
+
+#page-login-index .customloginimage {
+    margin-bottom: 0;
+}
+
+#page-course-view-grid .activity {
+    border-bottom: none;
+}
+
+#page-course-view-grid td.custombox-header-thumb.instructions {
+    min-width: 75px;
+}
+
 /* ======= USER PREFERENCES ======== */
 
 /* titre des notification largeur des colonnes corrigé */
@@ -23,6 +40,10 @@ body {
 /* réduction du container pour éviter ascenseur de droite */
 .container-fluid {
     width: 98%;
+}
+
+#page-wrapper {
+    height: initial;
 }
 
 /* je vais voir les préférence d'un autre usager, décalage des boutons sur le headerbkg */
@@ -49,6 +70,10 @@ body {
 .tool_dataprivacy,
 .performanceinfo.pageinfo {
     margin-left:2rem;
+}
+
+.navbar {
+    width: 100%;
 }
 
 .navbar-nav .icon.shadow {
@@ -105,13 +130,17 @@ span.site-name.d-none.d-md-inline {
     margin-left: 5px;
 }
 
+nav[role="navigation"] ol.breadcrumb.style1 li {
+   margin-bottom: 0;
+}
+
 #page-course-view-grid .section-navigation.navigationtitle {
     text-align: center;
 }
 
 .felement.fgroup input[type="radio"] {
-    margin-right:10px;
-    margin-left:20px;
+    margin-right: 10px;
+    margin-left: 20px;
 }
 
 #custom_menu_1 > div > ul > li > a {
@@ -132,7 +161,7 @@ span.site-name.d-none.d-md-inline {
 }
 
 #page-mod-quiz-attempt #region-main {
-    border:none;
+    border: none;
 }
 
 img.activityicon {
@@ -153,7 +182,7 @@ img.activityicon {
 
 /* Dashboard panels fixes */
 .dashtitle h3 {
-    color:#fff;
+    color: #fff;
     border: 1px solid #ccc;
     padding: .3rem;
     font-size: 1.3rem;
@@ -182,8 +211,8 @@ img.activityicon {
 
 footer {
     /* position:fixed; */
-    bottom:0;
-    width:100%;
+    bottom: 0;
+    width: 100%;
     z-index: 1000;
 }
 
@@ -215,7 +244,7 @@ footer {
 
 .toggle-password {
     margin-top: 8px;
-    margin-left:8px;
+    margin-left: 8px;
 }
 
 /* fix the controls on blocs for collapsend blocks */
@@ -250,4 +279,50 @@ footer {
 
 .hide-on-scroll.show {
     opacity: 1;
+}
+
+#dyslexic-toggle-switch {
+    margin: 5px 20px 2px 10px;
+    padding: 3px 10px;
+    border-radius: 4px;
+}
+
+.pagelayout-embeded #page #page-content,
+.pagelayout-popup #page #page-content {
+    margin-top: 0;
+}
+
+input[type="radio"] {
+	margin-right: 10px;
+}
+
+input[type="checkbox"] {
+    margin-right: 10px;
+}
+
+/* confidentiality on IP in log reports */
+table.reportlog td:last-child,
+table.reportlog th:last-child {
+    display: none;
+}
+
+/* Site indicators */
+
+.site-indicators .chartjs-size-monitor {
+    width: 50%;
+}
+
+.site-indicators.alertmessage {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+#page-course-index-category .generalbox.info {
+    border: none;
+    text-align: center;
+}
+
+#page-course-index-category .course-category-ctls {
+    display: none;
 }

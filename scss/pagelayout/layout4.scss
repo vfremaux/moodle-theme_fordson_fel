@@ -78,6 +78,12 @@ div#page-content {
     border: 1px solid $card-bg;
 }
 
+.pagelayout-embedded div#learningcontent,
+.pagelayout-embedded div#page-content,
+.pagelayout-popup div#learningcontent,
+.pagelayout-popup div#page-content {
+    margin-top: 0;
+}
 
 /* FORDSON Default Styling */
 .card {
@@ -117,7 +123,7 @@ div#page-content {
 }
 
 #nav-drawer::-webkit-scrollbar-thumb {
-    background-color: darken($brand-primary, 15%);
+    background-color: darken($brandprimary, 15%);
     outline: 1px solid slategrey;
 }
 

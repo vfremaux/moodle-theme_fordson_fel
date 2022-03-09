@@ -52,11 +52,17 @@ class theme_fordson_fel_format_flexsections_renderer extends format_flexsections
         $this->config = get_config('theme_'.$PAGE->theme->name);
         $this->availablestyles = $this->parse_styleconfig();
 
+        if ($this->config->flexsectionscollapse == 0) {
+            $amdscript = 'theme_fordson_fel/flex_section_control';
+        } else {
+            $amdscript = 'theme_fordson_fel/flex_section_control_accordion';
+        }
+
         if (!$initialized) {
             if ($PAGE->user_is_editing()) {
-                $PAGE->requires->js_call_amd('theme_fordson_fel/flex_section_control', 'init_editing', array($COURSE->id));
+                $PAGE->requires->js_call_amd($amdscript, 'init_editing', array($COURSE->id));
             } else {
-                $PAGE->requires->js_call_amd('theme_fordson_fel/flex_section_control', 'init', array($COURSE->id));
+                $PAGE->requires->js_call_amd($amdscript, 'init', array($COURSE->id));
             }
             $initialized = true;
         }
@@ -251,6 +257,18 @@ class theme_fordson_fel_format_flexsections_renderer extends format_flexsections
                 $contentclassurl = new moodle_url('/theme/fordson_fel/sections/sectionclass.php', array('id' => $section->id, 'sr' => $sr));
                 $text = new lang_string('chooseclass', 'theme_'.$PAGE->theme->name);
                 $controls[] = new format_flexsections_edit_control('contentclass', $contentclassurl, $text);
+            }
+        }
+
+        // Theme adds per section role assign.
+        if (is_dir($CFG->dirroot.'/local/sectioncontexts')) {
+            if ($PAGE->user_is_editing()) {
+                if (has_capability('local/sectioncontexts:assignrole', $context)) {
+                    $sectioncontext = context_course_section::instance($section->id);
+                    $assignroleurl = new moodle_url('/admin/roles/assign.php', array('contextid' => $sectioncontext->id, 'sesskey' => sesskey()));
+                    $text = new lang_string('assignrole', 'role');
+                    $controls[] = new format_flexsections_edit_control('assignrole', $assignroleurl, $text);
+                }
             }
         }
 
@@ -478,19 +496,19 @@ class theme_fordson_fel_format_flexsections_renderer extends format_flexsections
         $str = '';
 
         $params = array('type' => 'button',
-                        'class' => 'btn flexsection-global-control',
+                        'class' => 'btn btn-secondary flexsection-global-control',
                         'id' => 'flexsections-control-collapseall',
                         'value' => get_string('collapseall', 'theme_fordson_fel'));
         $str .= html_writer::tag('input', '', $params);
 
         $params = array('type' => 'button',
-                        'class' => 'btn flexsection-global-control',
+                        'class' => 'btn btn-secondary flexsection-global-control',
                         'id' => 'flexsections-control-expandall',
                         'value' => get_string('expandall', 'theme_fordson_fel'));
         $str .= html_writer::tag('input', '', $params);
 
         $params = array('type' => 'button',
-                        'class' => 'btn flexsection-global-control',
+                        'class' => 'btn btn-secondary flexsection-global-control',
                         'id' => 'flexsections-control-map',
                         'value' => get_string('map', 'theme_fordson_fel'));
         $str .= html_writer::tag('input', '', $params);

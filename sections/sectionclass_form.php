@@ -31,10 +31,8 @@ class sectionclass_form extends moodleform {
 
         $mform = $this->_form;
 
-        /*
         $mform->addElement('hidden', 'overridestyle');
         $mform->setType('overridestyle', PARAM_TEXT);
-        */
 
         $label = get_string('sectionstyleoverride', 'theme_fordson_fel');
         $mform->addElement('header', 'styleoverridehdr', $label);
@@ -49,14 +47,12 @@ class sectionclass_form extends moodleform {
         }
         $mform->addGroup($group, 'applytogroup', get_string('applyto', 'theme_fordson_fel'), array(' '), false);
 
-        $attrs = array('value' => 'none',
-                       'type' => 'submit',
-                       'form' => 'mform1',
-                       'name' => 'overridestyle');
+        $attrs = array('data-value' => 'none',
+                       'name' => 'overridestyle_default');
         if (empty($this->_customdata['current'])) {
-            $attrs['class'] = 'btn currentchoice';
+            $attrs['class'] = 'btn apply-section-style currentchoice';
         } else {
-            $attrs['class'] = 'btn';
+            $attrs['class'] = 'btn apply-section-style';
         }
         $btnlabel = get_string('nostyleoverride', 'theme_fordson_fel', '');
         $btn = html_writer::tag('button', $btnlabel, $attrs)."<br/><br/>";
@@ -69,12 +65,13 @@ class sectionclass_form extends moodleform {
                 $btncurrentclass = ($name == $this->_customdata['current']) ? 'btn currentchoice' : 'btn';
                 $currentclass = ($name == $this->_customdata['current']) ? 'currentchoice' : '';
 
-                // $attrs = array('onclick' => 'submitclasschange(this, \''.$name.'\');return true;', 'class' => $btncurrentclass);
-                $attrs = array('value' => $name,
-                               'type' => 'submit',
-                               'form' => 'mform1',
-                               'name' => 'overridestyle',
-                               'class' => 'btn');
+                $attrs = array('data-value' => $name,
+                               'name' => 'overridestyle_'.$name);
+                if (!empty($this->_customdata['current']) && ($this->_customdata['current'] == $name)) {
+                    $attrs['class'] = 'btn apply-section-style currentchoice';
+                } else {
+                    $attrs['class'] = 'btn apply-section-style';
+                }
                 $btnlabel = get_string('activatestyle', 'theme_fordson_fel').' > '.$label;
                 $btn = html_writer::tag('button', $btnlabel, $attrs);
                 $mform->addElement('html', $btn);

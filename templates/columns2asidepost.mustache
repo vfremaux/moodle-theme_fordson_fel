@@ -51,6 +51,12 @@
 <!-- fordson_fel:columns2asidepost -->
 {{> theme_boost/head }}
 
+<!-- accessibility add-ons -->
+<style>
+{{{dynamiccss}}}
+</style>
+<!-- /accessibility add-ons -->
+
 <body {{{ bodyattributes }}}>
 
 <div id="page-wrapper">
@@ -112,7 +118,7 @@
     {{{ output.standard_after_main_region_html }}}
 
     {{#hasfhsdrawer}}
-    {{> theme_boost/nav-drawer }}
+    {{> theme_fordson_fel/nav-drawer }}
     {{/hasfhsdrawer}}
 
     {{#hasspdrawer}}

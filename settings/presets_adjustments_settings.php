@@ -30,7 +30,7 @@ $page = new admin_settingpage($themename.'_presetadjustment', get_string('preset
 // Content Info.
 $name = $themename.'/generalcontentinfo';
 $heading = get_string('generalcontentinfo', 'theme_fordson_fel');
-$information = get_string('generalcontentinfodesc', 'theme_fordson_fel');
+$information = get_string('generalcontentinfo_desc', 'theme_fordson_fel');
 $setting = new admin_setting_heading($name, $heading, $information);
 $page->add($setting);
 
@@ -233,7 +233,7 @@ $page->add($setting);
 // This is the descriptor for icon One
 $name = $themename.'/coursetileinfo';
 $heading = get_string('coursetileinfo', 'theme_fordson_fel');
-$information = get_string('coursetileinfodesc', 'theme_fordson_fel');
+$information = get_string('coursetileinfo_desc', 'theme_fordson_fel');
 $setting = new admin_setting_heading($name, $heading, $information);
 $page->add($setting);
 

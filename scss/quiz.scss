@@ -4,8 +4,17 @@
 .qtext {
     padding-top: 10px;
     font-size: larger;
-    text-align: center;
     color: $brandprimary;
+    text-align: initial;
+
+    h4 {
+        text-align: center;
+        color: $brandprimary;
+    }
+
+    .form-control {
+        display: inline-block;
+    }
 }
 
 .answer {
@@ -19,12 +28,19 @@
     margin-bottom: 15px;
 }
 
+@media screen and (max-width: 576px) {
+    #page-mod-quiz-attempt .prompt {
+        max-width: 100%;
+    }
+}
+
 .que .info {
     background-color: $white;
     border-color: $brandprimary;
 }
 
 /*boite des questions*/
+
 .formulation.clearfix {
     border: 1px solid $brandprimary;
     box-shadow: 5px 5px 10px 0px $gray-100;
@@ -67,4 +83,43 @@
 
 .quiz-behaviour-progress-bar {
     background-color: $gray-200;
+}
+
+/* QUIZ navigation */
+
+.path-mod-quiz #mod_quiz_navblock .qnbutton {
+    color: #000;
+}
+
+.path-mod-quiz #mod_quiz_navblock .qnbutton .thispage {
+    border-width: 0;
+}
+
+.qn_buttons {
+    border: 1px solid $brandprimary;
+    -webkit-box-shadow: 5px 5px 10px 0 #f8f9fa;
+    box-shadow: 5px 5px 10px 0 #f8f9fa;
+    border-radius: 4px;
+    padding-left: 10px;
+    padding-top: 5px;
+}
+
+.qn_buttons .notyetanswered .trafficlight{
+    background-color: $brandprimary !important;
+}
+
+.path-mod-quiz #mod_quiz_navblock .qnbutton.complete .trafficlight,
+.path-mod-quiz #mod_quiz_navblock .qnbutton.answersaved .trafficlight,
+.path-mod-quiz #mod_quiz_navblock .qnbutton.requiresgrading .trafficlight {
+    background-color: #e9ecef;
+}
+
+.qn_buttons .thispage, .qn_buttons .thispage .thispageholder {
+    color: #000 !important;
+}
+
+.path-mod-quiz #mod_quiz_navblock a.qnbutton:hover,
+.path-mod-quiz #mod_quiz_navblock a.qnbutton:active,
+.path-mod-quiz #mod_quiz_navblock a.qnbutton:focus {
+    box-shadow: unset;
 }

@@ -26,6 +26,7 @@ defined('MOODLE_INTERNAL') || die();
 
 require_once($CFG->dirroot.'/theme/fordson_fel/lib/mobile_detect_lib.php');
 require_once($CFG->dirroot.'/theme/fordson_fel/lib.php');
+require_once($CFG->dirroot.'/theme/fordson_fel/lib/fordson_fel_lib.php');
 
 if (is_dir($CFG->dirroot.'/local/technicalsignals')) {
     require_once($CFG->dirroot.'/local/technicalsignals/lib.php');
@@ -59,13 +60,17 @@ list($hasfhsdrawer, $navdraweropen, $hasspdrawer, $navspdraweropen) = theme_ford
 $bodyattributes = $OUTPUT->body_attributes($extraclasses);
 
 $regionmainsettingsmenu = $OUTPUT->region_main_settings_menu();
-$footnote = $OUTPUT->footnote();
+$footnote = $OUTPUT->footer_element('footnote');
 $pagedoclink = $OUTPUT->page_doc_link();
 $coursefooter = $OUTPUT->course_footer();
 $sitealternatename = '';
 if (!empty($PAGE->theme->settings->sitealternatename)) {
     $sitealternatename = $PAGE->theme->settings->sitealternatename;
 }
+$OUTPUT->check_dyslexic_state();
+$OUTPUT->check_highcontrast_state();
+$dysstate = $OUTPUT->get_dyslexic_state();
+$hcstate = $OUTPUT->get_highcontrast_state();
 
 $templatecontext = [
     'sitename' => format_string($SITE->shortname, true, ['context' => context_course::instance(SITEID) , "escape" => false]) , 
@@ -90,11 +95,22 @@ $templatecontext = [
     'pagedoclink' => $pagedoclink,
     'hascustomlogin' => $PAGE->theme->settings->showcustomlogin == 1,
     'hasfooterelements' => !empty($PAGE->theme->settings->leftfooter) || !empty($PAGE->theme->settings->midfooter) || !empty($PAGE->theme->settings->rightfooter),
-    'leftfooter' => @$PAGE->theme->settings->leftfooter,
-    'midfooter' => @$PAGE->theme->settings->midfooter,
-    'rightfooter' => @$PAGE->theme->settings->rightfooter,
+    'leftfooter' => $OUTPUT->footer_element('leftfooter'),
+    'midfooter' => $OUTPUT->footer_element('midfooter'),
+    'rightfooter' => $OUTPUT->footer_element('rightfooter'),
     'showlangmenu' => @$CFG->langmenu,
-    'sitealternatename' => $sitealternatename
+    'sitealternatename' => $sitealternatename,
+
+    'useaccessibility' => @$PAGE->theme->settings->usedyslexicfont || @$PAGE->theme->settings->usehighcontrastfont,
+    'usedyslexicfont' => @$PAGE->theme->settings->usedyslexicfont,
+    'usehighcontrastfont' => @$PAGE->theme->settings->usehighcontrastfont,
+    'dyslexicactive' => ($dysstate) ? 'active' : '',
+    'highcontrastactive' => ($hcstate) ? 'active' : '',
+    'dyslexicurl' => $OUTPUT->get_dyslexic_url(),
+    'highcontrasturl' => $OUTPUT->get_highcontrast_url(),
+    'dyslexicactiontitle' => ($dysstate) ? get_string('unsetdys', 'theme_fordson_fel') : get_string('setdys', 'theme_fordson_fel'),
+    'highcontrastactiontitle' => ($hcstate) ? get_string('unsethc', 'theme_fordson_fel') : get_string('sethc', 'theme_fordson_fel'),
+    'dynamiccss' => $OUTPUT->get_dynamic_css($PAGE->theme),
 ];
 
 if (function_exists('debug_blocks')) {

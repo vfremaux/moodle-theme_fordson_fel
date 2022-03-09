@@ -39,6 +39,12 @@
 <!-- fordson_fel:pagefordson_fel  -->
 {{> theme_boost/head }}
 
+<!-- accessibility add-ons -->
+<style>
+{{{dynamiccss}}}
+</style>
+<!-- /accessibility add-ons -->
+
 <body {{{ bodyattributes }}}>
 
 <div id="page-wrapper">
@@ -72,7 +78,7 @@
             <!-- O(course_content_header) -->
             {{{ output.course_content_header }}}
             <!-- /O(course_content_header) -->
-            <div id="format_page_content" class="format_page_content clearfix">
+            <div id="format_page_content" class="format_page_content clearfix section section-{{sectionid}}">
             <!-- O(main_content) -->
             {{{ output.main_content }}}
             <!-- /O(main_content) -->

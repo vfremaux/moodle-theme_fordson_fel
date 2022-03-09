@@ -1,0 +1,115 @@
+/*=== Site wide buttons and side effects ===*/
+
+body:not(.path-message) button,
+body:not(.navbar) button,
+body:not(.path-message) [type="button"],
+body:not(.navbar) [type="button"],
+body:not(.path-message)  [type="reset"],
+body:not(.navbar)  [type="reset"],
+body:not(.path-message)  [type="submit"],
+body:not(.navbar)  [type="submit"],
+body:not(.path-message) .btn-primary,
+body:not(.navbar) .btn-primary,
+body:not(.path-message)  .btn-secondary,
+body:not(.navbar) .btn-secondary,
+body:not(.navbar) div.btn-secondary > a,
+body:not(.path-message) .btn:not(:disabled):not(.disabled)
+body:not(.navbar)  .btn:not(:disabled):not(.disabled) {
+    cursor: pointer;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    padding: .375rem .75rem;
+    margin: 3px;
+    background-color: $brandprimary;
+    color: $brandprimaryalt;
+}
+
+body:not(.path-message) .btn-secondary {
+    margin: 0;
+}
+
+body:not(.path-message)  button:hover,
+body:not(.path-message)  html [type="button"]:hover,
+body:not(.path-message)  html [type="reset"]:hover,
+body:not(.path-message)  html [type="submit"]:hover,
+body:not(.path-message)  .btn-primary:hover,
+body:not(.path-message)  .btn-secondary:hover { 
+    background-color: $brandsecondary;
+    color: $brandsecondaryalt;
+    box-shadow: 0 0 .2rem  $brandprimary;
+    transition: color 0.15s ease-in-out,background-color 0.15s ease-in-out,border-color 0.15s ease-in-out,box-
+}
+
+body:not(.path-message) .btn-secondary:not(:disabled):not(.disabled):active,
+body:not(.path-message) .btn-default:not(:disabled):not(.disabled):active,
+body:not(.path-message) .btn-secondary:not(:disabled):not(.disabled).active,
+body:not(.path-message) button:active,
+body:not(.path-message) buttons:focus,
+body:not(.path-message) [type="button"]:active,
+body:not(.path-message) [type="button"]:focus,
+body:not(.path-message) [type="reset"]:active,
+body:not(.path-message) [type="reset"]:focus,
+body:not(.path-message) [type="submit"]:active,
+body:not(.path-message) [type="submit"]:focus,
+body:not(.path-message) .btn-secondary:active,
+body:not(.path-message) .btn-secondary:focus,
+body:not(.path-message) .btn-primary:active,
+body:not(.path-message) .btn-primary:focus {
+    background-color: $brandsecondary;
+    border-color: $brandprimary;
+    color: $brandsecondaryalt;
+}
+
+body:not(.path-message) button:focus,
+body:not(.path-message) [type="button"]:focus, 
+body:not(.path-message) [type="reset"]:focus,
+body:not(.path-message) [type="submit"]:focus,
+body:not(.path-message) .btn-secondary:focus,
+body:not(.path-message) .btn-primary:focus {
+    box-shadow: 0 0 .2rem  $brandprimary;
+    transition: color 0.15s ease-in-out,background-color 0.15s ease-in-out,border-color 0.15s ease-in-out,box- 
+}
+
+.btn.btn-link.p-0, .btn.btn-link {
+    background-color: transparent;
+}
+
+.close{
+   text-shadow: none;
+   opacity: 1;
+}
+
+div.editor_atto_toolbar button .icon {
+    color: $brandprimaryalt;
+    background-color: $brandprimary;
+}
+
+div.editor_atto_toolbar button:hover .icon {
+    background-color: $brandprimaryalt;
+    color: $brandprimary;
+}
+
+div.editor_atto_toolbar button.atto_collpase_button.highlight .icon {
+    background-color: $brandprimaryalt;
+    color: $brandprimary;
+}
+
+.atto_equation_groups button {
+    background-color: $brandprimaryalt !important;
+    color: $brandprimary !important;
+    border: $brandprimary solid 1px !important;
+    border-radius: 4px;
+}
+
+.text-reset {
+    background-color: $brandprimary !important;
+    color: $brandprimaryalt !important;
+}
+
+.teacherdash .btn.btn-success {
+    background-color: $success;
+}
+
+.teacherdash .btn.btn-danger {
+    background-color: $danger;
+}

@@ -25,7 +25,7 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version   = 2019111010;
+$plugin->version   = 2022021600;
 $plugin->release  = 'Moodle 3.6 fordson_fel v3.6 release 6 Build(2019111010)';
 $plugin->maturity  = MATURITY_STABLE;
 $plugin->requires  = 2018112800;
@@ -35,4 +35,4 @@ $plugin->dependencies = array(
 );
 
 // Non moodle attributes.
-$plugin->codeincrement = '3.6.0006';
+$plugin->codeincrement = '3.6.0007';

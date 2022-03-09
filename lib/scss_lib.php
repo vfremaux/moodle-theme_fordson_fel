@@ -52,11 +52,12 @@ function theme_fordson_fel_get_main_scss_content($theme) {
     $context = context_system::instance();
     $iterator = new DirectoryIterator($CFG->dirroot . '/theme/fordson_fel/scss/preset/');
     $presetisset = '';
+    $presetscss = '';
     foreach ($iterator as $pfile) {
         if (!$pfile->isDot()) {
             $presetname = substr($pfile, 0, strlen($pfile) - 5); // Name - '.scss'.
             if ($filename == $presetname) {
-                $scss .= file_get_contents($CFG->dirroot . '/theme/fordson_fel/scss/preset/' . $pfile);
+                $presetscss .= file_get_contents($CFG->dirroot . '/theme/fordson_fel/scss/preset/' . $pfile);
                 $presetisset = true;
             }
         }
@@ -64,13 +65,17 @@ function theme_fordson_fel_get_main_scss_content($theme) {
     if (!$presetisset) {
         $filename .= '.scss';
         if ($filename && ($presetfile = $fs->get_file($context->id, 'theme_'.$theme->name, 'preset', 0, '/', $filename))) {
-            $scss .= $presetfile->get_content();
+            $presetscss .= $presetfile->get_content();
         }
         else {
             // Safety fallback - maybe new installs etc.
             // Nothing presetted.
-            $scss .= file_get_contents($CFG->dirroot . '/theme/fordson_fel/scss/preset/Default.scss');
+            $presetscss .= file_get_contents($CFG->dirroot . '/theme/fordson_fel/scss/preset/Default.scss');
         }
+    }
+
+    if (empty($theme->settings->presetaslast)) {
+        $scss .= $presetscss;
     }
 
     $scss .= file_get_contents($CFG->dirroot . '/theme/fordson_fel/scss/fordson_fel_variables.scss');
@@ -131,19 +136,48 @@ function theme_fordson_fel_get_main_scss_content($theme) {
         $scss .= file_get_contents($CFG->dirroot . '/theme/fordson_fel/scss/marketingstyle/marketingstyle4.scss');
     }
 
-    $scss .= file_get_contents($CFG->dirroot . '/theme/fordson_fel/scss/styles.scss');
+    if (is_readable($CFG->dirroot . '/theme/fordson_fel/scss/styles.scss')) {
+        $scss .= file_get_contents($CFG->dirroot . '/theme/fordson_fel/scss/styles.scss');
+    }
+    if (is_readable($CFG->dirroot . '/theme/fordson_fel/scss/non_core_plugins.scss')) {
+        $scss .= file_get_contents($CFG->dirroot . '/theme/fordson_fel/scss/non_core_plugins.scss');
+    }
 
-    $scss .= file_get_contents($CFG->dirroot . '/theme/fordson_fel/scss/stylebreadcrumb.scss');
-    $scss .= file_get_contents($CFG->dirroot . '/theme/fordson_fel/scss/navbar.scss');
-    $scss .= file_get_contents($CFG->dirroot . '/theme/fordson_fel/scss/tabs.scss');
-    $scss .= file_get_contents($CFG->dirroot . '/theme/fordson_fel/scss/quiz.scss');
-    $scss .= file_get_contents($CFG->dirroot . '/theme/fordson_fel/scss/responsive.scss');
-    $scss .= file_get_contents($CFG->dirroot . '/theme/fordson_fel/scss/modthumb.scss');
+    if (is_readable($CFG->dirroot . '/theme/fordson_fel/scss/blocks.scss')) {
+        $scss .= file_get_contents($CFG->dirroot . '/theme/fordson_fel/scss/blocks.scss');
+    }
+    if (is_readable($CFG->dirroot . '/theme/fordson_fel/scss/stylebreadcrumb.scss')) {
+        $scss .= file_get_contents($CFG->dirroot . '/theme/fordson_fel/scss/stylebreadcrumb.scss');
+    }
+    if (is_readable($CFG->dirroot . '/theme/fordson_fel/scss/navbar.scss')) {
+        $scss .= file_get_contents($CFG->dirroot . '/theme/fordson_fel/scss/navbar.scss');
+    }
+    if (is_readable($CFG->dirroot . '/theme/fordson_fel/scss/tabs.scss')) {
+        $scss .= file_get_contents($CFG->dirroot . '/theme/fordson_fel/scss/tabs.scss');
+    }
+    if (is_readable($CFG->dirroot . '/theme/fordson_fel/scss/quiz.scss')) {
+        $scss .= file_get_contents($CFG->dirroot . '/theme/fordson_fel/scss/quiz.scss');
+    }
+    if (is_readable($CFG->dirroot . '/theme/fordson_fel/scss/responsive.scss')) {
+        $scss .= file_get_contents($CFG->dirroot . '/theme/fordson_fel/scss/responsive.scss');
+    }
+    if (is_readable($CFG->dirroot . '/theme/fordson_fel/scss/modthumb.scss')) {
+        $scss .= file_get_contents($CFG->dirroot . '/theme/fordson_fel/scss/modthumb.scss');
+    }
+    if (is_readable($CFG->dirroot . '/theme/fordson_fel/scss/buttons.scss')) {
+        $scss .= file_get_contents($CFG->dirroot . '/theme/fordson_fel/scss/buttons.scss');
+    }
+
+    if (!empty($theme->settings->presetaslast)) {
+        $scss .= $presetscss;
+    }
 
     // Add variant local sheet.
     if (preg_match('/\d{2}$/', $theme->name)) {
         // We are in a numbered variant.
-        $scss .= file_get_contents($CFG->dirroot . '/theme/'.$theme->name.'/scss/variant.scss');
+        if (is_readable($CFG->dirroot . '/theme/'.$theme->name.'/scss/variant.scss')) {
+            $scss .= file_get_contents($CFG->dirroot . '/theme/'.$theme->name.'/scss/variant.scss');
+        }
     }
 
     return $scss;
@@ -163,18 +197,20 @@ function theme_fordson_fel_get_pre_scss($theme) {
     $configurable = [
     // Config key => variableName,
     'brandprimary' => ['brandprimary'],
+    'brandprimaryalt' => ['brandprimaryalt'],
     'brandsecondary' => ['brandsecondary'],
+    'brandsecondaryalt' => ['brandsecondaryalt'],
     'brandsuccess' => ['success'],
     'brandinfo' => ['info'],
     'brandwarning' => ['warning'],
     'branddanger' => ['danger'],
 
-    'topnavbarbg' => ['topnavbar-bg'],
+    'topnavbarbkg' => ['topnavbar-bg'],
     'topnavbarfg' => ['topnavbar-fg'],
-    'topnavbarbghov' => ['topnavbar-bg-hover'],
-    'topnavbarteacherbg' => ['teachernavbarcolor'],
+    'topnavbarbkghov' => ['topnavbar-bg-hover'],
+    'topnavbarteacherbkg' => ['teachernavbarcolor'],
 
-    'bodybackground' => ['body-bg'],
+    'bodybkg' => ['body-bg'],
 
     'breadcrumbbkg' => ['breadcrumb-bg'],
     'breadcrumbfg' => ['breadcrumb-fg'],
@@ -182,13 +218,16 @@ function theme_fordson_fel_get_pre_scss($theme) {
     'cardbkg' => ['card-bg'],
 
     'drawerbkg' => ['drawer-bg'],
-    'footerbkg' => ['footer-bg'],
+    'drawerfg' => ['drawer-fg'],
 
-    'fploginformbg' => ['fploginform-bg'],
+    'footerbkg' => ['footer-bg'],
+    'footerfg' => ['footer-fg'],
+
+    'fploginformbkg' => ['fploginform-bg'],
     'fploginformfg' => ['fploginform-fg'],
 
     'headerimagepadding' => ['headerimagepadding'],
-    'markettextbg' => ['markettextbg'],
+    'markettextbkg' => ['markettextbg'],
     'iconwidth' => ['fpicon-width'],
     'courseboxheight' => ['courseboxheight'],
     'learningcontentpadding' => ['learningcontentpadding'],
@@ -204,7 +243,9 @@ function theme_fordson_fel_get_pre_scss($theme) {
 
     // Add settings variables.
     foreach ($configurable as $configkey => $targets) {
-        $value = $theme->settings->{$configkey};
+        if (isset($theme->settings->{$configkey})) {
+            $value = $theme->settings->{$configkey};
+        }
         if (empty($value)) {
             // $value = 'undefined';
             continue;
@@ -347,25 +388,4 @@ function theme_fordson_fel_get_pre_scss($theme) {
 
     return $prescss;
 }
-
-/**
- * Inject additional SCSS.
- *
- * @param theme_config $theme The theme config object.
- * @return string
- */
-
-/* Removed to fix double import of extra SCSS at bottom of color page
-
-function theme_fordson_fel_get_extra_scss($theme) {
-    // Adapted from Boost to allow other changes or settings if required.
-    
-    if (!empty($theme->settings->scss)) {
-        $extrascss .= $theme->settings->scss;
-    } else {
-        $extrascss = '';
-    }
-
-    return $extrascss;
-}*/
 

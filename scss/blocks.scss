@@ -1,0 +1,20 @@
+/*Titrage bloc latéraux*/
+
+.card-title {
+    color: $brandprimary;
+}
+
+.card-title::before {
+    background-color: $brandsecondary;
+}
+
+h2.card-title {
+    padding: 0.5rem 0 1rem 0.5rem;
+    font-weight: 100;
+}
+
+h5.card-title {
+    border-top: 4px solid $brandprimary;
+    background-color: $brandsecondary;
+    padding: 0.5rem 0 1rem 0.5rem;
+}

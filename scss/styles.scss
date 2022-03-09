@@ -40,7 +40,12 @@
             src: $titlefont;
         }
 
-        h1,h2,h3,h4 {
+        /* this is also alike a block title */
+        nav.list-group [data-key="coursehome"] {
+            font-family: "titlefont" !important;
+        }
+
+        h1,h2,h3,h4,h5,h6 {
             font-family: 'titlefont' !important;
         }
     }
@@ -52,6 +57,25 @@
 
 .headerlogo img {
     padding: $spacer 0;
+}
+
+/*
+ * signals
+ */
+.signal-danger {
+    background-color: $danger;
+}
+
+.signal-warning {
+    background-color: $warning;
+}
+
+.signal-info {
+    background-color: $info;
+}
+
+.signal-success {
+    background-color: $success;
 }
 
 /**
@@ -97,7 +121,9 @@
 
 // block regions
 
+nav.list-group [data-key="coursehome"],
 .block-region h2 {
+    font-weight: 300;
     font-size: 1.3rem;
 }
 
@@ -317,12 +343,14 @@ div#blockslider {
     padding: 1rem;
     position: relative;
 }
+
 .blockpanelbtn {
     position: absolute;
     right: 0;
     top: 0;
     z-index: 2;
 }
+
 .blockpanelbtn .btn:focus, .blockpanelbtn .btn-primary:focus {
     outline: 0;
     box-shadow: none !important;
@@ -340,21 +368,50 @@ a#blocksliderbutton {
 
 /* Footer */
 
-ul.footercontact {
-    list-style: none;
+.logininfo {
+    color: $footer-fg;
+    text-decoration: none;
 }
 
 #page-footer {
     background-color: $footer-bg;
+
+	a,
+	p {
+	    color: $footer-fg;
+	    text-decoration: none;
+	}
+	
+	h1,
+	p {
+	    color: $footer-fg;
+	}
+	
+	.socials_wrapper .socials {
+	    padding-left: 0;
+
+		a {
+		    text-decoration: none !important;
+		    color: $brandprimary;
+		}
+	}	
 }
 
-#page-footer .socials_wrapper .socials {
-    padding-left: 0;
+ul.footercontact {
+    list-style: none;
 }
 
-#page-footer .socials_wrapper .socials a{
-    text-decoration: none !important;
-    color: $brandprimary;
+.aalink.focus, 
+#page-footer a:not([class]).focus, 
+.arrow_link.focus, a:not([class]).focus, 
+.activityinstance > a.focus, 
+.aalink:focus, 
+#page-footer a:not([class]):focus, 
+.arrow_link:focus, 
+a:not([class]):focus, 
+.activityinstance > a:focus {
+    background-color: transparent;
+    box-shadow: none;
 }
 
 /* Slideshow */
@@ -563,6 +620,7 @@ form#enrolform_easy button.btn.btn-primary {
     background-color:rgba($black, 0.8);
     border-radius: 0 0 .25rem .25rem;
 }
+
 @media screen and (max-width: 576px) {
     .course-summary-2col{
         display:none;
@@ -773,7 +831,7 @@ form#enrolform_easy button.btn.btn-primary {
 }
 
 .coursedimmed9 {
-    background-color: rgba($secondary, 0.2);
+    background-color: rgba($brandsecondary, 0.2);
 }
 
 .class-box-courseview {
@@ -904,6 +962,18 @@ ul.teacherscourseview {
     background-color: $brandprimary;
 }
 
+.dashtitle h3.card-title {
+    color: #fff;
+    border: 1px solid #ccc;
+    padding: .3rem;
+    font-size: 1.3rem;
+    font-weight: lighter;
+}
+
+.dashtitle h3.card-title::before {
+    content: none;
+}
+
 .jumpmenu {
     display: inline-block;
 }
@@ -966,72 +1036,6 @@ ul.teacherscourseview {
 .navbar-nav .coursecontrols .nav-item + .nav-item {
     margin-left: .25rem;
 }
-
-.navbar {
-    background-color: $topnavbar-bg;
-    color: $topnavbar-fg;
-}
-
-.navbar a {
-    color: $topnavbar-fg;
-}
-
-// FHS Navbar
-.navbar-fhs {
-  .navbar-brand {
-    color: $navbar-fhs-active-color;
-
-    @include hover-focus {
-      color: $navbar-fhs-active-color;
-    }
-  }
-
-  .navbar-nav {
-    .nav-link {
-      color: $navbar-fhs-color;
-
-      @include hover-focus {
-        color: $navbar-fhs-hover-color;
-      }
-
-      &.disabled {
-        color: $navbar-fhs-disabled-color;
-      }
-    }
-
-    .show > .nav-link,
-    .active > .nav-link,
-    .nav-link.show,
-    .nav-link.active {
-      color: $navbar-fhs-active-color;
-    }
-  }
-
-  .navbar-toggler {
-    color: $navbar-fhs-color;
-    border-color: $navbar-fhs-toggler-border-color;
-  }
-
-  .navbar-toggler-icon {
-    background-image: $navbar-fhs-toggler-icon-bg;
-  }
-
-  .navbar-text {
-    color: $navbar-fhs-color;
-    a {
-      color: $navbar-fhs-active-color;
-
-      @include hover-focus {
-        color: $navbar-fhs-active-color;
-      }
-    }
-  }
-}
-
-span.userbutton {
-    color: $topnavbar-fg;
-}
-
 
 #nav-drawer.closed {
     left: -($drawer-width + $drawer-offscreen-gutter);
@@ -1293,9 +1297,6 @@ nav.fixed-top.navbar.navbar-student.navbar-expand.moodle-has-zindex {
 
 [data-region="spdrawer"] {
     background-color: $spdrawer-bg;
-}
-
-[data-region="spdrawer"] {
     position: fixed;
     padding: $drawer-padding-x $drawer-padding-y;
     width: $drawer-width;
@@ -1304,7 +1305,6 @@ nav.fixed-top.navbar.navbar-student.navbar-expand.moodle-has-zindex {
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
     z-index: $zindex-dropdown - 1;
-    background-color: darken($body-bg, 5%);
     -webkit-transition: right 0.5s ease, left 0.5s ease;
     -moz-transition: right 0.5s ease, left 0.5s ease;
     transition: right 0.5s ease, left 0.5s ease;
@@ -1320,68 +1320,6 @@ nav.fixed-top.navbar.navbar-student.navbar-expand.moodle-has-zindex {
     visibility: hidden;
 }
 
-#admin-breadcrumbstyle input[type="radio"] {
-    margin-right: 10px;
-}
-
-nav[role="navigation"] ol.breadcrumb.style1 li {
-    color: $breadcrumb-fg;
-    background-color: $breadcrumb-bg;
-    border-color: $breadcrumb-bg;
-    border-width: 1px;
-    border-style: solid;
-}
-
-nav[role="navigation"] ol.breadcrumb.style1 li:before {
-    border-left-color: $breadcrumb-fg;
-}
-
-nav[role="navigation"] ol.breadcrumb.style1 li a {
-    color: inherit;
-}
-
-nav[role="navigation"] ol.breadcrumb.style1 li:after {
-    border-left-color: $breadcrumb-bg;
-}
-
-nav[role="navigation"] ol.breadcrumb.style1 li:first-of-type a:before {
-    color: $breadcrumb-fg;
-}
-
-nav[role="navigation"] ol.breadcrumb.style1 li:hover,
-nav[role="navigation"] ol.breadcrumb.style1 li:focus {
-    background-color: $breadcrumb-fg;
-}
-
-nav[role="navigation"] ol.breadcrumb.style1 li:hover:before,
-nav[role="navigation"] ol.breadcrumb.style1 li:focus:before {
-    border-left-color: $breadcrumb-bg;
-}
-
-nav[role="navigation"] ol.breadcrumb.style1 li:hover span,
-nav[role="navigation"] ol.breadcrumb.style1 li:focus span,
-nav[role="navigation"] ol.breadcrumb.style1 li:hover a,
-nav[role="navigation"] ol.breadcrumb.style1 li:focus a,
-nav[role="navigation"] ol.breadcrumb.style1 li:hover a:before,
-nav[role="navigation"] ol.breadcrumb.style1 li:focus a:before {
-    color: $breadcrumb-bg;
-}
-
-nav[role="navigation"] ol.breadcrumb.style1 li:hover:after {
-    border-left-color: $breadcrumb-fg;
-}
-
-nav[role="navigation"] ol.breadcrumb.style1 li:hover:after a {
-    color: $breadcrumb-bg;
-}
-
-.dir-rtl nav[role="navigation"] ol.breadcrumb.style1 li:after {
-    border-right-color: $breadcrumb-bg;
-}
-
-.dir-rtl nav[role="navigation"] ol.breadcrumb.style1 li:hover:after {
-    border-right-color: $breadcrumb-fg;
-}
 
 .subfooter {
    height: 8px;
@@ -1423,6 +1361,11 @@ h3.sectionname {
     width: 90%;
 }
 
+.dropdown-item.menu-action:hover, .dropdown-item.menu-action:active, .dropdown-item.menu-action:focus {
+    color: $brandprimaryalt;
+    background-color: $brandprimary;
+}
+
 .usermenu,
 .usermenu .dropdown-menu,
 .custom-menu,
@@ -1443,9 +1386,14 @@ h3.sectionname {
 .usermenu .dropdown-menu a:focus,
 .custom_menu_submenu li:focus {
     background-color: $topnavbar-bg-hover !important;
+    color: $topnavbar-fg !important;
 }
 
 /* overides the boost yui3 styles. */
+.custom_menu {
+    line-height: 1.15;
+}
+
 .custom_menu_submenu a:hover,
 .custom_menu_submenu a:focus {
     background-color: transparent !important;
@@ -1530,4 +1478,162 @@ h3.sectionname {
     background-color: $brandprimary;
     border-color: $brandprimary $brandprimary $brandprimary;
     color: #ffffff;
+}
+
+/* disables boost core.scss original rule */
+#region-main {
+    overflow-x: initial;
+    background-color: $card-bg;
+    padding-bottom: 20px !important;
+}
+
+@media (min-width: 576px) {
+    #region-main {
+        border: none;
+        padding: 0 0 20px 0;
+    }
+    
+    .region_main_settings_menu_proxy {
+        background-color: transparent;
+    }
+}
+
+li.current h3.sectionname {
+    background-color: $brandprimary;
+    color: $brandprimaryalt;
+}
+
+.course-content li.current .content ul.section {
+    border-left: 6px solid $brandprimary;
+}
+
+.course-content .single-section .section-navigation >span {
+    border: 1px solid $brandsecondary;
+    border-radius: 5px;
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
+.card-title {
+    color: $brandprimary;
+    padding-bottom: .8rem;
+    position: relative;
+}
+
+.text-info {
+    color: $brandsecondary !important;
+}
+
+.tool_dataprivacy {
+    text-align: right;
+}
+
+fieldset > legend {
+    color: $brandprimary;
+    font-weight: normal;
+}
+
+/* course grid */
+
+.block-ascendants-promowrap, .local-my-promowrap, .local-courseindex-promowrap {
+    background-color: $white;
+}
+
+#courseindex-nav {
+    background-color: $brandprimary;
+    color: $brandprimaryalt;
+}
+
+#courseindex-nav .is-current {
+    background-color: $brandsecondary;
+    color: $brandsecondaryalt;
+}
+
+.course-content h3.sectionname a {
+    text-decoration: none;
+}
+
+#page-login-index #page-content {
+    border: none;
+}
+
+#page-login-index #page {
+    margin-bottom: 0;
+}
+
+#page {
+    margin-bottom: 2rem;
+}
+
+.togglecompletion .btn.btn-link, .togglecompletion  .btn.btn-link:hover, .togglecompletion  .btn.btn-link:active, .togglecompletion  .btn.btn-link:focus {
+    background-color: transparent !important;
+    box-shadow: none;
+}
+
+.fgrouplabel {
+    font-weight: bold;
+}
+
+#questionscontainer table#categoryquestions {
+    overflow: inherit;
+}
+
+#page-my-index .fpwonderbox{
+    display: none;
+}
+
+.course-content .progress.fordsonsinglepage {
+    display: none;
+}
+
+.course-content .current::before {
+    content: none;
+}
+
+#course-category-listings .listitem > div > .float-right {
+    width: 100%;
+}
+
+.form-control {
+    border-radius: 4px;
+}
+
+.withimage {
+    box-shadow: 0 3px 5px 1px rgba(105,105,105, 1);
+}
+
+.message-app {
+    background-color: $gray-100;
+}
+
+.moodle-dialogue-base .closebutton {
+    background-color: $brandprimary;
+}
+
+.course-content img.activityicon {
+      height: $activityiconsize;
+      width: $activityiconsize;
+}
+
+/* Freshness signal. */
+
+.new-item {
+    display: inline-block;
+    color: #000;
+    background-color: orange;
+    padding: 4px;
+    margin-left: 20px;
+    border-radius: 5px;
+    transform: rotate(-10deg);
+    font-size: 0.8em;
+}
+
+.updated-item {
+    display: inline-block;
+    color: #000;
+    background-color: cyan;
+    padding: 4px;
+    margin-left: 20px;
+    transform: rotate(-10deg);
+    font-size: 0.8em;
 }

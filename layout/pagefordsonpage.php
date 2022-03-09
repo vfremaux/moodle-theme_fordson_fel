@@ -41,21 +41,28 @@ if (is_tablet()) {
     $extraclasses[] = 'is-tablet';
 }
 
-list($hasfhsdrawer, $navdraweropen, $hasspdrawer, $navspdraweropen) = theme_fordson_fel_resolve_drawers($extraclasses, $checkpostblocks, is_mobile());
-
-$bodyattributes = $OUTPUT->body_attributes($extraclasses);
-
 $hasblocks = false;
 $haspostblocks = false;
 $checkpostblocks = false;
 
-$footnote = $OUTPUT->footnote();
+list($hasfhsdrawer, $navdraweropen, $hasspdrawer, $navspdraweropen) = theme_fordson_fel_resolve_drawers($extraclasses, $checkpostblocks, is_mobile());
+
+$bodyattributes = $OUTPUT->body_attributes($extraclasses);
+
+$footnote = $OUTPUT->footer_element('footnote');
 $pagedoclink = $OUTPUT->page_doc_link();
 $coursefooter = $OUTPUT->course_footer();
+
+$page = format\page\course_page::get_current_page($COURSE->id);
+$OUTPUT->check_dyslexic_state();
+$OUTPUT->check_highcontrast_state();
+$dysstate = $OUTPUT->get_dyslexic_state();
+$hcstate = $OUTPUT->get_highcontrast_state();
 
 $templatecontext = [
     'sitename' => format_string($SITE->shortname, true, ['context' => context_course::instance(SITEID) , "escape" => false]),
     'output' => $OUTPUT,
+    'sectionid' => $page->get_section_id(),
     'showbacktotop' => isset($PAGE->theme->settings->showbacktotop) && $PAGE->theme->settings->showbacktotop == 1,
     'bodyattributes' => $bodyattributes,
     'navdraweropen' => $navdraweropen,
@@ -71,11 +78,20 @@ $templatecontext = [
     'pagedoclink' => $pagedoclink,
     'hascustomlogin' => @$PAGE->theme->settings->showcustomlogin == 1,
     'hasfooterelements' => !empty($PAGE->theme->settings->leftfooter) || !empty($PAGE->theme->settings->midfooter) || !empty($PAGE->theme->settings->rightfooter),
-    'leftfooter' => @$PAGE->theme->settings->leftfooter,
-    'midfooter' => @$PAGE->theme->settings->midfooter,
-    'rightfooter' => @$PAGE->theme->settings->rightfooter,
+    'leftfooter' => $OUTPUT->footer_element('leftfooter'),
+    'midfooter' => $OUTPUT->footer_element('midfooter'),
+    'rightfooter' => $OUTPUT->footer_element('rightfooter'),
     'showlangmenu' => @$CFG->langmenu,
-    'sitealternatename' => @$PAGE->theme->settings->sitealternatename
+    'sitealternatename' => @$PAGE->theme->settings->sitealternatename,
+
+    'useaccessibility' => @$PAGE->theme->settings->usedyslexicfont || @$PAGE->theme->settings->usehighcontrastfont,
+    'usedyslexicfont' => @$PAGE->theme->settings->usedyslexicfont,
+    'usehighcontrastfont' => @$PAGE->theme->settings->usehighcontrastfont,
+    'dyslexicurl' => $OUTPUT->get_dyslexic_url(),
+    'highcontrasturl' => $OUTPUT->get_highcontrast_url(),
+    'dyslexicactive' => ($dysstate) ? 'active' : '',
+    'highcontrastactive' => ($hcstate) ? 'active' : '',
+    'dynamiccss' => $OUTPUT->get_dynamic_css($PAGE->theme),
 ];
 
 theme_fordson_fel_process_texts($templatecontext);

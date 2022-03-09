@@ -27,7 +27,7 @@ if (is_dir($CFG->dirroot.'/blocks/quiz_behaviour')) {
 
 class theme_fordson_fel_mod_quiz_renderer extends mod_quiz_renderer {
 
-    protected $attemptobj;
+    protected static $attemptobj;
 
     /**
      * Attempt Page.
@@ -56,8 +56,6 @@ class theme_fordson_fel_mod_quiz_renderer extends mod_quiz_renderer {
             // Back to standard rendering.
             return parent::attempt_page($attemptobj, $page, $accessmanager, $messages, $slots, $id, $nextpage);
         }
-
-        $this->attemptobj = $attemptobj;
 
         $template = new StdClass;
         $template->header = $this->header();
@@ -161,6 +159,10 @@ class theme_fordson_fel_mod_quiz_renderer extends mod_quiz_renderer {
         $manager = null;
         if (function_exists('get_block_quiz_behaviour_manager')) {
             $manager = get_block_quiz_behaviour_manager();
+        }
+
+        if (!$manager) {
+            return parent::summary_page($attemptobj, $displayoptions);
         }
 
         $output = '';
@@ -411,8 +413,11 @@ class theme_fordson_fel_mod_quiz_renderer extends mod_quiz_renderer {
         return $output;
     }
 
+    /**
+     * Used by block quiz_behaviour overrides.
+     */
     public function set_attemptobj($attemptobj) {
-        $this->attemptobj = $attemptobj;
+        self::$attemptobj = $attemptobj;
     }
 
     /**
@@ -554,6 +559,8 @@ class theme_fordson_fel_mod_quiz_renderer extends mod_quiz_renderer {
      */
     public function navigation_panel(quiz_nav_panel_base $panel) {
 
+        self::get_attemptobj();
+
         $output = '<!-- renderer/navigation_panel -->';
         $userpicture = $panel->user_picture();
         if ($userpicture) {
@@ -574,17 +581,17 @@ class theme_fordson_fel_mod_quiz_renderer extends mod_quiz_renderer {
         $output .= html_writer::end_tag('div');
 
         // Override quiz_nav_panel_base::render_restart_preview_link()
-        if (is_null($this->attemptobj) || !$this->attemptobj->is_own_preview()) {
+        if (is_null(self::$attemptobj) || !self::$attemptobj->is_own_preview()) {
             $restartlink = '';
         } else {
-            $restarturl = new moodle_url($this->attemptobj->start_attempt_url(), array('forcenew' => true));
+            $restarturl = new moodle_url(self::$attemptobj->start_attempt_url(), array('forcenew' => true));
             $restartlink =  $this->restart_preview_button($restarturl);
         }
 
         // CHANGE+.
         $panelcontent = '';
-        if (!is_null($this->attemptobj)) {
-            $panelcontent = $this->countdown_timer($this->attemptobj, time()).$restartlink;
+        if (!is_null(self::$attemptobj)) {
+            $panelcontent = $this->countdown_timer(self::$attemptobj, time()).$restartlink;
         }
 
         $output .= html_writer::tag('div', $panelcontent, array('class' => 'othernav'));
@@ -598,5 +605,13 @@ class theme_fordson_fel_mod_quiz_renderer extends mod_quiz_renderer {
 
         $output .= '<!-- /renderer/navigation_panel -->';
         return $output;
+    }
+
+    protected static function get_attemptobj() {
+        if (is_null(self::$attemptobj)) {
+            $attemptid = required_param('attempt', PARAM_INT);
+            $cmid = optional_param('cmid', null, PARAM_INT);
+            self::$attemptobj = quiz_create_attempt_handling_errors($attemptid, $cmid);
+        }
     }
 }

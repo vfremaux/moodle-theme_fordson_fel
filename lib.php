@@ -38,6 +38,7 @@ defined('MOODLE_INTERNAL') || die();
 require_once($CFG->dirroot.'/theme/fordson_fel/lib/scss_lib.php');
 require_once($CFG->dirroot.'/theme/fordson_fel/lib/filesettings_lib.php');
 require_once($CFG->dirroot.'/theme/fordson_fel/lib/fordson_fel_lib.php');
+require_once($CFG->dirroot.'/theme/fordson_fel/lib/dynamicstyles_lib.php');
 
 function theme_fordson_fel_supports_feature($feature) {
 
@@ -74,7 +75,7 @@ function theme_fordson_fel_resolve_drawers(&$extraclasses, $checkspblocks, $ismo
     $isadminpage = preg_match('/admin/', $PAGE->pagetype);
     $isadminpage = $isadminpage || preg_match('/admin/', $PAGE->pagelayout);
     $isindexsys = preg_match('/indexsys/', $_SERVER['PHP_SELF']);
-    $isdashboard = preg_match('/my-index|site-index/', $PAGE->pagetype);
+    $isdashboard = preg_match('/my-index|site-index|user-profile/', $PAGE->pagetype);
     $isdashboard = $isdashboard || preg_match('/dashboard/', $PAGE->pagelayout);
     $isbaselayout = preg_match('/base/', $PAGE->pagelayout);
     $ispageformat = preg_match('/format_page/', $PAGE->pagelayout);

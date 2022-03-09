@@ -1,0 +1,29 @@
+
+#page-accessibility-switches {
+    margin: 0 20px;
+}
+
+.accessibility-toggle a {
+    text-decoration: none;
+    color: #000;
+}
+
+.accessibility-toggle {
+    padding: 3px 8px;
+    border: 1px #aaa solid;
+    border-radius: 4px;
+    background-color: #fff !important;
+    display: inline-block;
+}
+
+.accessibility-toggle a {
+    color: #000 !important;
+}
+
+.accessibility-toggle.active a {
+    color: #fff !important;
+}
+
+.accessibility-toggle.active {
+    background-color: #000 !important;
+}

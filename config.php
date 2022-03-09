@@ -28,6 +28,7 @@ defined('MOODLE_INTERNAL') || die();
 
 // Call the theme lib file.
 require_once(__DIR__ . '/lib.php');
+require_once($CFG->dirroot.'/theme/fordson_fel/lib/fordson_fel_lib.php');
 
 // Theme name.
 $THEME->name = 'fordson_fel';
@@ -40,7 +41,7 @@ $THEME->parents = ['boost'];
  * to generate dynamically from the scss presets and settings and is not
  * used by Moodle's default editor (Atto).
  */
-$THEME->sheets = ['styledbreadcrumb', 'yuioverride', 'modthumb', 'flexsections', 'themefixes', 'responsiverules', 'mobilecontrol', 'edgefixes'];
+$THEME->sheets = ['styledbreadcrumb', 'yuioverride', 'modthumb', 'flexsections', 'themefixes', 'responsiverules', 'mobilecontrol', 'edgefixes', 'accessibility'];
 $THEME->editor_sheets = [''];
 
 // Toggle display of blocks
@@ -197,34 +198,37 @@ $THEME->layouts = [
     ],
 ];
 
-if ($THEME->settings->enhancedmydashboard == 1 && $THEME->settings->blockdisplay == 1) {
-    $THEME->layouts['mydashboard'] = [
-        'file' => 'mydashboard.php',
-        'regions' => ['fp-a', 'fp-b', 'fp-c', 'side-pre'],
-        'defaultregion' => 'side-pre',
-        'options' => ['nonavbar' => true, 'langmenu' => true],
-    ];
-}
-if ($THEME->settings->blockdisplay == 2) {
-    $THEME->layouts['course'] = [
-        'file' => 'course.php',
-        'regions' => ['side-pre'],
-        'defaultregion' => 'side-pre',
-    ];
-    $THEME->layouts['frontpage'] = [
-        'file' => 'frontpage.php',
-        'regions' => ['side-pre'],
-        'defaultregion' => 'side-pre',
-        'options' => ['nonavbar' => true, 'langmenu' => true],
-    ];
-}
-if ($THEME->settings->blockdisplay == 2 && $THEME->settings->enhancedmydashboard == 1) {
-    $THEME->layouts['mydashboard'] = [
-        'file' => 'mydashboard.php',
-        'regions' => ['side-pre'],
-        'defaultregion' => 'side-pre',
-        'options' => ['nonavbar' => true, 'langmenu' => true],
-    ];
+if (!empty($THEME->settings->enhancedmydashboard)) {
+    // At upgrade time, those settings are not set.
+    if ($THEME->settings->enhancedmydashboard == 1 && $THEME->settings->blockdisplay == 1) {
+        $THEME->layouts['mydashboard'] = [
+            'file' => 'mydashboard.php',
+            'regions' => ['fp-a', 'fp-b', 'fp-c', 'side-pre'],
+            'defaultregion' => 'side-pre',
+            'options' => ['nonavbar' => true, 'langmenu' => true],
+        ];
+    }
+    if ($THEME->settings->blockdisplay == 2) {
+        $THEME->layouts['course'] = [
+            'file' => 'course.php',
+            'regions' => ['side-pre'],
+            'defaultregion' => 'side-pre',
+        ];
+        $THEME->layouts['frontpage'] = [
+            'file' => 'frontpage.php',
+            'regions' => ['side-pre'],
+            'defaultregion' => 'side-pre',
+            'options' => ['nonavbar' => true, 'langmenu' => true],
+        ];
+    }
+    if ($THEME->settings->blockdisplay == 2 && $THEME->settings->enhancedmydashboard == 1) {
+        $THEME->layouts['mydashboard'] = [
+            'file' => 'mydashboard.php',
+            'regions' => ['side-pre'],
+            'defaultregion' => 'side-pre',
+            'options' => ['nonavbar' => true, 'langmenu' => true],
+        ];
+    }
 }
 
 // Call main theme scss - including the selected preset.
@@ -263,4 +267,5 @@ if (!empty($PAGE) && !$PAGE->state) {
     $PAGE->requires->jquery();
     $PAGE->requires->js_call_amd('local_vflibs/docfix', 'init');
     $PAGE->requires->js_call_amd('theme_fordson_fel/custommenu', 'init');
+    $PAGE->requires->js_call_amd('theme_fordson_fel/searchlink', 'init');
 }
