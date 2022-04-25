@@ -249,10 +249,11 @@ div#learningcontent {
 }
 
 #page-header .card .card-body {
-	z-index: 1;
+    z-index: 1;
 }
 
 #page-header .btn.btn-secondary:hover {
+    background-color: $black;
     color: $white;
 }
 

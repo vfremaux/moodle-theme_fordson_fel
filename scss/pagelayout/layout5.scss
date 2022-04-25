@@ -74,7 +74,8 @@ div#page-navbar {
 
 //Button fixes for display over images
 #page-header .btn.btn-secondary {
-    background-color: $white;
+    background-color: $brandprimary;
+    color: $brandprimaryalt;
 }
 
 #page-header .btn.btn-secondary:hover {
