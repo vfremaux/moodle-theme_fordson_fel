@@ -2,6 +2,11 @@
 * Styles.scss : fordson_fel CUSTOMIZATIONS FOR NEW ELEMENTS
 **/
 
+/* remove boost */
+#page-wrapper {
+    height: initial !important;
+}
+
 /**
 * Custom fonts
 **/
@@ -1613,4 +1618,30 @@ fieldset > legend {
 .course-content img.activityicon {
       height: $activityiconsize;
       width: $activityiconsize;
+}
+
+/* Freshness signal. */
+
+.new-item {
+    display: inline-block;
+    color: #000;
+    background-color: orange;
+    padding: 4px;
+    margin-left: 20px;
+    border-radius: 5px;
+    transform: rotate(-10deg);
+    font-size: 0.8em;
+    text-indent: 0;
+}
+
+.updated-item {
+    display: inline-block;
+    color: #000;
+    background-color: cyan;
+    padding: 4px;
+    margin-left: 20px;
+    border-radius: 5px;
+    transform: rotate(-10deg);
+    font-size: 0.8em;
+    text-indent: 0;
 }

@@ -229,7 +229,7 @@ function theme_fordson_fel_add_login_indicators(&$templatecontext) {
             require_once($CFG->dirroot.$iplugin->path.'/xlib.php');
             $func = $iplugin->name.'_get_site_indicators';
             $notificationindicators = $func();
-            if (is_array($notificationindicators)) {
+            if (is_array($notificationindicators) && !empty($notificationindicators)) {
                 // Aggregate array members to indicators.
                 $indicators += $notificationindicators;
             } else {
@@ -239,7 +239,8 @@ function theme_fordson_fel_add_login_indicators(&$templatecontext) {
         }
     }
 
-    if (!empty($indicators)) {
+    // Weird single empty element return...
+    if (!empty($indicators) && !empty($indicators[0])) {
         $templatecontext->hasindicators = true;
         $indicatorsstr = implode('</div><div class="siteindicator">', $indicators);
         $templatecontext->indicatorsboxcontent = '<div class="siteindicator">'.$indicatorsstr.'<div>';

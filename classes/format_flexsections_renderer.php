@@ -52,11 +52,17 @@ class theme_fordson_fel_format_flexsections_renderer extends format_flexsections
         $this->config = get_config('theme_'.$PAGE->theme->name);
         $this->availablestyles = $this->parse_styleconfig();
 
+        if ($this->config->flexsectionscollapse == 0) {
+            $amdscript = 'theme_fordson_fel/flex_section_control';
+        } else {
+            $amdscript = 'theme_fordson_fel/flex_section_control_accordion';
+        }
+
         if (!$initialized) {
             if ($PAGE->user_is_editing()) {
-                $PAGE->requires->js_call_amd('theme_fordson_fel/flex_section_control', 'init_editing', array($COURSE->id));
+                $PAGE->requires->js_call_amd($amdscript, 'init_editing', array($COURSE->id));
             } else {
-                $PAGE->requires->js_call_amd('theme_fordson_fel/flex_section_control', 'init', array($COURSE->id));
+                $PAGE->requires->js_call_amd($amdscript, 'init', array($COURSE->id));
             }
             $initialized = true;
         }
@@ -246,7 +252,7 @@ class theme_fordson_fel_format_flexsections_renderer extends format_flexsections
         $this->availablestyles = $this->parse_styleconfig();
 
         // Theme adds style related additional attribute in format.
-        if (!empty($this->availablestyles) && ($section->section > 0) && $PAGE->user_is_editing()) {
+        if (!empty($this->availablestyles['configs']) && ($section->section > 0) && $PAGE->user_is_editing()) {
             if (has_capability('moodle/course:update', $context)) {
                 $contentclassurl = new moodle_url('/theme/fordson_fel/sections/sectionclass.php', array('id' => $section->id, 'sr' => $sr));
                 $text = new lang_string('chooseclass', 'theme_'.$PAGE->theme->name);

@@ -56,9 +56,15 @@ $page->add($setting);
 $name = $themename.'/loginhelpbutton';
 $title = get_string('loginhelpbutton', 'theme_fordson_fel');
 $description = get_string('loginhelpbutton_desc', 'theme_fordson_fel');
+$default = get_string('helpbuttondefaulttext', 'theme_fordson_fel');
+$setting = new admin_setting_configtext($name, $title, $description, $default, PARAM_TEXT, 80);
+$page->add($setting);
+
+$name = $themename.'/loginhelpbuttonurl';
+$title = get_string('loginhelpbuttonurl', 'theme_fordson_fel');
+$description = get_string('loginhelpbuttonurl_desc', 'theme_fordson_fel');
 $default = '';
-$setting = new admin_setting_configtext($name, $title, $description, $default);
-$setting->set_updatedcallback('theme_reset_all_caches');
+$setting = new admin_setting_configtext($name, $title, $description, $default, PARAM_TEXT, 80);
 $page->add($setting);
 
 // Top image.

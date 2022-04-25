@@ -12,14 +12,18 @@
     padding: 3px 8px;
     border: 1px #aaa solid;
     border-radius: 4px;
-    background-color: #fff;
+    background-color: #fff !important;
     display: inline-block;
 }
 
+.accessibility-toggle a {
+    color: #000 !important;
+}
+
 .accessibility-toggle.active a {
-    color: #fff;
+    color: #fff !important;
 }
 
 .accessibility-toggle.active {
-    background-color: #000;
+    background-color: #000 !important;
 }

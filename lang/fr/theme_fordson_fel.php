@@ -276,6 +276,9 @@ $string['linkedin'] = 'URL LinkedIn';
 $string['linkedin_desc'] = 'Saisir l\'URL de votre page LinkedIn (ex : http://linkedin.com/).';
 $string['loginhelpbutton'] = 'Bouton d\'aide à la connexion';
 $string['loginhelpbutton_desc'] = 'Texte du bouton d\'aide à la connexion';
+$string['loginhelpbuttonurl'] = 'Url du bouton d\'aide à la connexion';
+$string['loginhelpbuttonurl_desc'] = 'Url cible du bouton d\'aide à la connexion. Le bouton est caché si l\'URL est vide.';
+$string['helpbuttondefaulttext'] = 'Comment se connecter ?';
 $string['loginimage'] = 'Image par défaut de connexion';
 $string['loginimage_desc'] = 'Image de fond pour la page de connexion';
 $string['loginnavicon1'] = 'Icône n°1';
@@ -551,8 +554,8 @@ $string['youtube'] = 'URL YouTube';
 $string['youtube_desc'] = 'Saisir l\'URL de votre chaîne YouTube (ex : http://www.youtube.com/).';
 $string['signalitemsnewerthan'] = 'Ajouter le signal "Nouveau"';
 $string['signalitemsnewerthan_desc'] = 'Ajoute un signal aux noms des ressources ou activités lorsqu\'elles ont été ajoutées a moins de X heures. ajoute également un signal "modifié"';
-$string['newitem'] = 'New item';
-$string['updateditem'] = 'Recent change';
+$string['newitem'] = 'Nouveau !';
+$string['updateditem'] = 'Mis à jour !';
 
 // Variant settings
 $string['fromtheme'] = 'Depuis la variante';

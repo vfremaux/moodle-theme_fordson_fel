@@ -105,16 +105,6 @@ define(['jquery', 'core/config', 'core/log'], function($, config, log) {
             url += 'sectionid=' + sectionid;
             // var handlesrc = $('#control-' + sectionid + '-section-' + sectionsection + ' > img').attr('src');
 
-            if (!hide) {
-                var parentid = that.closest('li').parent().closest('li').attr('id');
-                // Trigger hide event on all siblings.
-                $.each($('#' + parentid + ' .flexcontrol.level-' + level), function(index, value) {
-                    if ($(value).attr('id') != that.attr('id')) {
-                        $(value).trigger('click', true);
-                    }
-                });
-            }
-
             if (($('#section-' + sectionsection).hasClass('expanded')) ||
                         (hide === true)) {
                 $('#section-' + sectionsection).addClass('collapsed');
@@ -123,8 +113,6 @@ define(['jquery', 'core/config', 'core/log'], function($, config, log) {
                 $('#section-title-' + sectionsection).attr('aria-expanded', 'false');
                 $('#section-' + sectionsection + ' > .content > .section-content').addClass('collpased');
                 $('#section-' + sectionsection + ' > .content > .section-content').removeClass('expanded');
-                // handlesrc = handlesrc.replace('expanded', 'collapsed');
-                // $('#control-' + sectionid + '-section-' + sectionsection + ' > img ').attr('src', handlesrc);
                 hide = 1;
             } else {
                 // Show section.
@@ -134,8 +122,6 @@ define(['jquery', 'core/config', 'core/log'], function($, config, log) {
                 $('#section-title-' + sectionsection).attr('aria-expanded', 'true');
                 $('#section-' + sectionsection + ' > .content > .section-content').addClass('expanded');
                 $('#section-' + sectionsection + ' > .content > .section-content').removeClass('collapsed');
-                // handlesrc = handlesrc.replace('collapsed', 'expanded');
-                // $('#control-' + sectionid + '-section-' + sectionsection + ' > img ').attr('src', handlesrc);
                 hide = 0;
 
                 // Scroll to this section.

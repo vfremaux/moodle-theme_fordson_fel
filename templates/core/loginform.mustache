@@ -141,6 +141,9 @@
                             </div>
                             <div class="sign-up-btn">
                                 <button type="submit" class="btn btn-primary">{{#str}}login{{/str}}</button>
+		                        {{#hasloginhelpbutton}}
+		                        <a target="_blank" class="btn btn-primary" role="button" href="{{{loginhelpbuttonurl}}}">{{{helpbuttontext}}}</a>
+		                        {{/hasloginhelpbutton}}
                             </div>
                         </form>
                         <p><a href="{{{ config.wwwroot }}}/login/forgot_password.php">{{#str}}forgotten{{/str}}</a></p> 

@@ -226,7 +226,7 @@ class theme_fordson_fel_format_weeks_renderer extends format_weeks_renderer {
         $availablestyles = $this->parse_styleconfig();
 
         // Theme adds style related additional attribute in format.
-        if (!empty($this->availablestyles) && ($section->section > 0) && $PAGE->user_is_editing()) {
+        if (!empty($availablestyles['configs']) && ($section->section > 0) && $PAGE->user_is_editing()) {
             if (has_capability('moodle/course:update', $context) || $caneditsection) {
                 $params = array('id' => $section->id);
                 if (!empty($sectionreturn)) {

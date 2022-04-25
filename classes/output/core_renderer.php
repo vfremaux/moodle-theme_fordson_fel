@@ -2564,6 +2564,13 @@ class core_renderer extends \theme_boost\output\core_renderer {
         $context->logintopimage = $PAGE->theme->setting_file_url('logintopimage', 'logintopimage');
         $context->hascustomlogin = $PAGE->theme->settings->showcustomlogin == 1;
         $context->hasdefaultlogin = $PAGE->theme->settings->showcustomlogin == 0;
+        $loginhelpbuttonurl = @$PAGE->theme->settings->loginhelpbuttonurl;
+        $loginhelpbuttonurl = format_string($loginhelpbuttonurl);
+        $context->loginhelpbuttonurl = $loginhelpbuttonurl;
+        $helpbuttontext = @$PAGE->theme->settings->loginhelpbutton;
+        $helpbuttontext = format_string($helpbuttontext);
+        $context->helpbuttontext = $helpbuttontext;
+        $context->hasloginhelpbutton = !empty($loginhelpbuttonurl);
         $context->alertbox = format_text($PAGE->theme->settings->alertbox, FORMAT_HTML, ['noclean' => true]);
         if ($url) {
             $url = $url->out(false);
@@ -3160,6 +3167,6 @@ class core_renderer extends \theme_boost\output\core_renderer {
         $searchinput = html_writer::tag('form', $contents, $formattrs);
         $searchinput = html_writer::tag('div', $searchinput, ['class' => 'search-input-form']);
 
-        return html_writer::tag('div', $searchicon.$searchinput, ['class' => 'search-input-toggle nav-link', 'id' => $id]);
+        return html_writer::tag('div', $searchicon, ['class' => 'search-input-toggle nav-link', 'id' => $id]).$searchinput;
     }
 }

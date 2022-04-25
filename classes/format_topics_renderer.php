@@ -38,7 +38,7 @@ class theme_fordson_fel_format_topics_renderer extends format_topics_renderer {
     }
 
     /**
-     * Generate a summary of a section for display on the 'coruse index page'
+     * Generate a summary of a section for display on the 'course index page'
      *
      * @param stdClass $section The course_section entry from DB
      * @param stdClass $course The course entry from DB
@@ -46,7 +46,8 @@ class theme_fordson_fel_format_topics_renderer extends format_topics_renderer {
      * @return string HTML to output.
      */
     protected function section_summary($section, $course, $mods) {
-    	global $PAGE;
+        global $PAGE;
+
         $classattr = 'section main section-summary clearfix';
         $linkclasses = '';
 
@@ -373,7 +374,7 @@ class theme_fordson_fel_format_topics_renderer extends format_topics_renderer {
         $availablestyles = $this->parse_styleconfig();
 
         // Theme adds style related additional attribute in format.
-        if (!empty($this->availablestyles) && ($section->section > 0) && $PAGE->user_is_editing()) {
+        if (!empty($availablestyles['configs']) && ($section->section > 0) && $PAGE->user_is_editing()) {
             if (has_capability('moodle/course:update', $context) || $caneditsection) {
                 $params = array('id' => $section->id);
                 if (!empty($sectionreturn)) {

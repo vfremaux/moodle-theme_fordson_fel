@@ -42,10 +42,6 @@ body {
     width: 98%;
 }
 
-#page-wrapper {
-    height: initial;
-}
-
 /* je vais voir les préférence d'un autre usager, décalage des boutons sur le headerbkg */
 .page-context-header .header-button-group {
     margin-left: 100px;

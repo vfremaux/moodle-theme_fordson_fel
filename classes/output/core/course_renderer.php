@@ -284,6 +284,8 @@ class theme_fordson_fel_course_renderer_base extends \core_course_renderer {
      * This includes link, content, availability, completion info and additional information
      * that module type wants to display (i.e. number of unread forum posts)
      *
+     * Note some course formats by pass this renderer function. @see /course/format/page/renderer;php
+     *
      * This function calls:
      * {@link core_course_renderer::course_section_cm_name()}
      * {@link core_course_renderer::course_section_cm_text()}
@@ -352,7 +354,7 @@ class theme_fordson_fel_course_renderer_base extends \core_course_renderer {
             $cmname = $this->course_section_cm_name_for_thumb($mod, $displayoptions);
         } else {
             // Display the link to the module (or do nothing if module has no url)
-            $cmname = $this->course_section_cm_name($mod, $displayoptions);
+            $cmname = $this->course_section_cm_name($mod, $displayoptions).$freshnesssignal;
         }
         // CHANGE-.
 
@@ -623,9 +625,10 @@ class theme_fordson_fel_course_renderer_base extends \core_course_renderer {
             $icon = $this->output->pix_icon('t/add', '');
             $span = html_writer::tag('span', $straddeither, array('class' => 'section-modchooser-text'));
             $ajaxcontrol .= html_writer::tag('button', $icon . $span, [
-                    'class' => 'section-modchooser-link btn btn-link',
+                    'class' => 'section-modchooser-link btn btn-link from-fordson-fel-628',
                     'data-action' => 'open-chooser',
-                    'data-sectionid' => $section,
+                    'data-sectionid' => $sectionnum,
+                    'data-sectionreturnid' => $sectionreturn,
                 ]
             );
             $ajaxcontrol .= html_writer::end_tag('div');
@@ -1770,9 +1773,10 @@ if (@$PAGE->theme->settings->coursetilestyle < 10) {
             $icon = $this->output->pix_icon('t/add', '');
             $span = html_writer::tag('span', $straddeither, array('class' => 'section-modchooser-text'));
             $ajaxcontrol .= html_writer::tag('button', $icon . $span, [
-                    'class' => 'section-modchooser-link btn btn-link',
+                    'class' => 'section-modchooser-link btn btn-link from-fordson-fel-1775',
                     'data-action' => 'open-chooser',
-                    'data-sectionid' => $sectionid,
+                    'data-sectionid' => $sectionnum,
+                    'data-sectionreturnid' => $sectionreturn,
                 ]
             );
             $ajaxcontrol .= html_writer::end_tag('div');
